@@ -1,6 +1,6 @@
 {
   "project": "NEXMES photo-driven MES prototype",
-  "version": "17",
+  "version": "18",
   "entry": "index.html",
   "updated": "2026-08-22",
   "naming_rule": "<domain>_<action>.html (snake_case, English)",
@@ -669,5 +669,14 @@
     "departments / inspection_items 테이블 신규 생성 및 시드 (기존 stub 화면용)",
     "화면 축약키(code/name/group/use) ↔ DB 컬럼 매핑 + 타입 변환(Y·N ↔ boolean, 문자열 ↔ numeric)",
     "저장/삭제 시 스냅샷 차분만 업서트/삭제 - 전체 덮어쓰기 아님"
+  ],
+  "changelog_v18": [
+    "order_lines 통합 테이블 신설: 4개 카테고리(구매품/원재료/외주가공/외주설계)의 발주→입고→입고확정 라인을 하나의 라이프사이클로 관리 (76건 시드)",
+    "MESDB.lines() 추가 - category/status 필터로 로드, 화면에서 바뀐 행만 되돌려 씀. 화면 상태값(대기/입고/확정) ↔ DB(발주/입고/입고확정) 자동 변환",
+    "입고/확정 6화면 직결: 구매품·원재료·외주가공 각각의 입고등록/입고확정",
+    "발주현황 3화면 직결(읽기): 구매품/원재료/외주가공 발주현황이 order_lines를 실시간 반영",
+    "발주등록 3화면 save() 실제 INSERT로 전환: 구매품/원재료/외주가공 발주등록 → order_lines에 status=발주로 등록되어 입고등록 화면에 즉시 나타남",
+    "외주설계발주입고 화면도 order_lines(외주설계)로 전환",
+    "데모 흐름 확보를 위해 구매품 17건 중 5건을 발주, 5건을 입고 단계로 되돌림"
   ]
 }

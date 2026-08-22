@@ -22,6 +22,7 @@ async function persist(){if(!online)return;const s=JSON.stringify(snapshot());if
 function bind(p,g){page=p;getter=g;load();document.addEventListener('click',e=>{if(e.target.closest('button,[onclick]')){clearTimeout(timer);timer=setTimeout(persist,400)}},true);document.addEventListener('change',()=>{clearTimeout(timer);timer=setTimeout(persist,400)},true)}
 async function reset(){await rest(`page_state?page=eq.${encodeURIComponent(page)}`,{method:'DELETE'});location.reload()}
 window.MESDB={cfg:CFG,rest,table,bind,persist,reset,get online(){return online}};
+MESDB.ping=async()=>{try{await rest('page_state?select=page&limit=1');online=true}catch(e){online=false}return online};MESDB.ping();
 })();
 
 /* ── v17: 마스터 화면 ↔ 정규화 테이블 직결 ──────────────────────────
@@ -79,4 +80,68 @@ async function master(opt){
   window.MESDB.syncMaster=sync;
 }
 window.MESDB.master=master;
+})();
+
+/* ── v18: 발주→입고→입고확정 라인 (order_lines) ─────────────────────
+ * MESDB.lines({page, category, statuses, map, get, render, pk:'_id'})
+ *   order_lines 테이블에서 category/status로 필터해 화면 배열에 로드하고,
+ *   화면에서 바뀐 행만 되돌려 쓴다. 신규 발주는 MESDB.newLines()로 insert.
+ */
+(function(){
+const N=m=>{const o={};for(const k in m){const v=m[k];o[k]=typeof v==='string'?{col:v,type:'text'}:{type:'text',...v}}return o};
+const S2D={'대기':'발주','발주':'발주','입고':'입고','확정':'입고확정','입고확정':'입고확정'};
+const D2S={'발주':'대기','입고':'입고','입고확정':'확정'};
+const toS=(row,map)=>{const o={_id:row.line_id};for(const k in map){const{col,type}=map[k];let v=row[col];
+  if(type==='num')v=(v===null||v===undefined?'':Number(v));
+  else if(type==='date')v=(v?String(v).slice(0,10):'');
+  else if(type==='status')v=D2S[v]||v||'대기';
+  else v=(v===null||v===undefined?'':String(v));o[k]=v}return o};
+const toD=(row,map)=>{const o={};for(const k in map){const{col,type}=map[k];let v=row[k];
+  if(col==='line_id')continue;
+  if(type==='num'){v=(v===''||v===null||v===undefined)?null:Number(v);if(Number.isNaN(v))v=null}
+  else if(type==='date')v=(v?String(v).slice(0,10):null);
+  else if(type==='status')v=S2D[v]||'발주';
+  else v=(v===''||v===undefined)?null:String(v);o[col]=v}return o};
+function badge(t,c){let b=document.getElementById('mesdb-badge');if(!b){b=document.createElement('div');b.id='mesdb-badge';b.style.cssText='position:fixed;right:8px;bottom:50px;font:11px Malgun Gothic,sans-serif;padding:2px 7px;border-radius:9px;color:#fff;opacity:.85;z-index:9999;pointer-events:none';document.body.appendChild(b)}b.textContent=t;b.style.background=c}
+
+async function lines(opt){
+  const map=N(opt.map);let snap=new Map(),online=false,timer=null;
+  const arr=()=>opt.get();
+  const q=['select=*','order=line_id',`category=eq.${encodeURIComponent(opt.category)}`];
+  if(opt.statuses&&opt.statuses.length)q.push(`status=in.(${opt.statuses.map(encodeURIComponent).join(',')})`);
+  const take=()=>{snap=new Map(arr().filter(r=>r._id).map(r=>[r._id,JSON.stringify(r)]))};
+  try{
+    const rows=await MESDB.table('order_lines').select(q.join('&'));
+    const a=arr();a.length=0;a.push(...rows.map(r=>toS(r,map)));
+    online=true;(opt.render||window.render||(()=>{}))();take();
+    badge(`DB: order_lines ${opt.category} ${rows.length}건`,'#2e7d32');
+  }catch(e){online=false;badge('DB 미연결(로컬)','#9e9e9e');console.warn('MESDB.lines',e.message);return}
+
+  async function sync(){
+    if(!online)return;
+    const cur=arr(),up=[],ins=[];
+    for(const r of cur){
+      if(!r._id){ins.push({...toD(r,map),category:opt.category,status:r.status||'발주'});continue}
+      if(snap.get(r._id)!==JSON.stringify(r))up.push({line_id:r._id,...toD(r,map),updated_at:new Date().toISOString()});
+    }
+    if(!up.length&&!ins.length)return;
+    try{
+      if(up.length)await MESDB.table('order_lines').upsert(up,'line_id');
+      if(ins.length)await MESDB.table('order_lines').upsert(ins);
+      take();
+      badge(`DB 반영 ${up.length+ins.length}건 · ${new Date().toLocaleTimeString('ko-KR')}`,'#2e7d32');
+    }catch(e){badge('DB 반영 실패','#c62828');console.warn('MESDB.lines',e.message);
+      if(window.MES?.setMessage)window.MES.setMessage('DB 반영 실패: '+e.message.slice(0,120))}
+  }
+  document.addEventListener('click',e=>{if(e.target.closest('button,[onclick]')){clearTimeout(timer);timer=setTimeout(sync,350)}},true);
+  document.addEventListener('change',()=>{clearTimeout(timer);timer=setTimeout(sync,350)},true);
+  window.MESDB.syncLines=sync;
+}
+/* 발주등록 화면용: 신규 발주 라인 insert */
+async function newLines(rows){
+  if(!rows||!rows.length)return 0;
+  await MESDB.table('order_lines').upsert(rows);
+  badge(`DB 발주 ${rows.length}건 등록`,'#2e7d32');return rows.length;
+}
+window.MESDB.lines=lines;window.MESDB.newLines=newLines;
 })();
