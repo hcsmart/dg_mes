@@ -65,12 +65,12 @@ view=view.filter(r=>!ids.includes(r.no));renderWait();renderIn();msg(`${ids.leng
 function pullUp(){const ids=[...inBody.querySelectorAll('input:checked')].map(x=>Number(x.dataset.no));if(!ids.length)return msg('입고 제외할 행을 선택하세요.');for(let i=IN.length-1;i>=0;i--)if(ids.includes(IN[i].no))IN.splice(i,1);search();renderIn();msg(`${ids.length}건을 입고 리스트에서 제외했습니다.`)}
 function cancelOrder(){const ids=[...waitBody.querySelectorAll('input:checked')].map(x=>Number(x.dataset.no));if(!ids.length)return msg('발주취소할 행을 선택하세요.');for(let i=rows.length-1;i>=0;i--)if(ids.includes(rows[i].no))rows.splice(i,1);view=view.filter(r=>!ids.includes(r.no));renderWait();msg(`${ids.length}건의 발주를 취소했습니다.`)}
 function applyDate(){const d=inDate.value||new Date().toISOString().slice(0,10);if(!IN.length)return msg('입고 리스트가 비어 있습니다.');IN.forEach(r=>r.idate=d);renderIn();msg(`입고 리스트 ${IN.length}건의 입고일을 ${d}로 적용했습니다.`)}
-function save(){if(!IN.length)return msg('저장할 입고 자료가 없습니다.');msg(`외주가공 입고 ${IN.length}건을 저장했습니다. (프로토타입)`)}
+async function save(){if(!IN.length)return msg('저장할 입고 자료가 없습니다.');if(!window.MESDB||!MESDB.online){msg(`외주가공 입고 ${IN.length}건을 저장했습니다. (DB 미연결 - 로컬)`);return}try{await MESDB.table('order_lines').upsert(IN.map(r=>({line_id:r.no,status:'입고',receipt_date:r.idate||null,updated_at:new Date().toISOString()})),'line_id');for(let i=rows.length-1;i>=0;i--)if(IN.some(x=>x.no===rows[i].no))rows.splice(i,1);IN.length=0;search();renderIn();msg('외주가공 입고를 DB에 반영했습니다. 입고확정 화면에서 확정하세요.')}catch(e){msg('DB 반영 실패: '+e.message.slice(0,120))}}
 function exportCsv(){const out=[['제번','공정','품번','부품명','가공공정코드','가공공정명','협력업체','입고일'],...IN.map(r=>[r.job,r.proc,r.part,r.partName,r.mp,r.mpName,r.vendor,r.idate])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='outsourcing_receipt_input.csv';a.click();URL.revokeObjectURL(a.href)}
 function msg(t){message.textContent=t}
 inDate.value='2026-08-22';renderWait();renderIn();window.MES={search,save,exportCsv,setMessage:msg};
 </script>
 <script src="mes_db.js"></script>
-<script>MESDB.bind("outsourcing_receipt_input",()=>({rows}));</script>
+<script>MESDB.lines({page:"outsourcing_receipt_input",category:"외주가공",statuses:["발주"],map:{"no": {"col": "line_id", "type": "num"}, "vendor": "vendor_name", "job": "job_no", "item": "item_name", "proc": "process_code", "procName": "process_name", "part": "part_no", "partName": "part_name", "mp": "machining_process_code", "mpName": "material", "odate": {"col": "order_date", "type": "date"}, "edate": {"col": "required_date", "type": "date"}},get:()=>rows,render:()=>{view=[...rows];render()}});</script>
 </body>
 </html>

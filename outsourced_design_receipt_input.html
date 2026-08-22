@@ -75,6 +75,6 @@ async function load(){try{const [a,b]=await Promise.all([fetch('outsourced_desig
 load();window.MES={search,save:receive,exportCsv,setMessage:msg};
 </script>
 <script src="mes_db.js"></script>
-<script>MESDB.bind("outsourced_design_receipt_input",()=>({ORD,RCP}));</script>
+<script>MESDB.lines({page:"outsourced_design_receipt_input",category:"외주설계",statuses:[],map:{"seq": {"col": "line_id", "type": "num"}, "job_no": "job_no", "item_name": "item_name", "partner_name": "vendor_name", "process_code": "process_code", "order_date": {"col": "order_date", "type": "date"}, "expected_date": {"col": "required_date", "type": "date"}, "nego_price": {"col": "confirm_price", "type": "num"}, "progress_rate": {"col": "nego_rate", "type": "num"}, "receipt_date": {"col": "receipt_date", "type": "date"}},get:()=>ORD,render:()=>search()});</script>
 </body>
 </html>
