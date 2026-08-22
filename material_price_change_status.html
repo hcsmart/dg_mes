@@ -27,4 +27,6 @@ function search(){const m=matq.value.trim().toLowerCase(),v=venq.value.trim().to
 function detail(){message.textContent='상세보기: 사진에서 판독된 JSON 필드를 그대로 표시합니다.'}
 function exportCsv(){const h=['구분','자재코드','자재명','사이즈','협력업체코드','협력업체명','단가','담당자','적용시작일'];const csv='\ufeff'+[h,...view.map(r=>[r.material_type,r.material_code,r.material_name,r.size,r.vendor_code,r.vendor_name,r.unit_price,r.manager_name,r.effective_date])].map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='material_price_change_status.csv';a.click()}
 window.MES={search,exportCsv,setMessage:t=>message.textContent=t};render();
-</script></body></html>
+</script><script src="mes_db.js"></script>
+<script>MESDB.bind("material_price_change_status",()=>({data}));</script>
+</body></html>

@@ -54,4 +54,6 @@ function render(){
 function search(){const k=document.querySelector('input[name="k"]:checked').value;
  view=k==='전체'?[...data]:data.filter(r=>r.work_type===k);render();msg(`조회결과 ${view.length}명입니다.`);}
 document.querySelectorAll('input[name="k"]').forEach(x=>x.addEventListener('change',search));
-window.MES={search,setMessage:msg};render();</script></body></html>
+window.MES={search,setMessage:msg};render();</script><script src="mes_db.js"></script>
+<script>MESDB.bind("design_result_status",()=>({data}));</script>
+</body></html>

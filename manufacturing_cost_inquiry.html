@@ -71,4 +71,6 @@ function exportCsv(){
 }
 window.MES={search,exportCsv,setMessage:t=>message.textContent=t};
 render();
-</script></body></html>
+</script><script src="mes_db.js"></script>
+<script>MESDB.bind("manufacturing_cost_inquiry",()=>({orders,details}));</script>
+</body></html>

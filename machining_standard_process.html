@@ -78,5 +78,7 @@ function setMsg(t){message.textContent=t}
 window.MES={search,add:clearForm,delete:removeStandard,save,exportCsv,setMessage:setMsg};
 renderWaiting();renderMaster();
 </script>
+<script src="mes_db.js"></script>
+<script>MESDB.bind("machining_standard_process",()=>({standards,processes}));</script>
 </body>
 </html>

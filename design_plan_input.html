@@ -49,4 +49,6 @@ function pick(i,tr){const r=view[i];document.querySelectorAll('#hbody tr').forEa
 function search(){const j=q_job.value.trim().toLowerCase(),it=q_item.value.trim().toLowerCase();
  view=heads.filter(r=>(!j||r.job_no.toLowerCase().includes(j))&&(!it||String(r.item_name??'').toLowerCase().includes(it)));sbody.innerHTML='';dbody.innerHTML='';render();msg(`조회결과 ${view.length}건입니다.`);}
 function save(){msg('프로토타입에서는 원본 JSON을 변경하지 않습니다.')}
-window.MES={search,save,setMessage:msg};render();</script></body></html>
+window.MES={search,save,setMessage:msg};render();</script><script src="mes_db.js"></script>
+<script>MESDB.bind("design_plan_input",()=>({heads,steps}));</script>
+</body></html>

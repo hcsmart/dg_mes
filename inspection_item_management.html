@@ -28,4 +28,6 @@ function remove(){if(selected<0)return msg('삭제할 항목을 선택하세요.
 function exportCsv(){const out=[["검사항목코드", "검사항목명", "검사구분", "판정기준"],...data.map(r=>[r.code||'',r.name||'',r.group||'',r.remark||''])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='business_division_info.csv';a.click();URL.revokeObjectURL(a.href);msg('CSV 파일을 생성했습니다.')}
 function msg(t){message.textContent=t}window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script>
+<script src="mes_db.js"></script>
+<script>MESDB.bind("inspection_item_management",()=>({data}));</script>
 </body></html>

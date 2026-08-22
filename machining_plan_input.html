@@ -54,4 +54,6 @@ function search(){const j=q_job.value.trim().toLowerCase();
 function save(){msg('프로토타입에서는 저장을 수행하지 않습니다.')}
 function del_(){msg('선택한 행이 없습니다.')}
 function pr(){msg('프로토타입에서는 인쇄를 지원하지 않습니다.')}
-window.MES={search,save,setMessage:msg};render();</script></body></html>
+window.MES={search,save,setMessage:msg};render();</script><script src="mes_db.js"></script>
+<script>MESDB.bind("machining_plan_input",()=>({heads,routes,parts}));</script>
+</body></html>

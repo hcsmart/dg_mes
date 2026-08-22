@@ -70,5 +70,7 @@ function msg(t){message.textContent=t}
 rate.value=SUMMARY.rate.toFixed(2)+'%';total.value=money(SUMMARY.total);done.value=money(SUMMARY.done);notin.value=money(SUMMARY.notin);notord.value=money(SUMMARY.notord);
 head();render();window.MES={search,exportCsv,setMessage:msg};
 </script>
+<script src="mes_db.js"></script>
+<script>MESDB.bind("machining_purchase_progress",()=>({rows}));</script>
 </body>
 </html>

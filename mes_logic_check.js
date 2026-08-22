@@ -6,8 +6,8 @@ let bad=0;
 for(const f of files){
   const html=fs.readFileSync(path.join(P,f),'utf8');
   const errs=[];
-  const dom=new JSDOM(html,{runScripts:'dangerously',url:'file://'+path.join(P,f),beforeParse(w){
-    w.fetch=(u)=>{const fp=path.join(P,String(u).split('/').pop());if(!fs.existsSync(fp))return Promise.reject(new Error('404 '+u));return Promise.resolve({ok:true,json:()=>Promise.resolve(JSON.parse(fs.readFileSync(fp,'utf8'))),text:()=>Promise.resolve(fs.readFileSync(fp,'utf8'))})};
+  const dom=new JSDOM(html,{runScripts:'dangerously',resources:'usable',url:'file://'+path.resolve(P,f),beforeParse(w){
+    w.fetch=(u)=>{if(String(u).includes('supabase'))return Promise.reject(new Error('offline'));const fp=path.join(P,String(u).split('/').pop());if(!fs.existsSync(fp))return Promise.reject(new Error('404 '+u));return Promise.resolve({ok:true,json:()=>Promise.resolve(JSON.parse(fs.readFileSync(fp,'utf8'))),text:()=>Promise.resolve(fs.readFileSync(fp,'utf8'))})};
     w.alert=()=>{};w.confirm=()=>true;w.prompt=()=>'x';w.URL.createObjectURL=()=>'blob:';w.URL.revokeObjectURL=()=>{};w.HTMLAnchorElement.prototype.click=()=>{};
     w.addEventListener('error',e=>errs.push('runtime: '+(e.error?.message||e.message)));
     w.onunhandledrejection=e=>errs.push('promise: '+e.reason);

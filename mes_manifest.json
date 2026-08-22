@@ -1,6 +1,6 @@
 {
   "project": "NEXMES photo-driven MES prototype",
-  "version": "15",
+  "version": "16",
   "entry": "index.html",
   "updated": "2026-08-22",
   "naming_rule": "<domain>_<action>.html (snake_case, English)",
@@ -592,6 +592,14 @@
       "data_json": [
         "machining_purchase_progress_rows.json"
       ]
+    },
+    {
+      "menu": "DB 동기화",
+      "file": "db_sync.html",
+      "status": "designed",
+      "source_photo": null,
+      "data_json": [],
+      "note": "v16 Supabase 연동 관리 화면"
     }
   ],
   "database_json": {
@@ -647,5 +655,10 @@
     "데모용: 고아 실적 삭제 대신 부모행 보강(영업계획 3, 원재료발주현황 7, 업체 3)",
     "window 예약속성 충돌 버그 수정(공정관리 name, 수주등록 status) - 실제 브라우저에서 저장 시 오류나던 건",
     "mes_logic_check.js 추가 (node mes_logic_check.js . 로 전 화면 버튼 클릭 시뮬레이션)"
+  ],
+  "changelog_v16": [
+    "Supabase 프로젝트 DG_smart 연결: 정규화 테이블 68개 + page_state 생성 (RLS demo 정책)",
+    "mes_db.js 추가 - 모든 화면이 page_state에서 저장본 복원/자동 저장 (우하단 배지로 상태 표시)",
+    "db_sync.html 추가 - JSON→DB 업서트, 저장본 초기화"
   ]
 }
