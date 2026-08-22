@@ -69,6 +69,8 @@ function msg(t){message.textContent=t}
 baseDate.value='2026-08-04';render();window.MES={search,exportCsv,setMessage:msg};
 </script>
 <script src="mes_db.js"></script>
-<script>MESDB.bind("stock_inquiry",()=>({rows}));</script>
+<script>
+MESDB.master({page:"stock_inquiry:rows",table:"stock_inquiry_rows",pk:"job",map:{"no": {"col": "seq", "type": "num"}, "job": "job_no", "type": "order_type", "item": "item_name", "odate": {"col": "order_date", "type": "date"}, "cust": "customer_name", "dev": "develop_type", "amount": {"col": "order_amount", "type": "num"}, "buy": {"col": "purchase_amount", "type": "num"}},get:()=>rows,render:()=>{if(typeof view!=="undefined")view=[...rows];(window.render||window.search||function(){})()}});
+</script>
 </body>
 </html>

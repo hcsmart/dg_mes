@@ -1,5 +1,5 @@
 {
-  "version": "15",
+  "version": "19",
   "candidate_foreign_keys": [
     {
       "from": "standard_process_steps.standard_process_id",
@@ -276,5 +276,20 @@
       "from": "outsourced_design_receipts.order_seq",
       "to": "outsourced_design_orders.seq"
     }
-  ]
+  ],
+  "enforced_foreign_keys": [
+    "order_lines.vendor_name -> vendors.vendor_name (on update cascade)",
+    "order_lines.job_no -> jobs.job_no",
+    "order_lines.part_no -> parts.part_code",
+    "order_lines.material -> materials.material_code",
+    "sale_orders.job_no / sale_order_status_rows.job_no / design_plans.job_no / machining_plans.job_no / machining_plan_parts.job_no / partlist_materials.job_no / partlist_purchases.job_no / partlist_status_rows.job_no / status_board_rows.job_no / sales_plans.job_no / design_results.job_no / stock_inquiry_rows.job_no -> jobs.job_no"
+  ],
+  "check_constraints": [
+    "order_lines.status in ('발주','입고','입고확정')",
+    "order_lines.category in ('구매품','원재료','외주가공','외주설계')"
+  ],
+  "rls": {
+    "tier_a": "업무 테이블 - anon 읽기/쓰기, authenticated 전체",
+    "tier_b": "users, user_permissions, employees - anon 완전 차단(로그인 전용)"
+  }
 }
