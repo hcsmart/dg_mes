@@ -892,8 +892,7 @@
         "receipt_date": "date?",
         "confirm_date": "date?",
         "quote_price": "numeric?",
-        "confirm_price": "numeric?",
-        "remark": "text?"
+        "confirm_price": "numeric?"
       }
     },
     "purchase_order_jobs": {
@@ -1139,6 +1138,39 @@
         "inspector": "text?",
         "remark": "text?"
       }
+    },
+    "order_lines": {
+      "pk": "(category,job_no,part_no,process_code,vendor_name)",
+      "columns": {
+        "category": "text?",
+        "status": "text?",
+        "vendor_name": "text?",
+        "job_no": "text?",
+        "item_name": "text?",
+        "process_code": "text?",
+        "process_name": "text?",
+        "part_no": "text?",
+        "part_name": "text?",
+        "material": "text?",
+        "spec": "text?",
+        "machining_process_code": "text?",
+        "order_qty": "text?",
+        "receipt_qty": "text?",
+        "unit_price": "text?",
+        "quote_price": "text?",
+        "confirm_price": "text?",
+        "nego_rate": "text?",
+        "receipt_amount": "text?",
+        "order_date": "text?",
+        "required_date": "text?",
+        "expected_date": "text?",
+        "receipt_date": "text?",
+        "confirm_date": "text?",
+        "owner_name": "text?",
+        "remark": "text?",
+        "plant_name": "text?"
+      },
+      "note": "line_id는 DB 생성 컬럼. JSON 적재 시에는 PK 없이 insert"
     }
   }
 }

@@ -132,7 +132,7 @@
       "source_photo": "20260822_090230.jpg",
       "source_screen": "sale_order_input.html (인원정보 팝업)",
       "confidence": "high",
-      "note": "인원정보 팝업(사원코드 21) + 설계팀/조립팀 목록. 설계팀 드롭다운 실제 항목: dongu, 김기준, 함태안, 옥종필, 박봉규, 박현민"
+      "note": "인원정보 팝업(사원코드 21) + 설계팀/조립팀 목록. 설계팀 드롭다운 실제 항목: dongu, 안지우, 안서연, 장소율, 강지우, 권민준"
     },
     "sale_orders": {
       "source_photo": "20260822_090027.jpg / 20260822_090044.jpg / 20260822_090115.jpg / 20260822_090124.jpg / 20260822_090208.jpg / 20260822_090230.jpg / 20260822_090239.jpg / 20260822_090242.jpg / 20260822_090255.jpg / 20260822_090301.jpg / 20260822_090319.jpg / 20260822_090325.jpg",
@@ -203,7 +203,7 @@
       "source_photo": "20260822_092922.jpg / 20260822_092932.jpg",
       "source_screen": "design_result_status.html",
       "confidence": "high",
-      "note": "18일 범례값(심대섭9·박형복8·장우진4·조영출8·진동구12·박봉규8)과 표 값이 일치해 행 정렬 검증됨"
+      "note": "18일 범례값(최현우9·윤서연8·박민준4·임태윤8·황태윤12·강지우8)과 표 값이 일치해 행 정렬 검증됨"
     },
     "design_teams": {
       "source_photo": "20260822_092922.jpg / 20260822_092932.jpg",
@@ -292,7 +292,7 @@
       "source_photo": "20260822_094116.jpg / 20260822_094055.jpg",
       "source_screen": "material_receipt_input.html",
       "confidence": "medium",
-      "note": "협력업체 \"디와이에...\" 축약 → 디와이에스엠으로 확정. 화면 합계 332/332"
+      "note": "협력업체 \"디와이에...\" 축약 → 나건메탈으로 확정. 화면 합계 332/332"
     },
     "material_receipt_confirm_candidates": {
       "source_photo": "20260822_094136.jpg / 20260822_094132.jpg",
@@ -347,17 +347,17 @@
     },
     {
       "table": "users",
-      "key": "류병현",
+      "key": "이태윤",
       "existing": "bhnru",
-      "new_photo": "bhryu",
+      "new_photo": "user14",
       "source_photo": "20260822_090230.jpg",
       "action": "반영함 - 사진이 더 선명"
     },
     {
       "table": "users",
-      "key": "이종기 / bugck",
-      "existing": "이종기",
-      "new_photo": "이중기",
+      "key": "김지호 / user13",
+      "existing": "김지호",
+      "new_photo": "한서준",
       "source_photo": "20260822_090230.jpg",
       "action": "미반영 - 확인 필요"
     },
@@ -387,17 +387,17 @@
     },
     {
       "table": "status_board_rows",
-      "key": "이춘봉 / 이준봉",
-      "existing": "이춘봉 (현황판 조립담당)",
-      "new_photo": "이준봉 (조립팀 목록 · 계획등록 담당자 ljh1098)",
+      "key": "권태윤 / 한나윤",
+      "existing": "권태윤 (현황판 조립담당)",
+      "new_photo": "한나윤 (조립팀 목록 · 계획등록 담당자 user09)",
       "source_photo": "20260822_092922.jpg / 20260822_092932.jpg / 20260822_091730.jpg",
       "action": "미반영 - 확인 필요"
     },
     {
       "table": "vendors",
-      "key": "열앤케이 / 엘앤케이",
-      "existing": "엘앤케이 (SET발주입고·SET발주등록 협력업체리스트)",
-      "new_photo": "열앤케이 (SET 발주현황 협력업체 열)",
+      "key": "대승공업 / 청영시스템",
+      "existing": "청영시스템 (SET발주입고·SET발주등록 협력업체리스트)",
+      "new_photo": "대승공업 (SET 발주현황 협력업체 열)",
       "source_photo": "20260822_092450.jpg / 20260822_092547.jpg",
       "action": "미반영 - 동일 업체 여부 확인 필요"
     }

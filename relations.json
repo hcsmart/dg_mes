@@ -109,12 +109,12 @@
     {
       "from": "status_board_rows.sales_manager",
       "to": "employees.employee_name",
-      "status": "candidate; 이금상·문병우는 employees.json에 미등록"
+      "status": "candidate; 조건우·박채원는 employees.json에 미등록"
     },
     {
       "from": "status_board_rows.assembly_manager",
       "to": "employees.employee_name",
-      "status": "candidate; 이춘봉·조영출·박기태는 employees.json에 미등록"
+      "status": "candidate; 권태윤·임태윤·이소율는 employees.json에 미등록"
     },
     {
       "from": "sales_plans.job_no",
@@ -167,7 +167,7 @@
     {
       "from": "sales_plans.design_manager_code",
       "to": "employees.employee_code",
-      "status": "verified; dream=김기준"
+      "status": "verified; user21=안지우"
     },
     {
       "from": "partlist_materials.job_no",

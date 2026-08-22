@@ -47,10 +47,10 @@
 </div>
 <script>
 const rows=[
-{no:1,job:'A26026',item:'',proc:'A',procName:'1/2',part:'T99A1',partName:'MACHINERY ...',mp:'MS',mpName:'성형밀링(소형)',vendor:'광주특강',odate:'2026-06-02',edate:'2026-05-22'},
-{no:2,job:'A26026',item:'',proc:'A',procName:'1/2',part:'T99Y',partName:'MACHINERY ...',mp:'WS',mpName:'WIRE CUT',vendor:'에스제이테크',odate:'2026-04-20',edate:'2026-04-18'},
-{no:3,job:'C25120',item:'STIFFENER',proc:'B',procName:'2/6',part:'B21AY2',partName:'PUNCH, NOTC...',mp:'WS',mpName:'WIRE CUT',vendor:'에스제이테크',odate:'2026-04-16',edate:'2026-04-02'},
-{no:4,job:'U26088',item:'Side Cbinet(L/R)',proc:'A',procName:'1/5',part:'B16F',partName:'DIE',mp:'WS',mpName:'WIRE CUT',vendor:'에스제이테크',odate:'2026-08-20',edate:'2026-08-20'},
+{no:1,job:'A26026',item:'',proc:'A',procName:'1/2',part:'T99A1',partName:'MACHINERY ...',mp:'MS',mpName:'성형밀링(소형)',vendor:'가강텍',odate:'2026-06-02',edate:'2026-05-22'},
+{no:2,job:'A26026',item:'',proc:'A',procName:'1/2',part:'T99Y',partName:'MACHINERY ...',mp:'WS',mpName:'WIRE CUT',vendor:'동빛테크',odate:'2026-04-20',edate:'2026-04-18'},
+{no:3,job:'C25120',item:'STIFFENER',proc:'B',procName:'2/6',part:'B21AY2',partName:'PUNCH, NOTC...',mp:'WS',mpName:'WIRE CUT',vendor:'동빛테크',odate:'2026-04-16',edate:'2026-04-02'},
+{no:4,job:'U26088',item:'Side Cbinet(L/R)',proc:'A',procName:'1/5',part:'B16F',partName:'DIE',mp:'WS',mpName:'WIRE CUT',vendor:'동빛테크',odate:'2026-08-20',edate:'2026-08-20'},
 {no:5,job:'U26048-U001',item:'Bottom Bracket LH',proc:'D',procName:'4/4',part:'B22B',partName:'PUNCH, BEND...',mp:'GS',mpName:'성형연삭(소형)',vendor:'동우정밀',odate:'2026-07-21',edate:'2026-07-21'}];
 let view=[],IN=[];
 function renderWait(){waitBody.innerHTML=view.length?view.map((r,i)=>`<tr onclick="pick(event,'wait',${r.no})"><td class="c">${i+1}</td><td class="c"><input type="checkbox" data-no="${r.no}"></td><td>${r.job}</td><td>${r.item}</td><td class="c">${r.proc}</td><td class="c">${r.procName}</td><td>${r.part}</td><td>${r.partName}</td><td class="c">${r.mp}</td><td>${r.mpName}</td><td>${r.vendor}</td><td class="c">${r.odate}</td><td class="c">${r.edate}</td></tr>`).join(''):'<tr><td colspan="13" class="empty">조회된 자료가 없습니다.</td></tr>';countText.textContent=`대기 ${view.length}건 / 입고 ${IN.length}건`}

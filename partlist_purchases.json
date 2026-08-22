@@ -8,7 +8,7 @@
     "type": "SJAL",
     "qty": 5,
     "spec": "8*LC78*P5.00",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -22,7 +22,7 @@
     "type": "SJAL",
     "qty": 2,
     "spec": "13*LC78*P9.60",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -36,7 +36,7 @@
     "type": "HDA",
     "qty": 2,
     "spec": "25*30.00*P9.66",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -50,7 +50,7 @@
     "type": "SGPH",
     "qty": 4,
     "spec": "25*120",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -64,7 +64,7 @@
     "type": "SGHZ",
     "qty": 4,
     "spec": "25*25",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -78,7 +78,7 @@
     "type": "SGHZ",
     "qty": 4,
     "spec": "25*30",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -92,7 +92,7 @@
     "type": "MYCK",
     "qty": 4,
     "spec": "38*140",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -106,7 +106,7 @@
     "type": null,
     "qty": 4,
     "spec": "JLP 6*15",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -120,7 +120,7 @@
     "type": "LP",
     "qty": 4,
     "spec": "4*26",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -134,7 +134,7 @@
     "type": "LP",
     "qty": 8,
     "spec": "6*20",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -148,7 +148,7 @@
     "type": null,
     "qty": 12,
     "spec": "JLP 10*35",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -162,7 +162,7 @@
     "type": "SM45C",
     "qty": 12,
     "spec": "REF DWG",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": "도면",
     "plant_name": "1공장"
@@ -176,7 +176,7 @@
     "type": "PSD",
     "qty": 4,
     "spec": "20*12",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -190,7 +190,7 @@
     "type": "SBM",
     "qty": 4,
     "spec": "38*74.6",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -204,7 +204,7 @@
     "type": "SBN",
     "qty": 4,
     "spec": "38*30.0",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -218,7 +218,7 @@
     "type": "SBS",
     "qty": 4,
     "spec": "38*20(MC NYLON)",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -232,7 +232,7 @@
     "type": "PRPB",
     "qty": 2,
     "spec": "16*20",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -246,7 +246,7 @@
     "type": "PRPB",
     "qty": 2,
     "spec": "22*20",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -260,7 +260,7 @@
     "type": "SM45C",
     "qty": 2,
     "spec": "REF DWG",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": "도면",
     "plant_name": "1공장"
@@ -274,7 +274,7 @@
     "type": "CBI",
     "qty": 3,
     "spec": "16*137.0",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -288,7 +288,7 @@
     "type": "SUJ2",
     "qty": 1,
     "spec": "REF DWG",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": "도면",
     "plant_name": "1공장"
@@ -302,7 +302,7 @@
     "type": "CHN",
     "qty": 8,
     "spec": "20",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -316,7 +316,7 @@
     "type": "CHP",
     "qty": 4,
     "spec": "40",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -330,7 +330,7 @@
     "type": "MSB",
     "qty": 2,
     "spec": "10*85",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -344,7 +344,7 @@
     "type": "CBH",
     "qty": 2,
     "spec": "35*5",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -358,7 +358,7 @@
     "type": "CBH",
     "qty": 3,
     "spec": "35*5",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -372,7 +372,7 @@
     "type": "SWL",
     "qty": 4,
     "spec": "30*90",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -386,7 +386,7 @@
     "type": "SWF",
     "qty": 2,
     "spec": "35*80",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -400,7 +400,7 @@
     "type": "SWL",
     "qty": 3,
     "spec": "35*125",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -414,7 +414,7 @@
     "type": "SWM",
     "qty": 8,
     "spec": "30*60",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -428,7 +428,7 @@
     "type": "SWM",
     "qty": 8,
     "spec": "20*65",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -442,7 +442,7 @@
     "type": "WM",
     "qty": 2,
     "spec": "14*80",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -456,7 +456,7 @@
     "type": null,
     "qty": 4,
     "spec": "B6905ZZ(MISUMI)",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -470,7 +470,7 @@
     "type": null,
     "qty": 2,
     "spec": "TLA2216Z(MISUMI)",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"
@@ -484,7 +484,7 @@
     "type": "TSP",
     "qty": 10,
     "spec": "750*75(TOSS)",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": "도면",
     "plant_name": "1공장"
@@ -498,7 +498,7 @@
     "type": null,
     "qty": 12,
     "spec": "REF DWG",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": "도면",
     "plant_name": "1공장"
@@ -512,7 +512,7 @@
     "type": null,
     "qty": 2,
     "spec": "REF DWG",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": "도면",
     "plant_name": "1공장"
@@ -526,7 +526,7 @@
     "type": "SCP1",
     "qty": 6,
     "spec": "REF DWG",
-    "registered_by": "박현민",
+    "registered_by": "권민준",
     "registered_date": "2026-08-10",
     "attachment": null,
     "plant_name": "1공장"

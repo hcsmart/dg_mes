@@ -61,14 +61,14 @@ const JOBS=[
 {job:'C25120',item:'STIFFENER',proc:'A',procName:'1/6'},
 {job:'C25120',item:'STIFFENER',proc:'B',procName:'2/6'},
 {job:'C25120',item:'STIFFENER',proc:'C',procName:'3/6'}];
-const VENDORS=['(주)부국','건영정밀','경남정밀','경천정밀','광주특강','기선정밀','동우정밀','성화기업','에스제이테크','제이케이테크','대경열처리'];
+const VENDORS=['신우기업','한림메탈','경남정밀','경천정밀','가강텍','기선정밀','동우정밀','금승정기','동빛테크','제이케이테크','대경열처리'];
 const PROCNAME={GS:'성형연삭(소형)',AB:'가공ASSY',MS:'성형밀링(소형)',WS:'WIRE CUT',WS1:'WIRE CUT1',MA:'머시닝',HQ:'열처리',NM:'NC밀링'};
 const ROUTES=[
 {part:'T99A',name:'MACHI...',steps:['GS',null,null,null,null,null,null,null,null]},
 {part:'T99B',name:'MACHI...',steps:['AB',null,null,null,null,null,null,null,null]}];
 const REQ=[
-{no:1,vendor:'동우정밀',job:'A25032',item:'',proc:'A',procName:'1/1',part:'T99A',partName:'MACHINERY ...',mp:'GS',mpName:'성형연삭(소형)',odate:'2025-02-25',rdate:'2025-02-25',remark:'',writer:'이영현'},
-{no:2,vendor:'동우정밀',job:'A25032',item:'',proc:'A',procName:'1/1',part:'T99B',partName:'MACHINERY ...',mp:'AB',mpName:'가공ASSY',odate:'2025-02-26',rdate:'2025-02-26',remark:'',writer:'이영현'}];
+{no:1,vendor:'동우정밀',job:'A25032',item:'',proc:'A',procName:'1/1',part:'T99A',partName:'MACHINERY ...',mp:'GS',mpName:'성형연삭(소형)',odate:'2025-02-25',rdate:'2025-02-25',remark:'',writer:'한서연'},
+{no:2,vendor:'동우정밀',job:'A25032',item:'',proc:'A',procName:'1/1',part:'T99B',partName:'MACHINERY ...',mp:'AB',mpName:'가공ASSY',odate:'2025-02-26',rdate:'2025-02-26',remark:'',writer:'한서연'}];
 let jobIdx=0,venIdx=6,jobView=[...JOBS],venView=[...VENDORS];
 function renderJobs(){jobBody.innerHTML=jobView.map((j,i)=>`<tr class="${i===jobIdx?'sel':''}" onclick="pickJob(${i})"><td>${j.job}</td><td>${j.item}</td><td class="c">${j.proc}</td><td class="c">${j.procName}</td></tr>`).join('');countText.textContent=`제번 ${jobView.length}건 / 요청 ${REQ.length}건`}
 function renderVendors(){venBody.innerHTML=venView.map((v,i)=>`<tr class="${i===venIdx?'sel':''}" onclick="pickVendor(${i})"><td>${v}</td></tr>`).join('')}

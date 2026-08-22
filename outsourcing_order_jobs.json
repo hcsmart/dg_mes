@@ -1,11 +1,5 @@
 [
   {
-    "job": "A25032",
-    "item": "",
-    "proc": "A",
-    "procName": "1/1"
-  },
-  {
     "job": "A26026",
     "item": "",
     "proc": "A",
@@ -16,18 +10,6 @@
     "item": "",
     "proc": "B",
     "procName": "2/2"
-  },
-  {
-    "job": "C14213-S030",
-    "item": "BUSBAR",
-    "proc": "A",
-    "procName": "1/1"
-  },
-  {
-    "job": "C25080-S001",
-    "item": "HEADER",
-    "proc": "A",
-    "procName": "1/2"
   },
   {
     "job": "C25120",

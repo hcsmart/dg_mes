@@ -1,13 +1,5 @@
 [
   {
-    "row_no": 1,
-    "job_no": "A23007",
-    "item_name": null,
-    "completion_planned_date": null,
-    "s1_date": "2023-08-22",
-    "customer_request_date": "2023-08-22"
-  },
-  {
     "row_no": 2,
     "job_no": "A24040",
     "item_name": null,
@@ -16,83 +8,11 @@
     "customer_request_date": "2024-03-21"
   },
   {
-    "row_no": 3,
-    "job_no": "A25032",
-    "item_name": null,
-    "completion_planned_date": null,
-    "s1_date": "2025-03-02",
-    "customer_request_date": "2025-03-02"
-  },
-  {
     "row_no": 4,
     "job_no": "A26026",
     "item_name": null,
     "completion_planned_date": null,
     "s1_date": "2026-12-31",
     "customer_request_date": "2026-12-31"
-  },
-  {
-    "row_no": 5,
-    "job_no": "C14213-S030",
-    "item_name": "BUSBAR",
-    "completion_planned_date": null,
-    "s1_date": "2026-08-30",
-    "customer_request_date": "2026-08-30"
-  },
-  {
-    "row_no": 6,
-    "job_no": "C19022-S004",
-    "item_name": "BRACKET",
-    "completion_planned_date": null,
-    "s1_date": "2025-02-06",
-    "customer_request_date": "2025-02-06"
-  },
-  {
-    "row_no": 7,
-    "job_no": "C23011",
-    "item_name": "MOTOR BRACKET",
-    "completion_planned_date": null,
-    "s1_date": "2023-04-22",
-    "customer_request_date": "2024-07-30"
-  },
-  {
-    "row_no": 8,
-    "job_no": "C23086",
-    "item_name": "MOTOR BRACKET",
-    "completion_planned_date": null,
-    "s1_date": "2023-10-22",
-    "customer_request_date": "2024-07-30"
-  },
-  {
-    "row_no": 9,
-    "job_no": "C23087",
-    "item_name": "MOTOR BRACKET",
-    "completion_planned_date": null,
-    "s1_date": "2023-10-22",
-    "customer_request_date": "2024-07-30"
-  },
-  {
-    "row_no": 10,
-    "job_no": "C23088",
-    "item_name": "MOTOR BRACKET",
-    "completion_planned_date": null,
-    "s1_date": "2023-10-22",
-    "customer_request_date": "2024-07-30"
-  },
-  {
-    "row_no": 11,
-    "job_no": "C23089",
-    "item_name": "MOTOR BRACKET",
-    "completion_planned_date": null,
-    "s1_date": "2023-10-22",
-    "customer_request_date": "2024-07-30"
-  },
-  {
-    "row_no": 12,
-    "job_no": "C23089-A001",
-    "item_name": "MOTOR BRACKET",
-    "completion_planned_date": null,
-    "s1_date": "2023-11-30",
-    "customer_request_date": null
   }
 ]

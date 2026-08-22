@@ -22,35 +22,5 @@
     "standard_process_name": "대형 가공",
     "owner_name": "임직원",
     "registered_date": "2024-03-05"
-  },
-  {
-    "standard_process_id": 5,
-    "standard_process_name": "EWE형2",
-    "owner_name": "임직원",
-    "registered_date": "2024-06-29"
-  },
-  {
-    "standard_process_id": 6,
-    "standard_process_name": "EWE형2",
-    "owner_name": "임직원",
-    "registered_date": "2023-06-29"
-  },
-  {
-    "standard_process_id": 7,
-    "standard_process_name": "외주 일반형",
-    "owner_name": "임직원",
-    "registered_date": "2023-09-04"
-  },
-  {
-    "standard_process_id": 8,
-    "standard_process_name": "외주EWE1",
-    "owner_name": "임직원",
-    "registered_date": "2023-09-05"
-  },
-  {
-    "standard_process_id": 9,
-    "standard_process_name": "외주EWE2",
-    "owner_name": "임직원",
-    "registered_date": "2024-09-24"
   }
 ]
