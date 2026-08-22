@@ -659,6 +659,7 @@
   "changelog_v16": [
     "Supabase 프로젝트 DG_smart 연결: 정규화 테이블 68개 + page_state 생성 (RLS demo 정책)",
     "mes_db.js 추가 - 모든 화면이 page_state에서 저장본 복원/자동 저장 (우하단 배지로 상태 표시)",
-    "db_sync.html 추가 - JSON→DB 업서트, 저장본 초기화"
+    "db_sync.html 추가 - JSON→DB 업서트, 저장본 초기화",
+    "PGRST102 대응: 업서트 전 모든 행의 키를 합집합으로 정규화(누락 키는 null) - PostgREST는 배열 내 객체 키가 모두 동일해야 함"
   ]
 }

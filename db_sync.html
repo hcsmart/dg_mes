@@ -15,10 +15,14 @@ const rows=d=>Array.isArray(d)?d:(Object.values(d).find(v=>Array.isArray(v)&&v.l
 const body=document.getElementById('body'),msg=t=>document.getElementById('msg').textContent=t;
 function line(t,pk,n,db,res,cls){let tr=document.getElementById('t_'+t);if(!tr){tr=document.createElement('tr');tr.id='t_'+t;body.appendChild(tr)}tr.innerHTML=`<td>${t}</td><td>${pk.join(',')}</td><td class="r">${n??''}</td><td class="r">${db??''}</td><td class="${cls||''}">${res||''}</td>`}
 async function countDb(t){try{const r=await fetch(MESDB.cfg.url+'/rest/v1/'+t+'?select=*',{headers:{apikey:MESDB.cfg.key,Authorization:'Bearer '+MESDB.cfg.key,Prefer:'count=exact',Range:'0-0'}});return (r.headers.get('content-range')||'').split('/')[1]}catch(e){return '?'}}
+function normalize(rs){/* PostgREST는 배열 내 모든 객체의 키가 같아야 함(PGRST102) */
+  const keys=[];for(const r of rs)for(const k in r)if(!keys.includes(k))keys.push(k);
+  return rs.map(r=>{const o={};for(const k of keys)o[k]=(r[k]===undefined?null:r[k]);return o})}
 async function upsert(t,data){const pk=TABLES[t];let rs=rows(data);
   if(pk.length)rs=rs.filter(r=>pk.every(k=>r[k]!==null&&r[k]!==undefined));
   if(!rs.length){line(t,pk,0,await countDb(t),'건너뜀');return}
-  try{for(let i=0;i<rs.length;i+=200)await MESDB.table(t).upsert(rs.slice(i,i+200),pk.join(','));line(t,pk,rs.length,await countDb(t),'완료','ok')}catch(e){line(t,pk,rs.length,await countDb(t),e.message.slice(0,120),'err')}}
+  rs=normalize(rs);
+  try{for(let i=0;i<rs.length;i+=200)await MESDB.table(t).upsert(rs.slice(i,i+200),pk.join(','));line(t,pk,rs.length,await countDb(t),'완료','ok')}catch(e){line(t,pk,rs.length,await countDb(t),e.message.slice(0,160),'err')}}
 async function syncFromUrl(){msg('읽는 중…');for(const t of Object.keys(TABLES)){try{const d=await fetch(t+'.json').then(r=>{if(!r.ok)throw new Error(r.status);return r.json()});await upsert(t,d)}catch(e){line(t,TABLES[t],'-','-','JSON 읽기 실패: '+e.message,'err')}}msg('완료')}
 async function syncFromFiles(fl){msg('읽는 중…');for(const f of fl){const t=f.name.replace(/\.json$/,'');if(!TABLES[t])continue;try{await upsert(t,JSON.parse(await f.text()))}catch(e){line(t,TABLES[t],'-','-',e.message,'err')}}msg('완료')}
 async function listStates(){try{const r=await MESDB.table('page_state').select('select=page,updated_at');msg(r.length?r.map(x=>x.page+' ('+x.updated_at.slice(0,16)+')').join(', '):'저장본 없음')}catch(e){msg('DB 연결 실패: '+e.message)}}

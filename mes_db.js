@@ -8,7 +8,9 @@ const H=()=>({'apikey':CFG.key,'Authorization':'Bearer '+CFG.key,'Content-Type':
 async function rest(path,opt={}){const r=await fetch(CFG.url+'/rest/v1/'+path,{...opt,headers:{...H(),...(opt.headers||{})}});if(!r.ok)throw new Error(r.status+' '+await r.text());const t=await r.text();return t?JSON.parse(t):null}
 const table=name=>({
   select:(q='select=*')=>rest(`${name}?${q}`),
-  upsert:(rows,onConflict)=>rest(`${name}${onConflict?'?on_conflict='+onConflict:''}`,{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(Array.isArray(rows)?rows:[rows])}),
+  upsert:(rows,onConflict)=>{const a=Array.isArray(rows)?rows:[rows];const keys=[];for(const r of a)for(const k in r)if(!keys.includes(k))keys.push(k);
+    const norm=a.map(r=>{const o={};for(const k of keys)o[k]=(r[k]===undefined?null:r[k]);return o});
+    return rest(`${name}${onConflict?'?on_conflict='+onConflict:''}`,{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(norm)})},
   delete:(match)=>rest(`${name}?`+Object.entries(match).map(([k,v])=>`${k}=eq.${encodeURIComponent(v)}`).join('&'),{method:'DELETE',headers:{'Prefer':'return=minimal'}})
 });
 let page=null,getter=null,last='',timer=null,online=false;
