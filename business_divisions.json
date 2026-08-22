@@ -1,0 +1,22 @@
+[
+  {
+    "business_division_code": "BN001",
+    "business_division_name": "금형",
+    "remark": null
+  },
+  {
+    "business_division_code": "BN002",
+    "business_division_name": "부품",
+    "remark": null
+  },
+  {
+    "business_division_code": "BN003",
+    "business_division_name": "EV사업부",
+    "remark": null
+  },
+  {
+    "business_division_code": "BN004",
+    "business_division_name": "연구소",
+    "remark": null
+  }
+]

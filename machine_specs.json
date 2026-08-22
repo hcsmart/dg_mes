@@ -1,0 +1,67 @@
+[
+  {
+    "machine_spec_code": "MS001",
+    "machine_spec_name": "110 TON",
+    "remark": null
+  },
+  {
+    "machine_spec_code": "MS002",
+    "machine_spec_name": "160 TON",
+    "remark": null
+  },
+  {
+    "machine_spec_code": "MS003",
+    "machine_spec_name": "250 TON",
+    "remark": null
+  },
+  {
+    "machine_spec_code": "MS004",
+    "machine_spec_name": "300 TON",
+    "remark": null
+  },
+  {
+    "machine_spec_code": "MS005",
+    "machine_spec_name": "350 TON",
+    "remark": null
+  },
+  {
+    "machine_spec_code": "MS006",
+    "machine_spec_name": "400 TON",
+    "remark": null
+  },
+  {
+    "machine_spec_code": "MS007",
+    "machine_spec_name": "500 TON",
+    "remark": null
+  },
+  {
+    "machine_spec_code": "MS008",
+    "machine_spec_name": "600 TON",
+    "remark": null
+  },
+  {
+    "machine_spec_code": "MS009",
+    "machine_spec_name": "800 TON",
+    "remark": null
+  },
+  {
+    "machine_spec_code": "MS010",
+    "machine_spec_name": "1000 TON",
+    "remark": null
+  },
+  {
+    "machine_spec_code": "MS011",
+    "machine_spec_name": "1500 TON",
+    "remark": null
+  },
+  {
+    "machine_spec_code": "MS012",
+    "machine_spec_name": "2000 TON",
+    "remark": null
+  },
+  {
+    "machine_spec_code": "MS013",
+    "machine_spec_name": "200 TON",
+    "remark": null
+  }
+]

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>가공구매 진척현황</title>
+<style>
+:root{--line:#9daab6;--line2:#c5ced6;--ink:#344758;--cell:#e8a33d}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:var(--ink);background:#fff;overflow:hidden}button,input,select{font:inherit;color:inherit}
+.screen{height:100%;display:flex;flex-direction:column}.title{height:46px;padding:9px 14px 4px;border-bottom:2px solid #3977ad;display:flex;align-items:center;gap:14px}.title h1{margin:0;font-size:21px;font-weight:500;color:#4b5b69}.title h1:before{content:'◯';margin-right:6px;color:#8795a1}.title .plant{margin-left:auto;display:flex;align-items:center;gap:6px;color:#6b7885}
+.filters{padding:7px 14px;border-bottom:1px solid var(--line2);background:#fafbfc;display:flex;gap:6px;align-items:center;flex-wrap:wrap}.label{font-weight:700}.field{height:27px;border:1px solid #b7c2cb;background:#fff;padding:0 7px;outline:none}.field:focus{border-color:#4e88bb}
+.gridbox{flex:1;min-height:0;margin:7px 14px 0;border:1px solid var(--line);display:flex;flex-direction:column;background:#fff}
+.tablewrap{flex:1;min-height:0;overflow:auto}table{border-collapse:collapse;min-width:1500px;width:100%;table-layout:fixed}
+th{position:sticky;top:0;z-index:2;height:26px;text-align:center;background:linear-gradient(#dbe9f4,#c7d9e8);color:#405266;font-weight:700;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2)}
+td{border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:0 5px;vertical-align:middle;height:56px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+td.step{background:var(--cell);padding:2px 4px;line-height:1.35;font-size:11px;color:#2f2408}
+td.step b{display:block;font-weight:700}
+tbody tr:hover td:not(.step){background:#edf6fd}tbody tr.sel td:not(.step){background:#2e78bd;color:#fff}
+.c{text-align:center}.r{text-align:right}
+.summary{height:40px;margin:0 14px;border:1px solid var(--line);border-top:0;background:#eef3f6;display:flex;align-items:center;gap:7px;padding:0 8px;flex-wrap:wrap}
+.summary input{height:26px;border:1px solid #aeb9c3;background:#fff;padding:0 6px;text-align:right;width:110px}
+.btn{height:28px;min-width:70px;border:1px solid #9ca9b5;background:linear-gradient(#fff,#dfe6eb)}.btn:hover{background:#fff}.btn.primary{background:linear-gradient(#f9ffff,#d2e7f6);color:#1e5e91}
+.foot{height:42px;display:flex;align-items:center;padding:5px 14px;border-top:1px solid var(--line);background:#eef2f5;gap:5px}.msg{margin-left:10px;color:#687784}.foot .right{margin-left:auto;color:#7c8993}
+@media(max-width:900px){.title h1{font-size:18px}.summary{overflow:auto}}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="title"><h1>가공구매 진척현황</h1><div class="plant"><span>공장</span><select id="plant" class="field"><option>1공장</option><option>2공장</option></select></div></div>
+  <section class="filters">
+    <span class="label">제 번</span><input id="jobQ" class="field" style="width:200px">
+    <span class="label">공 정</span><input id="procQ" class="field" style="width:160px">
+    <span class="label">품 번</span><input id="partQ" class="field" style="width:180px">
+    <button class="btn" onclick="search()">⌕ 조회</button>
+  </section>
+  <div class="gridbox"><div class="tablewrap"><table id="grid">
+    <thead><tr id="headRow"></tr></thead>
+    <tbody id="body"></tbody>
+  </table></div></div>
+  <div class="summary">
+    <span class="label">진척율</span><input id="rate" readonly>
+    <span class="label">전체공정</span><input id="total" readonly>
+    <span class="label">완료</span><input id="done" readonly>
+    <span class="label">미입고</span><input id="notin" readonly>
+    <span class="label">미발주</span><input id="notord" readonly>
+  </div>
+  <footer class="foot"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn primary" onclick="exportCsv()">▤ EXCEL</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫 기</button><span class="msg" id="message">가공구매 진척현황을 조회했습니다.</span><span class="right" id="countText"></span></footer>
+</div>
+<script>
+const MAXCOL=12;
+const rows=[
+{no:1,job:'A25032',proc:'A',part:'T99A',steps:[{mp:'GS',vendor:'동우정밀',date:'2025-02-07'}]},
+{no:2,job:'A25032',proc:'A',part:'T99B',steps:[{mp:'AB',vendor:'동우정밀',date:'2025-02-01'}]},
+{no:3,job:'A26026',proc:'A',part:'T99A1',steps:[{mp:'MS',vendor:'광주특강',date:'2026-05-22'}]},
+{no:4,job:'A26026',proc:'A',part:'T99A2',steps:[{mp:'MS',vendor:'광주특강',date:'2026-05-22'}]},
+{no:5,job:'A26026',proc:'A',part:'T99Y',steps:[{mp:'MA',vendor:'성화기업',date:'2026-04-09'},{mp:'WS',vendor:'에스제이테크',date:'2026-04-18'},{mp:'WS1',vendor:'제이케이테크',date:'2026-04-07'},{mp:'AB',vendor:'창원대학교…',date:'2026-04-20'}]},
+{no:6,job:'A26026',proc:'A',part:'T99Z',steps:[{mp:'MA',vendor:'성화기업',date:'2026-04-06'},{mp:'GS',vendor:'동우정밀',date:'2026-04-14'},{mp:'WS',vendor:'에스제이테크',date:'2026-04-21'},{mp:'AB',vendor:'창원대학교…',date:'2026-04-20'}]}];
+const SUMMARY={rate:78.51,total:17731,done:13920,notin:0,notord:3811};
+let view=[...rows];
+const money=v=>Number(v||0).toLocaleString('ko-KR');
+function head(){headRow.innerHTML=`<th style="width:120px">제번</th><th style="width:60px">공정</th><th style="width:100px">품번</th>`+Array.from({length:MAXCOL},(_,i)=>`<th style="width:105px">공정${i+1}</th>`).join('')}
+function render(){body.innerHTML=view.map(r=>`<tr onclick="sel(this)"><td>${r.job}</td><td class="c">${r.proc}</td><td>${r.part}</td>`+
+Array.from({length:MAXCOL},(_,i)=>{const s=r.steps[i];return s?`<td class="step"><b>${s.mp}</b>${s.vendor}<br>${s.date}</td>`:'<td></td>'}).join('')+'</tr>').join('');
+countText.textContent=`${view.length}건`}
+function sel(tr){document.querySelectorAll('#body tr').forEach(x=>x.classList.remove('sel'));tr.classList.add('sel')}
+function search(){const j=jobQ.value.trim().toLowerCase(),p=procQ.value.trim().toLowerCase(),pt=partQ.value.trim().toLowerCase();
+view=rows.filter(r=>(!j||r.job.toLowerCase().includes(j))&&(!p||r.proc.toLowerCase().includes(p))&&(!pt||r.part.toLowerCase().includes(pt)));render();msg(`${view.length}건을 조회했습니다.`)}
+function exportCsv(){const out=[['제번','공정','품번',...Array.from({length:MAXCOL},(_,i)=>`공정${i+1}`)],...view.map(r=>[r.job,r.proc,r.part,...Array.from({length:MAXCOL},(_,i)=>{const s=r.steps[i];return s?`${s.mp}/${s.vendor}/${s.date}`:''})])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='machining_purchase_progress.csv';a.click();URL.revokeObjectURL(a.href);msg('EXCEL(CSV) 파일을 생성했습니다.')}
+function msg(t){message.textContent=t}
+rate.value=SUMMARY.rate.toFixed(2)+'%';total.value=money(SUMMARY.total);done.value=money(SUMMARY.done);notin.value=money(SUMMARY.notin);notord.value=money(SUMMARY.notord);
+head();render();window.MES={search,exportCsv,setMessage:msg};
+</script>
+</body>
+</html>

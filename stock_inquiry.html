@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>재고조회</title>
+<style>
+:root{--line:#9daab6;--line2:#c5ced6;--ink:#344758}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:var(--ink);background:#fff;overflow:hidden}button,input,select{font:inherit;color:inherit}
+.screen{height:100%;display:flex;flex-direction:column}.title{height:46px;padding:9px 14px 4px;border-bottom:2px solid #3977ad;display:flex;align-items:center;gap:14px}.title h1{margin:0;font-size:21px;font-weight:500;color:#4b5b69}.title h1:before{content:'◯';margin-right:6px;color:#8795a1}.title .plant{margin-left:auto;display:flex;align-items:center;gap:6px;color:#6b7885}
+.filters{padding:7px 14px;border-bottom:1px solid var(--line2);background:#fafbfc;display:flex;gap:6px;align-items:center;flex-wrap:wrap}.label{font-weight:700}.field{height:27px;border:1px solid #b7c2cb;background:#fff;padding:0 7px;outline:none}.field:focus{border-color:#4e88bb}
+.gridbox{flex:1;min-height:0;margin:7px 14px;border:1px solid var(--line);display:flex;flex-direction:column;background:#fff}
+.tablewrap{flex:1;min-height:0;overflow:auto}table{border-collapse:collapse;min-width:1080px;width:100%;table-layout:fixed}th,td{height:25px;padding:0 6px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}th{position:sticky;top:0;z-index:2;text-align:center;background:linear-gradient(#dbe9f4,#c7d9e8);color:#405266;font-weight:700}tbody tr:nth-child(even) td{background:#fafcfd}tbody tr:hover td{background:#edf6fd}tbody tr.sel td{background:#2e78bd;color:#fff}.c{text-align:center}.r{text-align:right}
+tfoot th{position:sticky;bottom:0;background:linear-gradient(#e6eef5,#d3e0ea)}
+.btn{height:28px;min-width:70px;border:1px solid #9ca9b5;background:linear-gradient(#fff,#dfe6eb)}.btn:hover{background:#fff}.btn.primary{background:linear-gradient(#f9ffff,#d2e7f6);color:#1e5e91}
+.foot{height:42px;display:flex;align-items:center;padding:5px 14px;border-top:1px solid var(--line);background:#eef2f5;gap:5px}.msg{margin-left:10px;color:#687784}.foot .right{margin-left:auto;color:#7c8993}
+@media(max-width:900px){.title h1{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="title"><h1>재고조회</h1><div class="plant"><span>공장</span><select id="plant" class="field"><option>1공장</option><option>2공장</option></select></div></div>
+  <section class="filters">
+    <span class="label">기준일</span><input id="baseDate" class="field" type="date">
+    <span class="label">제번</span><input id="jobQ" class="field" style="width:170px">
+    <span class="label">품명</span><input id="itemQ" class="field" style="width:190px">
+    <span class="label">고객사</span><input id="custQ" class="field" style="width:190px">
+    <span class="label">구분</span><select id="typeQ" class="field"><option value="">전체</option><option>신작</option><option>개조</option><option>수리</option><option>유상사급</option></select>
+    <button class="btn" onclick="search()">⌕ 조회</button>
+  </section>
+  <div class="gridbox"><div class="tablewrap"><table>
+    <colgroup><col style="width:46px"><col style="width:130px"><col style="width:80px"><col style="width:180px"><col style="width:100px"><col style="width:190px"><col style="width:80px"><col style="width:130px"><col style="width:130px"></colgroup>
+    <thead><tr><th>No</th><th>제번</th><th>구분</th><th>품명</th><th>수주일</th><th>고객사</th><th>개발유형</th><th>수주가</th><th>매입금액</th></tr></thead>
+    <tbody id="body"></tbody>
+    <tfoot><tr><th colspan="7" class="r">합 계</th><th class="r" id="sumOrder">0</th><th class="r" id="sumBuy">0</th></tr></tfoot>
+  </table></div></div>
+  <footer class="foot"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn primary" onclick="exportCsv()">▤ EXCEL</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫 기</button><span class="msg" id="message">기준일 기준 재고(제번별 매입/수주) 현황을 조회했습니다.</span><span class="right" id="countText"></span></footer>
+</div>
+<script>
+const rows=[
+{no:1,job:'G02001',type:'신작',item:'SIDE PANEL R',odate:'2002-05-27',cust:'LGE11(인도푸네)',dev:'사내',amount:0,buy:0},
+{no:2,job:'G14130-S014',type:'개조',item:'SIDE, PANEL R/L',odate:'2025-12-04',cust:'LG전자 에어컨사업부',dev:'사내',amount:0,buy:0},
+{no:3,job:'G14130-U001',type:'유상사급',item:'SIDE, PANEL R/L',odate:'2025-10-01',cust:'LG전자 에어컨사업부',dev:'사내',amount:0,buy:0},
+{no:4,job:'J14137-A001',type:'수리',item:'FRONT,PLATE',odate:'2025-10-02',cust:'LG전자 리빙사업부',dev:'사내',amount:0,buy:405580},
+{no:5,job:'J14143-U001',type:'유상사급',item:'COVER, REAR',odate:'2024-08-20',cust:'LG전자 리빙사업부',dev:'사내',amount:0,buy:228960},
+{no:6,job:'J14144-U001',type:'유상사급',item:'COVER, REAR',odate:'2026-03-13',cust:'LG전자 리빙사업부',dev:'외주',amount:0,buy:208200},
+{no:7,job:'J14151-S030',type:'개조',item:'TOP,PLATE',odate:'2026-07-09',cust:'LG전자 리빙사업부',dev:'사내',amount:0,buy:4910},
+{no:8,job:'U14206-A001',type:'수리',item:'DOOR LINER',odate:'2025-06-16',cust:'',dev:'사내',amount:0,buy:22000},
+{no:9,job:'C14213-S030',type:'개조',item:'BUSBAR',odate:'2025-07-24',cust:'',dev:'사내',amount:0,buy:1563630},
+{no:10,job:'K14214-S063',type:'개조',item:'개조및 수리',odate:'2025-12-19',cust:'LG전자 냉장고사업부',dev:'사내',amount:14350000,buy:2629450},
+{no:11,job:'K14215-S097',type:'개조',item:'개조및 수리',odate:'2026-06-09',cust:'LG전자 냉장고사업부',dev:'사내',amount:0,buy:346770},
+{no:12,job:'G14216-U001',type:'유상사급',item:'개조및 수리',odate:'2024-09-20',cust:'LG전자 에어컨사업부',dev:'사내',amount:0,buy:44000},
+{no:13,job:'K15007-U001',type:'유상사급',item:'개조및 수리',odate:'2025-05-19',cust:'LG전자 냉장고사업부',dev:'사내',amount:0,buy:201000},
+{no:14,job:'G15012-S119',type:'개조',item:'PANEL SIDE',odate:'2025-10-31',cust:'LG전자 에어컨사업부',dev:'사내',amount:0,buy:0},
+{no:15,job:'G15012-S120',type:'개조',item:'개조및 수리',odate:'2026-02-05',cust:'LG전자 에어컨사업부',dev:'사내',amount:0,buy:0},
+{no:16,job:'G15012-S122',type:'개조',item:'개조및 수리',odate:'2026-04-30',cust:'LG전자 에어컨사업부',dev:'사내',amount:1000000,buy:2179900},
+{no:17,job:'G15012-U001',type:'유상사급',item:'Base, Indool',odate:'2025-07-18',cust:'LG전자 에어컨사업부',dev:'사내',amount:0,buy:850700},
+{no:18,job:'K15032-A004',type:'수리',item:'INNER, CASE',odate:'2025-09-05',cust:'스타리온 성절산',dev:'사내',amount:0,buy:0}];
+let view=[...rows];
+const money=v=>Number(v||0).toLocaleString('ko-KR');
+function render(){body.innerHTML=view.map((r,i)=>`<tr onclick="sel(this)"><td class="c">${i+1}</td><td>${r.job}</td><td class="c">${r.type}</td><td>${r.item}</td><td class="c">${r.odate}</td><td>${r.cust}</td><td class="c">${r.dev}</td><td class="r">${money(r.amount)}</td><td class="r">${money(r.buy)}</td></tr>`).join('');
+sumOrder.textContent=money(view.reduce((a,r)=>a+r.amount,0));sumBuy.textContent=money(view.reduce((a,r)=>a+r.buy,0));countText.textContent=`${view.length}건`}
+function sel(tr){document.querySelectorAll('#body tr').forEach(x=>x.classList.remove('sel'));tr.classList.add('sel')}
+function search(){const j=jobQ.value.trim().toLowerCase(),it=itemQ.value.trim().toLowerCase(),c=custQ.value.trim().toLowerCase(),t=typeQ.value,b=baseDate.value;
+view=rows.filter(r=>(!j||r.job.toLowerCase().includes(j))&&(!it||r.item.toLowerCase().includes(it))&&(!c||r.cust.toLowerCase().includes(c))&&(!t||r.type===t)&&(!b||!r.odate||r.odate<=b));
+render();msg(`기준일 ${b||'전체'} 기준 ${view.length}건을 조회했습니다.`)}
+function exportCsv(){const out=[['제번','구분','품명','수주일','고객사','개발유형','수주가','매입금액'],...view.map(r=>[r.job,r.type,r.item,r.odate,r.cust,r.dev,r.amount,r.buy])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='stock_inquiry.csv';a.click();URL.revokeObjectURL(a.href);msg('EXCEL(CSV) 파일을 생성했습니다.')}
+function msg(t){message.textContent=t}
+baseDate.value='2026-08-04';render();window.MES={search,exportCsv,setMessage:msg};
+</script>
+</body>
+</html>

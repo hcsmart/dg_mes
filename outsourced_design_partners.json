@@ -1,0 +1,26 @@
+{
+  "partners": [
+    { "seq": 1, "partner_name": "유성 ENG" },
+    { "seq": 2, "partner_name": "유니텍" },
+    { "seq": 3, "partner_name": "아르텍" },
+    { "seq": 4, "partner_name": "BTC" },
+    { "seq": 5, "partner_name": "NC테크" },
+    { "seq": 6, "partner_name": "두산테크" }
+  ],
+  "jobs": [
+    { "job_no": "A25032", "item_name": null, "complete_due_date": "2025-03-02", "s1_date": "2025-03-02", "customer_required_date": "2025-03-02" },
+    { "job_no": "A26026", "item_name": null, "complete_due_date": "2026-12-31", "s1_date": "2026-12-31", "customer_required_date": "2026-12-31" },
+    { "job_no": "C14213-S030", "item_name": "BUSBAR", "complete_due_date": "2025-08-10", "s1_date": "2026-08-30", "customer_required_date": "2026-08-30" },
+    { "job_no": "C23130-U001", "item_name": "RETAINER PA RHD", "complete_due_date": "2024-11-14", "s1_date": "2024-11-15", "customer_required_date": "2024-11-15" },
+    { "job_no": "C23140-U001", "item_name": "RETAINER DR RHD", "complete_due_date": "2024-12-10", "s1_date": "2024-12-10", "customer_required_date": "2024-12-10" },
+    { "job_no": "C23144-U001", "item_name": "MOTOR BRACKET", "complete_due_date": "2024-05-15", "s1_date": "2024-05-15", "customer_required_date": "2024-05-15" }
+  ],
+  "design_process_pool": [
+    { "process_code": "A", "process_name": "1/1" },
+    { "process_code": "B", "process_name": "1/2" },
+    { "process_code": "C", "process_name": "2/2" }
+  ],
+  "registered_rows": [
+    { "seq": 1, "partner_name": "유성 ENG", "process_code": "A", "process_name": "1/1", "order_date": "2026-08-22", "expected_date": null, "quote_price": null, "nego_price": null, "writer_name": "동구" }
+  ]
+}

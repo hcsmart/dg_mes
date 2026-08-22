@@ -1,0 +1,67 @@
+[
+  {
+    "row_no": 1,
+    "standard_process_no": 1,
+    "standard_process_name": "밀링완성",
+    "steps": [
+      "MS",
+      "HQ",
+      "GS"
+    ]
+  },
+  {
+    "row_no": 2,
+    "standard_process_no": 2,
+    "standard_process_name": "EW완성1",
+    "steps": [
+      "MS",
+      "HQ",
+      "GS",
+      "WS"
+    ]
+  },
+  {
+    "row_no": 3,
+    "standard_process_no": 3,
+    "standard_process_name": "기본",
+    "steps": [
+      "MS",
+      "HQ",
+      "GS",
+      "WS",
+      "NM2"
+    ]
+  },
+  {
+    "row_no": 4,
+    "standard_process_no": 4,
+    "standard_process_name": "대형 기본",
+    "steps": [
+      "NL",
+      "GM",
+      "NL1"
+    ]
+  },
+  {
+    "row_no": 5,
+    "standard_process_no": 5,
+    "standard_process_name": "EW완성2",
+    "steps": [
+      "NM",
+      "HQ",
+      "GS",
+      "WS",
+      "NM2"
+    ]
+  },
+  {
+    "row_no": 6,
+    "standard_process_no": 6,
+    "standard_process_name": "비열 밀링완성",
+    "steps": [
+      "MS",
+      "GS",
+      "WS"
+    ]
+  }
+]

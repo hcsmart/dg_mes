@@ -1,0 +1,45 @@
+[
+  {
+    "card_key": "K21136-A005_A_B11ADY1",
+    "issue_date": "2026-08-22",
+    "job_no": "K21136-A005",
+    "process_code": "A",
+    "part_no": "B11ADY1",
+    "material_code": "STD11",
+    "quantity": 2,
+    "product_name": "SHELF,NET RL",
+    "part_name": "PUNCH",
+    "order_date": "2021-11-09",
+    "design_date": "2024-05-23",
+    "machining_date": "2024-05-27",
+    "assembly_date": "2024-05-28",
+    "s1_date": "2024-06-05",
+    "sales_manager": "문병우",
+    "design_manager": "옥종필",
+    "process_sequence": null
+  },
+  {
+    "card_key": "K21136-A005_A_B17A",
+    "issue_date": "2026-08-22",
+    "job_no": "K21136-A005",
+    "process_code": "A",
+    "part_no": "B17A",
+    "material_code": "STD11",
+    "quantity": 1,
+    "product_name": "SHELF,NET RL",
+    "part_name": "BUTTON, DIE",
+    "order_date": "2021-11-09",
+    "design_date": "2024-05-23",
+    "machining_date": "2024-05-27",
+    "assembly_date": "2024-05-28",
+    "s1_date": "2024-06-05",
+    "sales_manager": "문병우",
+    "design_manager": "옥종필",
+    "process_sequence": [
+      "NM",
+      "HQ",
+      "GS",
+      "WS"
+    ]
+  }
+]

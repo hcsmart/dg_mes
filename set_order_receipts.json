@@ -1,0 +1,56 @@
+[
+  {
+    "row_no": 1,
+    "job_no": "C23144-S002",
+    "item_name": "MOTOR BRACKET",
+    "completion_planned_date": "2025-05-15",
+    "s1_date": null,
+    "customer_request_date": null,
+    "receipt_status": "미완료"
+  },
+  {
+    "row_no": 2,
+    "job_no": "C24028-S001",
+    "item_name": "MOTOR BRACKET",
+    "completion_planned_date": "2024-10-30",
+    "s1_date": null,
+    "customer_request_date": null,
+    "receipt_status": "미완료"
+  },
+  {
+    "row_no": 3,
+    "job_no": "C24033",
+    "item_name": "MOTOR BRACKET",
+    "completion_planned_date": "2024-04-18",
+    "s1_date": "2024-04-19",
+    "customer_request_date": null,
+    "receipt_status": "미완료"
+  },
+  {
+    "row_no": 4,
+    "job_no": "C24034",
+    "item_name": "RETAINER DR",
+    "completion_planned_date": "2024-04-29",
+    "s1_date": "2024-04-30",
+    "customer_request_date": null,
+    "receipt_status": "미완료"
+  },
+  {
+    "row_no": 5,
+    "job_no": "C24051",
+    "item_name": "MOTOR BRACKET",
+    "completion_planned_date": "2024-06-04",
+    "s1_date": "2024-06-05",
+    "customer_request_date": null,
+    "receipt_status": "미완료"
+  },
+  {
+    "row_no": 6,
+    "job_no": "C24051-S001",
+    "item_name": "MOTOR BRACKET",
+    "completion_planned_date": "2024-10-15",
+    "s1_date": null,
+    "customer_request_date": null,
+    "receipt_status": "미완료"
+  }
+]

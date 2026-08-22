@@ -1,0 +1,15 @@
+[
+  {
+    "row_no": 1,
+    "job_no": "C24034",
+    "receipt_status": "미입고",
+    "partner_vendor_name": "엘앤케이",
+    "set_seq": "A",
+    "process_name": "1/1",
+    "receipt_planned_date": "2024-04-30",
+    "order_date": "2024-02-14",
+    "receipt_date": null,
+    "unit_price": 25000000,
+    "confirmed_by": "정재진"
+  }
+]
