@@ -129,11 +129,28 @@ const MAP={job_no:'job_no',plant:'plant_name',order_date:'order_date',s1p:'s1_pl
  order_price:'order_price',sales_price:'sales_price',comp_date:'completion_date'};
 function load(o){for(const[el,k]of Object.entries(MAP)){const n=document.getElementById(el);if(n)n.value=o[k]??''}}
 function clearForm(){for(const el of Object.keys(MAP)){const n=document.getElementById(el);if(n)n.value=''}plant.value='1공장';document.getElementById('status').value='진행';otype.value='신작';dom.value='국내';msg('신규 입력 상태입니다.')}
-function save(){
+const NUMF=['quotation_price','order_price','sales_price','process_set_qty'];
+const DATEF=['order_date','s1_planned_date','delivery_planned_date','s1_completed_date','delivery_completed_date','completion_date'];
+async function save(){
  if(!job_no.value.trim()){msg('제번은 필수입니다.');return}
  const o={};for(const[el,k]of Object.entries(MAP)){const n=document.getElementById(el);if(n)o[k]=n.value||null}
- console.log('sale_order',o);msg(`${o.job_no} 저장했습니다. (프로토타입 - 원본 JSON은 변경되지 않습니다.)`);
+ for(const k of NUMF){const v=Number(o[k]);o[k]=(o[k]===null||o[k]===''||Number.isNaN(v))?null:v}
+ for(const k of DATEF)if(o[k]==='')o[k]=null;
+ if(!window.MESDB||!MESDB.online){msg(`${o.job_no} 저장했습니다. (DB 미연결 - 로컬)`);return}
+ try{
+  await MESDB.table('sale_orders').upsert(o,'job_no');
+  await MESDB.table('jobs').upsert({job_no:o.job_no,item_name:o.item_name,customer_name:o.customer_name,
+    order_status:o.order_status,order_date:o.order_date,source_count:1},'job_no');
+  await MESDB.table('sale_order_status_rows').upsert({row_no:Date.now()%2000000000,job_no:o.job_no,model:o.model,
+    drawing_no:o.drawing_no,item_name:o.item_name,eco:o.eco,customer_name:o.customer_name,set_qty:o.process_set_qty,
+    development_type:o.development_type,order_type:o.order_type,mold_type_name:o.mold_type_name,
+    machine_spec_name:o.machine_spec_name,order_date:o.order_date,s1_planned_date:o.s1_planned_date,
+    completion_date:o.completion_date,mass_production_vendor_name:o.mass_production_vendor_name,
+    order_status:o.order_status,plant_name:o.plant_name},'row_no');
+  msg(`${o.job_no} 수주를 DB에 저장했습니다. (sale_orders / jobs / 수주현황 반영)`);
+ }catch(e){msg('DB 저장 실패: '+e.message.slice(0,140))}
 }
 window.MES={save,clearForm,setMessage:msg};
 load(seed);
-</script></body></html>
+</script><script src="mes_db.js"></script>
+</body></html>

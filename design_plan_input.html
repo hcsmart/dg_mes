@@ -50,5 +50,8 @@ function search(){const j=q_job.value.trim().toLowerCase(),it=q_item.value.trim(
  view=heads.filter(r=>(!j||r.job_no.toLowerCase().includes(j))&&(!it||String(r.item_name??'').toLowerCase().includes(it)));sbody.innerHTML='';dbody.innerHTML='';render();msg(`조회결과 ${view.length}건입니다.`);}
 function save(){msg('프로토타입에서는 원본 JSON을 변경하지 않습니다.')}
 window.MES={search,save,setMessage:msg};render();</script><script src="mes_db.js"></script>
-<script>MESDB.bind("design_plan_input",()=>({heads,steps}));</script>
+<script>
+MESDB.master({page:"design_plan_input:heads",table:"design_plans",pk:"job_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "item_name": "item_name", "customer_name": "customer_name", "design_completion_planned_date": {"col": "design_completion_planned_date", "type": "date"}, "s1_date": {"col": "s1_date", "type": "date"}, "customer_request_date": {"col": "customer_request_date", "type": "date"}, "plant_name": "plant_name"},get:()=>heads,render:()=>{if(typeof view!=="undefined")view=[...heads];(window.render||window.search||function(){})()}});
+MESDB.master({page:"design_plan_input:steps",table:"design_plan_steps",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "process_code": "process_code", "process_name": "process_name", "manager_name": "manager_name", "machining_process_code": "machining_process_code", "machining_process_name": "machining_process_name", "completion_planned_date": "completion_planned_date"},get:()=>steps,render:()=>{if(typeof view!=="undefined")view=[...heads];(window.render||window.search||function(){})()}});
+</script>
 </body></html>

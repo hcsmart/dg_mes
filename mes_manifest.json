@@ -1,6 +1,6 @@
 {
   "project": "NEXMES photo-driven MES prototype",
-  "version": "18",
+  "version": "19",
   "entry": "index.html",
   "updated": "2026-08-22",
   "naming_rule": "<domain>_<action>.html (snake_case, English)",
@@ -678,5 +678,12 @@
     "발주등록 3화면 save() 실제 INSERT로 전환: 구매품/원재료/외주가공 발주등록 → order_lines에 status=발주로 등록되어 입고등록 화면에 즉시 나타남",
     "외주설계발주입고 화면도 order_lines(외주설계)로 전환",
     "데모 흐름 확보를 위해 구매품 17건 중 5건을 발주, 5건을 입고 단계로 되돌림"
+  ],
+  "changelog_v19": [
+    "영업/계획/현황 11화면 정규화 테이블 직결: 수주현황→sale_order_status_rows, 매출현황→sales_status_rows, 현황판→status_board_rows, 파트리스트 현황/자재/구매→partlist_*, 설계계획→design_plans+design_plan_steps, 가공계획→machining_plans+machining_plan_parts, 영업계획현황→sales_plan_status_rows+sales_plans, 재고조회→stock_inquiry_rows, 제조원가조회→manufacturing_cost_orders",
+    "한 화면에 여러 테이블이 걸린 경우 배열별로 독립 바인딩 (설계계획/가공계획/영업계획현황)",
+    "수주등록 save() 실제 저장으로 전환: sale_orders + jobs + sale_order_status_rows 3개 테이블 동시 upsert → 수주현황 화면에 즉시 반영",
+    "sale_orders 텍스트 컬럼 6개를 numeric/date로 타입 교정 (quotation_price, order_price, sales_price, process_set_qty, s1_completed_date, delivery_completed_date, completion_date)",
+    "partlist_materials/purchases에 row_no 유니크 인덱스 추가 (복합 PK 테이블의 화면 단위 업서트 지원)"
   ]
 }
