@@ -53,4 +53,6 @@ function start(){stop();const s=Math.max(3,Number(interval.value)||60);timer=set
 function stop(){if(timer)clearInterval(timer);timer=null;btnStart.classList.remove('on')}
 setInterval(()=>{const d=new Date();clock.textContent=d.toLocaleString('ko-KR')},1000);
 render();start();
-</script></body></html>
+</script><script src="mes_db.js"></script>
+<script>MESDB.bind("status_board",()=>({rows,pages}));</script>
+</body></html>

@@ -44,4 +44,6 @@ function search(){const k=q_kind.value,j=q_job.value.trim().toLowerCase(),p=q_pa
   &&(!pc||String(r.process_code??'').toLowerCase().includes(pc))&&(!m||String(r.material??'').toLowerCase().includes(m)));
  render();msg(`조회결과 ${view.length}건입니다.`);}
 function csv(){msg('프로토타입에서는 EXCEL 내보내기를 지원하지 않습니다.')}
-window.MES={search,setMessage:msg};render();</script></body></html>
+window.MES={search,setMessage:msg};render();</script><script src="mes_db.js"></script>
+<script>MESDB.bind("partlist_status",()=>({data}));</script>
+</body></html>

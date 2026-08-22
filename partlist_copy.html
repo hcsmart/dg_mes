@@ -73,5 +73,7 @@ function reset(){dstJob.value='';dstItem.value='';dstProc.value='';msg('복사�
 function msg(t){message.textContent=t}
 renderLog();window.MES={save:copyPartList,setMessage:msg};
 </script>
+<script src="mes_db.js"></script>
+<script>MESDB.bind("partlist_copy",()=>({LOG}));</script>
 </body>
 </html>

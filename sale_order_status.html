@@ -91,4 +91,6 @@ function exportCsv(){
 document.querySelectorAll('input[name="st"],input[name="ot"]').forEach(x=>x.addEventListener('change',search));
 window.MES={search,exportCsv,setMessage:t=>message.textContent=t};
 render();
-</script></body></html>
+</script><script src="mes_db.js"></script>
+<script>MESDB.bind("sale_order_status",()=>({data}));</script>
+</body></html>

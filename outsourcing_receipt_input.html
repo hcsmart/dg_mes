@@ -70,5 +70,7 @@ function exportCsv(){const out=[['제번','공정','품번','부품명','가공�
 function msg(t){message.textContent=t}
 inDate.value='2026-08-22';renderWait();renderIn();window.MES={search,save,exportCsv,setMessage:msg};
 </script>
+<script src="mes_db.js"></script>
+<script>MESDB.bind("outsourcing_receipt_input",()=>({rows}));</script>
 </body>
 </html>

@@ -74,5 +74,7 @@ async function load(){try{const [a,b]=await Promise.all([fetch('outsourced_desig
 [...new Set(ORD.map(o=>o.partner_name))].sort().forEach(v=>venQ.insertAdjacentHTML('beforeend',`<option>${v}</option>`));search()}
 load();window.MES={search,save:receive,exportCsv,setMessage:msg};
 </script>
+<script src="mes_db.js"></script>
+<script>MESDB.bind("outsourced_design_receipt_input",()=>({ORD,RCP}));</script>
 </body>
 </html>

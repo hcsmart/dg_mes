@@ -89,5 +89,7 @@ function msg(t){message.textContent=t}
 reqDate.value='2026-09-05';renderJobs();renderVendors();renderRoutes();renderReq();
 window.MES={search,save,exportCsv,setMessage:msg};
 </script>
+<script src="mes_db.js"></script>
+<script>MESDB.bind("outsourcing_order_input",()=>({JOBS,VENDORS,ROUTES,REQ}));</script>
 </body>
 </html>

@@ -187,5 +187,7 @@ function deleteUser(){
 window.MES={search:()=>q.focus(),add:()=>{selectedKey='';},delete:deleteUser,save:saveUser,exportCsv:()=>{},setMessage:t=>message.textContent=t};
 renderUsers();selectUser(selectedKey);
 </script>
+<script src="mes_db.js"></script>
+<script>MESDB.bind("user_information",()=>({users,permissions}));</script>
 </body>
 </html>

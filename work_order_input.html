@@ -82,5 +82,7 @@ function setMessage(t){document.getElementById('message').textContent=t}
 window.MES={search:doSearch,add:addRow,delete:deleteRow,save,exportCsv,setMessage};
 render();
 </script>
+<script src="mes_db.js"></script>
+<script>MESDB.bind("work_order_input",()=>({rows}));</script>
 </body>
 </html>

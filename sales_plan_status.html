@@ -68,4 +68,6 @@ function openPlan(pl,r){
  mask.classList.add('on');}
 function closePlan(){mask.classList.remove('on')}
 function csv(){msg('프로토타입에서는 EXCEL 내보내기를 지원하지 않습니다.')}
-window.MES={search,setMessage:msg};render();</script></body></html>
+window.MES={search,setMessage:msg};render();</script><script src="mes_db.js"></script>
+<script>MESDB.bind("sales_plan_status",()=>({data,plans}));</script>
+</body></html>
