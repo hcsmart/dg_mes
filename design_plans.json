@@ -1,15 +1,5 @@
 [
   {
-    "row_no": 1,
-    "job_no": "A25032",
-    "item_name": null,
-    "customer_name": null,
-    "design_completion_planned_date": "2025-02-23",
-    "s1_date": "2025-03-02",
-    "customer_request_date": "2025-03-02",
-    "plant_name": "1공장"
-  },
-  {
     "row_no": 2,
     "job_no": "A26026",
     "item_name": null,
@@ -17,66 +7,6 @@
     "design_completion_planned_date": "2026-05-01",
     "s1_date": "2026-12-31",
     "customer_request_date": "2026-12-31",
-    "plant_name": "1공장"
-  },
-  {
-    "row_no": 3,
-    "job_no": "C14213-S030",
-    "item_name": "BUSBAR",
-    "customer_name": null,
-    "design_completion_planned_date": "2025-07-28",
-    "s1_date": "2026-08-30",
-    "customer_request_date": "2026-08-30",
-    "plant_name": "1공장"
-  },
-  {
-    "row_no": 4,
-    "job_no": "C23130-U001",
-    "item_name": "RETAINER PA RHD",
-    "customer_name": null,
-    "design_completion_planned_date": "2024-10-30",
-    "s1_date": "2024-11-15",
-    "customer_request_date": "2024-11-15",
-    "plant_name": "1공장"
-  },
-  {
-    "row_no": 5,
-    "job_no": "C23140-U001",
-    "item_name": "RETAINER DR RHD",
-    "customer_name": null,
-    "design_completion_planned_date": "2024-12-07",
-    "s1_date": "2024-12-10",
-    "customer_request_date": "2024-12-10",
-    "plant_name": "1공장"
-  },
-  {
-    "row_no": 6,
-    "job_no": "C23144-U001",
-    "item_name": "MOTOR BRACKET",
-    "customer_name": null,
-    "design_completion_planned_date": "2024-05-09",
-    "s1_date": "2024-05-15",
-    "customer_request_date": "2024-05-15",
-    "plant_name": "1공장"
-  },
-  {
-    "row_no": 7,
-    "job_no": "C24028-A001",
-    "item_name": "MOTOR BRACKET",
-    "customer_name": null,
-    "design_completion_planned_date": "2025-05-20",
-    "s1_date": "2025-05-25",
-    "customer_request_date": "2025-05-25",
-    "plant_name": "1공장"
-  },
-  {
-    "row_no": 8,
-    "job_no": "C24028-U001",
-    "item_name": "MOTOR BRACKET",
-    "customer_name": null,
-    "design_completion_planned_date": "2024-09-01",
-    "s1_date": "2024-09-15",
-    "customer_request_date": "2024-09-15",
     "plant_name": "1공장"
   }
 ]

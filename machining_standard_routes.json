@@ -41,27 +41,5 @@
       "GM",
       "NL1"
     ]
-  },
-  {
-    "row_no": 5,
-    "standard_process_no": 5,
-    "standard_process_name": "EW완성2",
-    "steps": [
-      "NM",
-      "HQ",
-      "GS",
-      "WS",
-      "NM2"
-    ]
-  },
-  {
-    "row_no": 6,
-    "standard_process_no": 6,
-    "standard_process_name": "비열 밀링완성",
-    "steps": [
-      "MS",
-      "GS",
-      "WS"
-    ]
   }
 ]

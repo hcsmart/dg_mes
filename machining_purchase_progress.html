@@ -51,11 +51,11 @@ const MAXCOL=12;
 const rows=[
 {no:1,job:'A25032',proc:'A',part:'T99A',steps:[{mp:'GS',vendor:'동우정밀',date:'2025-02-07'}]},
 {no:2,job:'A25032',proc:'A',part:'T99B',steps:[{mp:'AB',vendor:'동우정밀',date:'2025-02-01'}]},
-{no:3,job:'A26026',proc:'A',part:'T99A1',steps:[{mp:'MS',vendor:'광주특강',date:'2026-05-22'}]},
-{no:4,job:'A26026',proc:'A',part:'T99A2',steps:[{mp:'MS',vendor:'광주특강',date:'2026-05-22'}]},
-{no:5,job:'A26026',proc:'A',part:'T99Y',steps:[{mp:'MA',vendor:'성화기업',date:'2026-04-09'},{mp:'WS',vendor:'에스제이테크',date:'2026-04-18'},{mp:'WS1',vendor:'제이케이테크',date:'2026-04-07'},{mp:'AB',vendor:'창원대학교…',date:'2026-04-20'}]},
-{no:6,job:'A26026',proc:'A',part:'T99Z',steps:[{mp:'MA',vendor:'성화기업',date:'2026-04-06'},{mp:'GS',vendor:'동우정밀',date:'2026-04-14'},{mp:'WS',vendor:'에스제이테크',date:'2026-04-21'},{mp:'AB',vendor:'창원대학교…',date:'2026-04-20'}]}];
-const SUMMARY={rate:78.51,total:17731,done:13920,notin:0,notord:3811};
+{no:3,job:'A26026',proc:'A',part:'T99A1',steps:[{mp:'MS',vendor:'가강텍',date:'2026-05-22'}]},
+{no:4,job:'A26026',proc:'A',part:'T99A2',steps:[{mp:'MS',vendor:'가강텍',date:'2026-05-22'}]},
+{no:5,job:'A26026',proc:'A',part:'T99Y',steps:[{mp:'MA',vendor:'금승정기',date:'2026-04-09'},{mp:'WS',vendor:'동빛테크',date:'2026-04-18'},{mp:'WS1',vendor:'제이케이테크',date:'2026-04-07'},{mp:'AB',vendor:'창원대학교…',date:'2026-04-20'}]},
+{no:6,job:'A26026',proc:'A',part:'T99Z',steps:[{mp:'MA',vendor:'금승정기',date:'2026-04-06'},{mp:'GS',vendor:'동우정밀',date:'2026-04-14'},{mp:'WS',vendor:'동빛테크',date:'2026-04-21'},{mp:'AB',vendor:'창원대학교…',date:'2026-04-20'}]}];
+const SUMMARY={rate:78.51,total:22800,done:13920,notin:0,notord:3811};
 let view=[...rows];
 const money=v=>Number(v||0).toLocaleString('ko-KR');
 function head(){headRow.innerHTML=`<th style="width:120px">제번</th><th style="width:60px">공정</th><th style="width:100px">품번</th>`+Array.from({length:MAXCOL},(_,i)=>`<th style="width:105px">공정${i+1}</th>`).join('')}

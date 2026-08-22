@@ -6,12 +6,60 @@
     "process_name": "1/4",
     "plant_name": "1공장",
     "bom": [
-      { "part_code": "C26D", "part_name": "BLOCK", "material": "SB41P", "spec": "20.0*100*100", "quantity": 8, "attachment": null, "remark": null },
-      { "part_code": "C26A", "part_name": "BLOCK", "material": "SB41P", "spec": "30.0*760*1300", "quantity": 1, "attachment": "도면", "remark": null },
-      { "part_code": "C26E", "part_name": "BLOCK", "material": "SB41P", "spec": "30.0*760*1300", "quantity": 1, "attachment": null, "remark": null },
-      { "part_code": "C26G", "part_name": "BLOCK", "material": "SB41P", "spec": "35*188.0*215", "quantity": 3, "attachment": null, "remark": null },
-      { "part_code": "C26F", "part_name": "BLOCK", "material": "SB41P", "spec": "35*188.0*310", "quantity": 2, "attachment": null, "remark": null },
-      { "part_code": "C26B", "part_name": "BLOCK", "material": "SB41P", "spec": "25*52.4*540", "quantity": 2, "attachment": null, "remark": null }
+      {
+        "part_code": "C26D",
+        "part_name": "BLOCK",
+        "material": "SB41P",
+        "spec": "20.0*100*100",
+        "quantity": 8,
+        "attachment": null,
+        "remark": null
+      },
+      {
+        "part_code": "C26A",
+        "part_name": "BLOCK",
+        "material": "SB41P",
+        "spec": "30.0*760*1300",
+        "quantity": 1,
+        "attachment": "도면",
+        "remark": null
+      },
+      {
+        "part_code": "C26E",
+        "part_name": "BLOCK",
+        "material": "SB41P",
+        "spec": "30.0*760*1300",
+        "quantity": 1,
+        "attachment": null,
+        "remark": null
+      },
+      {
+        "part_code": "C26G",
+        "part_name": "BLOCK",
+        "material": "SB41P",
+        "spec": "35*188.0*215",
+        "quantity": 3,
+        "attachment": null,
+        "remark": null
+      },
+      {
+        "part_code": "C26F",
+        "part_name": "BLOCK",
+        "material": "SB41P",
+        "spec": "35*188.0*310",
+        "quantity": 2,
+        "attachment": null,
+        "remark": null
+      },
+      {
+        "part_code": "C26B",
+        "part_name": "BLOCK",
+        "material": "SB41P",
+        "spec": "25*52.4*540",
+        "quantity": 2,
+        "attachment": null,
+        "remark": null
+      }
     ]
   },
   {
@@ -31,14 +79,6 @@
     "bom": []
   },
   {
-    "job_no": "A25032",
-    "item_name": null,
-    "process_code": "A",
-    "process_name": "1/1",
-    "plant_name": "1공장",
-    "bom": []
-  },
-  {
     "job_no": "A26026",
     "item_name": null,
     "process_code": "A",
@@ -51,22 +91,6 @@
     "item_name": null,
     "process_code": "B",
     "process_name": "2/2",
-    "plant_name": "1공장",
-    "bom": []
-  },
-  {
-    "job_no": "C14213-S030",
-    "item_name": "BUSBAR",
-    "process_code": "A",
-    "process_name": "1/1",
-    "plant_name": "1공장",
-    "bom": []
-  },
-  {
-    "job_no": "C25080-S001",
-    "item_name": "HEADER",
-    "process_code": "A",
-    "process_name": "1/2",
     "plant_name": "1공장",
     "bom": []
   },

@@ -1,30 +1,30 @@
 [
   {
     "row_no": 1,
-    "job_no": "C23130-U001",
+    "job_no": "A26026",
     "process_code": "A",
     "process_name": "1/1",
-    "manager_name": null,
+    "manager_name": "권소율",
     "machining_process_code": "DA",
     "machining_process_name": "레이아웃",
     "completion_planned_date": null
   },
   {
     "row_no": 2,
-    "job_no": "C23130-U001",
+    "job_no": "A26026",
     "process_code": "A",
     "process_name": "1/1",
-    "manager_name": null,
+    "manager_name": "권소율",
     "machining_process_code": "DL",
     "machining_process_name": "조립도",
     "completion_planned_date": null
   },
   {
     "row_no": 3,
-    "job_no": "C23130-U001",
+    "job_no": "A26026",
     "process_code": "A",
     "process_name": "1/1",
-    "manager_name": null,
+    "manager_name": "권소율",
     "machining_process_code": "DP",
     "machining_process_name": "부품도",
     "completion_planned_date": null

@@ -110,212 +110,190 @@
     "remark": null
   },
   {
-    "material_code": "STS3",
-    "material_name": "STS3",
-    "material_group": "구매품",
+    "material_code": "-",
+    "material_name": "-",
+    "material_group": "원재료",
     "density": null,
     "thickness": null,
     "width": null,
     "height": null,
     "length": null,
-    "remark": null
-  },
-  {
-    "material_code": "U0203",
-    "material_name": "CHP",
-    "material_group": "구매품",
-    "density": null,
-    "thickness": null,
-    "width": null,
-    "height": null,
-    "length": null,
-    "remark": null
-  },
-  {
-    "material_code": "Y0002",
-    "material_name": "AHJAL",
-    "material_group": "구매품",
-    "density": null,
-    "thickness": null,
-    "width": null,
-    "height": null,
-    "length": null,
-    "remark": null
-  },
-  {
-    "material_code": "Y0003",
-    "material_name": "AHJB",
-    "material_group": "구매품",
-    "density": null,
-    "thickness": null,
-    "width": null,
-    "height": null,
-    "length": null,
-    "remark": null
-  },
-  {
-    "material_code": "Y0004",
-    "material_name": "AHX",
-    "material_group": "구매품",
-    "density": null,
-    "thickness": null,
-    "width": null,
-    "height": null,
-    "length": null,
-    "remark": null
-  },
-  {
-    "material_code": "Y0005",
-    "material_name": "APJAL",
-    "material_group": "구매품",
-    "density": null,
-    "thickness": null,
-    "width": null,
-    "height": null,
-    "length": null,
-    "remark": null
-  },
-  {
-    "material_code": "Y0006",
-    "material_name": "APJAX",
-    "material_group": "구매품",
-    "density": null,
-    "thickness": null,
-    "width": null,
-    "height": null,
-    "length": null,
-    "remark": null
+    "remark": "샘플 참조 보강"
   },
   {
     "material_code": "CHN",
     "material_name": "CHN",
-    "material_group": "구매품",
+    "material_group": "원재료",
     "density": null,
     "thickness": null,
     "width": null,
     "height": null,
     "length": null,
-    "remark": "입고확정 화면 참조로 자동 추가(이름 미확인)"
+    "remark": "샘플 참조 보강"
   },
   {
     "material_code": "CSR",
     "material_name": "CSR",
-    "material_group": "구매품",
+    "material_group": "원재료",
     "density": null,
     "thickness": null,
     "width": null,
     "height": null,
     "length": null,
-    "remark": "입고확정 화면 참조로 자동 추가(이름 미확인)"
+    "remark": "샘플 참조 보강"
+  },
+  {
+    "material_code": "D",
+    "material_name": "D",
+    "material_group": "원재료",
+    "density": null,
+    "thickness": null,
+    "width": null,
+    "height": null,
+    "length": null,
+    "remark": "샘플 참조 보강"
+  },
+  {
+    "material_code": "D11",
+    "material_name": "D11",
+    "material_group": "원재료",
+    "density": null,
+    "thickness": null,
+    "width": null,
+    "height": null,
+    "length": null,
+    "remark": "샘플 참조 보강"
+  },
+  {
+    "material_code": "EA",
+    "material_name": "EA",
+    "material_group": "원재료",
+    "density": null,
+    "thickness": null,
+    "width": null,
+    "height": null,
+    "length": null,
+    "remark": "샘플 참조 보강"
   },
   {
     "material_code": "HDE",
     "material_name": "HDE",
-    "material_group": "구매품",
+    "material_group": "원재료",
     "density": null,
     "thickness": null,
     "width": null,
     "height": null,
     "length": null,
-    "remark": "입고확정 화면 참조로 자동 추가(이름 미확인)"
+    "remark": "샘플 참조 보강"
   },
   {
-    "material_code": "LP",
-    "material_name": "LP",
-    "material_group": "구매품",
+    "material_code": "M",
+    "material_name": "M",
+    "material_group": "원재료",
     "density": null,
     "thickness": null,
     "width": null,
     "height": null,
     "length": null,
-    "remark": "입고확정 화면 참조로 자동 추가(이름 미확인)"
+    "remark": "샘플 참조 보강"
   },
   {
     "material_code": "MHD",
     "material_name": "MHD",
-    "material_group": "구매품",
+    "material_group": "원재료",
     "density": null,
     "thickness": null,
     "width": null,
     "height": null,
     "length": null,
-    "remark": "입고확정 화면 참조로 자동 추가(이름 미확인)"
+    "remark": "샘플 참조 보강"
   },
   {
     "material_code": "MSB",
     "material_name": "MSB",
-    "material_group": "구매품",
+    "material_group": "원재료",
     "density": null,
     "thickness": null,
     "width": null,
     "height": null,
     "length": null,
-    "remark": "입고확정 화면 참조로 자동 추가(이름 미확인)"
+    "remark": "샘플 참조 보강"
+  },
+  {
+    "material_code": "PH",
+    "material_name": "PH",
+    "material_group": "원재료",
+    "density": null,
+    "thickness": null,
+    "width": null,
+    "height": null,
+    "length": null,
+    "remark": "샘플 참조 보강"
+  },
+  {
+    "material_code": "S",
+    "material_name": "S",
+    "material_group": "원재료",
+    "density": null,
+    "thickness": null,
+    "width": null,
+    "height": null,
+    "length": null,
+    "remark": "샘플 참조 보강"
   },
   {
     "material_code": "SB",
     "material_name": "SB",
-    "material_group": "구매품",
+    "material_group": "원재료",
     "density": null,
     "thickness": null,
     "width": null,
     "height": null,
     "length": null,
-    "remark": "입고확정 화면 참조로 자동 추가(이름 미확인)"
-  },
-  {
-    "material_code": "SBN",
-    "material_name": "SBN",
-    "material_group": "구매품",
-    "density": null,
-    "thickness": null,
-    "width": null,
-    "height": null,
-    "length": null,
-    "remark": "입고확정 화면 참조로 자동 추가(이름 미확인)"
+    "remark": "샘플 참조 보강"
   },
   {
     "material_code": "SGPN",
     "material_name": "SGPN",
-    "material_group": "구매품",
+    "material_group": "원재료",
     "density": null,
     "thickness": null,
     "width": null,
     "height": null,
     "length": null,
-    "remark": "입고확정 화면 참조로 자동 추가(이름 미확인)"
+    "remark": "샘플 참조 보강"
   },
   {
-    "material_code": "SIAL",
-    "material_name": "SIAL",
-    "material_group": "구매품",
+    "material_code": "SJAL",
+    "material_name": "SJAL",
+    "material_group": "원재료",
     "density": null,
     "thickness": null,
     "width": null,
     "height": null,
     "length": null,
-    "remark": "입고확정 화면 참조로 자동 추가(이름 미확인)"
+    "remark": "샘플 참조 보강"
   },
   {
     "material_code": "SJEL",
     "material_name": "SJEL",
-    "material_group": "구매품",
+    "material_group": "원재료",
     "density": null,
     "thickness": null,
     "width": null,
     "height": null,
     "length": null,
-    "remark": "입고확정 화면 참조로 자동 추가(이름 미확인)"
+    "remark": "샘플 참조 보강"
   },
   {
-    "material_code": "UP",
-    "material_name": "UP",
-    "material_group": "구매품",
+    "material_code": "SUS",
+    "material_name": "SUS",
+    "material_group": "원재료",
     "density": null,
     "thickness": null,
     "width": null,
     "height": null,
     "length": null,
-    "remark": "입고확정 화면 참조로 자동 추가(이름 미확인)"
+    "remark": "샘플 참조 보강"
   }
 ]

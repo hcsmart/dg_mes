@@ -68,12 +68,5 @@
     "process_code": "AS",
     "process_name": "1/4",
     "editable": true
-  },
-  {
-    "row_no": 11,
-    "process_set": "4분할+AS/BS",
-    "process_code": "BS",
-    "process_name": "2/4",
-    "editable": null
   }
 ]
