@@ -684,6 +684,12 @@
     "한 화면에 여러 테이블이 걸린 경우 배열별로 독립 바인딩 (설계계획/가공계획/영업계획현황)",
     "수주등록 save() 실제 저장으로 전환: sale_orders + jobs + sale_order_status_rows 3개 테이블 동시 upsert → 수주현황 화면에 즉시 반영",
     "sale_orders 텍스트 컬럼 6개를 numeric/date로 타입 교정 (quotation_price, order_price, sales_price, process_set_qty, s1_completed_date, delivery_completed_date, completion_date)",
-    "partlist_materials/purchases에 row_no 유니크 인덱스 추가 (복합 PK 테이블의 화면 단위 업서트 지원)"
+    "partlist_materials/purchases에 row_no 유니크 인덱스 추가 (복합 PK 테이블의 화면 단위 업서트 지원)",
+    "FK 제약 16개 실제 적용: job_no 12개 테이블 → jobs, order_lines → vendors/parts/materials (모두 on update cascade)",
+    "CHECK 제약: order_lines.status(발주/입고/입고확정), category(4종)",
+    "FK 적용 전 위반 해소: 중복 업체 2건 정리, 미등록 업체/품번/재질을 부모행으로 자동 보강",
+    "RLS 2티어: 업무 테이블은 anon 읽기/쓰기, users·user_permissions·employees는 로그인 전용(anon 차단)",
+    "users 테이블의 password_transcribed 컬럼 삭제 (평문 비밀번호 흔적 제거)",
+    "mes_db.js 오류 메시지 한글화: RLS 권한, FK 위반, CHECK 위반을 구분해 안내"
   ]
 }

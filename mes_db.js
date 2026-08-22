@@ -5,7 +5,7 @@
 (function(){
 const CFG={url:'https://ipggvrzxfcryzryileuv.supabase.co',key:'sb_publishable_CHO-dAOU00HNwno52255mg_H3C1_vew'};
 const H=()=>({'apikey':CFG.key,'Authorization':'Bearer '+CFG.key,'Content-Type':'application/json'});
-async function rest(path,opt={}){const r=await fetch(CFG.url+'/rest/v1/'+path,{...opt,headers:{...H(),...(opt.headers||{})}});if(!r.ok)throw new Error(r.status+' '+await r.text());const t=await r.text();return t?JSON.parse(t):null}
+async function rest(path,opt={}){const r=await fetch(CFG.url+'/rest/v1/'+path,{...opt,headers:{...H(),...(opt.headers||{})}});if(!r.ok){const b=await r.text();if(r.status===401||r.status===403||/permission denied|row-level security/i.test(b))throw new Error('권한 없음(RLS): 로그인이 필요한 자료입니다. '+r.status);if(/violates foreign key/i.test(b))throw new Error('참조 무결성 위반: 마스터에 없는 코드입니다. 기준정보에 먼저 등록하세요.');if(/violates check constraint/i.test(b))throw new Error('허용되지 않는 값입니다(구분/상태 코드 확인).');throw new Error(r.status+' '+b.slice(0,200))}const t=await r.text();return t?JSON.parse(t):null}
 const table=name=>({
   select:(q='select=*')=>rest(`${name}?${q}`),
   upsert:(rows,onConflict)=>{const a=Array.isArray(rows)?rows:[rows];const keys=[];for(const r of a)for(const k in r)if(!keys.includes(k))keys.push(k);
