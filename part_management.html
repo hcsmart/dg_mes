@@ -30,5 +30,5 @@ function remove(){if(selected<0)return msg('삭제할 항목을 선택하세요.
 function exportCsv(){const header=["부품코드", "부품명", "부품그룹"];const out=[header,...data.map(r=>colKeys.map(k=>r[k]??''))];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download="part_management.csv";a.click();URL.revokeObjectURL(a.href);msg('CSV 파일을 생성했습니다.')}
 function msg(t){message.textContent=t} window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script><script src="mes_db.js"></script>
-<script>MESDB.bind("part_management",()=>({data}));</script>
+<script>MESDB.master({page:"part_management",table:"parts",pk:"code",map:{"code": "part_code", "name": "part_name", "group": "part_group"},get:()=>data,render:()=>{view=[...data];render()}});</script>
 </body></html>
