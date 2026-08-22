@@ -74,6 +74,6 @@ function exportCsv(){const out=[['가공공정코드','가공공정명','공정�
 function msg(t){message.textContent=t}window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script>
 <script src="mes_db.js"></script>
-<script>MESDB.bind("machining_process_management",()=>({data}));</script>
+<script>MESDB.master({page:"machining_process_management",table:"processes",pk:"code",map:{"code": "process_code", "name": "process_name", "group": "process_group", "order": {"col": "sort_order", "type": "num"}, "complete": {"col": "completion_progress", "type": "num"}, "progress": {"col": "use_progress", "type": "ynbool"}, "plan": {"col": "use_plan", "type": "ynbool"}, "remark": "remark"},get:()=>data,render:()=>{view=[...data];render()}});</script>
 </body>
 </html>

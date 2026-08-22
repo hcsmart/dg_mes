@@ -1,6 +1,6 @@
 {
   "project": "NEXMES photo-driven MES prototype",
-  "version": "16",
+  "version": "17",
   "entry": "index.html",
   "updated": "2026-08-22",
   "naming_rule": "<domain>_<action>.html (snake_case, English)",
@@ -660,6 +660,14 @@
     "Supabase 프로젝트 DG_smart 연결: 정규화 테이블 68개 + page_state 생성 (RLS demo 정책)",
     "mes_db.js 추가 - 모든 화면이 page_state에서 저장본 복원/자동 저장 (우하단 배지로 상태 표시)",
     "db_sync.html 추가 - JSON→DB 업서트, 저장본 초기화",
-    "PGRST102 대응: 업서트 전 모든 행의 키를 합집합으로 정규화(누락 키는 null) - PostgREST는 배열 내 객체 키가 모두 동일해야 함"
+    "PGRST102 대응: 업서트 전 모든 행의 키를 합집합으로 정규화(누락 키는 null) - PostgREST는 배열 내 객체 키가 모두 동일해야 함",
+    "db_sync: JSON fetch 503/429 지수 백오프 재시도(4회) + 요청 간 간격 + 실패분 재시도 버튼 - GitHub Pages 연속 요청 시 일시적 503 대응"
+  ],
+  "changelog_v17": [
+    "MESDB.master() 추가 - 마스터 화면이 page_state 스냅샷이 아니라 정규화 테이블에 직접 읽고 쓰도록 전환",
+    "12개 마스터 화면 직결: 업체관리→vendors, 자재등록→materials, 부품관리→parts, 아이템관리→item_categories, 금형타입→mold_types, 기계사양→machine_specs, 경비사유→expense_reasons, 사업부정보→business_divisions, 설비등록→equipment, 가공공정관리→processes, 부서정보→departments, 검사항목→inspection_items",
+    "departments / inspection_items 테이블 신규 생성 및 시드 (기존 stub 화면용)",
+    "화면 축약키(code/name/group/use) ↔ DB 컬럼 매핑 + 타입 변환(Y·N ↔ boolean, 문자열 ↔ numeric)",
+    "저장/삭제 시 스냅샷 차분만 업서트/삭제 - 전체 덮어쓰기 아님"
   ]
 }

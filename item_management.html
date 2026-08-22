@@ -29,5 +29,5 @@ function exportCsv(){const out=[['아이템코드','아이템명','비고'],...d
 function msg(t){message.textContent=t}window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script>
 <script src="mes_db.js"></script>
-<script>MESDB.bind("item_management",()=>({data}));</script>
+<script>MESDB.master({page:"item_management",table:"item_categories",pk:"code",map:{"code": "item_code", "name": "item_name", "remark": "remark"},get:()=>data,render:()=>{view=[...data];render()}});</script>
 </body></html>

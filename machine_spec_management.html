@@ -29,5 +29,5 @@ function exportCsv(){const out=[['기계사양코드','기계사양명','비고'
 function msg(t){message.textContent=t}window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script>
 <script src="mes_db.js"></script>
-<script>MESDB.bind("machine_spec_management",()=>({data}));</script>
+<script>MESDB.master({page:"machine_spec_management",table:"machine_specs",pk:"code",map:{"code": "machine_spec_code", "name": "machine_spec_name", "remark": "remark"},get:()=>data,render:()=>{view=[...data];render()}});</script>
 </body></html>

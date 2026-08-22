@@ -29,5 +29,5 @@ function exportCsv(){const out=[['사업부코드','사업부명','비고'],...d
 function msg(t){message.textContent=t}window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script>
 <script src="mes_db.js"></script>
-<script>MESDB.bind("business_division_info",()=>({data}));</script>
+<script>MESDB.master({page:"business_division_info",table:"business_divisions",pk:"code",map:{"code": "business_division_code", "name": "business_division_name", "remark": "remark"},get:()=>data,render:()=>{view=[...data];render()}});</script>
 </body></html>
