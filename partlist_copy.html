@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PartList 복사</title>
+<style>
+:root{--line:#9daab6;--line2:#c5ced6;--ink:#344758}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:var(--ink);background:#fff;overflow:hidden}button,input,select{font:inherit;color:inherit}
+.screen{height:100%;display:flex;flex-direction:column}.title{height:46px;padding:9px 14px 4px;border-bottom:2px solid #3977ad;display:flex;align-items:center;gap:14px}.title h1{margin:0;font-size:21px;font-weight:500;color:#4b5b69}.title h1:before{content:'◯';margin-right:6px;color:#8795a1}.title .plant{margin-left:auto;display:flex;align-items:center;gap:6px;color:#6b7885}
+.body{flex:1;min-height:0;overflow:auto;padding:12px 14px}
+.radios{display:flex;gap:14px;color:#54626e;margin-bottom:8px}
+.frame{border:1px solid var(--line);display:inline-block;min-width:min(720px,100%)}
+.line{display:grid;grid-template-columns:70px 60px 220px 60px 220px 54px 90px;align-items:center;border-bottom:1px solid var(--line2)}
+.line:last-child{border-bottom:0}
+.cap{height:30px;display:flex;align-items:center;justify-content:center;font-weight:700;background:linear-gradient(#e2eef7,#cfe0ed);border-right:1px solid var(--line2)}
+.lab{height:30px;display:flex;align-items:center;justify-content:center;font-weight:700;color:#4b5b68;background:#f2f6f9;border-right:1px solid var(--line2);border-left:1px solid var(--line2)}
+.cell{height:30px;display:flex;align-items:center;padding:0 5px}
+.field{width:100%;height:23px;border:1px solid #b7c2cb;background:#fff;padding:0 6px;outline:none}.field:focus{border-color:#4e88bb}
+.arrowrow{height:34px;display:flex;align-items:center;justify-content:center;color:#3d7fbf;font-size:20px;border-bottom:1px solid var(--line2);background:#f7fafc}
+.actions{margin-top:10px;display:flex;gap:6px}
+.btn{height:29px;min-width:76px;border:1px solid #9ca9b5;background:linear-gradient(#fff,#dfe6eb)}.btn:hover{background:#fff}.btn.primary{background:linear-gradient(#f9ffff,#d2e7f6);color:#1e5e91}
+.logbox{margin-top:14px;border:1px solid var(--line);max-width:min(900px,100%)}.logbox .t{height:24px;display:flex;align-items:center;justify-content:center;background:linear-gradient(#deebf5,#caddea);border-bottom:1px solid var(--line);font-weight:700;color:#536677}
+table{border-collapse:collapse;width:100%;table-layout:fixed}th,td{height:24px;padding:0 6px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}th{background:linear-gradient(#dbe9f4,#c7d9e8);color:#405266;font-weight:700;text-align:center}.c{text-align:center}
+.foot{height:42px;display:flex;align-items:center;padding:5px 14px;border-top:1px solid var(--line);background:#eef2f5;gap:5px}.msg{margin-left:10px;color:#687784}.foot .right{margin-left:auto;color:#7c8993}
+@media(max-width:760px){.line{grid-template-columns:60px 54px 1fr;}.line .lab:nth-of-type(2),.line .cell:nth-of-type(2),.line .lab:nth-of-type(3),.line .cell:nth-of-type(3){grid-column:2/4}}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="title"><h1>PartList 복사</h1><div class="plant"><span>공장</span><select id="plant" class="field" style="width:110px"><option>1공장</option><option>2공장</option></select></div></div>
+  <div class="body">
+    <div class="radios">
+      <label><input type="radio" name="kind" value="전체" checked> 전체</label>
+      <label><input type="radio" name="kind" value="원재료"> 원재료</label>
+      <label><input type="radio" name="kind" value="구매품"> 구매품</label>
+    </div>
+    <div class="frame">
+      <div class="line">
+        <div class="cap">원본</div>
+        <div class="lab">제 번</div><div class="cell"><input id="srcJob" class="field" value="J26118"></div>
+        <div class="lab">품 명</div><div class="cell"><input id="srcItem" class="field" value="PANEL,CONTROL"></div>
+        <div class="lab">공정</div><div class="cell"><select id="srcProc" class="field"><option>A</option><option>B</option><option selected>C</option><option>D</option></select></div>
+      </div>
+      <div class="arrowrow">⬇</div>
+      <div class="line">
+        <div class="cap">복사본</div>
+        <div class="lab">제 번</div><div class="cell"><input id="dstJob" class="field" placeholder="복사할 제번"></div>
+        <div class="lab">품 명</div><div class="cell"><input id="dstItem" class="field" placeholder="복사할 품명"></div>
+        <div class="lab">공정</div><div class="cell"><select id="dstProc" class="field"><option value=""></option><option>A</option><option>B</option><option>C</option><option>D</option></select></div>
+      </div>
+    </div>
+    <div class="actions"><button class="btn primary" onclick="copyPartList()">⧉ 복사</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button></div>
+    <div class="logbox"><div class="t">복사 이력</div>
+      <table><colgroup><col style="width:44px"><col style="width:16%"><col style="width:22%"><col style="width:10%"><col style="width:16%"><col style="width:22%"><col style="width:10%"></colgroup>
+      <thead><tr><th>No</th><th>원본 제번</th><th>원본 품명</th><th>공정</th><th>복사 제번</th><th>복사 품명</th><th>공정</th></tr></thead>
+      <tbody id="logBody"><tr><td colspan="7" class="c" style="color:#8b98a4">복사 이력이 없습니다.</td></tr></tbody></table>
+    </div>
+  </div>
+  <footer class="foot"><button class="btn" onclick="reset()">↺ 초기화</button><button class="btn primary" onclick="copyPartList()">⧉ 복사</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">원본 제번의 PartList를 새로운 제번으로 복사합니다.</span><span class="right" id="countText"></span></footer>
+</div>
+<script>
+const LOG=[];
+function kind(){return document.querySelector('input[name=kind]:checked').value}
+function renderLog(){logBody.innerHTML=LOG.length?LOG.map((r,i)=>`<tr><td class="c">${i+1}</td><td>${r.sj}</td><td>${r.si}</td><td class="c">${r.sp}</td><td>${r.dj}</td><td>${r.di}</td><td class="c">${r.dp}</td></tr>`).join(''):'<tr><td colspan="7" class="c" style="color:#8b98a4">복사 이력이 없습니다.</td></tr>';countText.textContent=LOG.length?`${LOG.length}건 복사`:''}
+function copyPartList(){
+  if(!srcJob.value.trim())return msg('원본 제번을 입력하세요.');
+  if(!dstJob.value.trim())return msg('복사본 제번을 입력하세요.');
+  if(srcJob.value.trim()===dstJob.value.trim()&&srcProc.value===dstProc.value)return msg('원본과 복사본의 제번/공정이 동일합니다.');
+  LOG.unshift({sj:srcJob.value.trim(),si:srcItem.value.trim(),sp:srcProc.value,dj:dstJob.value.trim(),di:dstItem.value.trim()||srcItem.value.trim(),dp:dstProc.value||srcProc.value});
+  renderLog();msg(`${kind()} PartList를 ${srcJob.value.trim()}(${srcProc.value}) → ${dstJob.value.trim()}(${dstProc.value||srcProc.value}) 으로 복사했습니다.`)}
+function reset(){dstJob.value='';dstItem.value='';dstProc.value='';msg('복사본 입력값을 초기화했습니다.')}
+function msg(t){message.textContent=t}
+renderLog();window.MES={save:copyPartList,setMessage:msg};
+</script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>외주가공 발주</title>
+<style>
+:root{--line:#9daab6;--line2:#c5ced6;--ink:#344758}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:var(--ink);background:#fff;overflow:hidden}button,input,select{font:inherit;color:inherit}
+.screen{height:100%;display:flex;flex-direction:column}.title{height:46px;padding:9px 14px 4px;border-bottom:2px solid #3977ad;display:flex;align-items:center;gap:14px}.title h1{margin:0;font-size:21px;font-weight:500;color:#4b5b69}.title h1:before{content:'◯';margin-right:6px;color:#8795a1}.title .plant{margin-left:auto;display:flex;align-items:center;gap:6px;color:#6b7885}
+.filters{padding:7px 14px;border-bottom:1px solid var(--line2);background:#fafbfc;display:flex;gap:6px;align-items:center;flex-wrap:wrap}.label{font-weight:700}.field{height:27px;border:1px solid #b7c2cb;background:#fff;padding:0 7px;outline:none}.field:focus{border-color:#4e88bb}
+.panes{display:grid;grid-template-columns:1.1fr .62fr 1.7fr;gap:6px;padding:7px 14px 0;height:190px}
+.box{border:1px solid var(--line);display:flex;flex-direction:column;min-height:0;background:#fff}.box-title{height:24px;display:flex;align-items:center;justify-content:center;background:linear-gradient(#deebf5,#caddea);border-bottom:1px solid var(--line);font-weight:700;color:#536677}
+.searchbar{height:26px;display:flex;gap:4px;align-items:center;padding:0 4px;border-bottom:1px solid var(--line2);background:#f6f8fa}.searchbar input{flex:1;height:21px;border:1px solid #b7c2cb;padding:0 4px;min-width:0}.searchbar button{height:21px;border:1px solid #9ca9b5;background:linear-gradient(#fff,#e2e8ed)}
+.tablewrap{flex:1;min-height:0;overflow:auto}table{border-collapse:collapse;width:100%;table-layout:fixed}th,td{height:24px;padding:0 5px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}th{position:sticky;top:0;z-index:2;text-align:center;background:linear-gradient(#dbe9f4,#c7d9e8);color:#405266;font-weight:700}tbody tr:hover td{background:#edf6fd}tbody tr.sel td{background:#2e78bd;color:#fff}.c{text-align:center}.r{text-align:right}
+td.route{background:#8fdc6b;text-align:center;font-weight:700;color:#20461a}
+.reqbox tbody tr td{background:#9ade79}
+.midbar{display:flex;align-items:center;gap:6px;padding:6px 14px;justify-content:flex-end}
+.reqbox{flex:1;min-height:0;margin:0 14px 6px;border:1px solid var(--line);display:flex;flex-direction:column}.reqbox table{min-width:1280px}
+.btn{height:28px;min-width:70px;border:1px solid #9ca9b5;background:linear-gradient(#fff,#dfe6eb)}.btn:hover{background:#fff}.btn.primary{background:linear-gradient(#f9ffff,#d2e7f6);color:#1e5e91}
+.foot{height:42px;display:flex;align-items:center;padding:5px 14px;border-top:1px solid var(--line);background:#eef2f5;gap:5px}.msg{margin-left:10px;color:#687784}.foot .right{margin-left:auto;color:#7c8993}
+@media(max-width:900px){.panes{grid-template-columns:1fr;height:auto}.title h1{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="title"><h1>외주가공 발주</h1><div class="plant"><span>공장</span><select id="plant" class="field"><option>1공장</option><option>2공장</option></select></div></div>
+  <section class="filters">
+    <span class="label">제번</span><input id="jobQ" class="field" style="width:190px">
+    <span class="label">품명</span><input id="itemQ" class="field" style="width:190px">
+    <span class="label">업체</span><input id="venF" class="field" style="width:190px">
+    <button class="btn" onclick="search()">⌕ 조회</button>
+  </section>
+  <section class="panes">
+    <div class="box"><div class="box-title">제번리스트</div><div class="tablewrap"><table>
+      <colgroup><col style="width:34%"><col style="width:34%"><col style="width:16%"><col style="width:16%"></colgroup>
+      <thead><tr><th>제번</th><th>품명</th><th>공정</th><th>공정명</th></tr></thead><tbody id="jobBody"></tbody></table></div></div>
+    <div class="box"><div class="box-title">협력업체리스트</div>
+      <div class="searchbar"><input id="venQ" placeholder="Enter text to s"><button onclick="findVendor()">찾기</button><button onclick="clearVendor()">지우기</button></div>
+      <div class="tablewrap"><table><thead><tr><th>협력업체</th></tr></thead><tbody id="venBody"></tbody></table></div></div>
+    <div class="box"><div class="box-title">부품별 가공공정 리스트</div><div class="tablewrap"><table style="min-width:640px">
+      <colgroup><col style="width:36px"><col style="width:80px"><col style="width:90px"><col style="width:56px"><col style="width:56px"><col style="width:56px"><col style="width:56px"><col style="width:56px"><col style="width:56px"><col style="width:56px"><col style="width:56px"><col style="width:56px"></colgroup>
+      <thead><tr><th></th><th>부품코드</th><th>부품명</th><th>공정1</th><th>공정2</th><th>공정3</th><th>공정4</th><th>공정5</th><th>공정6</th><th>공정7</th><th>공정8</th><th>공정9</th></tr></thead>
+      <tbody id="routeBody"></tbody></table></div></div>
+  </section>
+  <div class="midbar"><span class="label">입고요구일</span><input id="reqDate" class="field" type="date"><button class="btn" onclick="pushDown()">⬇ 요청추가</button><button class="btn" onclick="pullUp()">⬆ 요청삭제</button></div>
+  <div class="reqbox"><div class="box-title">구매요청 리스트</div><div class="tablewrap"><table>
+    <colgroup><col style="width:40px"><col style="width:38px"><col style="width:110px"><col style="width:110px"><col style="width:120px"><col style="width:50px"><col style="width:60px"><col style="width:70px"><col style="width:150px"><col style="width:100px"><col style="width:120px"><col style="width:92px"><col style="width:100px"><col style="width:90px"><col style="width:80px"></colgroup>
+    <thead><tr><th>No</th><th>선택</th><th>협력업체</th><th>제번</th><th>품명</th><th>공정</th><th>공정명</th><th>품번</th><th>부품명</th><th>가공공정코드</th><th>가공공정</th><th>발주월</th><th>입고요구월</th><th>비고</th><th>작성자</th></tr></thead>
+    <tbody id="reqBody"></tbody>
+  </table></div></div>
+  <footer class="foot"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn primary" onclick="save()">▣ 저장</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫 기</button><span class="msg" id="message">제번·협력업체를 고르고 가공공정을 내려 외주가공 발주를 등록합니다.</span><span class="right" id="countText"></span></footer>
+</div>
+<script>
+const JOBS=[
+{job:'A25032',item:'',proc:'A',procName:'1/1'},
+{job:'A26026',item:'',proc:'A',procName:'1/2'},
+{job:'A26026',item:'',proc:'B',procName:'2/2'},
+{job:'C14213-S030',item:'BUSBAR',proc:'A',procName:'1/1'},
+{job:'C25080-S001',item:'HEADER',proc:'A',procName:'1/2'},
+{job:'C25120',item:'STIFFENER',proc:'A',procName:'1/6'},
+{job:'C25120',item:'STIFFENER',proc:'B',procName:'2/6'},
+{job:'C25120',item:'STIFFENER',proc:'C',procName:'3/6'}];
+const VENDORS=['(주)부국','건영정밀','경남정밀','경천정밀','광주특강','기선정밀','동우정밀','성화기업','에스제이테크','제이케이테크','대경열처리'];
+const PROCNAME={GS:'성형연삭(소형)',AB:'가공ASSY',MS:'성형밀링(소형)',WS:'WIRE CUT',WS1:'WIRE CUT1',MA:'머시닝',HQ:'열처리',NM:'NC밀링'};
+const ROUTES=[
+{part:'T99A',name:'MACHI...',steps:['GS',null,null,null,null,null,null,null,null]},
+{part:'T99B',name:'MACHI...',steps:['AB',null,null,null,null,null,null,null,null]}];
+const REQ=[
+{no:1,vendor:'동우정밀',job:'A25032',item:'',proc:'A',procName:'1/1',part:'T99A',partName:'MACHINERY ...',mp:'GS',mpName:'성형연삭(소형)',odate:'2025-02-25',rdate:'2025-02-25',remark:'',writer:'이영현'},
+{no:2,vendor:'동우정밀',job:'A25032',item:'',proc:'A',procName:'1/1',part:'T99B',partName:'MACHINERY ...',mp:'AB',mpName:'가공ASSY',odate:'2025-02-26',rdate:'2025-02-26',remark:'',writer:'이영현'}];
+let jobIdx=0,venIdx=6,jobView=[...JOBS],venView=[...VENDORS];
+function renderJobs(){jobBody.innerHTML=jobView.map((j,i)=>`<tr class="${i===jobIdx?'sel':''}" onclick="pickJob(${i})"><td>${j.job}</td><td>${j.item}</td><td class="c">${j.proc}</td><td class="c">${j.procName}</td></tr>`).join('');countText.textContent=`제번 ${jobView.length}건 / 요청 ${REQ.length}건`}
+function renderVendors(){venBody.innerHTML=venView.map((v,i)=>`<tr class="${i===venIdx?'sel':''}" onclick="pickVendor(${i})"><td>${v}</td></tr>`).join('')}
+function renderRoutes(){routeBody.innerHTML=ROUTES.map((r,i)=>`<tr><td class="c"><input type="checkbox" data-i="${i}"></td><td>${r.part}</td><td>${r.name}</td>${r.steps.map(s=>s?`<td class="route">${s}</td>`:'<td></td>').join('')}</tr>`).join('')}
+function renderReq(){reqBody.innerHTML=REQ.map((r,i)=>`<tr><td class="c">${i+1}</td><td class="c"><input type="checkbox" data-no="${r.no}"></td><td>${r.vendor}</td><td>${r.job}</td><td>${r.item}</td><td class="c">${r.proc}</td><td class="c">${r.procName}</td><td>${r.part}</td><td>${r.partName}</td><td class="c">${r.mp}</td><td>${r.mpName}</td><td class="c">${r.odate}</td><td class="c">${r.rdate}</td><td>${r.remark}</td><td class="c">${r.writer}</td></tr>`).join('');countText.textContent=`제번 ${jobView.length}건 / 요청 ${REQ.length}건`}
+function pickJob(i){jobIdx=i;renderJobs();msg(`${jobView[i].job} / 공정 ${jobView[i].proc} 부품별 가공공정을 조회했습니다.`)}
+function pickVendor(i){venIdx=i;renderVendors();msg(`협력업체 ${venView[i]} 선택`)}
+function findVendor(){const q=venQ.value.trim().toLowerCase();venView=VENDORS.filter(v=>!q||v.toLowerCase().includes(q));venIdx=0;renderVendors()}
+function clearVendor(){venQ.value='';venView=[...VENDORS];venIdx=0;renderVendors()}
+function search(){const j=jobQ.value.trim().toLowerCase(),it=itemQ.value.trim().toLowerCase();jobView=JOBS.filter(x=>(!j||x.job.toLowerCase().includes(j))&&(!it||(x.item||'').toLowerCase().includes(it)));jobIdx=0;renderJobs();msg(`제번 ${jobView.length}건을 조회했습니다.`)}
+function pushDown(){const j=jobView[jobIdx];if(!j)return;const picks=[...routeBody.querySelectorAll('input:checked')].map(x=>ROUTES[Number(x.dataset.i)]);if(!picks.length)return msg('부품별 가공공정에서 발주할 부품을 선택하세요.');const d=reqDate.value||'2026-09-05';
+picks.forEach(p=>p.steps.filter(Boolean).forEach(mp=>REQ.push({no:REQ.length?Math.max(...REQ.map(r=>r.no))+1:1,vendor:venView[venIdx],job:j.job,item:j.item,proc:j.proc,procName:j.procName,part:p.part,partName:p.name,mp,mpName:PROCNAME[mp]||'',odate:new Date().toISOString().slice(0,10),rdate:d,remark:'',writer:'동구'})));
+renderReq();msg(`${picks.length}개 부품의 가공공정을 구매요청 리스트에 추가했습니다.`)}
+function pullUp(){const ids=[...reqBody.querySelectorAll('input:checked')].map(x=>Number(x.dataset.no));if(!ids.length)return msg('삭제할 요청 행을 선택하세요.');for(let i=REQ.length-1;i>=0;i--)if(ids.includes(REQ[i].no))REQ.splice(i,1);renderReq();msg(`${ids.length}건을 삭제했습니다.`)}
+function save(){msg(`외주가공 발주 ${REQ.length}건을 저장했습니다. (프로토타입)`)}
+function exportCsv(){const out=[['협력업체','제번','공정','품번','부품명','가공공정코드','가공공정','발주월','입고요구월','작성자'],...REQ.map(r=>[r.vendor,r.job,r.proc,r.part,r.partName,r.mp,r.mpName,r.odate,r.rdate,r.writer])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='outsourcing_order_input.csv';a.click();URL.revokeObjectURL(a.href)}
+function msg(t){message.textContent=t}
+reqDate.value='2026-09-05';renderJobs();renderVendors();renderRoutes();renderReq();
+window.MES={search,save,exportCsv,setMessage:msg};
+</script>
+</body>
+</html>

@@ -1,0 +1,525 @@
+{
+  "version": "13",
+  "policy": "Only photo-readable values are intended for import. Unknown/uncertain values are null. Ellipsized screen text remains marked as truncated.",
+  "skipped_photos": {
+    "20260822_100158.jpg": "흐려서 판독 불가",
+    "20260822_095421.jpg": "조회결과 빈 화면 (레이아웃 참고용)",
+    "20260822_095442.jpg": "조회결과 빈 화면 (레이아웃 참고용)",
+    "20260822_090027.jpg": "빈 작업영역 (레이아웃 참고용)",
+    "20260822_090802.jpg": "윈도우 바탕화면 (앱 실행 화면)",
+    "20260822_090805.jpg": "윈도우 바탕화면 (업데이트 대화상자)",
+    "20260822_090943.jpg": "현황판 공지사항 탭 - 내용 없음",
+    "20260822_093950.jpg": "원재료 발주 - 조회 전 빈 화면 (레이아웃 참고용)"
+  },
+  "datasets": {
+    "business_divisions": {
+      "source_photo": "20260822_100122.jpg",
+      "source_screen": "business_division_info.html",
+      "confidence": "high"
+    },
+    "vendors": {
+      "source_photo": "20260822_100113.jpg / 20260822_090242.jpg / 20260822_090255.jpg / 20260822_090319.jpg",
+      "source_screen": "vendor_management.html",
+      "confidence": "medium",
+      "note": "V001~V014 기존 + V019~V032/V115~V119 신규(수주등록 거래처정보 팝업). V015~V018, V033~V114는 미촬영"
+    },
+    "equipment": {
+      "source_photo": "20260822_100109.jpg",
+      "source_screen": "equipment_registration.html",
+      "confidence": "medium"
+    },
+    "materials": {
+      "source_photo": "20260822_100058.jpg",
+      "source_screen": "material_management.html",
+      "confidence": "medium"
+    },
+    "parts": {
+      "source_photo": "20260822_100033.jpg / 20260822_100010.jpg",
+      "source_screen": "part_management.html",
+      "confidence": "high"
+    },
+    "item_categories": {
+      "source_photo": "20260822_100130.jpg",
+      "source_screen": "item_management.html",
+      "confidence": "high"
+    },
+    "expense_reasons": {
+      "source_photo": "20260822_100143.jpg",
+      "source_screen": "expense_reason_registration.html",
+      "confidence": "high"
+    },
+    "mold_types": {
+      "source_photo": "20260822_100148.jpg",
+      "source_screen": "mold_type_management.html",
+      "confidence": "high"
+    },
+    "machine_specs": {
+      "source_photo": "20260822_100154.jpg",
+      "source_screen": "machine_spec_management.html",
+      "confidence": "high"
+    },
+    "processes": {
+      "source_photo": "20260822_100001.jpg / 20260822_100005.jpg",
+      "source_screen": "machining_process_management.html",
+      "confidence": "medium"
+    },
+    "standard_processes": {
+      "source_photo": "20260822_095834.jpg / 20260822_095840.jpg / 20260822_095845.jpg / 20260822_095849.jpg / 20260822_095851.jpg",
+      "source_screen": "machining_standard_process.html",
+      "confidence": "medium"
+    },
+    "standard_process_steps": {
+      "source_photo": "20260822_095834.jpg / 20260822_095840.jpg / 20260822_095845.jpg / 20260822_095849.jpg / 20260822_095851.jpg",
+      "source_screen": "machining_standard_process.html",
+      "confidence": "medium"
+    },
+    "work_order_item_candidates": {
+      "source_photo": "20260822_101514.jpg",
+      "source_screen": "work_order_input.html",
+      "confidence": "medium"
+    },
+    "work_order_details": {
+      "source_photo": "20260822_101514.jpg",
+      "source_screen": "work_order_input.html",
+      "confidence": "medium"
+    },
+    "purchase_receipt_candidates": {
+      "source_photo": "20260822_100828.jpg / 20260822_100821.jpg",
+      "source_screen": "purchase_receipt_confirmation.html",
+      "confidence": "medium"
+    },
+    "process_history_cards": {
+      "source_photo": "20260822_101044.jpg / 20260822_101049.jpg / 20260822_101054.jpg",
+      "source_screen": "process_history_card.html",
+      "confidence": "medium"
+    },
+    "users": {
+      "source_photo": "20260822_095911.jpg",
+      "source_screen": "user_information.html",
+      "confidence": "high"
+    },
+    "user_permissions": {
+      "source_photo": "20260822_095911.jpg",
+      "source_screen": "user_information.html",
+      "confidence": "low",
+      "note": "권한 그리드가 화면상 비어 있어 부분 데이터만 존재"
+    },
+    "material_price_changes": {
+      "source_photo": "20260822_100357.jpg / 20260822_100421.jpg",
+      "source_screen": "material_price_change_registration.html / material_price_change_status.html",
+      "confidence": "medium",
+      "note": "화면 총 102건 중 판독 가능한 19건만 수록"
+    },
+    "process_price_changes": {
+      "source_photo": "20260822_100438.jpg / 20260822_100445.jpg",
+      "source_screen": "process_price_change_registration.html / process_price_change_status.html",
+      "confidence": "medium",
+      "note": "화면 총 33건 중 판독 가능한 22건만 수록"
+    },
+    "manufacturing_cost_orders": {
+      "source_photo": "20260822_095451.jpg / 20260822_095455.jpg / 20260822_095507.jpg / 20260822_095542.jpg / 20260822_095618.jpg",
+      "source_screen": "manufacturing_cost_inquiry.html",
+      "confidence": "high",
+      "note": "수주가-제조원가-이윤-이익률 산식 10행 전부 검증 통과"
+    },
+    "manufacturing_cost_details": {
+      "source_photo": "20260822_095507.jpg / 20260822_095542.jpg / 20260822_095618.jpg",
+      "source_screen": "manufacturing_cost_inquiry.html",
+      "confidence": "medium",
+      "note": "K24105·K25145 2건만 판독. 가공비 열은 화면 우측 스크롤 영역이라 전부 null. K25125는 값이 뭉개져 제외"
+    },
+    "employees": {
+      "source_photo": "20260822_090230.jpg",
+      "source_screen": "sale_order_input.html (인원정보 팝업)",
+      "confidence": "high",
+      "note": "인원정보 팝업(사원코드 21) + 설계팀/조립팀 목록. 설계팀 드롭다운 실제 항목: dongu, 김기준, 함태안, 옥종필, 박봉규, 박현민"
+    },
+    "sale_orders": {
+      "source_photo": "20260822_090027.jpg / 20260822_090044.jpg / 20260822_090115.jpg / 20260822_090124.jpg / 20260822_090208.jpg / 20260822_090230.jpg / 20260822_090239.jpg / 20260822_090242.jpg / 20260822_090255.jpg / 20260822_090301.jpg / 20260822_090319.jpg / 20260822_090325.jpg",
+      "source_screen": "sale_order_input.html",
+      "confidence": "high",
+      "note": "입력 중이던 임시 1건(J26137)"
+    },
+    "sale_order_status_rows": {
+      "source_photo": "20260822_090638.jpg / 20260822_090641.jpg / 20260822_090645.jpg / 20260822_090647.jpg / 20260822_090647_0_.jpg / 20260822_090649.jpg / 20260822_090703.jpg / 20260822_090626.jpg / 20260822_091008.jpg",
+      "source_screen": "sale_order_status.html",
+      "confidence": "medium",
+      "note": "구분×수주유형 필터별 화면 6장에서 판독. 각 화면 상단 16행만 촬영되어 전체 건수 대비 일부. 우측 스크롤 컬럼(견적서No·납기예정일·공정수·사업부·아이템·담당자·사용재료·견적가·수주가·판매가·비고)은 제번과 함께 촬영된 사진이 없어 행 단위 미수록"
+    },
+    "status_board_rows": {
+      "source_photo": "20260822_090834.jpg / 20260822_090840.jpg / 20260822_090858.jpg / 20260822_090902.jpg / 20260822_090903.jpg / 20260822_090936.jpg / 20260822_090943.jpg",
+      "source_screen": "status_board.html",
+      "confidence": "medium",
+      "note": "전체 11페이지 중 1·2·4·5·6페이지만 촬영. 6페이지(76~90)는 담당자 열이 사진 2장에서 서로 다르게 읽혀 전부 null 처리. NO 81/82(U26043·U26039)는 두 사진의 순번이 뒤바뀌어 있음"
+    },
+    "sales_plans": {
+      "source_photo": "20260822_091405.jpg / 20260822_091431.jpg",
+      "source_screen": "sales_plan_input.html",
+      "confidence": "medium",
+      "note": "G14191-S013 1건은 수주가·목표가·이익률(75.71%)·금액 5개 항목 합계 85,000 상호 검증 통과"
+    },
+    "mold_code_matchings": {
+      "source_photo": "20260822_091755.jpg / 20260822_091814.jpg / 20260822_091925.jpg / 20260822_092002.jpg / 20260822_092204.jpg",
+      "source_screen": "mold_code_matching.html",
+      "confidence": "medium",
+      "note": "NO 1~12, 31~42, 51~62, 136~147, 237~248 구간 판독. 제번 5분할(A~E)과 4분할+AS/BS 두 가지 공정세트 확인"
+    },
+    "set_order_status_rows": {
+      "source_photo": "20260822_092603.jpg / 20260822_092450.jpg",
+      "source_screen": "set_order_status.html",
+      "confidence": "high",
+      "note": "v11에서 행 정렬 불확실로 null 처리했던 값 전체를 재촬영본(092450)으로 확정. 하이라이트 행 C24104로 정렬 검증"
+    },
+    "set_order_receipts": {
+      "source_photo": "20260822_092555.jpg",
+      "source_screen": "set_order_receipt.html",
+      "confidence": "medium",
+      "note": "제번리스트 6행만 촬영"
+    },
+    "set_order_receipt_details": {
+      "source_photo": "20260822_092555.jpg",
+      "source_screen": "set_order_receipt.html",
+      "confidence": "medium",
+      "note": "C24034 선택 상태의 1행만 판독"
+    },
+    "design_plans": {
+      "source_photo": "20260822_092645.jpg / 20260822_092849.jpg",
+      "source_screen": "design_plan_input.html",
+      "confidence": "high"
+    },
+    "design_plan_steps": {
+      "source_photo": "20260822_092645.jpg / 20260822_092849.jpg",
+      "source_screen": "design_plan_input.html",
+      "confidence": "medium",
+      "note": "C23130-U001 선택 상태의 세부공정 3건. 완료예정일은 화면 우측 잘림"
+    },
+    "design_results": {
+      "source_photo": "20260822_093024.jpg / 20260822_093050.jpg / 20260822_094518.jpg / 20260822_094529.jpg / 20260822_094535.jpg",
+      "source_screen": "design_result_inquiry.html",
+      "confidence": "medium",
+      "note": "설계관리 탭(1~18, 9648~9664)과 조립관리 탭(55~72, 85~102)에서 판독. 조립관리 탭 합계는 1,956,100분(조립팀 필터)"
+    },
+    "design_result_monthly": {
+      "source_photo": "20260822_092922.jpg / 20260822_092932.jpg",
+      "source_screen": "design_result_status.html",
+      "confidence": "high",
+      "note": "18일 범례값(심대섭9·박형복8·장우진4·조영출8·진동구12·박봉규8)과 표 값이 일치해 행 정렬 검증됨"
+    },
+    "design_teams": {
+      "source_photo": "20260822_092922.jpg / 20260822_092932.jpg",
+      "source_screen": "design_result_status.html",
+      "confidence": "high"
+    },
+    "sales_plan_status_rows": {
+      "source_photo": "20260822_091730.jpg",
+      "source_screen": "sales_plan_status.html",
+      "confidence": "low",
+      "note": "계획등록 팝업에 가려 NO 138~140 3행만 판독"
+    },
+    "set_order_registrations": {
+      "source_photo": "20260822_092450.jpg / 20260822_092533.jpg / 20260822_092524.jpg / 20260822_092404.jpg / 20260822_092547.jpg",
+      "source_screen": "set_order_registration.html",
+      "confidence": "medium",
+      "note": "제번리스트 12행만 촬영"
+    },
+    "set_order_partners": {
+      "source_photo": "20260822_092450.jpg / 20260822_092533.jpg / 20260822_092524.jpg / 20260822_092404.jpg / 20260822_092547.jpg",
+      "source_screen": "set_order_registration.html",
+      "confidence": "high",
+      "note": "협력업체 9개 (스크롤 하단 미촬영)"
+    },
+    "partlist_materials": {
+      "source_photo": "20260822_093436.jpg / 20260822_093448.jpg / 20260822_093503.jpg",
+      "source_screen": "partlist_material_input.html",
+      "confidence": "medium",
+      "note": "J26118 공정 A(1~19) / D(55~72)만 촬영. 20~54, 73 이후는 미촬영"
+    },
+    "partlist_purchases": {
+      "source_photo": "20260822_093510.jpg / 20260822_093518.jpg / 20260822_093527.jpg",
+      "source_screen": "partlist_purchase_input.html",
+      "confidence": "medium",
+      "note": "J26118 공정 A(1~19) / D(16~34)만 촬영"
+    },
+    "partlist_processes": {
+      "source_photo": "20260822_093436.jpg / 20260822_093448.jpg / 20260822_093503.jpg",
+      "source_screen": "partlist_material_input.html",
+      "confidence": "high",
+      "note": "J26118은 A(1/4)·C(3/4)·D(4/4) 3개. B는 화면상 없음"
+    },
+    "partlist_status_rows": {
+      "source_photo": "20260822_093534.jpg / 20260822_093604.jpg",
+      "source_screen": "partlist_status.html",
+      "confidence": "medium",
+      "note": "A23007·A24040·C25080 3개 제번 구간만 촬영. 하단 집계 417,932"
+    },
+    "machining_plans": {
+      "source_photo": "20260822_094240.jpg / 20260822_094245.jpg",
+      "source_screen": "machining_plan_input.html",
+      "confidence": "medium",
+      "note": "NO 467~473 및 정렬 변경 후 1~7 구간만 촬영"
+    },
+    "machining_standard_routes": {
+      "source_photo": "20260822_094240.jpg / 20260822_094245.jpg",
+      "source_screen": "machining_plan_input.html",
+      "confidence": "high",
+      "note": "기준공정 6종 전부 판독"
+    },
+    "machining_plan_parts": {
+      "source_photo": "20260822_094240.jpg / 20260822_094245.jpg",
+      "source_screen": "machining_plan_input.html",
+      "confidence": "medium",
+      "note": "K21136-A005 부품 9행만 촬영"
+    },
+    "purchase_status_rows": {
+      "source_photo": "20260822_094543.jpg",
+      "source_screen": "purchase_status.html",
+      "confidence": "medium",
+      "note": "U14015-S016/S017 17행만 촬영. 하단 합계 견적가 22,917,164,768 / 확정가 21,130,692,430"
+    },
+    "material_order_jobs": {
+      "source_photo": "20260822_094016.jpg / 20260822_094005.jpg",
+      "source_screen": "material_order_input.html",
+      "confidence": "medium",
+      "note": "J26118 자재표만 판독. C26B 규격(25*52.4*540)은 흐림 - 재확인 필요"
+    },
+    "material_purchase_requests": {
+      "source_photo": "20260822_094016.jpg / 20260822_094005.jpg",
+      "source_screen": "material_order_input.html",
+      "confidence": "medium",
+      "note": "화면 합계는 43/43. 목록은 상단 9행만 판독"
+    },
+    "material_receipt_candidates": {
+      "source_photo": "20260822_094116.jpg / 20260822_094055.jpg",
+      "source_screen": "material_receipt_input.html",
+      "confidence": "medium",
+      "note": "협력업체 \"디와이에...\" 축약 → 디와이에스엠으로 확정. 화면 합계 332/332"
+    },
+    "material_receipt_confirm_candidates": {
+      "source_photo": "20260822_094136.jpg / 20260822_094132.jpg",
+      "source_screen": "material_receipt_confirmation.html",
+      "confidence": "medium",
+      "note": "매입가 열이 행 사이 어긋나 보여 근접 행 기준으로 매핑. 화면 합계 647,705,900"
+    },
+    "material_order_status_rows": {
+      "source_photo": "20260822_094200.jpg / 20260822_094152.jpg",
+      "source_screen": "material_order_status.html",
+      "confidence": "medium",
+      "note": "발주월/입고월 일부 잘림(2024-0..) → 월초 추정치. 화면 합계 7,150,108,442 / 6,462,215,506"
+    },
+    "purchase_order_jobs": {
+      "source_photo": "20260822_094211.jpg",
+      "source_screen": "purchase_order_input.html",
+      "confidence": "medium",
+      "note": "협력업체리스트 4행까지만 판독(강철볼트/그라미테크/금원테크/다원시스템)"
+    },
+    "purchase_receipt_rows": {
+      "source_photo": "20260822_094215.jpg",
+      "source_screen": "purchase_receipt_input.html",
+      "confidence": "medium",
+      "note": "화면 합계 15,922/15,922. 하단 U26040 3행은 수량 일부 미판독"
+    },
+    "outsourced_design_orders": {
+      "source_photo": "20260822_093937.jpg",
+      "source_screen": "outsourced_design_order_status.html",
+      "confidence": "medium",
+      "note": "화면 하단 365건 중 상단 18행만 판독. 수주가 일부 잘림(120,000,...)"
+    },
+    "outsourced_design_partners": {
+      "source_photo": "20260822_093930.jpg / 20260822_093912.jpg",
+      "source_screen": "outsourced_design_order_input.html",
+      "confidence": "high"
+    },
+    "stock_inquiry_rows": {
+      "source_photo": "20260822_095258.jpg",
+      "source_screen": "stock_inquiry.html",
+      "confidence": "medium",
+      "note": "기준일 2026-08-04. 수주가/매입금액 열이 행 사이 어긋나 보여 근접 매핑. 화면 합계 11,063,259,029 / 4,429,549,630"
+    }
+  },
+  "conflicts": [
+    {
+      "table": "processes",
+      "key": "HA",
+      "existing": "홀가공",
+      "new_photo": "풀림처리",
+      "source_photo": "20260822_100445.jpg",
+      "action": "미반영 - 확인 필요"
+    },
+    {
+      "table": "users",
+      "key": "류병현",
+      "existing": "bhnru",
+      "new_photo": "bhryu",
+      "source_photo": "20260822_090230.jpg",
+      "action": "반영함 - 사진이 더 선명"
+    },
+    {
+      "table": "users",
+      "key": "이종기 / bugck",
+      "existing": "이종기",
+      "new_photo": "이중기",
+      "source_photo": "20260822_090230.jpg",
+      "action": "미반영 - 확인 필요"
+    },
+    {
+      "table": "status_board_rows",
+      "key": "NO 81 / 82",
+      "existing": "U26043 / U26039 (090903.jpg)",
+      "new_photo": "U26039 / U26043 (090936.jpg)",
+      "source_photo": "20260822_090903.jpg / 20260822_090936.jpg",
+      "action": "090903.jpg 기준 채택 - 품명 매핑은 두 사진 모두 U26039=Cabinet Rear Cover, U26043=Drum Rear로 일치"
+    },
+    {
+      "table": "processes",
+      "key": "LM1",
+      "existing": "선반 황삭",
+      "new_photo": "선반 정삭",
+      "source_photo": "20260822_100445.jpg / 20260822_092033.jpg",
+      "action": "반영함 - 서로 다른 화면 2장에서 동일하게 판독"
+    },
+    {
+      "table": "processes",
+      "key": "LM2",
+      "existing": "선반 밀처리 정삭",
+      "new_photo": "선반 열처리 정삭",
+      "source_photo": "20260822_100445.jpg / 20260822_092033.jpg",
+      "action": "반영함 - 서로 다른 화면 2장에서 동일하게 판독"
+    },
+    {
+      "table": "status_board_rows",
+      "key": "이춘봉 / 이준봉",
+      "existing": "이춘봉 (현황판 조립담당)",
+      "new_photo": "이준봉 (조립팀 목록 · 계획등록 담당자 ljh1098)",
+      "source_photo": "20260822_092922.jpg / 20260822_092932.jpg / 20260822_091730.jpg",
+      "action": "미반영 - 확인 필요"
+    },
+    {
+      "table": "vendors",
+      "key": "열앤케이 / 엘앤케이",
+      "existing": "엘앤케이 (SET발주입고·SET발주등록 협력업체리스트)",
+      "new_photo": "열앤케이 (SET 발주현황 협력업체 열)",
+      "source_photo": "20260822_092450.jpg / 20260822_092547.jpg",
+      "action": "미반영 - 동일 업체 여부 확인 필요"
+    }
+  ],
+  "null_fields": [
+    {
+      "table": "manufacturing_cost_details",
+      "fields": [
+        "machining_cost_subtotal",
+        "machining_cost_rate_pct",
+        "machining_cost_internal",
+        "machining_cost_external"
+      ],
+      "reason": "가공비 열 전체가 화면 우측 스크롤 영역"
+    },
+    {
+      "table": "manufacturing_cost_details",
+      "key": "K25145/A",
+      "fields": [
+        "material_cost_subtotal",
+        "raw_material_cost",
+        "purchase_item_cost"
+      ],
+      "reason": "숫자 뭉개짐"
+    },
+    {
+      "table": "manufacturing_cost_details",
+      "key": "K24105/A",
+      "fields": [
+        "purchase_item_cost",
+        "purchase_item_rate_pct"
+      ],
+      "reason": "숫자 뭉개짐"
+    },
+    {
+      "table": "employees",
+      "key": "cyc, dongu",
+      "fields": [
+        "employee_name"
+      ],
+      "reason": "사원명 칸이 화면상 비어있거나 판독 불가"
+    },
+    {
+      "table": "vendors",
+      "key": "V032, V119",
+      "fields": [
+        "vendor_name"
+      ],
+      "reason": "그리드 하단 잘림"
+    },
+    {
+      "table": "status_board_rows",
+      "key": "page 6 (76~90)",
+      "fields": [
+        "sales_manager",
+        "assembly_manager"
+      ],
+      "reason": "사진 2장의 행 정렬이 불일치"
+    },
+    {
+      "table": "sale_order_status_rows",
+      "fields": [
+        "eco",
+        "mold_type_name",
+        "machine_spec_name"
+      ],
+      "reason": "대부분 화면상 공란이거나 우측 스크롤 영역"
+    },
+    {
+      "table": "mold_code_matchings",
+      "fields": [
+        "customer_name"
+      ],
+      "reason": "고객사 열이 화면 우측에서 잘림 (설계관리 탭 화면 제외)"
+    },
+    {
+      "table": "design_plan_steps",
+      "fields": [
+        "completion_planned_date",
+        "manager_name"
+      ],
+      "reason": "화면상 공란"
+    }
+  ],
+  "aggregates": [
+    {
+      "screen": "sale_order_status.html",
+      "source_photo": "20260822_091008.jpg",
+      "note": "화면 하단 전체 집계",
+      "견적가": 173595814291,
+      "수주가": 174331092811,
+      "판매가": 174331092811
+    },
+    {
+      "screen": "set_order_status.html",
+      "source_photo": "20260822_092603.jpg",
+      "note": "전체 799건 · 견적가 2,192,382,… / 네고가 1,515,844,… / 차액 846,732"
+    },
+    {
+      "screen": "design_result_inquiry.html",
+      "source_photo": "20260822_093024.jpg / 20260822_093050.jpg",
+      "note": "전체 작업시간 합계 2,766,330분"
+    },
+    {
+      "screen": "sales_plan_status.html",
+      "source_photo": "20260822_091730.jpg",
+      "note": "수주가 61,607,987,5… / 목표가 46,316,700,7… / 이익률 5.8 / 1,741,978,636 / 204,605,000 / 1,946,583,636"
+    },
+    {
+      "screen": "partlist_status.html",
+      "source_photo": "20260822_093534.jpg / 20260822_093604.jpg",
+      "note": "하단 집계 417,932"
+    },
+    {
+      "screen": "purchase_status.html",
+      "source_photo": "20260822_094543.jpg",
+      "note": "견적가 합계 22,917,164,768 / 확정가 합계 21,130,692,430"
+    },
+    {
+      "screen": "design_result_inquiry.html (조립관리 탭)",
+      "source_photo": "20260822_094518.jpg / 20260822_094529.jpg / 20260822_094535.jpg",
+      "note": "조립팀 필터 작업시간 합계 1,956,100분"
+    }
+  ]
+}

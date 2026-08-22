@@ -1,0 +1,20 @@
+{
+  "jobs": [
+    { "job_no": "A25032", "item_name": null, "process_code": "A", "process_name": "1/1" },
+    { "job_no": "A26026", "item_name": null, "process_code": "A", "process_name": "1/2" },
+    { "job_no": "C14213-S030", "item_name": "BUSBAR", "process_code": "A", "process_name": "1/1" },
+    { "job_no": "C23130-U001", "item_name": "RETAINER PA RHD", "process_code": "A", "process_name": "1/1" },
+    { "job_no": "C23140-U001", "item_name": "RETAINER DR RHD", "process_code": "A", "process_name": "1/2" },
+    { "job_no": "C23144-U001", "item_name": "MOTOR BRACKET", "process_code": "A", "process_name": "1/1" }
+  ],
+  "vendors": [
+    { "seq": 1, "vendor_name": "강철볼트" },
+    { "seq": 2, "vendor_name": "그라미테크" },
+    { "seq": 3, "vendor_name": "금원테크" },
+    { "seq": 4, "vendor_name": "다원시스템" },
+    { "seq": 5, "vendor_name": "신원티엔씨" },
+    { "seq": 6, "vendor_name": "아이위" }
+  ],
+  "default_required_date": "2026-08-29",
+  "plant_name": "1공장"
+}

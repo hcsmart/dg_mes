@@ -1,0 +1,67 @@
+[
+  {
+    "item_code": "A",
+    "item_name": "비품",
+    "remark": null
+  },
+  {
+    "item_code": "C",
+    "item_name": "자동차",
+    "remark": null
+  },
+  {
+    "item_code": "D",
+    "item_name": "기타",
+    "remark": null
+  },
+  {
+    "item_code": "G",
+    "item_name": "에어컨",
+    "remark": null
+  },
+  {
+    "item_code": "J",
+    "item_name": "키친",
+    "remark": null
+  },
+  {
+    "item_code": "K",
+    "item_name": "냉기",
+    "remark": null
+  },
+  {
+    "item_code": "P",
+    "item_name": "부품생산",
+    "remark": null
+  },
+  {
+    "item_code": "R",
+    "item_name": "연구소",
+    "remark": null
+  },
+  {
+    "item_code": "S",
+    "item_name": "연구개발품",
+    "remark": null
+  },
+  {
+    "item_code": "T",
+    "item_name": "TV",
+    "remark": null
+  },
+  {
+    "item_code": "U",
+    "item_name": "세탁기",
+    "remark": null
+  },
+  {
+    "item_code": "PRD",
+    "item_name": "제품",
+    "remark": "작업지시 품목구분 참조로 추가"
+  },
+  {
+    "item_code": "SUB",
+    "item_name": "부자재",
+    "remark": "작업지시 품목구분 참조로 추가"
+  }
+]

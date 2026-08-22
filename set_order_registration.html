@@ -1,0 +1,59 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SET발주등록</title><style>
+:root{--line:#98a6b2;--line2:#c5d0d8;--blue:#2f75b5;--ink:#344757;--head1:#e8f1f8;--head2:#c8dbe9}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:var(--ink);background:#fff;overflow:hidden}
+button,input,select{font:inherit;color:inherit}.screen{height:100%;display:flex;flex-direction:column;background:#fff}
+.title{height:48px;padding:8px 14px 5px;border-bottom:2px solid #3978ae;display:flex;align-items:center}.title h1{margin:0;font-size:22px;font-weight:500;color:#4b5c6a}.title h1:before{content:'◯';margin-right:6px;color:#8796a1}.title small{font-size:11px;color:#9ca7af;margin-left:12px}
+.form{padding:7px 14px;background:#fafbfc;border-bottom:1px solid var(--line2)}.formrow{display:grid;grid-template-columns:78px 140px 78px 150px 90px 150px 90px minmax(160px,1fr);gap:5px;align-items:center}.formrow+.formrow{margin-top:5px}.label{font-weight:700}.field{height:27px;border:1px solid #b5c0c9;background:#fff;padding:0 6px;min-width:0}
+.entrybox,.gridbox{margin:0 14px;border:1px solid var(--line);overflow:auto;background:#fff}.entrybox{height:190px}.gridbox{flex:1;min-height:0}
+.searchline{height:39px;margin:0 14px;display:flex;align-items:center;gap:5px;border-left:1px solid var(--line);border-right:1px solid var(--line);padding:4px 8px;background:#f6f8fa}.searchline input{width:min(430px,48vw);height:27px;border:1px solid #aeb9c3;padding:0 7px}
+.btn{height:29px;min-width:62px;border:1px solid #9ba8b4;background:linear-gradient(#fff,#dfe6eb);cursor:pointer}.btn:hover{background:#fff}
+table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th,td{height:27px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:0 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}th{position:sticky;top:0;z-index:2;text-align:center;background:linear-gradient(var(--head1),var(--head2));color:#405266}tbody tr:nth-child(even) td{background:#fafcfd}tbody tr:hover td{background:#edf6fd}tbody tr.sel td{background:#2d75b7;color:#fff}.c{text-align:center}.num{text-align:right}.toolbar{height:40px;display:flex;align-items:center;gap:5px;padding:4px 14px;background:#f5f7f8;border-bottom:1px solid var(--line2)}
+.foot{height:42px;display:flex;align-items:center;padding:5px 14px;border-top:1px solid var(--line);background:#eef2f5;gap:5px}.msg{margin-left:8px;color:#687784}.right{margin-left:auto;color:#7c8993}
+.split{flex:1;min-height:0;display:grid;grid-template-rows:1fr 1fr;gap:10px;padding:0 14px 8px}.split .gridbox{margin:0}
+@media(max-width:900px){.formrow{grid-template-columns:78px 1fr 78px 1fr}.formrow>*:nth-child(n+5){display:none}.entrybox,.gridbox,.searchline{margin-left:6px;margin-right:6px}}
+
+.filt{padding:7px 14px;background:#fafbfc;border-bottom:1px solid var(--line2)}
+.fr{display:grid;gap:5px;align-items:center}
+.lb{font-weight:700;text-align:right;padding-right:3px}
+.opts{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.opts label{display:flex;align-items:center;gap:3px;cursor:pointer}
+.gtot td{background:#dfe9f2;font-weight:700}
+.grp th{background:linear-gradient(#dbe9f5,#b9d2e6)}
+.panes{flex:1;min-height:0;display:grid;gap:8px;padding:0 14px 8px}
+.pane{border:1px solid var(--line);background:#fff;display:flex;flex-direction:column;min-height:0}
+.ph{padding:5px 9px;font-weight:700;background:linear-gradient(var(--head1),var(--head2));color:#405266;border-bottom:1px solid var(--line2)}
+.pb{flex:1;min-height:0;overflow:auto}
+.f2{display:grid;grid-template-columns:repeat(4,72px minmax(110px,1fr));gap:5px;align-items:center}
+.mask{position:fixed;inset:0;background:rgba(40,50,60,.3);display:none;align-items:flex-start;justify-content:center;z-index:50}
+.mask.on{display:flex}
+.dlg{margin-top:40px;width:min(1000px,96vw);background:#f3f6f8;border:1px solid #7d8d99;box-shadow:0 8px 26px rgba(0,0,0,.25)}
+.dh{display:flex;align-items:center;height:30px;padding:0 6px 0 10px;background:linear-gradient(#eef4f9,#dbe6ef);border-bottom:1px solid #b9c6d0;font-weight:700}
+.dh button{margin-left:auto;width:26px;height:20px;border:1px solid #b04a4a;background:#c9484a;color:#fff;cursor:pointer}
+.db{padding:10px}
+.kv{display:grid;grid-template-columns:repeat(4,84px minmax(90px,1fr));gap:4px;align-items:center;margin-bottom:8px}
+.kv .lb{text-align:right}
+.kv .v{border:1px solid #c3ccd4;background:#fff;height:26px;line-height:24px;padding:0 6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bar{height:14px;background:#3f7fbf;border-radius:2px}
+</style></head><body><div class="screen"><div class="title"><h1>SET발주등록</h1><small>영업관리 · SET발주 · 1공장</small></div><section class="filt"><div class="f2"><div class="lb">제 번</div><div><input id="q_job" class="field"></div><div class="lb">품 명</div><div><input id="q_item" class="field"></div><div class="lb">공 장</div><div><select class="field"><option>1공장</option></select></div><div></div><div></div></div></section><div class="panes" style="grid-template-rows:1fr 1.2fr"><div class="panes" style="grid-template-columns:1fr 280px;grid-template-rows:1fr;padding:0;gap:8px"><div class="pane"><div class="ph">제번리스트</div><div class="pb"><table style="min-width:700px"><thead><tr><th style="width:140px">제번</th><th style="width:180px">품명</th><th style="width:110px">완료예정일</th><th style="width:110px">S1</th><th>고객요구일</th></tr></thead><tbody id="hbody"></tbody></table></div></div><div class="pane"><div class="ph">조수 공정 매칭 리스트</div><div class="pb"><table style="min-width:0"><thead><tr><th style="width:36px"></th><th style="width:90px">공정코드</th><th>공정명</th></tr></thead><tbody id="mbody"></tbody></table></div></div></div><div class="panes" style="grid-template-columns:300px 1fr;grid-template-rows:1fr;padding:0;gap:8px"><div class="pane"><div class="ph">협력업체리스트</div><div style="display:flex;gap:4px;padding:5px"><input id="pq" class="field" placeholder="Enter text to search..." oninput="renderP()"><button class="btn" onclick="renderP()">찾기</button><button class="btn" onclick="pq.value='';renderP()">지우기</button></div><div class="pb"><table style="min-width:0"><thead><tr><th style="width:36px"></th><th>협력업체</th></tr></thead><tbody id="vbody"></tbody></table></div></div><div class="pane"><div class="ph">조수공정 리스트</div><div class="pb"><table style="min-width:900px"><thead><tr><th style="width:36px"></th><th style="width:120px">협력업체</th><th style="width:56px">조수</th><th style="width:80px">공정명</th><th style="width:100px">발주일</th><th style="width:110px">입고예정일</th><th style="width:110px">견적가</th><th style="width:110px">네고가</th><th>작성자</th></tr></thead><tbody id="dbody"></tbody></table></div></div></div></div><footer class="foot"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn" onclick="save()">▤ 저장</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">제번과 협력업체를 선택한 뒤 저장하면 발주가 생성됩니다.</span><span class="right" id="countText"></span></footer></div><script>const heads=[{"row_no": 1, "job_no": "A23007", "item_name": null, "completion_planned_date": null, "s1_date": "2023-08-22", "customer_request_date": "2023-08-22"}, {"row_no": 2, "job_no": "A24040", "item_name": null, "completion_planned_date": null, "s1_date": "2024-03-20", "customer_request_date": "2024-03-21"}, {"row_no": 3, "job_no": "A25032", "item_name": null, "completion_planned_date": null, "s1_date": "2025-03-02", "customer_request_date": "2025-03-02"}, {"row_no": 4, "job_no": "A26026", "item_name": null, "completion_planned_date": null, "s1_date": "2026-12-31", "customer_request_date": "2026-12-31"}, {"row_no": 5, "job_no": "C14213-S030", "item_name": "BUSBAR", "completion_planned_date": null, "s1_date": "2026-08-30", "customer_request_date": "2026-08-30"}, {"row_no": 6, "job_no": "C19022-S004", "item_name": "BRACKET", "completion_planned_date": null, "s1_date": "2025-02-06", "customer_request_date": "2025-02-06"}, {"row_no": 7, "job_no": "C23011", "item_name": "MOTOR BRACKET", "completion_planned_date": null, "s1_date": "2023-04-22", "customer_request_date": "2024-07-30"}, {"row_no": 8, "job_no": "C23086", "item_name": "MOTOR BRACKET", "completion_planned_date": null, "s1_date": "2023-10-22", "customer_request_date": "2024-07-30"}, {"row_no": 9, "job_no": "C23087", "item_name": "MOTOR BRACKET", "completion_planned_date": null, "s1_date": "2023-10-22", "customer_request_date": "2024-07-30"}, {"row_no": 10, "job_no": "C23088", "item_name": "MOTOR BRACKET", "completion_planned_date": null, "s1_date": "2023-10-22", "customer_request_date": "2024-07-30"}, {"row_no": 11, "job_no": "C23089", "item_name": "MOTOR BRACKET", "completion_planned_date": null, "s1_date": "2023-10-22", "customer_request_date": "2024-07-30"}, {"row_no": 12, "job_no": "C23089-A001", "item_name": "MOTOR BRACKET", "completion_planned_date": null, "s1_date": "2023-11-30", "customer_request_date": null}];const partners=[{"row_no": 1, "partner_vendor_name": "건영정밀"}, {"row_no": 2, "partner_vendor_name": "덕영테크"}, {"row_no": 3, "partner_vendor_name": "삼창정밀"}, {"row_no": 4, "partner_vendor_name": "에프피원"}, {"row_no": 5, "partner_vendor_name": "프로테크"}, {"row_no": 6, "partner_vendor_name": "일선테크"}, {"row_no": 7, "partner_vendor_name": "인아테크"}, {"row_no": 8, "partner_vendor_name": "에이아이텍"}, {"row_no": 9, "partner_vendor_name": "엘앤케이"}];const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const n=v=>v==null?'':Number(v).toLocaleString();const p=v=>v==null?'':Number(v).toFixed(2)+'%';
+const msg=t=>message.textContent=t;
+let view=[...heads],sel=null,pv=null;
+function render(){hbody.innerHTML=view.map((r,i)=>`<tr onclick="pick(${i},this)"><td>${esc(r.job_no)}</td><td>${esc(r.item_name||'')}</td><td class="c">${esc(r.completion_planned_date||'')}</td><td class="c">${esc(r.s1_date||'')}</td><td class="c">${esc(r.customer_request_date||'')}</td></tr>`).join('');countText.textContent=view.length+'건';renderP();}
+function renderP(){const q=pq.value.trim().toLowerCase();
+ vbody.innerHTML=partners.filter(p=>!q||p.partner_vendor_name.toLowerCase().includes(q))
+  .map(p=>`<tr class="${p.partner_vendor_name===pv?'sel':''}" onclick="pickP('${p.partner_vendor_name}')"><td class="c"><input type="checkbox" ${p.partner_vendor_name===pv?'checked':''}></td><td>${esc(p.partner_vendor_name)}</td></tr>`).join('');}
+function pick(i,tr){sel=view[i];document.querySelectorAll('#hbody tr').forEach(x=>x.classList.remove('sel'));tr.classList.add('sel');
+ mbody.innerHTML='<tr><td class="c"><input type="checkbox"></td><td>A</td><td>1/1</td></tr>';
+ dbody.innerHTML='<tr><td colspan="9" class="c" style="height:80px;color:#8a97a2">협력업체를 선택하고 저장하면 조수공정이 생성됩니다.</td></tr>';
+ msg(`${sel.job_no} 선택`);}
+function pickP(v){pv=v;renderP();msg(`협력업체: ${v}`)}
+function search(){const j=q_job.value.trim().toLowerCase(),it=q_item.value.trim().toLowerCase();
+ view=heads.filter(r=>(!j||r.job_no.toLowerCase().includes(j))&&(!it||String(r.item_name??'').toLowerCase().includes(it)));render();msg(`조회결과 ${view.length}건입니다.`);}
+function save(){
+ if(!sel){msg('제번을 선택하세요.');return}
+ if(!pv){msg('협력업체를 선택하세요.');return}
+ if(confirm(`업체 : ${pv}로 등록하시겠습니까?`)){
+  dbody.innerHTML=`<tr><td class="c"><input type="checkbox"></td><td>${esc(pv)}</td><td class="c">A</td><td class="c">1/1</td><td class="c">${new Date().toISOString().slice(0,10)}</td><td></td><td class="num">0</td><td class="num">0</td><td class="c">DG</td></tr>`;
+  msg('프로토타입 화면에만 반영했습니다. 원본 JSON은 변경되지 않습니다.');
+ }}
+window.MES={search,save,setMessage:msg};render();</script></body></html>

@@ -1,0 +1,288 @@
+[
+  {
+    "part_code": "B11",
+    "part_name": "PUNCH",
+    "part_group": null
+  },
+  {
+    "part_code": "B12",
+    "part_name": "PUNCH, PIERCING",
+    "part_group": null
+  },
+  {
+    "part_code": "B13",
+    "part_name": "PUNCH, BURRING",
+    "part_group": null
+  },
+  {
+    "part_code": "B14",
+    "part_name": "PUNCH, CARBIDE",
+    "part_group": null
+  },
+  {
+    "part_code": "B15",
+    "part_name": "BUTTON, PUNCH",
+    "part_group": null
+  },
+  {
+    "part_code": "B16",
+    "part_name": "DIE",
+    "part_group": null
+  },
+  {
+    "part_code": "B17",
+    "part_name": "BUTTON, DIE",
+    "part_group": null
+  },
+  {
+    "part_code": "B18",
+    "part_name": "PUNCH & DIE",
+    "part_group": null
+  },
+  {
+    "part_code": "B19",
+    "part_name": "PUNCH, SPECIAL",
+    "part_group": null
+  },
+  {
+    "part_code": "B20",
+    "part_name": "PUNCH, EJECTOR",
+    "part_group": null
+  },
+  {
+    "part_code": "B21",
+    "part_name": "PUNCH, NOTCHING",
+    "part_group": null
+  },
+  {
+    "part_code": "B22",
+    "part_name": "PUNCH, BENDING",
+    "part_group": null
+  },
+  {
+    "part_code": "B23",
+    "part_name": "PUNCH, FORMING",
+    "part_group": null
+  },
+  {
+    "part_code": "B24",
+    "part_name": "PUNCH, EMBOSSING",
+    "part_group": null
+  },
+  {
+    "part_code": "B25",
+    "part_name": "PUNCH, SLITTING",
+    "part_group": null
+  },
+  {
+    "part_code": "B26",
+    "part_name": "PUNCH, CUTTING",
+    "part_group": null
+  },
+  {
+    "part_code": "B27",
+    "part_name": "PUNCH, MANDREL",
+    "part_group": null
+  },
+  {
+    "part_code": "B28",
+    "part_name": "PUNCH, DRAWING",
+    "part_group": null
+  },
+  {
+    "part_code": "B29",
+    "part_name": "PUNCH, RESTRIKE",
+    "part_group": null
+  },
+  {
+    "part_code": "D91",
+    "part_name": "SET, BAR-CONTROL",
+    "part_group": null
+  },
+  {
+    "part_code": "E11",
+    "part_name": "RING, STACK",
+    "part_group": null
+  },
+  {
+    "part_code": "E12",
+    "part_name": "BEAD",
+    "part_group": null
+  },
+  {
+    "part_code": "E13",
+    "part_name": "CUTTER, SCRAP",
+    "part_group": null
+  },
+  {
+    "part_code": "E14",
+    "part_name": "BAR, STACKING",
+    "part_group": null
+  },
+  {
+    "part_code": "E21",
+    "part_name": "HOLDER, POST",
+    "part_group": null
+  },
+  {
+    "part_code": "E22",
+    "part_name": "BOLT, STAY",
+    "part_group": null
+  },
+  {
+    "part_code": "E23",
+    "part_name": "RING, PUNCH",
+    "part_group": null
+  },
+  {
+    "part_code": "E24",
+    "part_name": "RING, DIE",
+    "part_group": null
+  },
+  {
+    "part_code": "E25",
+    "part_name": "BOX, WORM",
+    "part_group": null
+  },
+  {
+    "part_code": "E26",
+    "part_name": "BOX, GEAR",
+    "part_group": null
+  },
+  {
+    "part_code": "E27",
+    "part_name": "HOUSING, B/R",
+    "part_group": null
+  },
+  {
+    "part_code": "E28",
+    "part_name": "RING, ROTATION",
+    "part_group": null
+  },
+  {
+    "part_code": "E29",
+    "part_name": "RING",
+    "part_group": null
+  },
+  {
+    "part_code": "E31",
+    "part_name": "RETAINER, SPOOL",
+    "part_group": null
+  },
+  {
+    "part_code": "E32",
+    "part_name": "RETAINER",
+    "part_group": null
+  },
+  {
+    "part_code": "E33",
+    "part_name": "BRACKET",
+    "part_group": null
+  },
+  {
+    "part_code": "E41",
+    "part_name": "GASKET",
+    "part_group": null
+  },
+  {
+    "part_code": "F42",
+    "part_name": "ROLLER",
+    "part_group": null
+  },
+  {
+    "part_code": "B16A",
+    "part_name": "B16A",
+    "part_group": null,
+    "remark": "원재료 입고확정 참조로 자동 추가"
+  },
+  {
+    "part_code": "B16B",
+    "part_name": "B16B",
+    "part_group": null,
+    "remark": "원재료 입고확정 참조로 자동 추가"
+  },
+  {
+    "part_code": "B17E",
+    "part_name": "B17E",
+    "part_group": null,
+    "remark": "원재료 입고확정 참조로 자동 추가"
+  },
+  {
+    "part_code": "B17L",
+    "part_name": "B17L",
+    "part_group": null,
+    "remark": "원재료 입고확정 참조로 자동 추가"
+  },
+  {
+    "part_code": "B19A",
+    "part_name": "B19A",
+    "part_group": null,
+    "remark": "원재료 입고확정 참조로 자동 추가"
+  },
+  {
+    "part_code": "B21E",
+    "part_name": "B21E",
+    "part_group": null,
+    "remark": "원재료 입고확정 참조로 자동 추가"
+  },
+  {
+    "part_code": "B23C",
+    "part_name": "B23C",
+    "part_group": null,
+    "remark": "원재료 입고확정 참조로 자동 추가"
+  },
+  {
+    "part_code": "B23D",
+    "part_name": "B23D",
+    "part_group": null,
+    "remark": "원재료 입고확정 참조로 자동 추가"
+  },
+  {
+    "part_code": "C23A",
+    "part_name": "C23A",
+    "part_group": null,
+    "remark": "원재료 입고확정 참조로 자동 추가"
+  },
+  {
+    "part_code": "C25A",
+    "part_name": "C25A",
+    "part_group": null,
+    "remark": "원재료 입고확정 참조로 자동 추가"
+  },
+  {
+    "part_code": "C42A",
+    "part_name": "C42A",
+    "part_group": null,
+    "remark": "원재료 입고확정 참조로 자동 추가"
+  },
+  {
+    "part_code": "C42B",
+    "part_name": "C42B",
+    "part_group": null,
+    "remark": "원재료 입고확정 참조로 자동 추가"
+  },
+  {
+    "part_code": "E53A",
+    "part_name": "E53A",
+    "part_group": null,
+    "remark": "원재료 입고확정 참조로 자동 추가"
+  },
+  {
+    "part_code": "T99A1",
+    "part_name": "T99A1",
+    "part_group": null,
+    "remark": "원재료 입고확정 참조로 자동 추가"
+  },
+  {
+    "part_code": "T99A2",
+    "part_name": "T99A2",
+    "part_group": null,
+    "remark": "원재료 입고확정 참조로 자동 추가"
+  },
+  {
+    "part_code": "T99B1",
+    "part_name": "T99B1",
+    "part_group": null,
+    "remark": "원재료 입고확정 참조로 자동 추가"
+  }
+]

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>구매품 입고</title>
+<style>
+:root{--line:#9daab6;--line2:#c5ced6;--ink:#344758}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:var(--ink);background:#fff;overflow:hidden}button,input,select{font:inherit;color:inherit}
+.screen{height:100%;display:flex;flex-direction:column}.title{height:46px;padding:9px 14px 4px;border-bottom:2px solid #3977ad;display:flex;align-items:center;gap:14px}.title h1{margin:0;font-size:21px;font-weight:500;color:#4b5b69}.title h1:before{content:'◯';margin-right:6px;color:#8795a1}.title .plant{margin-left:auto;display:flex;align-items:center;gap:6px;color:#6b7885}
+.filters{padding:7px 14px;border-bottom:1px solid var(--line2);background:#fafbfc;display:flex;gap:6px;align-items:center;flex-wrap:wrap}.label{font-weight:700}.field{height:27px;border:1px solid #b7c2cb;background:#fff;padding:0 7px;outline:none}.field:focus{border-color:#4e88bb}
+.histbar{margin:6px 14px 0;height:24px;border:1px solid var(--line);background:linear-gradient(#e9f2f9,#dbe8f2);display:flex;align-items:center;justify-content:center;font-weight:700;color:#536677}
+.gridbox{flex:1;min-height:0;margin:6px 14px;border:1px solid var(--line);display:flex;flex-direction:column;background:#fff}.grid-title{height:26px;display:flex;align-items:center;justify-content:center;background:linear-gradient(#deebf5,#caddea);border-bottom:1px solid var(--line);font-weight:700;color:#536677}
+.tablewrap{flex:1;min-height:0;overflow:auto}table{border-collapse:collapse;min-width:1620px;width:100%;table-layout:fixed}th,td{height:25px;padding:0 5px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}th{position:sticky;top:0;z-index:2;text-align:center;background:linear-gradient(#dbe9f4,#c7d9e8);color:#405266;font-weight:700}tbody tr:nth-child(even) td{background:#fafcfd}tbody tr:hover td{background:#edf6fd}tbody tr.sel td{background:#2e78bd;color:#fff}.c{text-align:center}.r{text-align:right}
+tfoot th{position:sticky;bottom:0;background:linear-gradient(#e6eef5,#d3e0ea)}
+.applybar{height:38px;margin:0 14px;border:1px solid var(--line);border-top:0;background:#eef3f6;display:flex;align-items:center;gap:7px;padding:0 8px;justify-content:flex-end}
+.btn{height:28px;min-width:70px;border:1px solid #9ca9b5;background:linear-gradient(#fff,#dfe6eb)}.btn:hover{background:#fff}.btn.primary{background:linear-gradient(#f9ffff,#d2e7f6);color:#1e5e91}.btn.warn{color:#a63a2f}
+.foot{height:42px;display:flex;align-items:center;padding:5px 14px;border-top:1px solid var(--line);background:#eef2f5;gap:5px}.msg{margin-left:10px;color:#687784}.foot .right{margin-left:auto;color:#7c8993}
+@media(max-width:900px){.title h1{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="title"><h1>구매품 입고</h1><div class="plant"><span>공장</span><select id="plant" class="field"><option>1공장</option><option>2공장</option></select></div></div>
+  <section class="filters">
+    <span class="label">협력업체</span><input id="vendorQ" class="field" style="width:190px" placeholder="협력업체">
+    <span class="label">제번</span><input id="jobQ" class="field" style="width:190px" placeholder="제번">
+    <span class="label">품명</span><input id="itemQ" class="field" style="width:190px" placeholder="품명">
+    <button class="btn" onclick="search()">⌕ 조회</button>
+  </section>
+  <div class="histbar">입고이력</div>
+  <div class="gridbox">
+    <div class="grid-title">입고 처리 대기 리스트</div>
+    <div class="tablewrap"><table>
+      <colgroup><col style="width:44px"><col style="width:40px"><col style="width:104px"><col style="width:112px"><col style="width:96px"><col style="width:48px"><col style="width:58px"><col style="width:76px"><col style="width:140px"><col style="width:64px"><col style="width:74px"><col style="width:74px"><col style="width:110px"><col style="width:76px"><col style="width:82px"><col style="width:92px"><col style="width:92px"><col style="width:92px"><col style="width:70px"></colgroup>
+      <thead><tr><th>No</th><th>선택</th><th>협력업체</th><th>제번</th><th>품명</th><th>공정</th><th>공정명</th><th>품번</th><th>부품명</th><th>재질</th><th>발주수량</th><th>입고수량</th><th>규격</th><th>입고단가</th><th>입고금액</th><th>발주월</th><th>입고예정일</th><th>입고월</th><th>발주자</th></tr></thead>
+      <tbody id="body"></tbody>
+      <tfoot><tr><th colspan="10" class="r">합 계</th><th class="r" id="sumOrd">0</th><th class="r" id="sumIn">0</th><th></th><th class="r" id="sumPrice">0</th><th class="r" id="sumAmt">0</th><th colspan="4"></th></tr></tfoot>
+    </table></div>
+  </div>
+  <div class="applybar"><span class="label">입고일</span><input id="inDate" class="field" type="date"><button class="btn primary" onclick="applyReceipt()">적용</button><span id="selectedText" style="color:#68757f">선택 0건</span></div>
+  <footer class="foot"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn" onclick="save()">▣ 저장</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫 기</button><button class="btn warn" onclick="cancelOrder()">✖ 발주취소</button><button class="btn warn" onclick="cancelReceipt()">✖ 입고취소</button><span class="msg" id="message">입고 처리 대기 자료를 조회했습니다.</span><span class="right" id="countText"></span></footer>
+</div>
+<script>
+const rows=[
+{no:1,vendor:'신원티엔씨',job:'U25133',item:'Drum Ce',proc:'A',procName:'1/2',part:'T04A',partName:'BOLT, HEXAGON',mat:'-',ord:80,inQty:80,spec:'',price:0,amt:0,odate:'2025-11-03',edate:'2025-10-31',idate:'2026-08-24',owner:'이영현',status:'대기'},
+{no:2,vendor:'아이위',job:'U25133',item:'Drum Ce',proc:'A',procName:'1/2',part:'D55B',partName:'PIN, CUSHION',mat:'STD11',ord:3,inQty:3,spec:'',price:0,amt:0,odate:'2025-11-13',edate:'2024-11-20',idate:'2026-08-24',owner:'이영현',status:'대기'},
+{no:3,vendor:'아이위',job:'J26001',item:'FRONT',proc:'A',procName:'1/5',part:'T42AX1',partName:'B, URETHAN',mat:'URETHANE',ord:2,inQty:2,spec:'',price:0,amt:0,odate:'2026-03-09',edate:'2026-03-07',idate:'2026-08-24',owner:'정재진',status:'대기'},
+{no:4,vendor:'아이위',job:'J26001',item:'FRONT',proc:'A',procName:'1/5',part:'D82BX1',partName:'BAR',mat:'SM45C',ord:6,inQty:6,spec:'',price:0,amt:0,odate:'2026-04-01',edate:'2026-03-31',idate:'2026-08-24',owner:'이영현',status:'대기'},
+{no:5,vendor:'신원티엔씨',job:'K26025',item:'PLATE,',proc:'B',procName:'1/1',part:'B24F',partName:'PUNCH, EMBOSSING',mat:'STD11',ord:1,inQty:1,spec:'',price:0,amt:0,odate:'2026-04-01',edate:'2026-04-08',idate:'2026-08-24',owner:'이영현',status:'대기'},
+{no:6,vendor:'신원티엔씨',job:'U26011',item:'Cabinet',proc:'A',procName:'1/6',part:'T14E',partName:'SPRING, SQUARE',mat:'SF',ord:4,inQty:4,spec:'',price:0,amt:0,odate:'2026-04-14',edate:'2026-04-21',idate:'2026-08-24',owner:'이영현',status:'대기'},
+{no:7,vendor:'신원티엔씨',job:'C25120',item:'STIFFENER',proc:'E',procName:'5/6',part:'B12AX2',partName:'PUNCH, PIERCING',mat:'SJAL',ord:2,inQty:2,spec:'',price:0,amt:0,odate:'2026-05-22',edate:'2026-05-21',idate:'2026-08-24',owner:'이영현',status:'대기'},
+{no:8,vendor:'신원티엔씨',job:'K26005-S003',item:'HOLDER',proc:'A',procName:'1/1',part:'T14K',partName:'SPRING, SQUARE',mat:'',ord:6,inQty:6,spec:'',price:0,amt:0,odate:'2026-05-26',edate:'2026-05-28',idate:'2026-08-24',owner:'이영현',status:'대기'},
+{no:9,vendor:'아이위',job:'J25156-A001',item:'WAVE,G',proc:'A',procName:'1/4',part:'D42A',partName:'PIN, EJECT',mat:'LPS',ord:12,inQty:12,spec:'',price:0,amt:0,odate:'2026-05-27',edate:'2026-05-22',idate:'2026-08-24',owner:'정재진',status:'대기'},
+{no:10,vendor:'신원티엔씨',job:'K26034',item:'Plate,Bot',proc:'A',procName:'1/1',part:'D31AX1',partName:'PIN, GUIDE',mat:'SGPH',ord:12,inQty:12,spec:'',price:0,amt:0,odate:'2026-05-28',edate:'2026-06-04',idate:'2026-08-24',owner:'이영현',status:'대기'},
+{no:11,vendor:'신원티엔씨',job:'K26022',item:'Press Di',proc:'CS',procName:'3/3',part:'B13A',partName:'PUNCH, BURRING',mat:'STD11',ord:2,inQty:2,spec:'',price:0,amt:0,odate:'2026-06-01',edate:'2026-05-22',idate:'2026-08-24',owner:'정재진',status:'대기'},
+{no:12,vendor:'아이위',job:'K26035',item:'Plate,Rear',proc:'A',procName:'1/3',part:'E54AX1',partName:'SPACER',mat:'CBI',ord:2,inQty:2,spec:'',price:0,amt:0,odate:'2026-06-01',edate:'2026-05-29',idate:'2026-08-24',owner:'정재진',status:'대기'},
+{no:13,vendor:'아이위',job:'K26035',item:'Plate,Rear',proc:'A',procName:'1/3',part:'T11AX1',partName:'WASHER ,P',mat:'CBH',ord:2,inQty:2,spec:'',price:0,amt:0,odate:'2026-06-01',edate:'2026-05-22',idate:'2026-08-24',owner:'정재진',status:'대기'},
+{no:14,vendor:'신원티엔씨',job:'K26035',item:'Plate,Rear',proc:'A',procName:'1/3',part:'T14AX1',partName:'SPRING, SQUARE',mat:'SM',ord:4,inQty:4,spec:'',price:0,amt:0,odate:'2026-06-04',edate:'2026-06-11',idate:'2026-08-24',owner:'이영현',status:'대기'},
+{no:15,vendor:'아이위',job:'U26040',item:'Front Do',proc:'C',procName:'3/5',part:'D58A',partName:'BAR, S-ADJUST',mat:'SBM',ord:4,inQty:4,spec:'',price:0,amt:0,odate:'',edate:'',idate:'2026-08-24',owner:'',status:'대기'},
+{no:16,vendor:'아이위',job:'U26040',item:'Front Do',proc:'C',procName:'3/5',part:'D58B',partName:'BAR, S-ADJUST',mat:'SBN',ord:4,inQty:4,spec:'',price:0,amt:0,odate:'',edate:'',idate:'2026-08-24',owner:'',status:'대기'},
+{no:17,vendor:'아이위',job:'U26040',item:'Front Do',proc:'C',procName:'3/5',part:'D58C',partName:'BAR, S-ADJUST',mat:'MC-NY',ord:0,inQty:0,spec:'',price:0,amt:0,odate:'',edate:'',idate:'2026-08-24',owner:'',status:'대기'}];
+let view=[...rows];
+const money=v=>Number(v||0).toLocaleString('ko-KR');
+function render(){body.innerHTML=view.map((r,i)=>`<tr onclick="pick(event,${r.no})"><td class="c">${i+1}</td><td class="c"><input type="checkbox" data-no="${r.no}" onchange="summary()"></td><td>${r.vendor}</td><td>${r.job}</td><td>${r.item}</td><td class="c">${r.proc}</td><td class="c">${r.procName}</td><td>${r.part}</td><td>${r.partName}</td><td class="c">${r.mat}</td><td class="r">${r.ord}</td><td class="r">${r.inQty}</td><td>${r.spec}</td><td class="r">${money(r.price)}</td><td class="r">${money(r.amt)}</td><td class="c">${r.odate}</td><td class="c">${r.edate}</td><td class="c">${r.idate}</td><td class="c">${r.owner}</td></tr>`).join('');
+sumOrd.textContent=money(view.reduce((a,r)=>a+(r.ord||0),0));sumIn.textContent=money(view.reduce((a,r)=>a+(r.inQty||0),0));sumPrice.textContent=money(view.reduce((a,r)=>a+(r.price||0),0));sumAmt.textContent=money(view.reduce((a,r)=>a+(r.amt||0),0));countText.textContent=`${view.length}건`;summary()}
+function pick(e,no){if(e.target.tagName==='INPUT')return;const cb=document.querySelector(`#body input[data-no="${no}"]`);if(cb){cb.checked=!cb.checked;summary()}}
+function selected(){const ids=[...document.querySelectorAll('#body input:checked')].map(x=>Number(x.dataset.no));return rows.filter(r=>ids.includes(r.no))}
+function summary(){const s=selected();selectedText.textContent=`선택 ${s.length}건`;document.querySelectorAll('#body tr').forEach(tr=>tr.classList.toggle('sel',!!tr.querySelector('input:checked')))}
+function search(){const v=vendorQ.value.trim().toLowerCase(),j=jobQ.value.trim().toLowerCase(),it=itemQ.value.trim().toLowerCase();view=rows.filter(r=>(!v||r.vendor.toLowerCase().includes(v))&&(!j||r.job.toLowerCase().includes(j))&&(!it||(r.item||'').toLowerCase().includes(it)));render();msg(`검색 결과 ${view.length}건입니다.`)}
+function applyReceipt(){const s=selected();if(!s.length)return msg('입고 처리할 행을 선택하세요.');const d=inDate.value||new Date().toISOString().slice(0,10);s.forEach(r=>{r.idate=d;r.amt=(r.price||0)*(r.inQty||0);r.status='입고'});render();msg(`${s.length}건을 ${d} 입고 처리했습니다.`)}
+function cancelReceipt(){const s=selected();if(!s.length)return msg('입고취소할 행을 선택하세요.');s.forEach(r=>{r.idate='';r.amt=0;r.status='대기'});render();msg(`${s.length}건의 입고를 취소했습니다.`)}
+function cancelOrder(){const s=selected();if(!s.length)return msg('발주취소할 행을 선택하세요.');const ids=s.map(r=>r.no);for(let i=rows.length-1;i>=0;i--)if(ids.includes(rows[i].no))rows.splice(i,1);view=view.filter(r=>!ids.includes(r.no));render();msg(`${ids.length}건의 발주를 취소했습니다.`)}
+function save(){msg('구매품 입고 내용을 저장했습니다. (프로토타입)')}
+function exportCsv(){const out=[['협력업체','제번','품명','공정','공정명','품번','부품명','재질','발주수량','입고수량','입고단가','입고금액','발주월','입고예정일','입고월','발주자'],...view.map(r=>[r.vendor,r.job,r.item,r.proc,r.procName,r.part,r.partName,r.mat,r.ord,r.inQty,r.price,r.amt,r.odate,r.edate,r.idate,r.owner])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='purchase_receipt_input.csv';a.click();URL.revokeObjectURL(a.href)}
+function msg(t){message.textContent=t}
+inDate.value='2026-08-22';render();window.MES={search,save,exportCsv,setMessage:msg};
+</script>
+</body>
+</html>

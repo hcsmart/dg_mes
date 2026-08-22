@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>가공공정관리</title>
+<style>
+:root{--line:#9daab6;--line2:#c6d0d8;--blue:#2d73af;--ink:#344757;--head:#d9e7f2}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:var(--ink);overflow:hidden;background:#fff}button,input,select{font:inherit;color:inherit}.screen{height:100%;display:flex;flex-direction:column;background:#fff}
+.title{height:48px;padding:10px 14px 5px;border-bottom:2px solid #3978ae}.title h1{margin:0;font-size:22px;font-weight:500;color:#4b5c6a}.title h1:before{content:'◯';margin-right:6px;color:#8796a1}.title small{font-size:11px;color:#9ca7af;margin-left:12px}
+.form{padding:7px 14px;border-bottom:1px solid var(--line2);background:#fafbfc}.form-grid{display:grid;grid-template-columns:105px 170px 95px minmax(170px,1fr) 82px 160px;gap:5px;align-items:center}.form-grid+.form-grid{margin-top:5px}.label{font-weight:700}.field{height:27px;border:1px solid #b5c0c9;background:#fff;padding:0 6px}.memo{grid-column:2/7}.searchline{height:38px;margin:0 14px;display:flex;align-items:center;gap:5px;border-left:1px solid var(--line);border-right:1px solid var(--line);padding:4px 8px;background:#f6f8fa}.searchline input{width:min(420px,50vw);height:27px;border:1px solid #aeb9c3;padding:0 7px}.btn{height:28px;min-width:62px;border:1px solid #9ba8b4;background:linear-gradient(#fff,#dfe6eb)}.btn:hover{background:#fff}
+.gridbox{flex:1;min-height:0;margin:0 14px;border:1px solid var(--line);overflow:auto;background:#fff}table{border-collapse:collapse;min-width:930px;width:100%;table-layout:fixed}th,td{height:27px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:0 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}th{position:sticky;top:0;z-index:2;text-align:center;background:linear-gradient(#dce9f4,#c7d9e8);color:#405266}tbody tr:nth-child(even) td{background:#fafcfd}tbody tr:hover td{background:#edf6fd}tbody tr.sel td{background:#2d75b7;color:white}.c{text-align:center}.num{text-align:right}.code{width:110px}.name{width:210px}.group{width:105px}.order{width:70px}.progress{width:120px}.yn{width:120px}.remark{width:200px}
+.foot{height:43px;display:flex;align-items:center;padding:5px 14px;border-top:1px solid var(--line);background:#eef2f5;gap:5px}.msg{margin-left:10px;color:#687784}.foot .right{margin-left:auto;color:#7c8993}@media(max-width:850px){.form-grid{grid-template-columns:95px 1fr 95px 1fr}.memo{grid-column:2/5}.form-grid .hide-sm{display:none}}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="title"><h1>가공공정관리 <small>가공 공정코드와 진척/계획 사용여부를 관리합니다.</small></h1></div>
+  <section class="form">
+    <div class="form-grid"><div class="label">가공공정코드</div><input id="code" class="field"><div class="label">가공공정명</div><input id="name" class="field"><div class="label">공정그룹</div><select id="group" class="field"><option>가공</option><option>설계</option><option>조립</option></select></div>
+    <div class="form-grid"><div class="label">순번</div><input id="order" class="field" type="number" value="0"><div class="label">진척률사용여부</div><select id="useProgress" class="field"><option>Y</option><option>N</option></select><div class="label">계획사용여부</div><select id="usePlan" class="field"><option>Y</option><option>N</option></select></div>
+    <div class="form-grid"><div class="label">비고</div><input id="remark" class="field memo"><div class="label hide-sm">완료시 진척률</div><input id="completeProgress" class="field hide-sm" type="number" min="0" max="100" value="0"></div>
+  </section>
+  <div class="searchline"><input id="query" placeholder="Enter text to search..."><button class="btn" onclick="search()">찾기</button><button class="btn" onclick="clearSearch()">지우기</button></div>
+  <div class="gridbox"><table><thead><tr><th style="width:44px">No</th><th class="code">가공공정코드</th><th class="name">가공공정명</th><th class="group">공정그룹</th><th class="order">정렬</th><th class="progress">완료시진척률</th><th class="yn">진척률 사용여부</th><th class="yn">계획 사용여부</th><th class="remark">비고</th></tr></thead><tbody id="body"></tbody></table></div>
+  <footer class="foot"><button class="btn" onclick="save()">▣ 저장</button><button class="btn" onclick="add()">＋ 신규</button><button class="btn" onclick="remove()">✖ 삭제</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">가공공정 데이터를 조회했습니다.</span><span class="right" id="countText"></span></footer>
+</div>
+<script>
+const data=[
+{code:'DL',name:'조립도',group:'설계',order:1,complete:30,progress:'Y',plan:'Y',remark:''},
+{code:'DA',name:'레이아웃',group:'설계',order:2,complete:30,progress:'Y',plan:'Y',remark:''},
+{code:'DP',name:'부품도',group:'설계',order:3,complete:40,progress:'Y',plan:'Y',remark:''},
+{code:'CT',name:'코팅',group:'가공',order:0,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'LM1',name:'선반 황삭',group:'가공',order:0,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'LM2',name:'선반 밀처리 정삭',group:'가공',order:0,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'NL1',name:'M/C정삭(대형)',group:'가공',order:0,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'NL2',name:'M/C밀처리정삭',group:'가공',order:0,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'TC',name:'각인',group:'가공',order:0,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'TE',name:'방전',group:'가공',order:0,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'WS1',name:'WIRE CUT1',group:'가공',order:0,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'AB',name:'가공ASSY',group:'가공',order:1,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'MA',name:'면삭밀링(소형)',group:'가공',order:2,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'MF',name:'면삭밀링(대형)',group:'가공',order:3,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'MP',name:'면삭밀링(초대형)',group:'가공',order:4,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'MS',name:'성형밀링(소형)',group:'가공',order:5,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'DR',name:'DRILLING',group:'가공',order:6,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'HA',name:'홀가공',group:'가공',order:7,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'HQ',name:'열처리',group:'가공',order:8,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'NM',name:'M/C황삭(소형,중형)',group:'가공',order:9,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'NL',name:'M/C정삭(대형)',group:'가공',order:10,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'GS',name:'성형연삭(소형)',group:'가공',order:11,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'GM',name:'평면연삭(중형)',group:'가공',order:12,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'GL',name:'평면연삭(대형)',group:'가공',order:13,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'WS',name:'WIRE CUT',group:'가공',order:15,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'LM',name:'선반',group:'가공',order:18,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'GG',name:'원통연삭',group:'가공',order:19,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'WW',name:'용접',group:'가공',order:20,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'NM1',name:'M/C정삭(소형,중형)',group:'가공',order:25,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'NM2',name:'M/C열처리정삭',group:'가공',order:26,complete:0,progress:'N',plan:'Y',remark:''},
+{code:'AS',name:'래핑,조립',group:'조립',order:1,complete:25,progress:'Y',plan:'Y',remark:''},
+{code:'TO',name:'시험',group:'조립',order:2,complete:25,progress:'Y',plan:'Y',remark:''},
+{code:'S1',name:'S1',group:'조립',order:3,complete:25,progress:'Y',plan:'Y',remark:''},
+{code:'CQ',name:'품질육성',group:'조립',order:4,complete:25,progress:'Y',plan:'Y',remark:''}
+];
+let view=[...data],selected=-1;
+function render(){body.innerHTML=view.map((r,i)=>`<tr onclick="select('${r.code}',this)"><td class="c">${i+1}</td><td>${r.code}</td><td>${r.name}</td><td class="c">${r.group}</td><td class="num">${r.order}</td><td class="num">${r.complete}</td><td class="c">${r.progress}</td><td class="c">${r.plan}</td><td>${r.remark}</td></tr>`).join('');countText.textContent=`${view.length}건`}
+function select(c,tr){selected=data.findIndex(x=>x.code===c);document.querySelectorAll('tbody tr').forEach(x=>x.classList.remove('sel'));tr?.classList.add('sel');const r=data[selected];if(!r)return;code.value=r.code;document.getElementById('name').value=r.name;group.value=r.group;order.value=r.order;completeProgress.value=r.complete;useProgress.value=r.progress;usePlan.value=r.plan;remark.value=r.remark;msg(`${r.code} ${r.name} 공정을 선택했습니다.`)}
+function search(){const q=query.value.trim().toLowerCase();view=!q?[...data]:data.filter(r=>Object.values(r).some(v=>String(v).toLowerCase().includes(q)));render();msg(`검색 결과 ${view.length}건입니다.`)}
+function clearSearch(){query.value='';view=[...data];render();msg('검색조건을 초기화했습니다.')}
+function add(){selected=-1;code.value='';document.getElementById('name').value='';group.value='가공';order.value=0;completeProgress.value=0;useProgress.value='N';usePlan.value='Y';remark.value='';msg('신규 가공공정을 입력하세요.')}
+function save(){const c=code.value.trim().toUpperCase(),n=document.getElementById('name').value.trim();if(!c||!n)return msg('가공공정코드와 공정명을 입력하세요.');let r=selected>=0?data[selected]:data.find(x=>x.code===c);if(!r){r={};data.push(r)}r.code=c;r.name=n;r.group=group.value;r.order=Number(order.value)||0;r.complete=Number(completeProgress.value)||0;r.progress=useProgress.value;r.plan=usePlan.value;r.remark=remark.value.trim();selected=data.indexOf(r);view=[...data];render();msg(`${c} 공정을 저장했습니다.`)}
+function remove(){if(selected<0)return msg('삭제할 공정을 선택하세요.');if(!confirm('선택한 공정을 삭제하시겠습니까?'))return;const c=data[selected].code;data.splice(selected,1);selected=-1;view=[...data];render();add();msg(`${c} 공정을 삭제했습니다.`)}
+function exportCsv(){const out=[['가공공정코드','가공공정명','공정그룹','정렬','완료시진척률','진척률 사용여부','계획 사용여부','비고'],...data.map(r=>[r.code,r.name,r.group,r.order,r.complete,r.progress,r.plan,r.remark])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='machining_process_management.csv';a.click();URL.revokeObjectURL(a.href);msg('CSV 파일을 생성했습니다.')}
+function msg(t){message.textContent=t}window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
+</script>
+</body>
+</html>

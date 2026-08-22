@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>조립실적등록</title>
+<style>
+:root{--line:#9daab6;--line2:#c5ced6;--ink:#344758}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:var(--ink);background:#fff;overflow:hidden}button,input,select{font:inherit;color:inherit}
+.screen{height:100%;display:flex;flex-direction:column}.title{height:46px;padding:9px 14px 4px;border-bottom:2px solid #3977ad;display:flex;align-items:center;gap:16px}.title h1{margin:0;font-size:21px;font-weight:500;color:#4b5b69}.title h1:before{content:'◯';margin-right:6px;color:#8795a1}.title .opts{display:flex;align-items:center;gap:10px;color:#5f6d79}.title .plant{margin-left:auto;display:flex;align-items:center;gap:6px;color:#6b7885}
+.filters{padding:7px 14px;border-bottom:1px solid var(--line2);background:#fafbfc;display:flex;gap:6px;align-items:center;flex-wrap:wrap}.label{font-weight:700}.field{height:27px;border:1px solid #b7c2cb;background:#fff;padding:0 7px;outline:none}.field:focus{border-color:#4e88bb}
+.jobbox{margin:7px 14px 0;height:180px;border:1px solid var(--line);display:flex;flex-direction:column;background:#fff}
+.bottom{flex:1;min-height:0;display:grid;grid-template-columns:2.1fr 1fr;gap:6px;padding:6px 14px}
+.box{border:1px solid var(--line);display:flex;flex-direction:column;min-height:0;background:#fff}
+.box-title{height:24px;display:flex;align-items:center;justify-content:center;background:linear-gradient(#deebf5,#caddea);border-bottom:1px solid var(--line);font-weight:700;color:#536677}
+.tablewrap{flex:1;min-height:0;overflow:auto}table{border-collapse:collapse;width:100%;table-layout:fixed}th,td{height:25px;padding:0 5px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}th{position:sticky;top:0;z-index:2;text-align:center;background:linear-gradient(#dbe9f4,#c7d9e8);color:#405266;font-weight:700}tbody tr:hover td{background:#edf6fd}tbody tr.sel td{background:#2e78bd;color:#fff}.c{text-align:center}.r{text-align:right}
+.entry{border-top:1px solid var(--line2);padding:6px;display:grid;grid-template-columns:64px 1fr;gap:5px;align-items:center;background:#f5f8fa}
+.entry .field{height:24px;width:100%}
+.entrybtns{display:flex;flex-wrap:wrap;gap:4px;padding:0 6px 6px;background:#f5f8fa}
+.btn{height:28px;min-width:70px;border:1px solid #9ca9b5;background:linear-gradient(#fff,#dfe6eb)}.btn:hover{background:#fff}.btn.primary{background:linear-gradient(#f9ffff,#d2e7f6);color:#1e5e91}.btn.warn{color:#a63a2f}.btn.sm{height:25px;min-width:0;padding:0 8px;font-size:11px}
+.foot{height:42px;display:flex;align-items:center;padding:5px 14px;border-top:1px solid var(--line);background:#eef2f5;gap:5px}.msg{margin-left:10px;color:#687784}.foot .right{margin-left:auto;color:#7c8993}
+@media(max-width:900px){.bottom{grid-template-columns:1fr}.title h1{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="title"><h1>조립실적등록</h1>
+    <div class="opts"><label><input type="radio" name="done" value="미완료" checked onchange="search()"> 미완료</label><label><input type="radio" name="done" value="완료" onchange="search()"> 완료</label></div>
+    <div class="plant"><span>공장</span><select id="plant" class="field"><option>1공장</option><option>2공장</option></select></div>
+  </div>
+  <section class="filters">
+    <span class="label">제 번</span><input id="jobQ" class="field" style="width:230px">
+    <span class="label">품 명</span><input id="itemQ" class="field" style="width:230px">
+    <button class="btn" onclick="search()">⌕ 조회</button>
+  </section>
+  <div class="jobbox"><div class="box-title">제번리스트</div><div class="tablewrap"><table>
+    <colgroup><col style="width:16%"><col style="width:24%"><col style="width:16%"><col style="width:16%"><col style="width:16%"><col style="width:12%"></colgroup>
+    <thead><tr><th>제번</th><th>품명</th><th>조립완료예정일</th><th>S1</th><th>고객요구일</th><th>검사횟수</th></tr></thead>
+    <tbody id="jobBody"></tbody></table></div></div>
+  <section class="bottom">
+    <div class="box"><div class="box-title">세부공정 리스트</div><div class="tablewrap"><table>
+      <colgroup><col style="width:38px"><col style="width:14%"><col style="width:20%"><col style="width:30%"><col style="width:18%"><col style="width:18%"></colgroup>
+      <thead><tr><th></th><th>완료여부</th><th>가공공정코드</th><th>가공공정명</th><th>작업시간(분)</th><th>조립진척(%)</th></tr></thead>
+      <tbody id="procBody"></tbody></table></div></div>
+    <div class="box"><div class="box-title">설계/조립 실적등록</div>
+      <div class="tablewrap"><table>
+        <colgroup><col style="width:34%"><col style="width:36%"><col style="width:30%"></colgroup>
+        <thead><tr><th>작업자</th><th>작업일자</th><th>작업시간(분)</th></tr></thead>
+        <tbody id="resultBody"></tbody></table></div>
+      <div class="entry">
+        <span class="label">작업시간</span><input id="minutes" class="field" type="number" min="0" placeholder="분">
+        <span class="label">작업일</span><input id="workDate" class="field" type="date">
+        <span class="label">작업자</span><select id="worker" class="field"></select>
+      </div>
+      <div class="entrybtns">
+        <button class="btn sm primary" onclick="addResult()">실적 등록</button>
+        <button class="btn sm warn" onclick="delResult()">실적 삭제</button>
+        <button class="btn sm" onclick="completeStep()">세부공정 완료</button>
+        <button class="btn sm" onclick="completeAssembly()">조립 완료</button>
+        <button class="btn sm" onclick="inspectionSheet()">검사시트 작성/수정</button>
+      </div>
+    </div>
+  </section>
+  <footer class="foot"><button class="btn" onclick="search()">⌕ 검 색</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">제번을 선택하면 세부공정 리스트가 조회됩니다.</span><span class="right" id="countText"></span></footer>
+</div>
+<script>
+const JOBS=[
+{job:'A23007',item:'',due:'2023-01-30',s1:'2023-08-22',cust:'2023-08-22',insp:null,done:false},
+{job:'A24040',item:'',due:'2024-03-19',s1:'2024-03-20',cust:'2024-03-21',insp:0,done:false},
+{job:'A25032',item:'',due:'2025-03-02',s1:'2025-03-02',cust:'2025-03-02',insp:0,done:false},
+{job:'A26026',item:'',due:'2026-12-31',s1:'2026-12-31',cust:'2026-12-31',insp:0,done:false},
+{job:'C14213-S030',item:'BUSBAR',due:'2025-08-10',s1:'2026-08-30',cust:'2026-08-30',insp:0,done:false},
+{job:'C19022-S003',item:'BRACKET',due:'2024-06-09',s1:'2024-06-10',cust:'2024-06-10',insp:0,done:false},
+{job:'C19022-S004',item:'BRACKET',due:'2025-02-05',s1:'2025-02-06',cust:'2025-02-06',insp:0,done:false},
+{job:'C23011',item:'MOTOR BRACKET',due:'2023-04-21',s1:'2023-04-22',cust:'2024-07-30',insp:0,done:false}];
+const STEPS=[
+{mp:'AS',mpName:'래핑,조립',min:null,rate:null,done:false},
+{mp:'CQ',mpName:'품질육성',min:null,rate:null,done:false},
+{mp:'S1',mpName:'S1',min:null,rate:0,done:false},
+{mp:'TO',mpName:'시험',min:null,rate:null,done:false}];
+const WORKERS=['박봉규','박형복','심대섭','장우진','조영출','진동구','배강현','김기준','함태안','옥종필','박현민'];
+const RESULTS={};
+let jobIdx=0,stepIdx=0,jobView=[...JOBS];
+function key(){return `${jobView[jobIdx]?.job}|${STEPS[stepIdx]?.mp}`}
+function renderJobs(){jobBody.innerHTML=jobView.map((j,i)=>`<tr class="${i===jobIdx?'sel':''}" onclick="pickJob(${i})"><td>${j.job}</td><td>${j.item}</td><td class="c">${j.due}</td><td class="c">${j.s1}</td><td class="c">${j.cust}</td><td class="r">${j.insp??''}</td></tr>`).join('');countText.textContent=`제번 ${jobView.length}건`}
+function renderSteps(){procBody.innerHTML=STEPS.map((s,i)=>`<tr class="${i===stepIdx?'sel':''}" onclick="pickStep(${i})"><td class="c">${i===stepIdx?'▶':''}</td><td class="c">${s.done?'완료':''}</td><td class="c">${s.mp}</td><td>${s.mpName}</td><td class="r">${s.min??''}</td><td class="r">${s.rate==null?'':s.rate+'%'}</td></tr>`).join('')}
+function renderResults(){const list=RESULTS[key()]||[];resultBody.innerHTML=list.length?list.map((r,i)=>`<tr onclick="selResult(${i})" class="${r._sel?'sel':''}"><td>${r.worker}</td><td class="c">${r.date}</td><td class="r">${r.min}</td></tr>`).join(''):'<tr><td colspan="3" class="c" style="color:#8b98a4">실적 없음</td></tr>'}
+function pickJob(i){jobIdx=i;stepIdx=0;renderJobs();renderSteps();renderResults();msg(`${jobView[i].job} 세부공정을 조회했습니다.`)}
+function pickStep(i){stepIdx=i;renderSteps();renderResults();msg(`세부공정 ${STEPS[i].mp} (${STEPS[i].mpName}) 선택`)}
+function selResult(i){const list=RESULTS[key()]||[];list.forEach((r,k)=>r._sel=(k===i));renderResults()}
+function search(){const j=jobQ.value.trim().toLowerCase(),it=itemQ.value.trim().toLowerCase(),m=document.querySelector('input[name=done]:checked').value;
+jobView=JOBS.filter(x=>(m==='완료'?x.done:!x.done)&&(!j||x.job.toLowerCase().includes(j))&&(!it||(x.item||'').toLowerCase().includes(it)));jobIdx=0;renderJobs();renderSteps();renderResults();msg(`${m} 기준 제번 ${jobView.length}건을 조회했습니다.`)}
+function addResult(){if(!jobView[jobIdx])return msg('제번을 선택하세요.');const m=Number(minutes.value);if(!m||m<=0)return msg('작업시간(분)을 입력하세요.');
+const k=key();(RESULTS[k]=RESULTS[k]||[]).push({worker:worker.value,date:workDate.value||new Date().toISOString().slice(0,10),min:m});
+const s=STEPS[stepIdx];s.min=(RESULTS[k]||[]).reduce((a,r)=>a+r.min,0);minutes.value='';renderSteps();renderResults();msg(`${worker.value} 실적 ${m}분을 등록했습니다.`)}
+function delResult(){const k=key(),list=RESULTS[k]||[];const i=list.findIndex(r=>r._sel);if(i<0)return msg('삭제할 실적 행을 선택하세요.');list.splice(i,1);STEPS[stepIdx].min=list.reduce((a,r)=>a+r.min,0)||null;renderSteps();renderResults();msg('실적을 삭제했습니다.')}
+function completeStep(){const s=STEPS[stepIdx];s.done=true;s.rate=100;renderSteps();msg(`세부공정 ${s.mp}를 완료 처리했습니다.`)}
+function completeAssembly(){const j=jobView[jobIdx];if(!j)return msg('제번을 선택하세요.');STEPS.forEach(s=>{s.done=true;s.rate=100});j.done=true;renderSteps();msg(`${j.job} 조립을 완료 처리했습니다.`)}
+function inspectionSheet(){const j=jobView[jobIdx];if(!j)return msg('제번을 선택하세요.');j.insp=(j.insp||0)+1;renderJobs();msg(`${j.job} 검사시트를 작성했습니다. (검사횟수 ${j.insp})`)}
+function exportCsv(){const k=key(),list=RESULTS[k]||[];const out=[['제번','가공공정코드','작업자','작업일자','작업시간(분)'],...list.map(r=>[jobView[jobIdx]?.job,STEPS[stepIdx].mp,r.worker,r.date,r.min])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='assembly_result_input.csv';a.click();URL.revokeObjectURL(a.href)}
+function msg(t){message.textContent=t}
+worker.innerHTML=WORKERS.map(w=>`<option>${w}</option>`).join('');workDate.value='2026-08-22';
+renderJobs();renderSteps();renderResults();window.MES={search,save:addResult,exportCsv,setMessage:msg};
+</script>
+</body>
+</html>

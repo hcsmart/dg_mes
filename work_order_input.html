@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>작업지시 관리 - Work Order Input</title>
+<style>
+:root{--line:#aeb8c2;--line2:#d6dde3;--head:#e9eef3;--head2:#f5f7f9;--blue:#2374b9;--blue2:#0d5e9c;--text:#273746;--muted:#6d7b88;--green:#cdebdc;--violet:#c9c8f0}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:var(--text);background:#eef1f4;overflow:hidden}
+button,input,select{font:inherit;color:inherit}button{cursor:pointer}
+.screen{height:100%;display:flex;flex-direction:column;background:#f5f7f9}
+.form{padding:7px 8px 5px;border-bottom:1px solid #8e9aa6;background:linear-gradient(#f8fafb,#e9edf1)}
+.form-grid{display:grid;grid-template-columns:110px minmax(160px,1fr) 100px minmax(180px,1fr) 100px minmax(180px,1fr);border-top:1px solid var(--line);border-left:1px solid var(--line)}
+.label,.field{min-height:31px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);display:flex;align-items:center}
+.label{padding:0 8px;background:#eef2f5;font-weight:700;color:#4b5c6c}.label::before{content:"✓";color:#1e6bad;margin-right:5px}.field{padding:3px 5px;background:#fafbfc}.field input,.field select{height:24px;width:100%;border:1px solid #b4bec8;background:#fff;padding:0 7px;outline:none}.field input:focus,.field select:focus{border-color:#3d80bc;box-shadow:0 0 0 1px #cfe2f4 inset}
+.date-range{display:flex;gap:4px;width:100%;align-items:center}.date-range input{min-width:0}.date-range span{color:#7b8792}
+.modebar{height:29px;display:flex;align-items:end;padding:0 8px;border-bottom:1px solid #8b99a5;background:#eef2f5}.mode{height:25px;border:1px solid #a7b3be;border-bottom:0;padding:0 12px;background:linear-gradient(#fff,#e3e8ed);font-weight:700;color:#526170}.mode.on{background:#fff;color:#244e77}
+.split{flex:1;min-height:0;display:grid;grid-template-rows:minmax(230px,1.65fr) minmax(150px,.9fr);gap:4px;padding:4px 8px 5px}
+.panel{min-height:0;border:1px solid #8998a6;background:#fff;display:flex;flex-direction:column}.caption{height:25px;display:flex;align-items:center;padding:0 6px;background:linear-gradient(#f6f8fa,#e1e7ec);border-bottom:1px solid #9dabb8;font-weight:800;color:#3f5264}.caption .right{margin-left:auto;color:#72808d;font-weight:400;font-size:11px}.table-wrap{min-height:0;flex:1;overflow:auto;background:white}
+table{border-collapse:collapse;min-width:1220px;width:100%;table-layout:fixed}th{position:sticky;top:0;z-index:2;height:27px;background:linear-gradient(#eef2f5,#d9e0e6);border-right:1px solid #a9b4bf;border-bottom:1px solid #8d9ca9;padding:0 5px;text-align:center;white-space:nowrap;color:#41505e;font-weight:800}td{height:26px;border-right:1px solid #d0d7dd;border-bottom:1px solid #d8dee4;padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:#fff}tr:nth-child(even) td{background:#fafbfc}tbody tr:hover td{background:#eaf3fb}tbody tr.selected td{background:#d7e9f8}.newcell{background:#1e75bd!important;color:#fff;text-align:center}.num{text-align:right}.center{text-align:center}.yes{color:#245d32;font-weight:700}
+.detail table{min-width:1150px}.detail th.workdate{background:#8aa7df;color:#10294b}.detail th.workname{background:#a6d4c4}.detail th.process{background:#d2c5e7}.detail th.line{background:#b4e0d8}.detail th.qty{background:#9e9bd8;color:#18214a}.detail td{height:28px}
+.footer{height:23px;display:flex;align-items:center;border-top:1px solid #9ba8b4;background:#e6ebef;padding:0 8px;color:#5f6e7b;font-size:11px}.footer .message{margin-left:22px;color:#334d66}.footer .right{margin-left:auto;display:flex;gap:18px}
+@media(max-width:900px){.form-grid{grid-template-columns:90px 1fr 90px 1fr}.form-grid>*:nth-child(5),.form-grid>*:nth-child(6){display:none}.split{grid-template-rows:1.5fr 1fr}}
+</style>
+</head>
+<body>
+<div class="screen">
+  <section class="form">
+    <div class="form-grid">
+      <div class="label">사업장 정보</div><div class="field"><select id="site"><option>(주)동구기업</option><option>제1공장</option><option>제2공장</option></select></div>
+      <div class="label">수주일자</div><div class="field"><div class="date-range"><input type="date" value="2026-07-23"><span>~</span><input type="date" value="2026-08-22"></div></div>
+      <div class="label">거래처 정보</div><div class="field"><input id="customer" placeholder="거래처명 / 코드"></div>
+      <div class="label">수주명</div><div class="field"><input id="orderName" placeholder="수주명"></div>
+      <div class="label">완료 여부</div><div class="field"><select id="complete"><option>ALL</option><option>미완료</option><option>완료</option></select></div>
+      <div class="label">품목 정보</div><div class="field"><input id="itemSearch" placeholder="품번 / 품명"></div>
+    </div>
+  </section>
+  <div class="modebar"><button class="mode on" onclick="switchMode(this,'item')">품목별 작업지시</button><button class="mode" onclick="switchMode(this,'order')">수주별 작업지시</button></div>
+  <div class="split">
+    <section class="panel">
+      <div class="caption">[품목 정보]<span class="right" id="countText">13건</span></div>
+      <div class="table-wrap">
+        <table id="masterGrid"><thead><tr>
+          <th style="width:42px">No</th><th style="width:58px">신규</th><th style="width:110px">사업장</th><th style="width:130px">품번</th><th style="width:190px">품명</th><th style="width:80px">품목유형</th><th style="width:80px">차종</th><th style="width:85px">재질</th><th style="width:150px">거래처</th><th style="width:64px">소재</th><th style="width:58px">단위</th><th style="width:88px">수입검사여부</th><th style="width:92px">모니터링여부</th><th style="width:74px">사용여부</th>
+        </tr></thead><tbody id="masterBody"></tbody></table>
+      </div>
+    </section>
+    <section class="panel detail">
+      <div class="caption">[품목별 작업지시 정보]<span class="right">선택 품목 기준</span></div>
+      <div class="table-wrap"><table><thead><tr>
+        <th style="width:120px">작업지시번호</th><th style="width:90px">비고</th><th class="workdate" style="width:110px">작업지시일자</th><th style="width:100px">작업장코드</th><th class="workname" style="width:120px">작업장명</th><th class="process" style="width:95px">공정코드</th><th style="width:85px">공정명</th><th class="line" style="width:95px">라인코드</th><th style="width:95px">라인명</th><th class="qty" style="width:70px">지시량</th><th style="width:58px">완료</th><th style="width:58px">불량</th><th style="width:82px">실적수량</th>
+      </tr></thead><tbody id="detailBody"><tr><td class="center">자동생성</td><td></td><td class="center">2026-08-22</td><td class="center">WC0007</td><td>PRO 5-1호기</td><td class="center">CP0037</td><td class="center">PRO</td><td></td><td></td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr></tbody></table></div>
+    </section>
+  </div>
+  <footer class="footer"><span id="time">2026-08-22 10:15:13</span><span class="message" id="message">데이터가 조회되었습니다.</span><span class="right"><span>AP0020</span><span>[DONGGU02] 조영호 로그인 하였습니다.</span></span></footer>
+</div>
+<script>
+const rows=[
+['(주)동구기업','01-1300-00690A','1010180421M DRUM-LOOK UP','제품','','','[KC] ㈜ 정광정공','0','EA','예','예','예'],
+['(주)동구기업','01-9000-0188','207 BRKT','제품','덕스','','[KC] ㈜ 정광정공','0','EA','예','예','예'],
+['(주)동구기업','01-9000-0342','C/PLATE (너트,2코팅)','제품','TO/TRW','','[KC] ㈜ 정광정공','0','EA','예','예','예'],
+['(주)동구기업','01-9000-0344','C/PLATE (6m)','제품','TO/TRW','','[KC] ㈜ 정광정공','0','EA','예','예','예'],
+['(주)동구기업','01-9000-0365','C/PLATE (8m)','제품','TO/TRW','','[KC] ㈜ 정광정공','0','EA','예','예','예'],
+['(주)동구기업','01-9000-03850B','1238 BRKT','제품','TO/덕스','','[KC] ㈜ 정광정공','0','EA','예','예','예'],
+['(주)동구기업','01-9000-03870A','1232 BRKT','제품','TO/덕스','','[KC] ㈜ 정광정공','0','EA','예','예','예'],
+['(주)동구기업','01-9000-0437T0','1229 BRKT','제품','덕스','','[KC] ㈜ 정광정공','0','EA','예','예','예'],
+['(주)동구기업','01-9000-0438T0','1262 BRKT','부자재','덕스','','[KC] ㈜ 정광정공','0','EA','예','예','예'],
+['(주)동구기업','01-9000-0478','1275 P1A1','제품','TO/덕스','EA','[KC] ㈜ 정광정공','0','EA','예','예','예'],
+['(주)동구기업','01-9000-0482','BRKT PART 3','제품','TO/TRW','','[KC] ㈜ 정광정공','0','EA','예','예','예'],
+['(주)동구기업','01-9000-0491PA1','E1490001153 P1A1','제품','TO/덕스','','[KC] ㈜ 정광정공','0','EA','예','예','예'],
+['(주)동구기업','01-9000-0491PA2','E1490001153 P1A2','제품','TO/덕스','','[KC] ㈜ 정광정공','0','EA','예','예','예']
+];
+function render(data=rows){const body=document.getElementById('masterBody');body.innerHTML=data.map((r,i)=>`<tr onclick="selectRow(this,${i})"><td class="center">${i+1}</td><td class="newcell">신규</td>${r.map((v,j)=>`<td class="${[7].includes(j)?'num':''} ${[8,9,10,11].includes(j)?'center':''}">${v}</td>`).join('')}</tr>`).join('');document.getElementById('countText').textContent=data.length+'건';body.querySelector('tr')?.classList.add('selected')}
+function selectRow(tr,i){document.querySelectorAll('#masterBody tr').forEach(x=>x.classList.remove('selected'));tr.classList.add('selected');const r=rows[i]||rows[0];document.getElementById('detailBody').innerHTML=`<tr><td class="center">자동생성</td><td>${r[1]}</td><td class="center">2026-08-22</td><td class="center">WC0007</td><td>PRO 5-1호기</td><td class="center">CP0037</td><td class="center">PRO</td><td></td><td></td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>`}
+function doSearch(){const q=(document.getElementById('itemSearch').value+' '+document.getElementById('customer').value+' '+document.getElementById('orderName').value).trim().toLowerCase();const filtered=!q?rows:rows.filter(r=>r.join(' ').toLowerCase().includes(q));render(filtered);setMessage(`데이터가 조회되었습니다. (${filtered.length}건)`)}
+function addRow(){rows.unshift(['(주)동구기업','NEW-'+String(Date.now()).slice(-6),'신규 품목','제품','','','','0','EA','예','예','예']);render(rows);setMessage('신규 행이 추가되었습니다.')}
+function deleteRow(){const selected=document.querySelector('#masterBody tr.selected');if(!selected){setMessage('삭제할 행을 선택하세요.');return}const idx=[...selected.parentNode.children].indexOf(selected);rows.splice(idx,1);render(rows);setMessage('선택 행이 삭제되었습니다.')}
+function save(){setMessage('작업지시 정보가 저장되었습니다.')}
+function exportCsv(){const data=[['사업장','품번','품명','품목유형','차종','재질','거래처','소재','단위','수입검사여부','모니터링여부','사용여부'],...rows];const csv='\ufeff'+data.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='work_order_input.csv';a.click();URL.revokeObjectURL(a.href);setMessage('엑셀용 CSV 파일을 생성했습니다.')}
+function switchMode(btn,mode){document.querySelectorAll('.mode').forEach(b=>b.classList.remove('on'));btn.classList.add('on');setMessage(mode==='item'?'품목별 작업지시로 전환했습니다.':'수주별 작업지시로 전환했습니다.')}
+function setMessage(t){document.getElementById('message').textContent=t}
+window.MES={search:doSearch,add:addRow,delete:deleteRow,save,exportCsv,setMessage};
+render();
+</script>
+</body>
+</html>

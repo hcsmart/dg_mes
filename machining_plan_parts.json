@@ -1,0 +1,107 @@
+[
+  {
+    "row_no": 1,
+    "job_no": "K21136-A005",
+    "part_no": "B11AD",
+    "part_name": "PUNCH",
+    "standard_process": null,
+    "steps": [
+      "WS",
+      "CT"
+    ]
+  },
+  {
+    "row_no": 2,
+    "job_no": "K21136-A005",
+    "part_no": "B11ADY1",
+    "part_name": "PUNCH",
+    "standard_process": null,
+    "steps": [
+      "CT"
+    ]
+  },
+  {
+    "row_no": 3,
+    "job_no": "K21136-A005",
+    "part_no": "B16B",
+    "part_name": "DIE",
+    "standard_process": null,
+    "steps": [
+      "WS"
+    ]
+  },
+  {
+    "row_no": 4,
+    "job_no": "K21136-A005",
+    "part_no": "B17A",
+    "part_name": "BUTTON, DIE",
+    "standard_process": null,
+    "steps": [
+      "NM",
+      "HQ",
+      "GS",
+      "WS"
+    ]
+  },
+  {
+    "row_no": 5,
+    "job_no": "K21136-A005",
+    "part_no": "B17AX1",
+    "part_name": "BUTTON, DIE",
+    "standard_process": null,
+    "steps": [
+      "NM2",
+      "WS"
+    ]
+  },
+  {
+    "row_no": 6,
+    "job_no": "K21136-A005",
+    "part_no": "B17B",
+    "part_name": "BUTTON, DIE",
+    "standard_process": null,
+    "steps": [
+      "MS",
+      "WS"
+    ]
+  },
+  {
+    "row_no": 7,
+    "job_no": "K21136-A005",
+    "part_no": "B17C",
+    "part_name": "BUTTON, DIE",
+    "standard_process": null,
+    "steps": [
+      "MS",
+      "HQ",
+      "GS",
+      "WS"
+    ]
+  },
+  {
+    "row_no": 8,
+    "job_no": "K21136-A005",
+    "part_no": "B17D",
+    "part_name": "BUTTON, DIE",
+    "standard_process": null,
+    "steps": [
+      "MS",
+      "HQ",
+      "GS",
+      "WS"
+    ]
+  },
+  {
+    "row_no": 9,
+    "job_no": "K21136-A005",
+    "part_no": "B17E",
+    "part_name": "BUTTON, DIE",
+    "standard_process": null,
+    "steps": [
+      "MS",
+      "HQ",
+      "GS",
+      "WS"
+    ]
+  }
+]

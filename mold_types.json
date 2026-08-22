@@ -1,0 +1,27 @@
+[
+  {
+    "mold_type_code": "MD001",
+    "mold_type_name": "PROGRESSIVE",
+    "remark": null
+  },
+  {
+    "mold_type_code": "MD002",
+    "mold_type_name": "SEMI+단발",
+    "remark": null
+  },
+  {
+    "mold_type_code": "MD003",
+    "mold_type_name": "단발",
+    "remark": null
+  },
+  {
+    "mold_type_code": "MD004",
+    "mold_type_name": "TPL",
+    "remark": null
+  },
+  {
+    "mold_type_code": "MD005",
+    "mold_type_name": "TR",
+    "remark": null
+  }
+]

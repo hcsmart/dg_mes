@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>공정이력카드 미리보기</title>
+<style>
+:root{--line:#68747e;--soft:#dfe5ea;--bar:#eef1f3;--blue:#1d5ca6}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:#222;background:#cfd5da;overflow:hidden}.viewer{height:100%;display:flex;flex-direction:column}.caption{height:28px;display:flex;align-items:center;padding:0 9px;background:#eef1f3;border-bottom:1px solid #8f9aa4;font-weight:700;color:#4b5965}.caption .win{margin-left:auto;display:flex;gap:3px}.caption .win span{width:22px;height:18px;border:1px solid #a9b1b8;background:#f8f9fa;text-align:center;line-height:16px}.menubar{height:28px;display:flex;align-items:center;gap:20px;padding:0 10px;background:#f4f6f7;border-bottom:1px solid #c1c8ce}.toolbar{height:36px;display:flex;align-items:center;padding:0 9px;gap:4px;background:#eef1f3;border-bottom:1px solid #9ba5ad}.ico{width:27px;height:26px;border:1px solid transparent;background:transparent;color:#4c5f70;font-size:15px}.ico:hover{border-color:#a5afb8;background:#fff}.sep{width:1px;height:20px;background:#c1c7cc;margin:0 4px}.zoom{width:66px;height:24px;border:1px solid #adb6bd;background:#fff;padding:0 5px}.counter{margin-left:4px;color:#66747e}.canvas{flex:1;min-height:0;overflow:auto;padding:16px 20px 28px;background:#d6dbe0}.paper{display:none;width:1040px;min-height:720px;margin:0 auto 18px;background:white;box-shadow:0 0 0 1px #9da6ad,0 3px 12px rgba(0,0,0,.22);padding:26px 28px 24px;transform-origin:top center}.paper.on{display:block}.report{border:2px solid #394149}.head{display:grid;grid-template-columns:1.5fr 1fr;border-bottom:1px solid #394149}.brandcell{padding:16px 18px;position:relative;min-height:135px}.brandcell h1{margin:0 0 22px;font-size:37px;letter-spacing:1px;font-weight:500}.issue{font-size:15px;display:flex;justify-content:space-between;gap:20px}.qr{position:absolute;right:22px;top:15px;width:92px;height:92px;background:repeating-linear-gradient(45deg,#111 0 5px,#fff 5px 10px),repeating-linear-gradient(-45deg,transparent 0 7px,#111 7px 11px);border:6px solid #fff;box-shadow:0 0 0 1px #333}.dates{display:grid;grid-template-columns:58px repeat(5,1fr);grid-auto-rows:31px}.dates div{border-left:1px solid #394149;border-bottom:1px solid #394149;display:flex;align-items:center;justify-content:center;text-align:center;padding:2px;font-size:13px}.dates div:nth-last-child(-n+6){border-bottom:0}.dates .th{background:#f4f5f6;font-weight:700}.meta{display:grid;grid-template-columns:1.2fr .75fr 1fr .85fr .5fr 1.2fr .9fr}.meta div{height:37px;border-right:1px solid #394149;border-bottom:1px solid #394149;display:flex;align-items:center;justify-content:center;font-size:14px}.meta div:last-child{border-right:0}.meta.th div{font-weight:700;background:#f4f5f6;height:30px}.workgrid{display:grid;grid-template-columns:92px 110px repeat(8,1fr)}.workgrid div{height:31px;border-right:1px solid #394149;border-bottom:1px solid #394149;display:flex;align-items:center;justify-content:center}.workgrid .side{grid-row:span 4;font-weight:700}.workgrid .lbl{background:#f6f7f8;font-weight:700}.inspection-title{height:32px;border-bottom:1px solid #394149;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}.inspection{width:100%;border-collapse:collapse;table-layout:fixed}.inspection th,.inspection td{border-right:1px solid #394149;border-bottom:1px solid #394149;height:31px;text-align:center;padding:0 2px}.inspection th{background:#f6f7f8}.inspection td:last-child,.inspection th:last-child{border-right:0}.inspection tr:last-child td{border-bottom:0}.notes{margin-top:16px;border:1px solid #394149;padding:9px 12px;font-size:14px;line-height:1.7}.firstpage .report{min-height:665px}.firstpage .section{padding:10px 0}.firstpage .small-table{width:100%;border-collapse:collapse}.firstpage th,.firstpage td{height:28px;border:1px solid #394149;text-align:center}.firstpage .summary{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}.firstpage .summary>div{border:1px solid #394149;padding:10px;min-height:120px}.statusbar{height:26px;display:flex;align-items:center;padding:0 8px;background:#0f56a8;color:white;border-top:1px solid #0a4385}.statusbar span:last-child{margin-left:auto}.navbtn{height:24px;min-width:26px;border:1px solid #aab3bb;background:#f7f8f9}.navbtn:hover{background:#fff}
+@media(max-width:1100px){.paper{width:900px}.brandcell h1{font-size:31px}}
+@media print{body{background:#fff;overflow:visible}.caption,.menubar,.toolbar,.statusbar{display:none!important}.viewer,.canvas{display:block;height:auto;overflow:visible;background:#fff;padding:0}.paper{display:block!important;width:100%;min-height:auto;margin:0;box-shadow:none;page-break-after:always;transform:none!important}.paper:last-child{page-break-after:auto}}
+</style>
+</head>
+<body>
+<div class="viewer">
+  <div class="caption">미리 보기 <div class="win"><span>–</span><span>□</span><span>×</span></div></div>
+  <div class="menubar"><span>파일(F)</span><span>보기(V)</span><span>배경(B)</span></div>
+  <div class="toolbar">
+    <button class="ico" title="검색">⌕</button><button class="ico" title="열기">📂</button><button class="ico" title="저장">▣</button><button class="ico" title="인쇄" onclick="window.print()">🖨</button><div class="sep"></div>
+    <select class="zoom" id="zoom" onchange="applyZoom()"><option>75%</option><option selected>100%</option><option>125%</option><option>150%</option></select><div class="sep"></div>
+    <button class="navbtn" onclick="goPage(1)">|◀</button><button class="navbtn" onclick="prevPage()">◀</button><button class="navbtn" onclick="nextPage()">▶</button><button class="navbtn" onclick="goPage(2)">▶|</button><span class="counter" id="counter">페이지 1 / 2</span><div class="sep"></div>
+    <button class="ico" title="인쇄" onclick="window.print()">🖨</button><button class="ico" title="닫기" onclick="closePreview()">⊗</button>
+  </div>
+  <div class="canvas" id="canvas">
+    <section class="paper firstpage on" id="page1">
+      <div class="report">
+        <div class="head">
+          <div class="brandcell"><h1>공정이력카드</h1><div class="qr"></div><div class="issue"><span>발행일 :　2026-08-22</span><span>K21136-A005_A_B11ADY1</span></div></div>
+          <div class="dates">
+            <div class="th">납기</div><div class="th">수주일</div><div class="th">설계</div><div class="th">가공</div><div class="th">조립</div><div class="th">S1</div>
+            <div>기</div><div>2021-11-09</div><div>2024-05-23</div><div>2024-05-27</div><div>2024-05-28</div><div>2024-06-05</div>
+            <div class="th">담당자</div><div colspan="2">영업　 문병우</div><div colspan="2">설계　 옥종필</div><div>조립</div>
+          </div>
+        </div>
+        <div class="meta th"><div>제번</div><div>공정</div><div>품번</div><div>재질</div><div>수량</div><div>제품명</div><div>부품명</div></div>
+        <div class="meta"><div>K21136-A005</div><div>A</div><div>B11ADY1</div><div>STD11</div><div>2</div><div>SHELF,NET RL</div><div>PUNCH</div></div>
+        <div class="section">
+          <table class="small-table"><thead><tr><th style="width:55px">NO</th><th style="width:100px">공정</th><th style="width:130px">작업장</th><th>작업내용</th><th style="width:90px">계획일</th><th style="width:90px">완료일</th></tr></thead><tbody id="planRows"></tbody></table>
+          <div class="summary"><div><b>가공 유의사항</b><br><br>1. 1/8 가공여유 -0.5<br>2. 외각치수 일반치수 ±0.2<br>3. 연삭가공여유 ±0.2~0.3</div><div><b>검사 / 승인</b><br><br>치수검사 및 공정별 확인 후 다음 공정으로 이관합니다.<br>기준 온도 : 20℃ ±1℃</div></div>
+        </div>
+      </div>
+    </section>
+    <section class="paper" id="page2">
+      <div class="report">
+        <div class="head">
+          <div class="brandcell"><h1>공정이력카드</h1><div class="qr"></div><div class="issue"><span>발행일 :　2026-08-22</span><span>K21136-A005_A_B17A</span></div></div>
+          <div class="dates">
+            <div class="th">납기</div><div class="th">수주일</div><div class="th">설계</div><div class="th">가공</div><div class="th">조립</div><div class="th">S1</div>
+            <div>기</div><div>2021-11-09</div><div>2024-05-23</div><div>2024-05-27</div><div>2024-05-28</div><div>2024-06-05</div>
+            <div class="th">담당자</div><div colspan="2">영업　 문병우</div><div colspan="2">설계　 옥종필</div><div>조립</div>
+          </div>
+        </div>
+        <div class="meta th"><div>제번</div><div>공정</div><div>품번</div><div>재질</div><div>수량</div><div>제품명</div><div>부품명</div></div>
+        <div class="meta"><div>K21136-A005</div><div>A</div><div>B17A</div><div>STD11</div><div>1</div><div>SHELF,NET RL</div><div>BUTTON, DIE</div></div>
+        <div class="workgrid">
+          <div class="side">작업공정</div><div class="lbl">공정</div><div>NM</div><div>HQ</div><div>GS</div><div>WS</div><div></div><div></div><div></div><div></div>
+          <div class="lbl">작업자(업체)</div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+          <div class="lbl">납기일</div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+          <div class="lbl">완료일</div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
+        </div>
+        <div class="inspection-title">공정별 검사결과</div>
+        <table class="inspection"><thead><tr><th style="width:45px">NO</th><th style="width:80px">규격치</th><th style="width:65px">공차</th><th colspan="4">NM</th><th colspan="4">HQ</th><th colspan="4">GS</th><th colspan="4">WS</th></tr><tr><th></th><th></th><th></th><th>작업자</th><th>검사자</th><th>값1</th><th>값2</th><th>작업자</th><th>검사자</th><th>값1</th><th>값2</th><th>작업자</th><th>검사자</th><th>값1</th><th>값2</th><th>작업자</th><th>검사자</th><th>값1</th><th>값2</th></tr></thead><tbody id="inspectRows"></tbody></table>
+      </div>
+    </section>
+  </div>
+  <div class="statusbar"><span id="pageStatus">페이지 1 / 2</span><span>100%</span></div>
+</div>
+<script>
+let page=1;
+function build(){planRows.innerHTML=Array.from({length:11},(_,i)=>`<tr><td>${i+1}</td><td>${['CT','NM','HQ','GS','WS','TE'][i%6]}</td><td>${['가공1','가공2','검사','외주'][i%4]}</td><td style="text-align:left;padding-left:8px">공정 작업 및 검사 기록</td><td>${i<5?'2026-08-'+String(22+i).padStart(2,'0'):''}</td><td></td></tr>`).join('');inspectRows.innerHTML=Array.from({length:8},(_,i)=>`<tr><td>${i+1}</td><td></td><td></td>${Array.from({length:16},()=>'<td></td>').join('')}</tr>`).join('')}
+function goPage(n){page=Math.max(1,Math.min(2,n));document.querySelectorAll('.paper').forEach((p,i)=>p.classList.toggle('on',i===page-1));counter.textContent=`페이지 ${page} / 2`;pageStatus.textContent=`페이지 ${page} / 2`;canvas.scrollTop=0;applyZoom()}
+function prevPage(){goPage(page-1)}function nextPage(){goPage(page+1)}
+function applyZoom(){const scale=parseInt(zoom.value)/100;document.querySelectorAll('.paper').forEach(p=>p.style.transform=`scale(${scale})`);const active=document.querySelector('.paper.on');if(active){active.style.marginBottom=(active.offsetHeight*(scale-1)+18)+'px'}}
+function closePreview(){if(window.parent&&window.parent!==window){try{window.parent.closeActive()}catch(e){}}else history.back()}
+function search(){goPage(1)}function add(){return false}function remove(){return false}function save(){window.print()}function exportCsv(){const rows=[['제번','K21136-A005'],['품번','B17A'],['재질','STD11'],['수량','1'],['제품명','SHELF,NET RL'],['부품명','BUTTON, DIE']];const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+v+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='process_history_card.csv';a.click();URL.revokeObjectURL(a.href)}
+window.MES={search,add,delete:remove,save,exportCsv,setMessage:()=>{}};build();goPage(1);
+</script>
+</body>
+</html>

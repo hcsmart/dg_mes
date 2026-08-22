@@ -1,0 +1,280 @@
+{
+  "version": "15",
+  "candidate_foreign_keys": [
+    {
+      "from": "standard_process_steps.standard_process_id",
+      "to": "standard_processes.standard_process_id"
+    },
+    {
+      "from": "standard_process_steps.process_code",
+      "to": "processes.process_code"
+    },
+    {
+      "from": "purchase_receipt_candidates.material_code",
+      "to": "materials.material_code",
+      "status": "candidate; source values may contain codes not yet in material master"
+    },
+    {
+      "from": "process_history_cards.material_code",
+      "to": "materials.material_code"
+    },
+    {
+      "from": "process_history_cards.process_sequence[]",
+      "to": "processes.process_code",
+      "status": "array relationship; normalize later if desired"
+    },
+    {
+      "from": "work_order_item_candidates.item_type",
+      "to": "item_categories.item_name",
+      "status": "candidate; recommend converting to item_code during cleanup"
+    },
+    {
+      "from": "user_permissions.user_key",
+      "to": "users.user_key"
+    },
+    {
+      "from": "material_price_changes.material_code",
+      "to": "materials.material_code",
+      "status": "candidate; AMPCO/HP4/SB41P 일부는 자재마스터에 미등록"
+    },
+    {
+      "from": "material_price_changes.vendor_code",
+      "to": "vendors.vendor_code"
+    },
+    {
+      "from": "process_price_changes.process_code",
+      "to": "processes.process_code",
+      "status": "verified; 22개 코드 전부 processes.json에 존재"
+    },
+    {
+      "from": "process_price_changes.vendor_code",
+      "to": "vendors.vendor_code"
+    },
+    {
+      "from": "manufacturing_cost_details.job_no",
+      "to": "manufacturing_cost_orders.job_no"
+    },
+    {
+      "from": "manufacturing_cost_details.cost_stage",
+      "to": null,
+      "status": "원가단계 코드(A/AS/B/BS). processes.process_code와 별개 체계이며 마스터 화면 미촬영"
+    },
+    {
+      "from": "users.user_id",
+      "to": "employees.employee_code",
+      "status": "verified; 인원정보 팝업으로 7명 user_id 보정"
+    },
+    {
+      "from": "sale_orders.business_division_code",
+      "to": "business_divisions.business_division_code"
+    },
+    {
+      "from": "sale_orders.item_code",
+      "to": "item_categories.item_code"
+    },
+    {
+      "from": "sale_orders.mold_type_code",
+      "to": "mold_types.mold_type_code"
+    },
+    {
+      "from": "sale_orders.machine_spec_code",
+      "to": "machine_specs.machine_spec_code"
+    },
+    {
+      "from": "sale_orders.customer_code",
+      "to": "vendors.vendor_code"
+    },
+    {
+      "from": "sale_orders.mass_production_vendor_code",
+      "to": "vendors.vendor_code"
+    },
+    {
+      "from": "sale_orders.manager_code",
+      "to": "employees.employee_code"
+    },
+    {
+      "from": "sale_order_status_rows.job_no",
+      "to": "jobs.job_no",
+      "status": "v15: 통합 job 마스터로 재지정"
+    },
+    {
+      "from": "sale_order_status_rows.mass_production_vendor_name",
+      "to": "vendors.vendor_name"
+    },
+    {
+      "from": "status_board_rows.job_no",
+      "to": "jobs.job_no",
+      "status": "v15: 통합 job 마스터로 재지정"
+    },
+    {
+      "from": "status_board_rows.sales_manager",
+      "to": "employees.employee_name",
+      "status": "candidate; 이금상·문병우는 employees.json에 미등록"
+    },
+    {
+      "from": "status_board_rows.assembly_manager",
+      "to": "employees.employee_name",
+      "status": "candidate; 이춘봉·조영출·박기태는 employees.json에 미등록"
+    },
+    {
+      "from": "sales_plans.job_no",
+      "to": "jobs.job_no",
+      "status": "v15: 통합 job 마스터로 재지정"
+    },
+    {
+      "from": "mold_code_matchings.job_no",
+      "to": "jobs.job_no",
+      "status": "v15: 통합 job 마스터로 재지정"
+    },
+    {
+      "from": "mold_code_matchings.business_division_name",
+      "to": "business_divisions.business_division_name"
+    },
+    {
+      "from": "mold_code_matchings.item_name",
+      "to": "item_categories.item_name"
+    },
+    {
+      "from": "set_order_receipt_details.job_no",
+      "to": "set_order_receipts.job_no"
+    },
+    {
+      "from": "design_plan_steps.job_no",
+      "to": "design_plans.job_no"
+    },
+    {
+      "from": "design_plan_steps.machining_process_code",
+      "to": "processes.process_code",
+      "status": "verified; DA/DL/DP 존재"
+    },
+    {
+      "from": "design_results.machining_process_code",
+      "to": "processes.process_code",
+      "status": "verified; DA/DL/DP/TO/CQ/AS/S1 전부 존재"
+    },
+    {
+      "from": "design_results.worker_name",
+      "to": "employees.employee_name"
+    },
+    {
+      "from": "design_result_monthly.worker_name",
+      "to": "employees.employee_name"
+    },
+    {
+      "from": "sales_plan_status_rows.job_no",
+      "to": "sales_plans.job_no"
+    },
+    {
+      "from": "sales_plans.design_manager_code",
+      "to": "employees.employee_code",
+      "status": "verified; dream=김기준"
+    },
+    {
+      "from": "partlist_materials.job_no",
+      "to": "jobs.job_no",
+      "status": "v15: 통합 job 마스터로 재지정"
+    },
+    {
+      "from": "partlist_purchases.job_no",
+      "to": "jobs.job_no",
+      "status": "v15: 통합 job 마스터로 재지정"
+    },
+    {
+      "from": "partlist_materials.material",
+      "to": "materials.material_code",
+      "status": "verified; SB41P·SM45C·STD11·AMPCO·AL 모두 자재마스터에 존재"
+    },
+    {
+      "from": "machining_plan_parts.steps[]",
+      "to": "processes.process_code",
+      "status": "verified; MS/HQ/GS/WS/NM/NM2/NL/NL1/GM/CT 전부 존재"
+    },
+    {
+      "from": "machining_standard_routes.steps[]",
+      "to": "processes.process_code"
+    },
+    {
+      "from": "purchase_status_rows.partner_vendor_name",
+      "to": "vendors.vendor_name"
+    },
+    {
+      "from": "purchase_status_rows.machining_process_code",
+      "to": "processes.process_code"
+    },
+    {
+      "from": "set_order_partners.partner_vendor_name",
+      "to": "vendors.vendor_name"
+    },
+    {
+      "from": "material_purchase_requests.vendor_name",
+      "to": "vendors.vendor_name",
+      "status": "candidate; 화면에 코드 없이 업체명만 표시"
+    },
+    {
+      "from": "material_purchase_requests.job_no",
+      "to": "material_order_jobs.job_no"
+    },
+    {
+      "from": "material_purchase_requests.material",
+      "to": "materials.material_code",
+      "status": "candidate"
+    },
+    {
+      "from": "material_receipt_candidates.job_no",
+      "to": "material_order_status_rows.job_no",
+      "status": "candidate"
+    },
+    {
+      "from": "material_receipt_confirm_candidates.part_code",
+      "to": "parts.part_code",
+      "status": "candidate"
+    },
+    {
+      "from": "material_order_status_rows.vendor_name",
+      "to": "vendors.vendor_name",
+      "status": "candidate"
+    },
+    {
+      "from": "purchase_receipt_rows.vendor_name",
+      "to": "vendors.vendor_name",
+      "status": "candidate"
+    },
+    {
+      "from": "purchase_order_jobs.job_no",
+      "to": "jobs.job_no",
+      "status": "v15: 통합 job 마스터로 재지정"
+    },
+    {
+      "from": "outsourced_design_orders.partner_name",
+      "to": "outsourced_design_partners.partner_name"
+    },
+    {
+      "from": "outsourced_design_orders.job_no",
+      "to": "jobs.job_no",
+      "status": "v15: 외주설계는 사내 설계계획 없이도 발주 가능 → job 마스터 기준"
+    },
+    {
+      "from": "stock_inquiry_rows.job_no",
+      "to": "jobs.job_no",
+      "status": "v15: 통합 job 마스터로 재지정"
+    },
+    {
+      "from": "stock_inquiry_rows.customer_name",
+      "to": "vendors.vendor_name",
+      "status": "candidate; 고객사명 표기"
+    },
+    {
+      "from": "jobs.job_no",
+      "to": "sale_orders.job_no",
+      "status": "candidate; 수주등록 사진 추가 시 채움"
+    },
+    {
+      "from": "outsourced_design_receipt_candidates.seq",
+      "to": "outsourced_design_orders.seq"
+    },
+    {
+      "from": "outsourced_design_receipts.order_seq",
+      "to": "outsourced_design_orders.seq"
+    }
+  ]
+}

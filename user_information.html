@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>사용자정보</title>
+<style>
+:root{--line:#9aa7b3;--line2:#c7d2db;--blue:#2c73b4;--blue2:#d7e7f2;--ink:#354858;--bg:#f6f8fa}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:var(--ink);background:#fff;overflow:hidden}
+button,input,select{font:inherit;color:inherit}button{cursor:pointer}
+.screen{height:100%;display:flex;flex-direction:column;background:#fff}
+.title{height:50px;padding:8px 14px 5px;border-bottom:2px solid #3978ae;display:flex;align-items:center;gap:8px}
+.title h1{margin:0;font-size:22px;font-weight:500;color:#4d5d69}.title h1:before{content:'◯';margin-right:6px;color:#8c9aa5}
+.body{flex:1;min-height:0;display:grid;grid-template-columns:36% 64%;gap:8px;padding:7px 10px}
+.panel{border:1px solid var(--line);background:#fff;min-height:0;display:flex;flex-direction:column}
+.cap{height:28px;display:flex;align-items:center;padding:0 8px;background:linear-gradient(#f5f8fa,#e6edf2);border-bottom:1px solid var(--line);font-weight:700}
+.filters{display:grid;grid-template-columns:74px 1fr 74px 1fr;gap:3px;padding:5px;border-bottom:1px solid var(--line2)}
+.lab{background:#eef2f5;border:1px solid #c4cdd5;display:flex;align-items:center;justify-content:center;min-height:25px}
+.field{height:25px;border:1px solid #b7c1ca;background:#fff;padding:0 6px;min-width:0}
+.userlist{flex:1;min-height:0;overflow:auto}
+.group-title{height:25px;display:flex;align-items:center;padding:0 8px;background:#edf3f7;border-bottom:1px solid #c8d3dc;color:#3b556d;font-weight:700}
+.user-row{display:grid;grid-template-columns:1fr 1.4fr;min-height:26px;border-bottom:1px solid #e0e6eb}
+.user-row span{padding:5px 8px;border-right:1px solid #e0e6eb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.user-row:hover{background:#eef6fc}.user-row.on{background:#2f76b7;color:#fff}
+.right{min-height:0;display:grid;grid-template-rows:auto 42px minmax(0,1fr);gap:7px}
+.detail{border:1px solid var(--line)}
+.detail-grid{display:grid;grid-template-columns:78px 1fr 78px 1fr 78px 1fr;gap:0}
+.detail-grid .lab,.detail-grid .field{border-top:0;border-left:0}
+.detail-grid .field{width:100%}
+.detail-grid .check{height:25px;border-right:1px solid #b7c1ca;border-bottom:1px solid #b7c1ca;display:flex;align-items:center;padding-left:8px}
+.actions{display:flex;align-items:center;gap:5px;padding-left:3px}
+.btn{height:29px;min-width:72px;border:1px solid #9ba8b4;background:linear-gradient(#fff,#dfe6eb)}.btn:hover{background:#fff}
+.permission{border:1px solid var(--line);min-height:0;display:flex;flex-direction:column}
+.permission-head{display:grid;grid-template-columns:1fr 250px;background:linear-gradient(#e7f0f7,#cadae7);border-bottom:1px solid var(--line);font-weight:700}
+.permission-head div{padding:6px 8px;border-right:1px solid #aebbc6}
+.permission-list{flex:1;min-height:0;overflow:auto;background:#fff}
+.perm-row{display:grid;grid-template-columns:1fr 250px;min-height:27px;border-bottom:1px solid #e0e6eb}
+.perm-row div{padding:5px 8px;border-right:1px solid #e0e6eb}
+.path{padding-left:calc(8px + var(--depth)*15px)!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.full{color:#b03a34;font-weight:700}.none{color:#b03a34}
+.note{padding:10px;color:#7c8993}
+.foot{height:40px;display:flex;align-items:center;padding:5px 10px;border-top:1px solid var(--line);background:#edf2f5;gap:5px}
+.msg{margin-left:8px;color:#687784}.rightmsg{margin-left:auto;color:#7d8993}
+@media(max-width:1000px){.body{grid-template-columns:42% 58%}.detail-grid{grid-template-columns:74px 1fr 74px 1fr}.detail-grid > *:nth-child(n+9){display:none}}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="title"><h1>사용자정보</h1></div>
+  <div class="body">
+    <section class="panel">
+      <div class="cap">사용자 목록</div>
+      <div class="filters">
+        <div class="lab">사용자</div><input id="q" class="field" oninput="renderUsers()">
+        <div class="lab">공장</div><select id="factory" class="field" onchange="renderUsers()"><option>1공장</option></select>
+      </div>
+      <div class="userlist" id="userList"></div>
+    </section>
+
+    <section class="right">
+      <div class="detail">
+        <div class="cap">사용자정보</div>
+        <div class="detail-grid">
+          <div class="lab">공장</div><select id="d_factory" class="field"><option>1공장</option></select>
+          <div class="lab">등록일</div><input id="d_registered" class="field" type="date">
+          <div class="lab">전체</div><div class="check"><input type="checkbox" id="d_all"></div>
+
+          <div class="lab">아이디</div><input id="d_user_id" class="field">
+          <div class="lab">성명</div><input id="d_name" class="field">
+          <div class="lab">성명(영문)</div><input id="d_english_name" class="field">
+
+          <div class="lab">비밀번호</div><input class="field" value="******" disabled>
+          <div class="lab">사용자그룹</div><select id="d_user_group" class="field"><option></option><option>사용자</option></select>
+          <div class="lab">공정그룹</div><input id="d_process_group" class="field">
+
+          <div class="lab">부서</div><input id="d_department" class="field">
+          <div class="lab">사업부</div><input id="d_business_division" class="field">
+          <div class="lab">휴대폰번호</div><input id="d_mobile" class="field">
+
+          <div class="lab">직급</div><input id="d_position" class="field">
+          <div class="lab">전화번호</div><input id="d_phone" class="field">
+          <div class="lab">이메일</div><input id="d_email" class="field">
+
+          <div class="lab">사원번호</div><input id="d_employee_no" class="field">
+          <div class="lab">사용여부</div><div class="check"><input id="d_active" type="checkbox"></div>
+          <div class="lab">비고</div><input id="d_remark" class="field">
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn" onclick="refresh()">⟳ 새로고침</button>
+        <button class="btn" onclick="saveUser()">▣ 저장</button>
+        <button class="btn" onclick="deleteUser()">✖ 삭제</button>
+      </div>
+
+      <div class="permission">
+        <div class="cap">권한</div>
+        <div class="permission-head"><div>메뉴명</div><div>권한</div></div>
+        <div class="permission-list" id="permList"></div>
+      </div>
+    </section>
+  </div>
+  <footer class="foot">
+    <button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button>
+    <span class="msg" id="message">사용자 데이터를 조회했습니다.</span>
+    <span class="rightmsg" id="countText"></span>
+  </footer>
+</div>
+<script>
+const users = [{"user_key": "20300_노은성", "user_id": null, "name": "노은성", "department_code": "20300", "department_name": "경영기획", "factory": "1공장", "registered_date": null, "position_code": null, "position_name": null, "user_group": null, "is_active": null}, {"user_key": "20300_류민호", "user_id": null, "name": "류민호", "department_code": "20300", "department_name": "경영기획", "factory": "1공장", "registered_date": null, "position_code": null, "position_name": null, "user_group": null, "is_active": null}, {"user_key": "20300_김민수", "user_id": null, "name": "김민수", "department_code": "20300", "department_name": "경영기획", "factory": "1공장", "registered_date": null, "position_code": null, "position_name": null, "user_group": null, "is_active": null}, {"user_key": "10000_류병현", "user_id": "bhnru", "name": "류병현", "department_code": "10000", "department_name": "공통", "factory": "1공장", "registered_date": "2024-01-09", "position_code": "002", "position_name": "대표이사", "user_group": "사용자", "is_active": true, "english_name": null, "business_division": null, "process_group": null, "mobile_phone": null, "email": null, "phone": null, "employee_no": null, "remark": null, "password_transcribed": false}, {"user_key": "10000_이종기", "user_id": null, "name": "이종기", "department_code": "10000", "department_name": "공통", "factory": "1공장", "registered_date": null, "position_code": null, "position_name": null, "user_group": null, "is_active": null}, {"user_key": "10000_민재홍", "user_id": null, "name": "민재홍", "department_code": "10000", "department_name": "공통", "factory": "1공장", "registered_date": null, "position_code": null, "position_name": null, "user_group": null, "is_active": null}, {"user_key": "10000_TIC", "user_id": null, "name": "TIC", "department_code": "10000", "department_name": "공통", "factory": "1공장", "registered_date": null, "position_code": null, "position_name": null, "user_group": null, "is_active": null}, {"user_key": "10500_이영현", "user_id": null, "name": "이영현", "department_code": "10500", "department_name": "구매/가공", "factory": "1공장", "registered_date": null, "position_code": null, "position_name": null, "user_group": null, "is_active": null}, {"user_key": "10500_임지만", "user_id": null, "name": "임지만", "department_code": "10500", "department_name": "구매/가공", "factory": "1공장", "registered_date": null, "position_code": null, "position_name": null, "user_group": null, "is_active": null}, {"user_key": "10500_정재진", "user_id": null, "name": "정재진", "department_code": "10500", "department_name": "구매/가공", "factory": "1공장", "registered_date": null, "position_code": null, "position_name": null, "user_group": null, "is_active": null}, {"user_key": "none_임창민", "user_id": null, "name": "임창민", "department_code": null, "department_name": "부서없음", "factory": "1공장", "registered_date": null, "position_code": null, "position_name": null, "user_group": null, "is_active": null}, {"user_key": "none_동구", "user_id": null, "name": "동구", "department_code": null, "department_name": "부서없음", "factory": "1공장", "registered_date": null, "position_code": null, "position_name": null, "user_group": null, "is_active": null}, {"user_key": "none_이장준", "user_id": null, "name": "이장준", "department_code": null, "department_name": "부서없음", "factory": "1공장", "registered_date": null, "position_code": null, "position_name": null, "user_group": null, "is_active": null}, {"user_key": "10300_김기준", "user_id": null, "name": "김기준", "department_code": "10300", "department_name": "설계", "factory": "1공장", "registered_date": null, "position_code": null, "position_name": null, "user_group": null, "is_active": null}, {"user_key": "10300_함태안", "user_id": null, "name": "함태안", "department_code": "10300", "department_name": "설계", "factory": "1공장", "registered_date": null, "position_code": null, "position_name": null, "user_group": null, "is_active": null}, {"user_key": "10300_옥종필", "user_id": "jpok", "name": "옥종필", "department_code": "10300", "department_name": "설계", "factory": "1공장", "registered_date": "2023-08-22", "position_code": "010", "position_name": "과장", "user_group": "사용자", "is_active": true, "english_name": null, "business_division": null, "process_group": null, "mobile_phone": null, "email": null, "phone": null, "employee_no": null, "remark": null, "password_transcribed": false}, {"user_key": "10300_박봉규", "user_id": null, "name": "박봉규", "department_code": "10300", "department_name": "설계", "factory": "1공장", "registered_date": null, "position_code": null, "position_name": null, "user_group": null, "is_active": null}, {"user_key": "10300_박현민", "user_id": null, "name": "박현민", "department_code": "10300", "department_name": "설계", "factory": "1공장", "registered_date": null, "position_code": null, "position_name": null, "user_group": null, "is_active": null}, {"user_key": "40000_강대규", "user_id": null, "name": "강대규", "department_code": "40000", "department_name": "연구소", "factory": "1공장", "registered_date": null, "position_code": null, "position_name": null, "user_group": null, "is_active": null}];
+const permissions = [{"user_key": "10300_옥종필", "user_id": "jpok", "menu_path": ["영업관리", "수주등록"], "menu_name": "수주등록", "permission_status": "none", "can_view": false, "can_save": false, "can_edit": false, "can_delete": false}, {"user_key": "10300_옥종필", "user_id": "jpok", "menu_path": ["영업관리", "수주현황"], "menu_name": "수주현황", "permission_status": "none", "can_view": false, "can_save": false, "can_edit": false, "can_delete": false}, {"user_key": "10300_옥종필", "user_id": "jpok", "menu_path": ["설계관리", "외주설계발주", "외주설계발주", "외주설계발주등록"], "menu_name": "외주설계발주등록", "permission_status": "full", "can_view": true, "can_save": true, "can_edit": true, "can_delete": true}, {"user_key": "10300_옥종필", "user_id": "jpok", "menu_path": ["설계관리", "외주설계발주", "외주설계발주", "외주설계발주현황"], "menu_name": "외주설계발주현황", "permission_status": "full", "can_view": true, "can_save": true, "can_edit": true, "can_delete": true}, {"user_key": "10300_옥종필", "user_id": "jpok", "menu_path": ["설계관리", "외주설계발주", "외주설계발주", "외주설계발주입고"], "menu_name": "외주설계발주입고", "permission_status": "full", "can_view": true, "can_save": true, "can_edit": true, "can_delete": true}];
+let selectedKey = '10300_옥종필';
+function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function grouped(arr){
+  const order=['경영기획','공통','구매/가공','부서없음','설계','연구소'];
+  const out=[];
+  for(const dept of order){
+    const rows=arr.filter(x=>x.department_name===dept);
+    if(rows.length) out.push([dept,rows]);
+  }
+  return out;
+}
+function renderUsers(){
+  const qv=(q.value||'').trim().toLowerCase();
+  const list=users.filter(u=>!qv || [u.name,u.user_id,u.department_name].some(v=>String(v??'').toLowerCase().includes(qv)));
+  userList.innerHTML=grouped(list).map(([dept,rows])=>`
+    <div class="group-title">부서명: ${esc(dept)}</div>
+    ${rows.map(u=>`<div class="user-row ${u.user_key===selectedKey?'on':''}" onclick="selectUser('${u.user_key.replaceAll("'","\\'")}')"><span>${esc(u.position_name||'')}</span><span>${esc(u.name)}</span></div>`).join('')}
+  `).join('');
+  countText.textContent=`${list.length}명`;
+}
+function selectUser(key){
+  selectedKey=key;
+  const u=users.find(x=>x.user_key===key);
+  if(!u)return;
+  d_factory.value=u.factory||'1공장';
+  d_registered.value=u.registered_date||'';
+  d_user_id.value=u.user_id||'';
+  d_name.value=u.name||'';
+  d_english_name.value=u.english_name||'';
+  d_user_group.value=u.user_group||'';
+  d_process_group.value=u.process_group||'';
+  d_department.value=[u.department_code,u.department_name].filter(Boolean).join('  ');
+  d_business_division.value=u.business_division||'';
+  d_mobile.value=u.mobile_phone||'';
+  d_position.value=[u.position_code,u.position_name].filter(Boolean).join('  ');
+  d_phone.value=u.phone||'';
+  d_email.value=u.email||'';
+  d_employee_no.value=u.employee_no||'';
+  d_active.checked=!!u.is_active;
+  d_remark.value=u.remark||'';
+  renderPermissions(u);
+  renderUsers();
+  message.textContent=`${u.name} 사용자정보를 표시합니다.`;
+}
+function renderPermissions(u){
+  const ps=permissions.filter(p=>p.user_key===u.user_key);
+  if(!ps.length){
+    const roots=['영업관리','설계관리','구매관리','기준정보','원가관리','조립관리'];
+    permList.innerHTML=roots.map(r=>`<div class="perm-row"><div class="path" style="--depth:0">⊞ ${r}</div><div></div></div>`).join('');
+    return;
+  }
+  const tree=[];
+  const seen=new Set();
+  for(const p of ps){
+    p.menu_path.forEach((name,i)=>{
+      const key=p.menu_path.slice(0,i+1).join('/');
+      if(!seen.has(key)){seen.add(key);tree.push({name,depth:i,right:i===p.menu_path.length-1?p:null})}
+    });
+  }
+  permList.innerHTML=tree.map(x=>{
+    let right='';
+    if(x.right) right=x.right.permission_status==='full'?'조회, 저장, 수정, 삭제':'권한없음';
+    return `<div class="perm-row"><div class="path" style="--depth:${x.depth}">${x.depth<2?'⊞':'└'} ${esc(x.name)}</div><div class="${x.right?.permission_status==='full'?'full':'none'}">${right}</div></div>`;
+  }).join('');
+}
+function refresh(){selectUser(selectedKey);message.textContent='사용자 데이터를 다시 조회했습니다.'}
+function saveUser(){
+  const u=users.find(x=>x.user_key===selectedKey); if(!u)return;
+  u.user_id=d_user_id.value||null; u.name=d_name.value||u.name; u.registered_date=d_registered.value||null;
+  u.user_group=d_user_group.value||null; u.is_active=d_active.checked;
+  message.textContent='화면 내 임시 데이터로 저장했습니다. JSON 원본 파일은 변경하지 않습니다.';
+}
+function deleteUser(){
+  message.textContent='프로토타입에서는 실제 JSON 삭제를 수행하지 않습니다.';
+}
+window.MES={search:()=>q.focus(),add:()=>{selectedKey='';},delete:deleteUser,save:saveUser,exportCsv:()=>{},setMessage:t=>message.textContent=t};
+renderUsers();selectUser(selectedKey);
+</script>
+</body>
+</html>

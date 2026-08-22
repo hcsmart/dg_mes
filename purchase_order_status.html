@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>구매품 발주현황</title>
+<style>
+:root{--line:#9daab6;--line2:#c5ced6;--ink:#344758}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:var(--ink);background:#fff;overflow:hidden}button,input,select{font:inherit;color:inherit}
+.screen{height:100%;display:flex;flex-direction:column}.title{height:46px;padding:9px 14px 4px;border-bottom:2px solid #3977ad;display:flex;align-items:center;gap:14px}.title h1{margin:0;font-size:21px;font-weight:500;color:#4b5b69}.title h1:before{content:'◯';margin-right:6px;color:#8795a1}.title .plant{margin-left:auto;display:flex;align-items:center;gap:6px;color:#6b7885}
+.filters{padding:7px 14px;border-bottom:1px solid var(--line2);background:#fafbfc}.frow{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.frow+.frow{margin-top:5px}.label{font-weight:700}.field{height:26px;border:1px solid #b7c2cb;background:#fff;padding:0 6px;outline:none}.field:focus{border-color:#4e88bb}.radios{display:flex;gap:9px;color:#5f6d79}
+.gridbox{flex:1;min-height:0;margin:7px 14px;border:1px solid var(--line);display:flex;flex-direction:column;background:#fff}
+.tablewrap{flex:1;min-height:0;overflow:auto}table{border-collapse:collapse;min-width:1720px;width:100%;table-layout:fixed}th,td{height:25px;padding:0 5px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}th{position:sticky;top:0;z-index:2;text-align:center;background:linear-gradient(#dbe9f4,#c7d9e8);color:#405266;font-weight:700}tbody tr:nth-child(even) td{background:#fafcfd}tbody tr:hover td{background:#edf6fd}tbody tr.sel td{background:#2e78bd;color:#fff}.c{text-align:center}.r{text-align:right}
+tfoot th{position:sticky;bottom:0;background:linear-gradient(#e6eef5,#d3e0ea)}
+.tag{display:inline-block;min-width:60px;text-align:center;border-radius:2px;padding:0 4px;color:#fff}.t-발주{background:#8e9aa6}.t-입고{background:#3d84c6}.t-입고확정{background:#3f9a6d}
+.btn{height:28px;min-width:70px;border:1px solid #9ca9b5;background:linear-gradient(#fff,#dfe6eb)}.btn:hover{background:#fff}.btn.primary{background:linear-gradient(#f9ffff,#d2e7f6);color:#1e5e91}
+.foot{height:42px;display:flex;align-items:center;padding:5px 14px;border-top:1px solid var(--line);background:#eef2f5;gap:5px}.msg{margin-left:10px;color:#687784}.foot .right{margin-left:auto;color:#7c8993}
+@media(max-width:900px){.title h1{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="title"><h1>구매품 발주현황</h1><div class="plant"><span>공장</span><select id="plant" class="field"><option>1공장</option><option>2공장</option></select></div></div>
+  <section class="filters">
+    <div class="frow">
+      <span class="label">구 분</span>
+      <div class="radios">
+        <label><input type="radio" name="st" value="전체" checked onchange="search()"> 전체</label>
+        <label><input type="radio" name="st" value="발주" onchange="search()"> 발주</label>
+        <label><input type="radio" name="st" value="입고" onchange="search()"> 입고</label>
+        <label><input type="radio" name="st" value="입고확정" onchange="search()"> 입고확정</label>
+      </div>
+      <span class="label">입고예정일</span><input id="rd1" class="field" type="date"><span>~</span><input id="rd2" class="field" type="date">
+      <span class="label">입고일</span><input id="id1" class="field" type="date"><span>~</span><input id="id2" class="field" type="date">
+      <span class="label">입고확정일</span><input id="cd1" class="field" type="date"><span>~</span><input id="cd2" class="field" type="date">
+    </div>
+    <div class="frow">
+      <span class="label">제 번</span><input id="jobQ" class="field" style="width:180px">
+      <span class="label">품 명</span><input id="itemQ" class="field" style="width:180px">
+      <span class="label">협력업체</span><input id="vendorQ" class="field" style="width:180px">
+      <button class="btn" onclick="search()">⌕ 조회</button>
+    </div>
+  </section>
+  <div class="gridbox"><div class="tablewrap"><table>
+    <colgroup><col style="width:44px"><col style="width:76px"><col style="width:104px"><col style="width:104px"><col style="width:96px"><col style="width:46px"><col style="width:58px"><col style="width:66px"><col style="width:140px"><col style="width:56px"><col style="width:140px"><col style="width:56px"><col style="width:62px"><col style="width:92px"><col style="width:96px"><col style="width:92px"><col style="width:96px"><col style="width:100px"></colgroup>
+    <thead><tr><th>No</th><th>구분</th><th>업체명</th><th>제번</th><th>품명</th><th>공정</th><th>공정명</th><th>품번</th><th>부품명</th><th>재질</th><th>스펙</th><th>수량</th><th>단가</th><th>발주월</th><th>입고요구일</th><th>입고월</th><th>입고확정일</th><th>견적가</th></tr></thead>
+    <tbody id="body"></tbody>
+    <tfoot><tr><th colspan="11" class="r">합 계</th><th class="r" id="sumQty">0</th><th colspan="5"></th><th class="r" id="sumQuote">0</th></tr></tfoot>
+  </table></div></div>
+  <footer class="foot"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn primary" onclick="exportCsv()">▤ EXCEL</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫 기</button><span class="msg" id="message">구매품 발주현황을 조회했습니다.</span><span class="right" id="countText"></span></footer>
+</div>
+<script>
+const rows=[
+{no:1,st:'입고확정',vendor:'아이투프럼',job:'A23007',item:'',proc:'A',procName:'1/1',part:'T99D',partName:'MACHINERY PA...',mat:'-',spec:'0',qty:1,price:0,odate:'2023-12-12',rdate:'2023-12-19',idate:'2023-12-12',cdate:'2023-11-30',quote:4600},
+{no:2,st:'입고확정',vendor:'아이투프럼',job:'A23007',item:'',proc:'A',procName:'1/1',part:'T99E',partName:'MACHINERY PA...',mat:'-',spec:'카운터기60EA',qty:60,price:0,odate:'2023-12-26',rdate:'2023-12-26',idate:'2023-12-26',cdate:'2023-12-31',quote:13800},
+{no:3,st:'입고확정',vendor:'신원티엔씨',job:'A23007',item:'',proc:'A',procName:'1/1',part:'T99F',partName:'MACHINERY PA...',mat:'-',spec:'SPC 12*100',qty:10,price:0,odate:'2023-12-30',rdate:'2023-12-28',idate:'2023-12-30',cdate:'2023-12-31',quote:54000},
+{no:4,st:'입고확정',vendor:'아이투프럼',job:'A23007',item:'',proc:'A',procName:'1/1',part:'T99A',partName:'MACHINERY PA...',mat:'-',spec:'0',qty:20,price:0,odate:'2023-11-01',rdate:'2023-10-11',idate:'2023-11-01',cdate:'2023-10-31',quote:4600},
+{no:5,st:'입고확정',vendor:'아이투프럼',job:'A24040',item:'',proc:'A',procName:'1/1',part:'T99T',partName:'MACHINERY PA...',mat:'-',spec:'프레스용 카운터기',qty:20,price:0,odate:'2024-11-05',rdate:'2024-10-31',idate:'2024-11-05',cdate:'2024-10-31',quote:4600},
+{no:6,st:'입고확정',vendor:'다원시스템',job:'A24040',item:'',proc:'A',procName:'1/1',part:'T99F',partName:'MACHINERY PA...',mat:'-',spec:'REF.',qty:4,price:0,odate:'2024-05-03',rdate:'2024-04-30',idate:'2024-05-03',cdate:'2024-04-30',quote:44000},
+{no:7,st:'입고확정',vendor:'신원티엔씨',job:'A24040',item:'',proc:'A',procName:'1/1',part:'T99K',partName:'MACHINERY PA...',mat:'-',spec:'SH 35*125',qty:1,price:0,odate:'2024-06-05',rdate:'2024-05-31',idate:'2024-06-05',cdate:'2024-05-31',quote:4300},
+{no:8,st:'입고확정',vendor:'동승',job:'A24040',item:'',proc:'A',procName:'1/1',part:'T99I',partName:'MACHINERY PA...',mat:'-',spec:'',qty:1,price:0,odate:'2024-06-05',rdate:'2024-05-31',idate:'2024-06-05',cdate:'2024-05-31',quote:23000},
+{no:9,st:'입고확정',vendor:'아이투프럼',job:'A24040',item:'',proc:'A',procName:'1/1',part:'T99Q',partName:'MACHINERY PA...',mat:'-',spec:'프레스용 카운터기',qty:20,price:0,odate:'2024-07-18',rdate:'2024-07-25',idate:'2024-07-18',cdate:'2024-07-31',quote:4600},
+{no:10,st:'입고확정',vendor:'신원티엔씨',job:'A24040',item:'',proc:'A',procName:'1/1',part:'T99J',partName:'MACHINERY PA...',mat:'-',spec:'버링펀치3EA',qty:1,price:0,odate:'2024-06-05',rdate:'2024-05-31',idate:'2024-06-05',cdate:'2024-06-30',quote:57600},
+{no:11,st:'입고확정',vendor:'아이위',job:'A24040',item:'',proc:'A',procName:'1/1',part:'T99U',partName:'MACHINERY PA...',mat:'-',spec:'BAR',qty:6,price:0,odate:'2024-11-20',rdate:'2024-11-27',idate:'2024-11-20',cdate:'2024-11-30',quote:156000},
+{no:12,st:'입고확정',vendor:'주광레이저',job:'A24040',item:'',proc:'A',procName:'1/1',part:'T99W',partName:'MACHINERY PA...',mat:'-',spec:'레이저 1000*615',qty:1,price:0,odate:'2024-12-03',rdate:'2024-11-30',idate:'2024-12-03',cdate:'2024-11-30',quote:190000},
+{no:13,st:'입고확정',vendor:'다원시스템',job:'A24040',item:'',proc:'A',procName:'1/1',part:'T99G',partName:'MACHINERY PA...',mat:'-',spec:'REF.',qty:4,price:0,odate:'2024-05-03',rdate:'2024-04-30',idate:'2024-05-03',cdate:'2024-04-30',quote:44000},
+{no:14,st:'입고확정',vendor:'아이투프럼',job:'A24040',item:'',proc:'A',procName:'1/1',part:'T99V',partName:'MACHINERY PA...',mat:'-',spec:'프레스용 카운터기',qty:30,price:0,odate:'2024-11-25',rdate:'2024-11-27',idate:'2024-11-25',cdate:'2024-11-30',quote:6900},
+{no:15,st:'입고확정',vendor:'주광레이저',job:'A24040',item:'',proc:'A',procName:'1/1',part:'T99C',partName:'MACHINERY PA...',mat:'SUS',spec:'0.2T',qty:1,price:0,odate:'2024-04-18',rdate:'2024-04-25',idate:'2024-05-02',cdate:'2024-04-30',quote:73000},
+{no:16,st:'입고확정',vendor:'주광레이저',job:'A24040',item:'',proc:'A',procName:'1/1',part:'T99E',partName:'MACHINERY PA...',mat:'SUS',spec:'0.5T',qty:1,price:0,odate:'2024-04-18',rdate:'2024-04-25',idate:'2024-05-02',cdate:'2024-04-30',quote:83000},
+{no:17,st:'입고확정',vendor:'주광레이저',job:'A24040',item:'',proc:'A',procName:'1/1',part:'T99D',partName:'MACHINERY PA...',mat:'SUS',spec:'0.1T',qty:1,price:0,odate:'2024-04-18',rdate:'2024-04-25',idate:'2024-05-02',cdate:'2024-04-30',quote:0}];
+let view=[...rows];
+const money=v=>Number(v||0).toLocaleString('ko-KR');
+function within(v,a,b){if(!a&&!b)return true;if(!v)return false;return (!a||v>=a)&&(!b||v<=b)}
+function render(){body.innerHTML=view.map((r,i)=>`<tr onclick="sel(this)"><td class="c">${i+1}</td><td class="c"><span class="tag t-${r.st}">${r.st}</span></td><td>${r.vendor}</td><td>${r.job}</td><td>${r.item}</td><td class="c">${r.proc}</td><td class="c">${r.procName}</td><td>${r.part}</td><td>${r.partName}</td><td class="c">${r.mat}</td><td>${r.spec}</td><td class="r">${r.qty}</td><td class="r">${money(r.price)}</td><td class="c">${r.odate}</td><td class="c">${r.rdate}</td><td class="c">${r.idate}</td><td class="c">${r.cdate}</td><td class="r">${money(r.quote)}</td></tr>`).join('');
+sumQty.textContent=money(view.reduce((a,r)=>a+(r.qty||0),0));sumQuote.textContent=money(view.reduce((a,r)=>a+(r.quote||0),0));countText.textContent=`${view.length}건`}
+function sel(tr){document.querySelectorAll('#body tr').forEach(x=>x.classList.remove('sel'));tr.classList.add('sel')}
+function search(){const st=document.querySelector('input[name=st]:checked').value;const j=jobQ.value.trim().toLowerCase(),it=itemQ.value.trim().toLowerCase(),v=vendorQ.value.trim().toLowerCase();
+view=rows.filter(r=>(st==='전체'||r.st===st)&&(!j||r.job.toLowerCase().includes(j))&&(!it||(r.item||'').toLowerCase().includes(it))&&(!v||r.vendor.toLowerCase().includes(v))&&within(r.rdate,rd1.value,rd2.value)&&within(r.idate,id1.value,id2.value)&&within(r.cdate,cd1.value,cd2.value));
+render();msg(`${st} 기준 ${view.length}건을 조회했습니다.`)}
+function exportCsv(){const out=[['구분','업체명','제번','품명','공정','공정명','품번','부품명','재질','스펙','수량','단가','발주월','입고요구일','입고월','입고확정일','견적가'],...view.map(r=>[r.st,r.vendor,r.job,r.item,r.proc,r.procName,r.part,r.partName,r.mat,r.spec,r.qty,r.price,r.odate,r.rdate,r.idate,r.cdate,r.quote])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='purchase_order_status.csv';a.click();URL.revokeObjectURL(a.href);msg('EXCEL(CSV) 파일을 생성했습니다.')}
+function msg(t){message.textContent=t}
+render();window.MES={search,exportCsv,setMessage:msg};
+</script>
+</body>
+</html>

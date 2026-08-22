@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MES Prototype</title>
+<style>
+:root{--top1:42px;--top2:78px;--left:300px;--tabs:32px;--line:#aeb8c2;--blue:#2469a8;--text:#273746}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:var(--text);background:#dfe4e9;overflow:hidden}button{font:inherit;cursor:pointer}
+.top1{position:fixed;inset:0 0 auto 0;height:var(--top1);display:flex;align-items:center;background:linear-gradient(#fafbfc,#edf1f4);border-bottom:1px solid #b2bdc6;z-index:20}.logo{width:210px;height:100%;display:flex;align-items:center;padding-left:22px;font-size:22px;font-weight:900;font-style:italic;color:#265eb8;letter-spacing:-1px;border-right:1px solid #c8d0d7}.logo b{margin-right:8px;font-size:28px}.modules{height:100%;display:flex;overflow-x:auto}.module{height:100%;min-width:82px;padding:0 12px;border:0;border-right:1px solid #d5dce2;background:transparent;color:#546270;font-weight:700}.module:hover,.module.on{background:#e5edf5;color:#1d568c}.user{margin-left:auto;padding:0 15px;color:#687684;white-space:nowrap}.top2{position:fixed;top:var(--top1);left:0;right:0;height:var(--top2);display:flex;align-items:stretch;background:linear-gradient(#f8fafb,#edf1f4);border-bottom:1px solid #9eabb6;z-index:19}.tool{width:68px;border:0;border-right:1px solid #d1d8de;background:transparent;color:#465665;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}.tool:hover,.tool.on{background:#fff;color:#1d568c}.tool.on{box-shadow:inset 0 -3px 0 #2f73b6}.ico{font-size:22px;color:#214d79;line-height:24px}.tool span:last-child{font-size:11px}.tool.disabled{opacity:.35;cursor:default}.left{position:fixed;top:calc(var(--top1) + var(--top2));left:0;bottom:24px;width:var(--left);background:#f5f7f8;border-right:1px solid #8f9ca8;z-index:18;display:flex;flex-direction:column}.tree-top{height:29px;border-bottom:1px solid #aab5bf;display:flex;align-items:center;padding:0 7px;gap:4px;background:#eef2f5}.mini{width:22px;height:20px;border:1px solid #aab6c1;background:#f9fbfc}.tree{overflow:auto;padding:5px 0 10px;flex:1}.group{margin-bottom:1px}.group-title{padding:4px 8px;font-weight:800;color:#2f4559;display:flex;align-items:center;gap:5px}.group-title::before{content:'⊟';font-size:12px;color:#315c86}.item{display:block;width:100%;border:0;background:transparent;text-align:left;padding:4px 8px 4px 32px;color:#374958;position:relative}.item::before{content:'▣';position:absolute;left:18px;color:#5a7185}.item:hover{background:#e5eef6}.item.on{background:#2e77bd;color:white}.item.on::before{color:white}.现场{margin:auto 10px 10px;border:1px solid #737f8a;background:#f6f7f8;padding:9px 12px;font-size:21px;text-align:center;letter-spacing:2px}.workspace{position:fixed;top:calc(var(--top1) + var(--top2));left:var(--left);right:0;bottom:24px;background:#d7dde3;display:flex;flex-direction:column;min-width:0}.tabs{height:var(--tabs);display:flex;align-items:flex-end;gap:2px;padding:3px 5px 0;background:#e3e8ec;border-bottom:1px solid #8d99a5;overflow-x:auto}.tab{height:27px;min-width:126px;max-width:190px;display:flex;align-items:center;padding-left:9px;border:1px solid #9ba8b4;border-bottom:0;background:linear-gradient(#f4f6f8,#dde4e9);color:#5d6b78;white-space:nowrap}.tab.on{background:#fff;color:#244c73;font-weight:800}.tab .title{overflow:hidden;text-overflow:ellipsis}.x{margin-left:auto;width:25px;height:24px;border:0;background:transparent;color:#6d7882}.x:hover{background:#e8ecf0;color:#a22}.stage{flex:1;min-height:0;padding:0;background:#fff}.stage iframe{display:none;width:100%;height:100%;border:0;background:#fff}.stage iframe.on{display:block}.placeholder{display:none;height:100%;align-items:center;justify-content:center;background:#f6f8fa;color:#71808d;font-size:14px}.placeholder.on{display:flex}.status{position:fixed;left:0;right:0;bottom:0;height:24px;z-index:30;display:flex;align-items:center;border-top:1px solid #9aa6b1;background:#e6ebef;padding:0 12px;color:#5f6d78}.status .msg{margin-left:var(--left);padding-left:16px}.status .right{margin-left:auto}.mobile{display:none}@media(max-width:900px){:root{--left:220px}.logo{width:170px}.module{min-width:70px}.user{display:none}}@media(max-width:680px){:root{--left:0px}.left{display:none}.logo{width:145px}.module:nth-child(n+5){display:none}.tool{width:56px}.status .msg{margin-left:0}.mobile{display:block}}
+</style>
+</head>
+<body>
+<header class="top1"><div class="logo"><b>M</b>MES</div><nav class="modules" id="modules"></nav><div class="user">동구기업 MES</div></header>
+<section class="top2" id="secondaryNav"></section>
+<aside class="left"><div class="tree-top"><button class="mini">＋</button><button class="mini">－</button></div><div class="tree" id="tree"></div><div class="现场">⚙　현장 전용 화면</div></aside>
+<main class="workspace"><div class="tabs" id="tabs"></div><div class="stage" id="stage"></div></main>
+<footer class="status"><span id="now">2026-08-22 10:15:13</span><span class="msg" id="statusMsg">데이터가 조회되었습니다.</span><span class="right">AP0020</span></footer>
+<script>
+const APP={
+  '영업관리':{
+    secondary:[
+      {name:'수주',icon:'▣'},
+      {name:'영업계획',icon:'◴'},
+      {name:'금형코드매칭',icon:'⌘'},
+      {name:'SET발주',icon:'◆'},
+      {name:'경비',icon:'▤'}
+    ],
+    menus:{
+      '수주':[{name:'수주',items:['수주등록','수주현황','현황판']}],
+      '영업계획':[{name:'영업계획',items:['영업계획등록','영업계획현황']}],
+      '금형코드매칭':[{name:'금형코드매칭',items:['금형코드매칭']}],
+      'SET발주':[{name:'SET발주',items:['SET발주등록','SET발주입고','SET발주현황']}],
+      '경비':[{name:'경비',items:['경비등록','경비현황']}]
+    }
+  },
+  '설계관리':{
+    secondary:[
+      {name:'외주설계발주',icon:'✎'},
+      {name:'설계',icon:'▤'},
+      {name:'PARTLIST',icon:'▦'}
+    ],
+    menus:{
+      '외주설계발주':[{name:'외주설계발주',items:['외주설계발주등록','외주설계발주입고','외주설계발주현황']}],
+      '설계':[{name:'설계',items:['설계계획등록','설계실적등록','설계실적현황','설계실적조회']}],
+      'PARTLIST':[{name:'PARTLIST',items:['PartList 등록(원재료)','PartList 등록(구매품)','PartList 현황','PartList 복사']}]
+    }
+  },
+  '구매관리':{
+    secondary:[
+      {name:'원재료',icon:'▣'},
+      {name:'구매품',icon:'◆'},
+      {name:'가공',icon:'⚒'}
+    ],
+    menus:{
+      '원재료':[
+        {name:'원재료',items:['원재료 발주','원재료 입고','원재료 입고확정']},
+        {name:'현황',items:['원재료 발주현황']}
+      ],
+      '구매품':[
+        {name:'구매품',items:['구매품 발주','구매품 입고','구매품 입고확정']},
+        {name:'현황',items:['구매품 발주현황']}
+      ],
+      '가공':[
+        {name:'가공',items:['가공계획등록','공정이력카드']},
+        {name:'외주가공',items:['외주가공 발주','외주가공 입고','외주가공 입고확정']},
+        {name:'현황',items:['외주가공발주현황','가공구매 진척현황']}
+      ]
+    }
+  },
+  '조립관리':{
+    secondary:[
+      {name:'조립',icon:'⚙'},
+      {name:'검사',icon:'⌕'}
+    ],
+    menus:{
+      '조립':[{name:'조립',items:['조립실적등록','조립실적현황','조립실적조회']}],
+      '검사':[{name:'검사',items:[]}]
+    }
+  },
+  '원가관리':{
+    secondary:[
+      {name:'원가관리',icon:'◴'},
+      {name:'매입매출현황',icon:'▥'}
+    ],
+    menus:{
+      '원가관리':[{name:'제조원가',items:['제조원가조회(실시간)']}],
+      '매입매출현황':[{name:'매입매출현황',items:['매입현황','매출현황','재고조회']}]
+    }
+  },
+  '기준정보':{
+    secondary:[
+      {name:'생산/품질',icon:'👥'},
+      {name:'공통',icon:'⚙'}
+    ],
+    menus:{
+      '생산/품질':[
+        {name:'공정관리',items:['가공공정관리','가공 기준공정관리']},
+        {name:'작업지시',items:['작업지시 관리','공정이력카드']}
+      ],
+      '공통':[
+        {name:'사용자',items:['사용자정보']},
+        {name:'공통',items:['공정관리','부품관리','자재등록','설비등록','업체관리','사업부정보','부서정보','아이템 관리','경비사유','금형타입관리','기계사양관리']},
+        {name:'검사',items:['검사구분','검사항목']},
+        {name:'공지사항',items:['공지사항 등록']},
+        {name:'인사',items:['부서정보','직급정보']},
+        {name:'단가관리',items:['자재단가변동등록','자재단가변동현황','공정단가변동등록','공정단가변동현황']}
+      ]
+    }
+  }
+};
+const MODULES=['영업관리','설계관리','구매관리','조립관리','원가관리','기준정보'];
+const pageRegistry={
+'가공공정관리':{id:'machining_process_management',file:'machining_process_management.html',title:'가공공정관리'},
+'공정관리':{id:'machining_process_management',file:'machining_process_management.html',title:'가공공정관리'},
+'가공 기준공정관리':{id:'machining_standard_process',file:'machining_standard_process.html',title:'가공 기준공정관리'},
+'작업지시 관리':{id:'work_order_input',file:'work_order_input.html',title:'작업지시 관리'},
+'공정이력카드':{id:'process_history_card',file:'process_history_card.html',title:'공정이력카드'},
+'구매품 입고확정':{id:'purchase_receipt_confirmation',file:'purchase_receipt_confirmation.html',title:'구매품 입고확정'},
+'업체관리':{id:'vendor_management',file:'vendor_management.html',title:'업체 관리'},
+'설비등록':{id:'equipment_registration',file:'equipment_registration.html',title:'설비등록'},
+'자재등록':{id:'material_management',file:'material_management.html',title:'자재등록'},
+'부품관리':{id:'part_management',file:'part_management.html',title:'부품 관리'},
+'사업부정보':{id:'business_division_info',file:'business_division_info.html',title:'사업부 정보'},
+'아이템 관리':{id:'item_management',file:'item_management.html',title:'아이템 관리'},
+'경비사유':{id:'expense_reason_registration',file:'expense_reason_registration.html',title:'경비사유 등록'},
+'금형타입관리':{id:'mold_type_management',file:'mold_type_management.html',title:'금형타입 관리'},
+'기계사양관리':{id:'machine_spec_management',file:'machine_spec_management.html',title:'기계사양 관리'},
+'부서정보':{id:'department_registration',file:'department_registration.html',title:'부서등록'},
+'검사항목':{id:'inspection_item_management',file:'inspection_item_management.html',title:'검사항목'},
+'공지사항 등록':{id:'notice_registration',file:'notice_registration.html',title:'공지사항 등록'},
+'사용자정보':{id:'user_information',file:'user_information.html',title:'사용자정보'},
+'자재단가변동등록':{id:'material_price_change_registration',file:'material_price_change_registration.html',title:'자재단가변동 등록'},
+'자재단가변동현황':{id:'material_price_change_status',file:'material_price_change_status.html',title:'자재단가변동 현황'},
+'공정단가변동등록':{id:'process_price_change_registration',file:'process_price_change_registration.html',title:'공정단가변동 등록'},
+'공정단가변동현황':{id:'process_price_change_status',file:'process_price_change_status.html',title:'가공공정단가변동 현황'},
+'제조원가조회(실시간)':{id:'manufacturing_cost_inquiry',file:'manufacturing_cost_inquiry.html',title:'제조원가 조회'},
+'수주등록':{id:'sale_order_input',file:'sale_order_input.html',title:'수주정보 등록'},
+'수주현황':{id:'sale_order_status',file:'sale_order_status.html',title:'수주현황'},
+'영업계획등록':{id:'sales_plan_input',file:'sales_plan_input.html',title:'계획등록'},
+'현황판':{id:'status_board',file:'status_board.html',title:'동구기업 현황판'},
+'금형코드매칭':{id:'mold_code_matching',file:'mold_code_matching.html',title:'금형코드 매칭'},
+'영업계획현황':{id:'sales_plan_status',file:'sales_plan_status.html',title:'영업계획현황'},
+'SET발주현황':{id:'set_order_status',file:'set_order_status.html',title:'SET 발주현황'},
+'SET발주입고':{id:'set_order_receipt',file:'set_order_receipt.html',title:'SET발주입고'},
+'경비등록':{id:'expense_registration',file:'expense_registration.html',title:'경비 등록'},
+'경비현황':{id:'expense_status',file:'expense_status.html',title:'경비현황'},
+'설계계획등록':{id:'design_plan_input',file:'design_plan_input.html',title:'설계계획등록'},
+'설계실적등록':{id:'design_result_input',file:'design_result_input.html',title:'설계실적등록'},
+'설계실적현황':{id:'design_result_status',file:'design_result_status.html',title:'설계/조립실적현황'},
+'설계실적조회':{id:'design_result_inquiry',file:'design_result_inquiry.html',title:'설계/조립실적조회'},
+'PartList 등록(원재료)':{id:'partlist_material_input',file:'partlist_material_input.html',title:'PartList 등록(원재료)'},
+'PartList 등록(구매품)':{id:'partlist_purchase_input',file:'partlist_purchase_input.html',title:'PartList 등록(구매품)'},
+'PartList 현황':{id:'partlist_status',file:'partlist_status.html',title:'PartList 현황'},
+'SET발주등록':{id:'set_order_registration',file:'set_order_registration.html',title:'SET발주등록'},
+'가공계획등록':{id:'machining_plan_input',file:'machining_plan_input.html',title:'가공계획등록'},
+'매입현황':{id:'purchase_status',file:'purchase_status.html',title:'매입현황'},
+'조립실적조회':{id:'design_result_inquiry',file:'design_result_inquiry.html',title:'설계/조립실적조회'},
+'조립실적현황':{id:'design_result_status',file:'design_result_status.html',title:'설계/조립실적현황'},
+'원재료 발주':{id:'material_order_input',file:'material_order_input.html',title:'원재료 발주'},
+'원재료 입고':{id:'material_receipt_input',file:'material_receipt_input.html',title:'원재료 입고'},
+'원재료 입고확정':{id:'material_receipt_confirmation',file:'material_receipt_confirmation.html',title:'원재료 입고확정'},
+'원재료 발주현황':{id:'material_order_status',file:'material_order_status.html',title:'원재료 발주현황'},
+'구매품 발주':{id:'purchase_order_input',file:'purchase_order_input.html',title:'구매품 발주'},
+'구매품 입고':{id:'purchase_receipt_input',file:'purchase_receipt_input.html',title:'구매품 입고'},
+'외주설계발주등록':{id:'outsourced_design_order_input',file:'outsourced_design_order_input.html',title:'외주설계발주등록'},
+'외주설계발주입고':{id:'outsourced_design_receipt_input',file:'outsourced_design_receipt_input.html',title:'외주설계발주입고'},
+'외주설계발주현황':{id:'outsourced_design_order_status',file:'outsourced_design_order_status.html',title:'외주설계발주현황'},
+'PartList 복사':{id:'partlist_copy',file:'partlist_copy.html',title:'PartList 복사'},
+'재고조회':{id:'stock_inquiry',file:'stock_inquiry.html',title:'재고조회'},
+'구매품 발주현황':{id:'purchase_order_status',file:'purchase_order_status.html',title:'구매품 발주현황'},
+'외주가공 발주':{id:'outsourcing_order_input',file:'outsourcing_order_input.html',title:'외주가공 발주'},
+'외주가공 입고':{id:'outsourcing_receipt_input',file:'outsourcing_receipt_input.html',title:'외주가공 입고'},
+'외주가공 입고확정':{id:'outsourcing_receipt_confirmation',file:'outsourcing_receipt_confirmation.html',title:'외주가공입고확정'},
+'외주가공발주현황':{id:'outsourcing_order_status',file:'outsourcing_order_status.html',title:'외주가공 발주현황'},
+'가공구매 진척현황':{id:'machining_purchase_progress',file:'machining_purchase_progress.html',title:'가공구매 진척현황'},
+'조립실적등록':{id:'assembly_result_input',file:'assembly_result_input.html',title:'조립실적등록'},
+'매출현황':{id:'sales_status',file:'sales_status.html',title:'매출현황'}
+};
+let activeModule='기준정보', activeSecondary='생산/품질', activeId='machining_process_management';
+const openTabs=new Map();
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function buildModules(){modules.innerHTML=MODULES.map(m=>`<button class="module ${m===activeModule?'on':''}" onclick="setModule('${m}')">${m}</button>`).join('')}
+function buildSecondary(){
+  const list=APP[activeModule]?.secondary||[];
+  secondaryNav.innerHTML=list.map(x=>`<button class="tool ${x.name===activeSecondary?'on':''}" onclick="setSecondary('${x.name}')"><span class="ico">${x.icon}</span><span>${x.name}</span></button>`).join('');
+}
+function currentGroups(){return APP[activeModule]?.menus?.[activeSecondary]||[]}
+function buildTree(){
+  const gs=currentGroups();
+  if(!gs.length){tree.innerHTML='<div style="padding:16px;color:#7a8793">등록된 하위 메뉴가 없습니다.</div>';return}
+  tree.innerHTML=gs.map(g=>`<div class="group"><div class="group-title">${g.name}</div>${g.items.map(name=>`<button class="item ${pageRegistry[name]?.id===activeId?'on':''}" onclick="openByName('${name}')">${name}</button>`).join('')}</div>`).join('')
+}
+function setModule(m){
+  activeModule=m;
+  const secs=APP[m]?.secondary||[];
+  activeSecondary=secs[0]?.name||'';
+  buildModules();buildSecondary();buildTree();
+  statusMsg.textContent=`${m} 메뉴를 선택했습니다.`
+}
+function setSecondary(s){activeSecondary=s;buildSecondary();buildTree();statusMsg.textContent=`${activeModule} / ${s}`}
+function slugify(name){const map={'수주등록':'sale_order_input','수주현황':'sale_order_status','구매품 발주':'purchase_order_input','구매품 입고':'purchase_receipt_input','구매품 발주현황':'purchase_order_status','가공계획등록':'machining_plan_input','외주가공 발주':'outsourcing_order_input','외주가공 입고':'outsourcing_receipt_input','외주가공 입고확정':'outsourcing_receipt_confirmation','외주가공발주현황':'outsourcing_order_status','가공구매 진척현황':'machining_purchase_progress','사용자정보':'user_info','검사구분':'inspection_category','직급정보':'position_info','자재단가변동등록':'material_price_change_input','자재단가변동현황':'material_price_change_status','공정단가변동등록':'process_price_change_input','공정단가변동현황':'process_price_change_status'};return map[name]||'pending_'+Math.abs([...name].reduce((a,c)=>((a<<5)-a+c.charCodeAt(0))|0,0))}
+function openByName(name){let p=pageRegistry[name];if(!p){const id=slugify(name);p={id,title:name,file:null};pageRegistry[name]=p}openPage(p)}
+function openPage(p){if(!openTabs.has(p.id))openTabs.set(p.id,p);activeId=p.id;renderTabs();renderStage();buildTree();statusMsg.textContent=p.file?`${p.title} 화면을 열었습니다.`:`${p.title} 화면은 사진 등록 대기중입니다.`}
+function renderTabs(){tabs.innerHTML=[...openTabs.values()].map(p=>`<div class="tab ${p.id===activeId?'on':''}" onclick="activate('${p.id}')"><span class="title">${p.title}</span><button class="x" onclick="closeTab('${p.id}',event)">×</button></div>`).join('');requestAnimationFrame(()=>tabs.querySelector('.tab.on')?.scrollIntoView({inline:'nearest'}))}
+function renderStage(){for(const p of openTabs.values()){if(document.getElementById('view_'+p.id))continue;if(p.file){const f=document.createElement('iframe');f.id='view_'+p.id;f.src=p.file;stage.appendChild(f)}else{const d=document.createElement('div');d.id='view_'+p.id;d.className='placeholder';d.innerHTML=`<div><b>${esc(p.title)}</b><br><br>해당 업무 화면 사진을 주시면 <code>${p.id}.html</code> 형태로 제작해 이 위치에 연결합니다.</div>`;stage.appendChild(d)}}stage.querySelectorAll('iframe,.placeholder').forEach(x=>x.classList.toggle('on',x.id==='view_'+activeId))}
+function activate(id){activeId=id;renderTabs();renderStage();buildTree()}
+function closeTab(id,e){e?.stopPropagation();const ids=[...openTabs.keys()],idx=ids.indexOf(id);openTabs.delete(id);document.getElementById('view_'+id)?.remove();if(activeId===id){activeId=ids[idx+1]||ids[idx-1]||'';if(!openTabs.has(activeId))activeId=[...openTabs.keys()][0]||''}renderTabs();renderStage();buildTree()}
+function closeActive(){if(activeId)closeTab(activeId)}
+function tick(){const d=new Date();now.textContent=d.toLocaleString('sv-SE',{hour12:false}).replace(',','')}
+openTabs.set('machining_process_management',pageRegistry['가공공정관리']);
+buildModules();buildSecondary();buildTree();renderTabs();renderStage();tick();setInterval(tick,1000);
+</script>
+</body>
+</html>

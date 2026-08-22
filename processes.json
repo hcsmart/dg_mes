@@ -1,0 +1,342 @@
+[
+  {
+    "process_code": "DL",
+    "process_name": "조립도",
+    "process_group": "설계",
+    "sort_order": 1,
+    "completion_progress": 30,
+    "use_progress": true,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "DA",
+    "process_name": "레이아웃",
+    "process_group": "설계",
+    "sort_order": 2,
+    "completion_progress": 30,
+    "use_progress": true,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "DP",
+    "process_name": "부품도",
+    "process_group": "설계",
+    "sort_order": 3,
+    "completion_progress": 40,
+    "use_progress": true,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "CT",
+    "process_name": "코팅",
+    "process_group": "가공",
+    "sort_order": 0,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "LM1",
+    "process_name": "선반 정삭",
+    "process_group": "가공",
+    "sort_order": 0,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "LM2",
+    "process_name": "선반 열처리 정삭",
+    "process_group": "가공",
+    "sort_order": 0,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "NL1",
+    "process_name": "M/C정삭(대형)",
+    "process_group": "가공",
+    "sort_order": 0,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "NL2",
+    "process_name": "M/C밀처리정삭",
+    "process_group": "가공",
+    "sort_order": 0,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "TC",
+    "process_name": "각인",
+    "process_group": "가공",
+    "sort_order": 0,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "TE",
+    "process_name": "방전",
+    "process_group": "가공",
+    "sort_order": 0,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "WS1",
+    "process_name": "WIRE CUT1",
+    "process_group": "가공",
+    "sort_order": 0,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "AB",
+    "process_name": "가공ASSY",
+    "process_group": "가공",
+    "sort_order": 1,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "MA",
+    "process_name": "면삭밀링(소형)",
+    "process_group": "가공",
+    "sort_order": 2,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "MF",
+    "process_name": "면삭밀링(대형)",
+    "process_group": "가공",
+    "sort_order": 3,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "MP",
+    "process_name": "면삭밀링(초대형)",
+    "process_group": "가공",
+    "sort_order": 4,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "MS",
+    "process_name": "성형밀링(소형)",
+    "process_group": "가공",
+    "sort_order": 5,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "DR",
+    "process_name": "DRILLING",
+    "process_group": "가공",
+    "sort_order": 6,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "HA",
+    "process_name": "홀가공",
+    "process_group": "가공",
+    "sort_order": 7,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "HQ",
+    "process_name": "열처리",
+    "process_group": "가공",
+    "sort_order": 8,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "NM",
+    "process_name": "M/C황삭(소형,중형)",
+    "process_group": "가공",
+    "sort_order": 9,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "NL",
+    "process_name": "M/C정삭(대형)",
+    "process_group": "가공",
+    "sort_order": 10,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "GS",
+    "process_name": "성형연삭(소형)",
+    "process_group": "가공",
+    "sort_order": 11,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "GM",
+    "process_name": "평면연삭(중형)",
+    "process_group": "가공",
+    "sort_order": 12,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "GL",
+    "process_name": "평면연삭(대형)",
+    "process_group": "가공",
+    "sort_order": 13,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "WS",
+    "process_name": "WIRE CUT",
+    "process_group": "가공",
+    "sort_order": 15,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "LM",
+    "process_name": "선반",
+    "process_group": "가공",
+    "sort_order": 18,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "GG",
+    "process_name": "원통연삭",
+    "process_group": "가공",
+    "sort_order": 19,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "WW",
+    "process_name": "용접",
+    "process_group": "가공",
+    "sort_order": 20,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "NM1",
+    "process_name": "M/C정삭(소형,중형)",
+    "process_group": "가공",
+    "sort_order": 25,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "NM2",
+    "process_name": "M/C열처리정삭",
+    "process_group": "가공",
+    "sort_order": 26,
+    "completion_progress": 0,
+    "use_progress": false,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "AS",
+    "process_name": "래핑,조립",
+    "process_group": "조립",
+    "sort_order": 1,
+    "completion_progress": 25,
+    "use_progress": true,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "TO",
+    "process_name": "시험",
+    "process_group": "조립",
+    "sort_order": 2,
+    "completion_progress": 25,
+    "use_progress": true,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "S1",
+    "process_name": "S1",
+    "process_group": "조립",
+    "sort_order": 3,
+    "completion_progress": 25,
+    "use_progress": true,
+    "use_plan": true,
+    "remark": null
+  },
+  {
+    "process_code": "CQ",
+    "process_name": "품질육성",
+    "process_group": "조립",
+    "sort_order": 4,
+    "completion_progress": 25,
+    "use_progress": true,
+    "use_plan": true,
+    "remark": null
+  }
+]

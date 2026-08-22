@@ -1,0 +1,17 @@
+[
+  {
+    "expense_reason_code": "EXP01",
+    "expense_reason_name": "공통비용",
+    "remark": "1"
+  },
+  {
+    "expense_reason_code": "EXP02",
+    "expense_reason_name": "보관료",
+    "remark": null
+  },
+  {
+    "expense_reason_code": "EXP03",
+    "expense_reason_name": "운반비",
+    "remark": null
+  }
+]

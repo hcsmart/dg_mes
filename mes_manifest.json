@@ -1,0 +1,651 @@
+{
+  "project": "NEXMES photo-driven MES prototype",
+  "version": "15",
+  "entry": "index.html",
+  "updated": "2026-08-22",
+  "naming_rule": "<domain>_<action>.html (snake_case, English)",
+  "pages": [
+    {
+      "menu": "작업지시 관리",
+      "file": "work_order_input.html",
+      "status": "implemented",
+      "source_photo": "20260822_101514.jpg",
+      "data_json": [
+        "work_order_item_candidates.json",
+        "work_order_details.json"
+      ]
+    },
+    {
+      "menu": "구매품 입고확정",
+      "file": "purchase_receipt_confirmation.html",
+      "status": "implemented",
+      "source_photo": "20260822_100828.jpg / 20260822_100821.jpg / 20260822_094217_아래로완료.jpg / 20260822_094220.jpg",
+      "data_json": [
+        "purchase_receipt_candidates.json"
+      ]
+    },
+    {
+      "menu": "가공 기준공정관리",
+      "file": "machining_standard_process.html",
+      "status": "implemented",
+      "source_photo": "20260822_095834.jpg / 20260822_095840.jpg / 20260822_095845.jpg / 20260822_095849.jpg / 20260822_095851.jpg",
+      "data_json": [
+        "standard_processes.json",
+        "standard_process_steps.json"
+      ]
+    },
+    {
+      "menu": "공정 관리",
+      "file": "machining_process_management.html",
+      "status": "implemented",
+      "source_photo": "20260822_100001.jpg / 20260822_100005.jpg",
+      "data_json": [
+        "processes.json"
+      ]
+    },
+    {
+      "menu": "공정이력카드",
+      "file": "process_history_card.html",
+      "status": "implemented",
+      "source_photo": "20260822_101044.jpg / 20260822_101049.jpg / 20260822_101054.jpg",
+      "data_json": [
+        "process_history_cards.json"
+      ]
+    },
+    {
+      "menu": "업체관리",
+      "file": "vendor_management.html",
+      "status": "implemented",
+      "source_photo": "20260822_100113.jpg",
+      "data_json": [
+        "vendors.json"
+      ]
+    },
+    {
+      "menu": "설비등록",
+      "file": "equipment_registration.html",
+      "status": "implemented",
+      "source_photo": "20260822_100109.jpg",
+      "data_json": [
+        "equipment.json"
+      ]
+    },
+    {
+      "menu": "자재등록",
+      "file": "material_management.html",
+      "status": "implemented",
+      "source_photo": "20260822_100058.jpg",
+      "data_json": [
+        "materials.json"
+      ]
+    },
+    {
+      "menu": "부품관리",
+      "file": "part_management.html",
+      "status": "implemented",
+      "source_photo": "20260822_100033.jpg / 20260822_100010.jpg",
+      "data_json": [
+        "parts.json"
+      ]
+    },
+    {
+      "menu": "사업부정보",
+      "file": "business_division_info.html",
+      "status": "implemented",
+      "source_photo": "20260822_100122.jpg",
+      "data_json": [
+        "business_divisions.json"
+      ]
+    },
+    {
+      "menu": "아이템 관리",
+      "file": "item_management.html",
+      "status": "implemented",
+      "source_photo": "20260822_100130.jpg",
+      "data_json": [
+        "item_categories.json"
+      ]
+    },
+    {
+      "menu": "경비사유",
+      "file": "expense_reason_registration.html",
+      "status": "implemented",
+      "source_photo": "20260822_100143.jpg",
+      "data_json": [
+        "expense_reasons.json"
+      ]
+    },
+    {
+      "menu": "금형타입관리",
+      "file": "mold_type_management.html",
+      "status": "implemented",
+      "source_photo": "20260822_100148.jpg",
+      "data_json": [
+        "mold_types.json"
+      ]
+    },
+    {
+      "menu": "기계사양관리",
+      "file": "machine_spec_management.html",
+      "status": "implemented",
+      "source_photo": "20260822_100154.jpg",
+      "data_json": [
+        "machine_specs.json"
+      ]
+    },
+    {
+      "menu": "사용자정보",
+      "file": "user_information.html",
+      "status": "implemented",
+      "source_photo": "20260822_095911.jpg",
+      "data_json": [
+        "users.json",
+        "user_permissions.json"
+      ]
+    },
+    {
+      "menu": "자재단가변동등록",
+      "file": "material_price_change_registration.html",
+      "status": "implemented",
+      "source_photo": "20260822_100357.jpg",
+      "data_json": [
+        "material_price_changes.json"
+      ]
+    },
+    {
+      "menu": "자재단가변동현황",
+      "file": "material_price_change_status.html",
+      "status": "implemented",
+      "source_photo": "20260822_100421.jpg",
+      "data_json": [
+        "material_price_changes.json"
+      ]
+    },
+    {
+      "menu": "공정단가변동등록",
+      "file": "process_price_change_registration.html",
+      "status": "implemented",
+      "source_photo": "20260822_100438.jpg",
+      "data_json": [
+        "process_price_changes.json"
+      ]
+    },
+    {
+      "menu": "공정단가변동현황",
+      "file": "process_price_change_status.html",
+      "status": "implemented",
+      "source_photo": "20260822_100445.jpg",
+      "data_json": [
+        "process_price_changes.json"
+      ]
+    },
+    {
+      "menu": "제조원가조회(실시간)",
+      "file": "manufacturing_cost_inquiry.html",
+      "status": "implemented",
+      "source_photo": "20260822_095451.jpg / 20260822_095455.jpg / 20260822_095507.jpg / 20260822_095542.jpg / 20260822_095618.jpg",
+      "data_json": [
+        "manufacturing_cost_orders.json",
+        "manufacturing_cost_details.json"
+      ]
+    },
+    {
+      "menu": "수주등록",
+      "file": "sale_order_input.html",
+      "status": "implemented",
+      "source_photo": "20260822_090027.jpg / 20260822_090044.jpg / 20260822_090115.jpg / 20260822_090124.jpg / 20260822_090208.jpg / 20260822_090230.jpg / 20260822_090239.jpg / 20260822_090242.jpg / 20260822_090255.jpg / 20260822_090301.jpg / 20260822_090319.jpg / 20260822_090325.jpg",
+      "data_json": [
+        "sale_orders.json",
+        "employees.json",
+        "vendors.json",
+        "item_categories.json",
+        "business_divisions.json",
+        "machine_specs.json",
+        "mold_types.json"
+      ]
+    },
+    {
+      "menu": "수주현황",
+      "file": "sale_order_status.html",
+      "status": "implemented",
+      "source_photo": "20260822_090638.jpg / 20260822_090641.jpg / 20260822_090645.jpg / 20260822_090647.jpg / 20260822_090647_0_.jpg / 20260822_090649.jpg / 20260822_090703.jpg / 20260822_090626.jpg / 20260822_091008.jpg",
+      "data_json": [
+        "sale_order_status_rows.json"
+      ]
+    },
+    {
+      "menu": "영업계획등록",
+      "file": "sales_plan_input.html",
+      "status": "implemented",
+      "source_photo": "20260822_091405.jpg / 20260822_091431.jpg",
+      "data_json": [
+        "sales_plans.json"
+      ]
+    },
+    {
+      "menu": "현황판",
+      "file": "status_board.html",
+      "status": "implemented",
+      "source_photo": "20260822_090834.jpg / 20260822_090840.jpg / 20260822_090858.jpg / 20260822_090902.jpg / 20260822_090903.jpg / 20260822_090936.jpg / 20260822_090943.jpg",
+      "data_json": [
+        "status_board_rows.json"
+      ],
+      "note": "NEXMES 메뉴가 아닌 별도 데스크톱 앱(동구기업 현황판.exe). 편의상 영업관리>수주 트리에 등록"
+    },
+    {
+      "menu": "금형코드매칭",
+      "file": "mold_code_matching.html",
+      "status": "implemented",
+      "source_photo": "20260822_091755.jpg / 20260822_091814.jpg / 20260822_091925.jpg / 20260822_092002.jpg / 20260822_092204.jpg",
+      "data_json": [
+        "mold_code_matchings.json",
+        "mold_code_match_processes.json"
+      ]
+    },
+    {
+      "menu": "영업계획현황",
+      "file": "sales_plan_status.html",
+      "status": "implemented",
+      "source_photo": "20260822_091730.jpg",
+      "data_json": [
+        "sales_plan_status_rows.json",
+        "sales_plans.json"
+      ]
+    },
+    {
+      "menu": "SET발주현황",
+      "file": "set_order_status.html",
+      "status": "implemented",
+      "source_photo": "20260822_092603.jpg / 20260822_092450.jpg",
+      "data_json": [
+        "set_order_status_rows.json"
+      ]
+    },
+    {
+      "menu": "SET발주입고",
+      "file": "set_order_receipt.html",
+      "status": "implemented",
+      "source_photo": "20260822_092555.jpg",
+      "data_json": [
+        "set_order_receipts.json",
+        "set_order_receipt_details.json"
+      ]
+    },
+    {
+      "menu": "경비등록",
+      "file": "expense_registration.html",
+      "status": "implemented",
+      "source_photo": "20260822_092609.jpg",
+      "data_json": []
+    },
+    {
+      "menu": "경비현황",
+      "file": "expense_status.html",
+      "status": "implemented",
+      "source_photo": "20260822_092640.jpg",
+      "data_json": []
+    },
+    {
+      "menu": "설계계획등록",
+      "file": "design_plan_input.html",
+      "status": "implemented",
+      "source_photo": "20260822_092645.jpg / 20260822_092849.jpg",
+      "data_json": [
+        "design_plans.json",
+        "design_plan_steps.json"
+      ]
+    },
+    {
+      "menu": "설계실적등록",
+      "file": "design_result_input.html",
+      "status": "implemented",
+      "source_photo": "20260822_092700.jpg / 20260822_092840.jpg / 20260822_092825.jpg",
+      "data_json": []
+    },
+    {
+      "menu": "설계실적현황",
+      "file": "design_result_status.html",
+      "status": "implemented",
+      "source_photo": "20260822_092922.jpg / 20260822_092932.jpg / 20260822_094502.jpg / 20260822_094457.jpg",
+      "data_json": [
+        "design_result_monthly.json",
+        "design_teams.json"
+      ]
+    },
+    {
+      "menu": "설계실적조회",
+      "file": "design_result_inquiry.html",
+      "status": "implemented",
+      "source_photo": "20260822_093024.jpg / 20260822_093050.jpg / 20260822_094514.jpg",
+      "data_json": [
+        "design_results.json",
+        "design_teams.json"
+      ]
+    },
+    {
+      "menu": "PartList 등록(원재료)",
+      "file": "partlist_material_input.html",
+      "status": "implemented",
+      "source_photo": "20260822_093436.jpg / 20260822_093448.jpg / 20260822_093503.jpg",
+      "data_json": [
+        "partlist_materials.json",
+        "partlist_processes.json"
+      ]
+    },
+    {
+      "menu": "SET발주등록",
+      "file": "set_order_registration.html",
+      "status": "implemented",
+      "source_photo": "20260822_092450.jpg / 20260822_092533.jpg / 20260822_092524.jpg / 20260822_092404.jpg / 20260822_092547.jpg",
+      "data_json": [
+        "set_order_registrations.json",
+        "set_order_partners.json"
+      ]
+    },
+    {
+      "menu": "PartList 등록(구매품)",
+      "file": "partlist_purchase_input.html",
+      "status": "implemented",
+      "source_photo": "20260822_093510.jpg / 20260822_093518.jpg / 20260822_093527.jpg",
+      "data_json": [
+        "partlist_purchases.json",
+        "partlist_processes.json"
+      ]
+    },
+    {
+      "menu": "PartList 현황",
+      "file": "partlist_status.html",
+      "status": "implemented",
+      "source_photo": "20260822_093534.jpg / 20260822_093604.jpg",
+      "data_json": [
+        "partlist_status_rows.json"
+      ]
+    },
+    {
+      "menu": "가공계획등록",
+      "file": "machining_plan_input.html",
+      "status": "implemented",
+      "source_photo": "20260822_094240.jpg / 20260822_094245.jpg",
+      "data_json": [
+        "machining_plans.json",
+        "machining_standard_routes.json",
+        "machining_plan_parts.json"
+      ]
+    },
+    {
+      "menu": "매입현황",
+      "file": "purchase_status.html",
+      "status": "implemented",
+      "source_photo": "20260822_094543.jpg",
+      "data_json": [
+        "purchase_status_rows.json"
+      ]
+    },
+    {
+      "menu": "조립실적조회",
+      "file": "design_result_inquiry.html",
+      "status": "implemented",
+      "source_photo": "20260822_094518.jpg / 20260822_094529.jpg / 20260822_094535.jpg / 20260822_094514.jpg",
+      "data_json": [
+        "design_results.json"
+      ]
+    },
+    {
+      "menu": "조립실적현황",
+      "file": "design_result_status.html",
+      "status": "implemented",
+      "source_photo": "20260822_094518.jpg / 20260822_094529.jpg / 20260822_094535.jpg / 20260822_094502.jpg / 20260822_094457.jpg",
+      "data_json": [
+        "design_result_monthly.json"
+      ]
+    },
+    {
+      "menu": "부서정보",
+      "file": "department_registration.html",
+      "status": "stub",
+      "source_photo": null,
+      "data_json": []
+    },
+    {
+      "menu": "검사항목",
+      "file": "inspection_item_management.html",
+      "status": "stub",
+      "source_photo": null,
+      "data_json": []
+    },
+    {
+      "menu": "공지사항 등록",
+      "file": "notice_registration.html",
+      "status": "stub",
+      "source_photo": null,
+      "data_json": []
+    },
+    {
+      "menu": "외주설계발주등록",
+      "file": "outsourced_design_order_input.html",
+      "status": "implemented",
+      "source_photo": "20260822_093930.jpg / 20260822_093912.jpg",
+      "data_json": [
+        "outsourced_design_partners.json"
+      ]
+    },
+    {
+      "menu": "외주설계발주입고",
+      "file": "outsourced_design_receipt_input.html",
+      "status": "designed",
+      "source_photo": null,
+      "data_json": [
+        "outsourced_design_receipt_candidates.json",
+        "outsourced_design_receipts.json"
+      ],
+      "note": "사진 없음. 발주등록/현황 + SET발주입고 패턴으로 직접 설계"
+    },
+    {
+      "menu": "외주설계발주현황",
+      "file": "outsourced_design_order_status.html",
+      "status": "implemented",
+      "source_photo": "20260822_093937.jpg",
+      "data_json": [
+        "outsourced_design_orders.json"
+      ]
+    },
+    {
+      "menu": "PartList 복사",
+      "file": "partlist_copy.html",
+      "status": "implemented",
+      "source_photo": "20260822_093903.jpg / 20260822_093840.jpg / 20260822_093803.jpg",
+      "data_json": []
+    },
+    {
+      "menu": "조립실적등록",
+      "file": "assembly_result_input.html",
+      "status": "implemented",
+      "source_photo": "20260822_094447.jpg / 20260822_094435.jpg / 20260822_094428.jpg",
+      "data_json": [
+        "assembly_result_jobs.json"
+      ]
+    },
+    {
+      "menu": "매출현황",
+      "file": "sales_status.html",
+      "status": "implemented",
+      "source_photo": "20260822_094742.jpg / 20260822_094715.jpg / 20260822_094710.jpg / 20260822_094659.jpg",
+      "data_json": [
+        "sales_status_rows.json"
+      ]
+    },
+    {
+      "menu": "재고조회",
+      "file": "stock_inquiry.html",
+      "status": "implemented",
+      "source_photo": "20260822_095258.jpg / 20260822_094755.jpg",
+      "data_json": [
+        "stock_inquiry_rows.json"
+      ]
+    },
+    {
+      "menu": "원재료 발주",
+      "file": "material_order_input.html",
+      "status": "implemented",
+      "source_photo": "20260822_094016.jpg / 20260822_094005.jpg / 20260822_093950.jpg / 20260822_094028.jpg",
+      "data_json": [
+        "material_order_jobs.json",
+        "material_purchase_requests.json"
+      ],
+      "note": "PRINT 미리보기(원재료 발주서)는 20260822_094028.jpg 기준 재현"
+    },
+    {
+      "menu": "원재료 입고",
+      "file": "material_receipt_input.html",
+      "status": "implemented",
+      "source_photo": "20260822_094116.jpg / 20260822_094055.jpg",
+      "data_json": [
+        "material_receipt_candidates.json"
+      ]
+    },
+    {
+      "menu": "원재료 입고확정",
+      "file": "material_receipt_confirmation.html",
+      "status": "implemented",
+      "source_photo": "20260822_094136.jpg / 20260822_094132.jpg",
+      "data_json": [
+        "material_receipt_confirm_candidates.json"
+      ]
+    },
+    {
+      "menu": "원재료 발주현황",
+      "file": "material_order_status.html",
+      "status": "implemented",
+      "source_photo": "20260822_094200.jpg / 20260822_094152.jpg",
+      "data_json": [
+        "material_order_status_rows.json"
+      ]
+    },
+    {
+      "menu": "구매품 발주",
+      "file": "purchase_order_input.html",
+      "status": "implemented",
+      "source_photo": "20260822_094211.jpg",
+      "data_json": [
+        "purchase_order_jobs.json"
+      ]
+    },
+    {
+      "menu": "구매품 입고",
+      "file": "purchase_receipt_input.html",
+      "status": "implemented",
+      "source_photo": "20260822_094215.jpg",
+      "data_json": [
+        "purchase_receipt_rows.json"
+      ]
+    },
+    {
+      "menu": "구매품 발주현황",
+      "file": "purchase_order_status.html",
+      "status": "implemented",
+      "source_photo": "20260822_094224.jpg",
+      "data_json": [
+        "purchase_order_status_rows.json"
+      ]
+    },
+    {
+      "menu": "외주가공 발주",
+      "file": "outsourcing_order_input.html",
+      "status": "implemented",
+      "source_photo": "20260822_094344.jpg / 20260822_094330.jpg",
+      "data_json": [
+        "outsourcing_order_jobs.json"
+      ]
+    },
+    {
+      "menu": "외주가공 입고",
+      "file": "outsourcing_receipt_input.html",
+      "status": "implemented",
+      "source_photo": "20260822_094349.jpg",
+      "data_json": [],
+      "note": "촬영본이 조회 전 빈 화면이라 레이아웃 기준으로 재현"
+    },
+    {
+      "menu": "외주가공 입고확정",
+      "file": "outsourcing_receipt_confirmation.html",
+      "status": "implemented",
+      "source_photo": "20260822_094358.jpg",
+      "data_json": [
+        "outsourcing_receipt_confirm_candidates.json"
+      ],
+      "note": "기존 메뉴명 \"외주가공 입고조회\"를 사진 기준 \"외주가공 입고확정\"으로 정정"
+    },
+    {
+      "menu": "외주가공발주현황",
+      "file": "outsourcing_order_status.html",
+      "status": "implemented",
+      "source_photo": "20260822_094407.jpg",
+      "data_json": [
+        "outsourcing_order_status_rows.json"
+      ]
+    },
+    {
+      "menu": "가공구매 진척현황",
+      "file": "machining_purchase_progress.html",
+      "status": "implemented",
+      "source_photo": "20260822_094414.jpg / 20260822_094424.jpg",
+      "data_json": [
+        "machining_purchase_progress_rows.json"
+      ]
+    }
+  ],
+  "database_json": {
+    "index": "index.json",
+    "schema": "schema.json",
+    "relations": "relations.json",
+    "provenance": "photo_provenance.json",
+    "supabase_ready": true
+  },
+  "layout": "flat",
+  "path_rule": "모든 html/json은 동일 폴더에 평면 배치. 경로 접두사 없음.",
+  "removed_files": {
+    "index__1_.html": "index.html 구버전",
+    "index__2_.html": "index.html 로 승격됨",
+    "mes_main.html": "index.html 이전 셸. 메뉴가 index.html의 부분집합",
+    "material_price_change_status__1_.html": "중복본",
+    "mes_manifest__1_.json": "중복본"
+  },
+  "changelog_v15": [
+    "sales_status_rows.json 생성 (44건, sales_status.html 인라인 데이터 추출)",
+    "purchase_order_status_rows.json 생성 (17건, purchase_order_status.html 인라인 데이터 추출)",
+    "outsourcing_order_jobs.json 생성 (8건, outsourcing_order_input.html 인라인 데이터 추출)",
+    "outsourcing_receipt_confirm_candidates.json 생성 (16건, outsourcing_receipt_confirmation.html 인라인 데이터 추출)",
+    "outsourcing_order_status_rows.json 생성 (17건, outsourcing_order_status.html 인라인 데이터 추출)",
+    "machining_purchase_progress_rows.json 생성 (6건, machining_purchase_progress.html 인라인 데이터 추출)",
+    "assembly_result_jobs.json 생성 (8건, assembly_result_input.html 인라인 데이터 추출)",
+    "vendors: 열앤케이 -> V120 임시코드",
+    "vendors: 성화기업 -> V121 임시코드",
+    "vendors: 아이워 -> V122 임시코드",
+    "vendors: 백광테크 -> V123 임시코드",
+    "vendors: 에스제이테크 -> V124 임시코드",
+    "vendors: 신원티엔씨 -> V125 임시코드",
+    "vendors: 건영정밀 -> V126 임시코드",
+    "vendors: 삼창정밀 -> V127 임시코드",
+    "vendors: 에프피원 -> V128 임시코드",
+    "vendors: 프로테크 -> V129 임시코드",
+    "vendors: 일선테크 -> V130 임시코드",
+    "vendors: 인아테크 -> V131 임시코드",
+    "vendors: 에이아이텍 -> V132 임시코드",
+    "vendors: 덕영테크 -> V133 임시코드",
+    "vendors: 진양 -> V134 임시코드",
+    "vendors: 신신사 -> V135 임시코드",
+    "vendors: 상일코스텍 -> V136 임시코드",
+    "vendors: 태성하이테크 -> V137 임시코드",
+    "vendors: 화인알텍 -> V138 임시코드",
+    "vendors: 오성사 -> V139 임시코드",
+    "vendors: 스타리온 성철사 -> V140 임시코드",
+    "vendors: 미등록 업체 12건 추가",
+    "employees: null 사원코드 TMP 부여, 이춘봉 추가",
+    "materials/parts: 미등록 코드 자동 추가",
+    "jobs.json 생성: 356건 (사진에 찍힌 수주는 1건뿐이라 FK 기준점으로 통합 마스터 생성)",
+    "외주설계발주입고 화면 신규 설계 (부분입고/진척률/입고취소 로직 포함)",
+    "데모용: 고아 실적 삭제 대신 부모행 보강(영업계획 3, 원재료발주현황 7, 업체 3)",
+    "window 예약속성 충돌 버그 수정(공정관리 name, 수주등록 status) - 실제 브라우저에서 저장 시 오류나던 건",
+    "mes_logic_check.js 추가 (node mes_logic_check.js . 로 전 화면 버튼 클릭 시뮬레이션)"
+  ]
+}

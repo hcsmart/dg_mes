@@ -1,0 +1,542 @@
+{
+  "version": "15",
+  "generated_date": "2026-08-22",
+  "purpose": "photo-transcribed JSON seed data for later Supabase import",
+  "rules": {
+    "unknown_value": "null",
+    "booleans": "true/false",
+    "dates": "YYYY-MM-DD",
+    "naming": "snake_case English keys"
+  },
+  "datasets": [
+    {
+      "table": "business_divisions",
+      "file": "business_divisions.json",
+      "primary_key": "business_division_code",
+      "records": 4,
+      "source_screen": "business_division_info.html",
+      "source_photo": "20260822_100122.jpg"
+    },
+    {
+      "table": "vendors",
+      "file": "vendors.json",
+      "primary_key": "vendor_code",
+      "records": 55,
+      "source_screen": "vendor_management.html",
+      "source_photo": "20260822_100113.jpg / 20260822_090242.jpg / 20260822_090255.jpg / 20260822_090319.jpg"
+    },
+    {
+      "table": "equipment",
+      "file": "equipment.json",
+      "primary_key": "equipment_code",
+      "records": 17,
+      "source_screen": "equipment_registration.html",
+      "source_photo": "20260822_100109.jpg"
+    },
+    {
+      "table": "materials",
+      "file": "materials.json",
+      "primary_key": "material_code",
+      "records": 17,
+      "source_screen": "material_management.html",
+      "source_photo": "20260822_100058.jpg"
+    },
+    {
+      "table": "parts",
+      "file": "parts.json",
+      "primary_key": "part_code",
+      "records": 38,
+      "source_screen": "part_management.html",
+      "source_photo": "20260822_100033.jpg / 20260822_100010.jpg"
+    },
+    {
+      "table": "item_categories",
+      "file": "item_categories.json",
+      "primary_key": "item_code",
+      "records": 11,
+      "source_screen": "item_management.html",
+      "source_photo": "20260822_100130.jpg"
+    },
+    {
+      "table": "expense_reasons",
+      "file": "expense_reasons.json",
+      "primary_key": "expense_reason_code",
+      "records": 3,
+      "source_screen": "expense_reason_registration.html",
+      "source_photo": "20260822_100143.jpg"
+    },
+    {
+      "table": "mold_types",
+      "file": "mold_types.json",
+      "primary_key": "mold_type_code",
+      "records": 5,
+      "source_screen": "mold_type_management.html",
+      "source_photo": "20260822_100148.jpg"
+    },
+    {
+      "table": "machine_specs",
+      "file": "machine_specs.json",
+      "primary_key": "machine_spec_code",
+      "records": 13,
+      "source_screen": "machine_spec_management.html",
+      "source_photo": "20260822_100154.jpg"
+    },
+    {
+      "table": "processes",
+      "file": "processes.json",
+      "primary_key": "process_code",
+      "records": 34,
+      "source_screen": "machining_process_management.html",
+      "source_photo": "20260822_100001.jpg / 20260822_100005.jpg / 20260822_092033.jpg"
+    },
+    {
+      "table": "standard_processes",
+      "file": "standard_processes.json",
+      "primary_key": "standard_process_id",
+      "records": 9,
+      "source_screen": "machining_standard_process.html",
+      "source_photo": "20260822_095834.jpg / 20260822_095840.jpg / 20260822_095845.jpg / 20260822_095849.jpg / 20260822_095851.jpg"
+    },
+    {
+      "table": "standard_process_steps",
+      "file": "standard_process_steps.json",
+      "primary_key": null,
+      "records": 27,
+      "source_screen": "machining_standard_process.html",
+      "source_photo": "20260822_095834.jpg / 20260822_095840.jpg / 20260822_095845.jpg / 20260822_095849.jpg / 20260822_095851.jpg"
+    },
+    {
+      "table": "work_order_item_candidates",
+      "file": "work_order_item_candidates.json",
+      "primary_key": "item_no",
+      "records": 13,
+      "source_screen": "work_order_input.html",
+      "source_photo": "20260822_101514.jpg"
+    },
+    {
+      "table": "work_order_details",
+      "file": "work_order_details.json",
+      "primary_key": null,
+      "records": 1,
+      "source_screen": "work_order_input.html",
+      "source_photo": "20260822_101514.jpg"
+    },
+    {
+      "table": "purchase_receipt_candidates",
+      "file": "purchase_receipt_candidates.json",
+      "primary_key": "row_no",
+      "records": 15,
+      "source_screen": "purchase_receipt_confirmation.html",
+      "source_photo": "20260822_100828.jpg / 20260822_100821.jpg"
+    },
+    {
+      "table": "process_history_cards",
+      "file": "process_history_cards.json",
+      "primary_key": "card_key",
+      "records": 2,
+      "source_screen": "process_history_card.html",
+      "source_photo": "20260822_101044.jpg / 20260822_101049.jpg / 20260822_101054.jpg"
+    },
+    {
+      "table": "users",
+      "file": "users.json",
+      "primary_key": "user_key",
+      "records": 19,
+      "source_screen": "user_information.html",
+      "source_photo": "20260822_095911.jpg / 20260822_090230.jpg"
+    },
+    {
+      "table": "user_permissions",
+      "file": "user_permissions.json",
+      "primary_key": "(user_key,menu_name)",
+      "records": 5,
+      "source_screen": "user_information.html",
+      "source_photo": "20260822_095911.jpg"
+    },
+    {
+      "table": "material_price_changes",
+      "file": "material_price_changes.json",
+      "primary_key": "row_no",
+      "records": 19,
+      "source_screen": "material_price_change_registration.html / material_price_change_status.html",
+      "source_photo": "20260822_100357.jpg / 20260822_100421.jpg"
+    },
+    {
+      "table": "process_price_changes",
+      "file": "process_price_changes.json",
+      "primary_key": "row_no",
+      "records": 22,
+      "source_screen": "process_price_change_registration.html / process_price_change_status.html",
+      "source_photo": "20260822_100438.jpg / 20260822_100445.jpg"
+    },
+    {
+      "table": "manufacturing_cost_orders",
+      "file": "manufacturing_cost_orders.json",
+      "primary_key": "job_no",
+      "records": 10,
+      "source_screen": "manufacturing_cost_inquiry.html",
+      "source_photo": "20260822_095451.jpg / 20260822_095455.jpg / 20260822_095507.jpg / 20260822_095542.jpg / 20260822_095618.jpg"
+    },
+    {
+      "table": "manufacturing_cost_details",
+      "file": "manufacturing_cost_details.json",
+      "primary_key": "(job_no,cost_stage)",
+      "records": 6,
+      "source_screen": "manufacturing_cost_inquiry.html",
+      "source_photo": "20260822_095507.jpg / 20260822_095542.jpg / 20260822_095618.jpg"
+    },
+    {
+      "table": "employees",
+      "file": "employees.json",
+      "primary_key": "employee_code",
+      "records": 31,
+      "source_screen": "sale_order_input.html",
+      "source_photo": "20260822_090230.jpg / 20260822_091730.jpg / 20260822_092922.jpg / 20260822_092932.jpg"
+    },
+    {
+      "table": "sale_orders",
+      "file": "sale_orders.json",
+      "primary_key": "job_no",
+      "records": 1,
+      "source_screen": "sale_order_input.html",
+      "source_photo": "20260822_090027.jpg / 20260822_090044.jpg / 20260822_090115.jpg / 20260822_090124.jpg / 20260822_090208.jpg / 20260822_090230.jpg / 20260822_090239.jpg / 20260822_090242.jpg / 20260822_090255.jpg / 20260822_090301.jpg / 20260822_090319.jpg / 20260822_090325.jpg"
+    },
+    {
+      "table": "sale_order_status_rows",
+      "file": "sale_order_status_rows.json",
+      "primary_key": "row_no",
+      "records": 95,
+      "source_screen": "sale_order_status.html",
+      "source_photo": "20260822_090638.jpg / 20260822_090641.jpg / 20260822_090645.jpg / 20260822_090647.jpg / 20260822_090647_0_.jpg / 20260822_090649.jpg / 20260822_090703.jpg / 20260822_090626.jpg / 20260822_091008.jpg"
+    },
+    {
+      "table": "status_board_rows",
+      "file": "status_board_rows.json",
+      "primary_key": "row_no",
+      "records": 75,
+      "source_screen": "status_board.html",
+      "source_photo": "20260822_090834.jpg / 20260822_090840.jpg / 20260822_090858.jpg / 20260822_090902.jpg / 20260822_090903.jpg / 20260822_090936.jpg / 20260822_090943.jpg"
+    },
+    {
+      "table": "sales_plans",
+      "file": "sales_plans.json",
+      "primary_key": "row_no",
+      "records": 2,
+      "source_screen": "sales_plan_input.html",
+      "source_photo": "20260822_091405.jpg / 20260822_091431.jpg / 20260822_091730.jpg"
+    },
+    {
+      "table": "mold_code_matchings",
+      "file": "mold_code_matchings.json",
+      "primary_key": "row_no",
+      "records": 60,
+      "source_screen": "mold_code_matching.html",
+      "source_photo": "20260822_091755.jpg / 20260822_091814.jpg / 20260822_091925.jpg / 20260822_092002.jpg / 20260822_092204.jpg"
+    },
+    {
+      "table": "mold_code_match_processes",
+      "file": "mold_code_match_processes.json",
+      "primary_key": "process_code",
+      "records": 11,
+      "source_screen": "mold_code_matching.html",
+      "source_photo": "20260822_091755.jpg / 20260822_091814.jpg / 20260822_091925.jpg / 20260822_092002.jpg"
+    },
+    {
+      "table": "set_order_status_rows",
+      "file": "set_order_status_rows.json",
+      "primary_key": "row_no",
+      "records": 19,
+      "source_screen": "set_order_status.html",
+      "source_photo": "20260822_092603.jpg"
+    },
+    {
+      "table": "set_order_receipts",
+      "file": "set_order_receipts.json",
+      "primary_key": "row_no",
+      "records": 6,
+      "source_screen": "set_order_receipt.html",
+      "source_photo": "20260822_092555.jpg"
+    },
+    {
+      "table": "set_order_receipt_details",
+      "file": "set_order_receipt_details.json",
+      "primary_key": "row_no",
+      "records": 1,
+      "source_screen": "set_order_receipt.html",
+      "source_photo": "20260822_092555.jpg"
+    },
+    {
+      "table": "design_plans",
+      "file": "design_plans.json",
+      "primary_key": "job_no",
+      "records": 8,
+      "source_screen": "design_plan_input.html",
+      "source_photo": "20260822_092645.jpg / 20260822_092849.jpg"
+    },
+    {
+      "table": "design_plan_steps",
+      "file": "design_plan_steps.json",
+      "primary_key": "row_no",
+      "records": 3,
+      "source_screen": "design_plan_input.html",
+      "source_photo": "20260822_092645.jpg / 20260822_092849.jpg"
+    },
+    {
+      "table": "design_results",
+      "file": "design_results.json",
+      "primary_key": "row_no",
+      "records": 71,
+      "source_screen": "design_result_inquiry.html",
+      "source_photo": "20260822_093024.jpg / 20260822_093050.jpg / 20260822_094518.jpg / 20260822_094529.jpg / 20260822_094535.jpg"
+    },
+    {
+      "table": "design_result_monthly",
+      "file": "design_result_monthly.json",
+      "primary_key": "row_no",
+      "records": 6,
+      "source_screen": "design_result_status.html",
+      "source_photo": "20260822_092922.jpg / 20260822_092932.jpg"
+    },
+    {
+      "table": "design_teams",
+      "file": "design_teams.json",
+      "primary_key": "team",
+      "records": 2,
+      "source_screen": "design_result_status.html",
+      "source_photo": "20260822_092922.jpg / 20260822_092932.jpg"
+    },
+    {
+      "table": "sales_plan_status_rows",
+      "file": "sales_plan_status_rows.json",
+      "primary_key": "row_no",
+      "records": 3,
+      "source_screen": "sales_plan_status.html",
+      "source_photo": "20260822_091730.jpg"
+    },
+    {
+      "table": "set_order_registrations",
+      "file": "set_order_registrations.json",
+      "primary_key": "row_no",
+      "records": 12,
+      "source_screen": "set_order_registration.html",
+      "source_photo": "20260822_092450.jpg / 20260822_092533.jpg / 20260822_092524.jpg / 20260822_092404.jpg / 20260822_092547.jpg"
+    },
+    {
+      "table": "set_order_partners",
+      "file": "set_order_partners.json",
+      "primary_key": "row_no",
+      "records": 9,
+      "source_screen": "set_order_registration.html",
+      "source_photo": "20260822_092450.jpg / 20260822_092533.jpg / 20260822_092524.jpg / 20260822_092404.jpg / 20260822_092547.jpg"
+    },
+    {
+      "table": "partlist_materials",
+      "file": "partlist_materials.json",
+      "primary_key": "row_no",
+      "records": 37,
+      "source_screen": "partlist_material_input.html",
+      "source_photo": "20260822_093436.jpg / 20260822_093448.jpg / 20260822_093503.jpg"
+    },
+    {
+      "table": "partlist_purchases",
+      "file": "partlist_purchases.json",
+      "primary_key": "row_no",
+      "records": 38,
+      "source_screen": "partlist_purchase_input.html",
+      "source_photo": "20260822_093510.jpg / 20260822_093518.jpg / 20260822_093527.jpg"
+    },
+    {
+      "table": "partlist_processes",
+      "file": "partlist_processes.json",
+      "primary_key": "row_no",
+      "records": 3,
+      "source_screen": "partlist_material_input.html",
+      "source_photo": "20260822_093436.jpg / 20260822_093448.jpg / 20260822_093503.jpg"
+    },
+    {
+      "table": "partlist_status_rows",
+      "file": "partlist_status_rows.json",
+      "primary_key": "row_no",
+      "records": 36,
+      "source_screen": "partlist_status.html",
+      "source_photo": "20260822_093534.jpg / 20260822_093604.jpg"
+    },
+    {
+      "table": "machining_plans",
+      "file": "machining_plans.json",
+      "primary_key": "row_no",
+      "records": 13,
+      "source_screen": "machining_plan_input.html",
+      "source_photo": "20260822_094240.jpg / 20260822_094245.jpg"
+    },
+    {
+      "table": "machining_standard_routes",
+      "file": "machining_standard_routes.json",
+      "primary_key": "row_no",
+      "records": 6,
+      "source_screen": "machining_plan_input.html",
+      "source_photo": "20260822_094240.jpg / 20260822_094245.jpg"
+    },
+    {
+      "table": "machining_plan_parts",
+      "file": "machining_plan_parts.json",
+      "primary_key": "row_no",
+      "records": 9,
+      "source_screen": "machining_plan_input.html",
+      "source_photo": "20260822_094240.jpg / 20260822_094245.jpg"
+    },
+    {
+      "table": "purchase_status_rows",
+      "file": "purchase_status_rows.json",
+      "primary_key": "row_no",
+      "records": 17,
+      "source_screen": "purchase_status.html",
+      "source_photo": "20260822_094543.jpg"
+    },
+    {
+      "table": "material_order_jobs",
+      "file": "material_order_jobs.json",
+      "primary_key": "(job_no,process_code)",
+      "records": 9,
+      "source_screen": "material_order_input.html",
+      "source_photo": "20260822_094016.jpg / 20260822_094005.jpg"
+    },
+    {
+      "table": "material_purchase_requests",
+      "file": "material_purchase_requests.json",
+      "primary_key": "seq",
+      "records": 9,
+      "source_screen": "material_order_input.html",
+      "source_photo": "20260822_094016.jpg / 20260822_094005.jpg"
+    },
+    {
+      "table": "material_receipt_candidates",
+      "file": "material_receipt_candidates.json",
+      "primary_key": "seq",
+      "records": 17,
+      "source_screen": "material_receipt_input.html",
+      "source_photo": "20260822_094116.jpg / 20260822_094055.jpg"
+    },
+    {
+      "table": "material_receipt_confirm_candidates",
+      "file": "material_receipt_confirm_candidates.json",
+      "primary_key": "seq",
+      "records": 16,
+      "source_screen": "material_receipt_confirmation.html",
+      "source_photo": "20260822_094136.jpg / 20260822_094132.jpg"
+    },
+    {
+      "table": "material_order_status_rows",
+      "file": "material_order_status_rows.json",
+      "primary_key": "seq",
+      "records": 17,
+      "source_screen": "material_order_status.html",
+      "source_photo": "20260822_094200.jpg / 20260822_094152.jpg"
+    },
+    {
+      "table": "purchase_order_jobs",
+      "file": "purchase_order_jobs.json",
+      "primary_key": "job_no",
+      "records": 6,
+      "source_screen": "purchase_order_input.html",
+      "source_photo": "20260822_094211.jpg"
+    },
+    {
+      "table": "purchase_receipt_rows",
+      "file": "purchase_receipt_rows.json",
+      "primary_key": "seq",
+      "records": 17,
+      "source_screen": "purchase_receipt_input.html",
+      "source_photo": "20260822_094215.jpg"
+    },
+    {
+      "table": "outsourced_design_orders",
+      "file": "outsourced_design_orders.json",
+      "primary_key": "seq",
+      "records": 18,
+      "source_screen": "outsourced_design_order_status.html",
+      "source_photo": "20260822_093937.jpg"
+    },
+    {
+      "table": "outsourced_design_partners",
+      "file": "outsourced_design_partners.json",
+      "primary_key": "partner_name",
+      "records": 6,
+      "source_screen": "outsourced_design_order_input.html",
+      "source_photo": "20260822_093930.jpg / 20260822_093912.jpg"
+    },
+    {
+      "table": "stock_inquiry_rows",
+      "file": "stock_inquiry_rows.json",
+      "primary_key": "job_no",
+      "records": 18,
+      "source_screen": "stock_inquiry.html",
+      "source_photo": "20260822_095258.jpg"
+    },
+    {
+      "table": "sales_status_rows",
+      "file": "sales_status_rows.json",
+      "primary_key": "row_no",
+      "records": 44,
+      "source_screen": "auto",
+      "source_photo": null
+    },
+    {
+      "table": "purchase_order_status_rows",
+      "file": "purchase_order_status_rows.json",
+      "primary_key": "row_no",
+      "records": 17,
+      "source_screen": "auto",
+      "source_photo": null
+    },
+    {
+      "table": "outsourcing_order_jobs",
+      "file": "outsourcing_order_jobs.json",
+      "primary_key": "(job_no,process_code)",
+      "records": 8,
+      "source_screen": "auto",
+      "source_photo": null
+    },
+    {
+      "table": "outsourcing_receipt_confirm_candidates",
+      "file": "outsourcing_receipt_confirm_candidates.json",
+      "primary_key": "row_no",
+      "records": 16,
+      "source_screen": "auto",
+      "source_photo": null
+    },
+    {
+      "table": "outsourcing_order_status_rows",
+      "file": "outsourcing_order_status_rows.json",
+      "primary_key": "row_no",
+      "records": 17,
+      "source_screen": "auto",
+      "source_photo": null
+    },
+    {
+      "table": "machining_purchase_progress_rows",
+      "file": "machining_purchase_progress_rows.json",
+      "primary_key": "row_no",
+      "records": 6,
+      "source_screen": "auto",
+      "source_photo": null
+    },
+    {
+      "table": "assembly_result_jobs",
+      "file": "assembly_result_jobs.json",
+      "primary_key": "job_no",
+      "records": 8,
+      "source_screen": "auto",
+      "source_photo": null
+    },
+    {
+      "table": "jobs",
+      "file": "jobs.json",
+      "primary_key": "job_no",
+      "records": 356,
+      "source_screen": "auto",
+      "source_photo": null
+    }
+  ],
+  "layout": "flat"
+}

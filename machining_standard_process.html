@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>가공 기준공정관리</title>
+<style>
+:root{--line:#9ba9b6;--line2:#c9d2da;--head:#dce8f3;--head2:#c5d8e8;--blue:#2b71ad;--ink:#304253;--bg:#eef2f5}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:var(--ink);background:#f6f8fa;overflow:hidden}button,input{font:inherit}
+.screen{height:100%;display:flex;flex-direction:column;background:#fff}
+.page-title{height:48px;padding:10px 14px 5px;border-bottom:2px solid #3d78ad;background:#fff}.page-title h1{margin:0;font-size:22px;font-weight:500;color:#4a5967}.page-title h1::before{content:'◯';color:#7b8b98;font-weight:400;margin-right:6px}.page-title small{margin-left:10px;color:#9aa6b0;font-size:11px}
+.search-area{height:70px;padding:8px 14px;border-bottom:1px solid var(--line2);background:#fafbfc}.search-grid{display:grid;grid-template-columns:95px 230px 95px 240px 1fr;gap:5px;align-items:center}.label{font-weight:700}.field{height:26px;border:1px solid #b7c1ca;background:#fff;padding:0 7px;outline:none}.field:focus{border-color:#4b88bd;box-shadow:0 0 0 1px #d6e7f6 inset}.search-hint{color:#98a4af;text-align:right;padding-right:8px}
+.master{height:205px;margin:0 14px;border:1px solid var(--line);border-top:0;overflow:auto;background:#fff}table{border-collapse:collapse;width:100%;table-layout:fixed}th,td{height:25px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:0 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}th{background:linear-gradient(#dce9f4,#c7d9e8);text-align:center;font-weight:700;color:#405266}tbody tr:nth-child(even) td{background:#fafcfd}tbody tr:hover td{background:#edf6fd}tbody tr.sel td{background:#2e78bd;color:#fff}.center{text-align:center}.num{text-align:right}
+.section-title{height:28px;display:flex;align-items:center;justify-content:center;background:linear-gradient(#dfeaf4,#cfdeea);border-bottom:1px solid var(--line);font-weight:700;color:#546677}.work{flex:1;min-height:0;display:grid;grid-template-columns:minmax(330px,40%) 54px minmax(430px,1fr);gap:9px;padding:9px 14px 8px}.box{border:1px solid var(--line);min-height:0;display:flex;flex-direction:column;background:white}.box .tablewrap{flex:1;min-height:0;overflow:auto}.box table{min-width:520px}.box th{position:sticky;top:0;z-index:1}.check{width:34px;text-align:center}.code{width:95px}.name{width:240px}.wait-title{height:27px;background:#e3edf5;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:700}.arrows{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}.arrow{width:34px;height:31px;border:1px solid #8d9aa5;background:linear-gradient(#f8fafb,#d9e1e8);color:#316a9e;font-size:20px}.arrow:hover{background:#fff}
+.selected-head{display:grid;grid-template-columns:1fr 1fr 1fr;border-bottom:1px solid var(--line);background:#eef3f7}.selected-head div{padding:5px 8px;border-right:1px solid var(--line2)}.selected-head b{display:block;font-size:10px;color:#6c7a86;margin-bottom:2px}.selected-head input{width:100%;height:23px;border:1px solid #b9c3cc;background:#fff;padding:0 5px}.selected-box table{min-width:680px}.ordercol{width:54px}.selected-row td:first-child{background:#eef5fa}
+.bottom{height:43px;display:flex;align-items:center;padding:5px 14px;border-top:1px solid var(--line);background:#eef2f5;gap:5px}.btn{height:29px;min-width:65px;border:1px solid #9ca9b4;background:linear-gradient(#fff,#dfe5ea);color:#3d4e5d}.btn:hover{background:#fff}.btn::first-letter{color:#1d68a1}.msg{margin-left:12px;color:#6e7d89}.bottom .spacer{flex:1}.status{font-size:11px;color:#7b8893}
+@media(max-width:900px){.work{grid-template-columns:1fr 45px 1fr}.search-grid{grid-template-columns:85px 1fr 85px 1fr}.search-hint{display:none}}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="page-title"><h1>가공 기준공정관리 <small>기준공정과 세부 가공공정을 조합하여 관리합니다.</small></h1></div>
+  <section class="search-area">
+    <div class="search-grid">
+      <div class="label">기준공정ID</div><input id="filterId" class="field" placeholder="기준공정ID">
+      <div class="label">기준공정명</div><input id="filterName" class="field" placeholder="기준공정명">
+      <div class="search-hint">가공 기준공정 목록</div>
+    </div>
+  </section>
+  <div class="master">
+    <table>
+      <thead><tr><th style="width:44px">No</th><th style="width:110px">기준공정ID</th><th style="width:250px">기준공정명</th><th style="width:100px">담당자</th><th style="width:110px">등록일</th><th>기준 공정 리스트</th></tr></thead>
+      <tbody id="masterBody"></tbody>
+    </table>
+  </div>
+  <section class="work">
+    <div class="box">
+      <div class="wait-title">대기 공정 리스트</div>
+      <div class="tablewrap"><table><thead><tr><th class="check">선택</th><th class="code">공정코드</th><th class="name">공정명</th></tr></thead><tbody id="waitingBody"></tbody></table></div>
+    </div>
+    <div class="arrows"><button class="arrow" title="선택 공정 추가" onclick="moveRight()">▶</button><button class="arrow" title="선택 공정 제거" onclick="moveLeft()">◀</button></div>
+    <div class="box selected-box">
+      <div class="selected-head"><div><b>기준공정ID</b><input id="editId"></div><div><b>기준공정명</b><input id="editName"></div><div><b>담당자</b><input id="editOwner"></div></div>
+      <div class="section-title">적용 공정 리스트</div>
+      <div class="tablewrap"><table><thead><tr><th class="ordercol">순번</th><th style="width:120px">공정코드</th><th>공정명</th><th style="width:92px">관리</th></tr></thead><tbody id="selectedBody"></tbody></table></div>
+    </div>
+  </section>
+  <footer class="bottom"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn" onclick="save()">▣ 저장</button><button class="btn" onclick="removeStandard()">✖ 삭제</button><button class="btn" onclick="clearForm()">□ 신규</button><div class="msg" id="message">데이터가 조회되었습니다.</div><div class="spacer"></div><div class="status" id="countText"></div></footer>
+</div>
+<script>
+const standards=[
+{id:'1',name:'표준',owner:'임직원',date:'2023-09-21',processes:['CT','LM1','LM2','TC']},
+{id:'2',name:'EWE형2',owner:'임직원',date:'2023-08-24',processes:['NL1','NL2','WS1']},
+{id:'3',name:'기본',owner:'임직원',date:'2023-08-24',processes:['MP','MS','DR']},
+{id:'4',name:'대형 가공',owner:'임직원',date:'2024-03-05',processes:['HA','HQ','NM']},
+{id:'5',name:'EWE형2',owner:'임직원',date:'2024-06-29',processes:['CT','GS','WS']},
+{id:'6',name:'EWE형2',owner:'임직원',date:'2023-06-29',processes:['MF','MP','MS']},
+{id:'7',name:'외주 일반형',owner:'임직원',date:'2023-09-04',processes:['DR','GL']},
+{id:'8',name:'외주EWE1',owner:'임직원',date:'2023-09-05',processes:['HQ','NM','NL']},
+{id:'9',name:'외주EWE2',owner:'임직원',date:'2024-09-24',processes:['GS','GM','WS']}
+];
+const processes=[
+['CT','코팅'],['LM1','선반 황삭'],['LM2','선반 밀처리 정삭'],['NL1','M/C정삭(대형)'],['NL2','M/C밀처리정삭'],['TC','각인'],['TE','방전'],['WS1','WIRE CUT1'],['AB','가공ASSY'],['MA','면삭밀링(소형)'],['MF','면삭밀링(대형)'],['MP','면삭밀링(초대형)'],['MS','성형밀링(소형)'],['DR','DRILLING'],['HA','홀가공'],['HQ','열처리'],['NM','M/C황삭'],['NL','M/C정삭'],['GS','성형연삭'],['GM','평면연삭'],['GL','평면연삭(대형)'],['WS','WIRE CUT'],['LM','선반'],['GG','원통연삭'],['WW','홈가공'],['NM1','M/C황삭(소형,중형)'],['NM2','M/C밀처리정삭']
+];
+let selectedIndex=0;
+function renderMaster(data=standards){masterBody.innerHTML=data.map((r,i)=>`<tr data-id="${r.id}" onclick="selectStandard('${r.id}',this)"><td class="center">${i+1}</td><td class="center">${r.id}</td><td>${r.name}</td><td class="center">${r.owner}</td><td class="center">${r.date}</td><td>${r.processes.join(' → ')}</td></tr>`).join('');countText.textContent=`기준공정 ${data.length}건 / 공정 ${processes.length}건`;const current=[...masterBody.querySelectorAll('tr')].find(x=>x.dataset.id===standards[selectedIndex]?.id)||masterBody.querySelector('tr');if(current){current.classList.add('sel');selectStandard(current.dataset.id,current)}}
+function renderWaiting(){waitingBody.innerHTML=processes.map((p,i)=>`<tr><td class="check"><input type="checkbox" data-code="${p[0]}"></td><td class="center">${p[0]}</td><td>${p[1]}</td></tr>`).join('')}
+function renderSelected(){const s=standards[selectedIndex];if(!s){selectedBody.innerHTML='';return}selectedBody.innerHTML=s.processes.map((code,i)=>{const p=processes.find(x=>x[0]===code)||[code,code];return `<tr class="selected-row"><td class="center">${i+1}</td><td class="center">${code}</td><td>${p[1]}</td><td class="center"><input type="checkbox" data-remove="${code}"></td></tr>`}).join('')}
+function selectStandard(id,tr){const idx=standards.findIndex(x=>x.id===String(id));if(idx<0)return;selectedIndex=idx;document.querySelectorAll('#masterBody tr').forEach(x=>x.classList.remove('sel'));tr?.classList.add('sel');const s=standards[idx];editId.value=s.id;editName.value=s.name;editOwner.value=s.owner;renderSelected();setMsg(`${s.name} 기준공정을 선택했습니다.`)}
+function search(){const qid=filterId.value.trim().toLowerCase(),qn=filterName.value.trim().toLowerCase();const data=standards.filter(s=>(!qid||s.id.toLowerCase().includes(qid))&&(!qn||s.name.toLowerCase().includes(qn)));renderMaster(data);setMsg(`검색 결과 ${data.length}건입니다.`)}
+function moveRight(){const codes=[...document.querySelectorAll('#waitingBody input:checked')].map(x=>x.dataset.code);if(!codes.length){setMsg('추가할 공정을 선택하세요.');return}const s=standards[selectedIndex];for(const c of codes)if(!s.processes.includes(c))s.processes.push(c);renderSelected();renderMaster();setMsg(`${codes.length}개 공정을 추가했습니다.`)}
+function moveLeft(){const codes=[...document.querySelectorAll('#selectedBody input:checked')].map(x=>x.dataset.remove);if(!codes.length){setMsg('제거할 공정을 선택하세요.');return}const s=standards[selectedIndex];s.processes=s.processes.filter(c=>!codes.includes(c));renderSelected();renderMaster();setMsg(`${codes.length}개 공정을 제거했습니다.`)}
+function save(){const s=standards[selectedIndex];if(!s){setMsg('저장할 기준공정을 선택하세요.');return}s.id=editId.value.trim()||s.id;s.name=editName.value.trim()||s.name;s.owner=editOwner.value.trim()||s.owner;s.date=new Date().toISOString().slice(0,10);renderMaster();setMsg('가공 기준공정 정보가 저장되었습니다.')}
+function clearForm(){const id=String(Math.max(...standards.map(s=>Number(s.id)||0))+1);standards.push({id,name:'신규 기준공정',owner:'',date:new Date().toISOString().slice(0,10),processes:[]});selectedIndex=standards.length-1;renderMaster();setMsg('신규 기준공정이 추가되었습니다.')}
+function removeStandard(){if(!standards[selectedIndex])return;if(!confirm('선택한 기준공정을 삭제하시겠습니까?'))return;standards.splice(selectedIndex,1);selectedIndex=Math.max(0,Math.min(selectedIndex,standards.length-1));renderMaster();renderSelected();setMsg('선택 기준공정을 삭제했습니다.')}
+function exportCsv(){const out=[['기준공정ID','기준공정명','담당자','등록일','공정리스트'],...standards.map(s=>[s.id,s.name,s.owner,s.date,s.processes.join('|')])];const csv='\ufeff'+out.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='machining_standard_process.csv';a.click();URL.revokeObjectURL(a.href);setMsg('엑셀용 CSV를 생성했습니다.')}
+function setMsg(t){message.textContent=t}
+window.MES={search,add:clearForm,delete:removeStandard,save,exportCsv,setMessage:setMsg};
+renderWaiting();renderMaster();
+</script>
+</body>
+</html>

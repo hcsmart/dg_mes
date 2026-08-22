@@ -1,0 +1,24 @@
+{
+  "base_date": "2026-08-04",
+  "totals": { "order_amount": 11063259029, "purchase_amount": 4429549630 },
+  "rows": [
+    { "seq": 1, "job_no": "G02001", "order_type": "신작", "item_name": "SIDE PANEL R", "order_date": "2002-05-27", "customer_name": "LGE11(인도푸네)", "develop_type": "사내", "order_amount": 0, "purchase_amount": 0 },
+    { "seq": 2, "job_no": "G14130-S014", "order_type": "개조", "item_name": "SIDE, PANEL R/L", "order_date": "2025-12-04", "customer_name": "LG전자 에어컨사업부", "develop_type": "사내", "order_amount": 0, "purchase_amount": 0 },
+    { "seq": 3, "job_no": "G14130-U001", "order_type": "유상사급", "item_name": "SIDE, PANEL R/L", "order_date": "2025-10-01", "customer_name": "LG전자 에어컨사업부", "develop_type": "사내", "order_amount": 0, "purchase_amount": 0 },
+    { "seq": 4, "job_no": "J14137-A001", "order_type": "수리", "item_name": "FRONT,PLATE", "order_date": "2025-10-02", "customer_name": "LG전자 리빙사업부", "develop_type": "사내", "order_amount": 0, "purchase_amount": 405580 },
+    { "seq": 5, "job_no": "J14143-U001", "order_type": "유상사급", "item_name": "COVER, REAR", "order_date": "2024-08-20", "customer_name": "LG전자 리빙사업부", "develop_type": "사내", "order_amount": 0, "purchase_amount": 228960 },
+    { "seq": 6, "job_no": "J14144-U001", "order_type": "유상사급", "item_name": "COVER, REAR", "order_date": "2026-03-13", "customer_name": "LG전자 리빙사업부", "develop_type": "외주", "order_amount": 0, "purchase_amount": 208200 },
+    { "seq": 7, "job_no": "J14151-S030", "order_type": "개조", "item_name": "TOP,PLATE", "order_date": "2026-07-09", "customer_name": "LG전자 리빙사업부", "develop_type": "사내", "order_amount": 0, "purchase_amount": 4910 },
+    { "seq": 8, "job_no": "U14206-A001", "order_type": "수리", "item_name": "DOOR LINER", "order_date": "2025-06-16", "customer_name": null, "develop_type": "사내", "order_amount": 0, "purchase_amount": 22000 },
+    { "seq": 9, "job_no": "C14213-S030", "order_type": "개조", "item_name": "BUSBAR", "order_date": "2025-07-24", "customer_name": null, "develop_type": "사내", "order_amount": 0, "purchase_amount": 1563630 },
+    { "seq": 10, "job_no": "K14214-S063", "order_type": "개조", "item_name": "개조및 수리", "order_date": "2025-12-19", "customer_name": "LG전자 냉장고사업부", "develop_type": "사내", "order_amount": 14350000, "purchase_amount": 2629450 },
+    { "seq": 11, "job_no": "K14215-S097", "order_type": "개조", "item_name": "개조및 수리", "order_date": "2026-06-09", "customer_name": "LG전자 냉장고사업부", "develop_type": "사내", "order_amount": 0, "purchase_amount": 346770 },
+    { "seq": 12, "job_no": "G14216-U001", "order_type": "유상사급", "item_name": "개조및 수리", "order_date": "2024-09-20", "customer_name": "LG전자 에어컨사업부", "develop_type": "사내", "order_amount": 0, "purchase_amount": 44000 },
+    { "seq": 13, "job_no": "K15007-U001", "order_type": "유상사급", "item_name": "개조및 수리", "order_date": "2025-05-19", "customer_name": "LG전자 냉장고사업부", "develop_type": "사내", "order_amount": 0, "purchase_amount": 201000 },
+    { "seq": 14, "job_no": "G15012-S119", "order_type": "개조", "item_name": "PANEL SIDE", "order_date": "2025-10-31", "customer_name": "LG전자 에어컨사업부", "develop_type": "사내", "order_amount": 0, "purchase_amount": 0 },
+    { "seq": 15, "job_no": "G15012-S120", "order_type": "개조", "item_name": "개조및 수리", "order_date": "2026-02-05", "customer_name": "LG전자 에어컨사업부", "develop_type": "사내", "order_amount": 0, "purchase_amount": 0 },
+    { "seq": 16, "job_no": "G15012-S122", "order_type": "개조", "item_name": "개조및 수리", "order_date": "2026-04-30", "customer_name": "LG전자 에어컨사업부", "develop_type": "사내", "order_amount": 1000000, "purchase_amount": 2179900 },
+    { "seq": 17, "job_no": "G15012-U001", "order_type": "유상사급", "item_name": "Base, Indool", "order_date": "2025-07-18", "customer_name": "LG전자 에어컨사업부", "develop_type": "사내", "order_amount": 0, "purchase_amount": 850700 },
+    { "seq": 18, "job_no": "K15032-A004", "order_type": "수리", "item_name": "INNER, CASE", "order_date": "2025-09-05", "customer_name": "스타리온 성절산", "develop_type": "사내", "order_amount": 0, "purchase_amount": 0 }
+  ]
+}

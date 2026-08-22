@@ -1,0 +1,139 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>수주정보 등록</title><style>
+:root{--line:#98a6b2;--line2:#c5d0d8;--blue:#2f75b5;--ink:#344757;--head1:#e8f1f8;--head2:#c8dbe9}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:var(--ink);background:#fff;overflow:hidden}
+button,input,select{font:inherit;color:inherit}.screen{height:100%;display:flex;flex-direction:column;background:#fff}
+.title{height:48px;padding:8px 14px 5px;border-bottom:2px solid #3978ae;display:flex;align-items:center}.title h1{margin:0;font-size:22px;font-weight:500;color:#4b5c6a}.title h1:before{content:'◯';margin-right:6px;color:#8796a1}.title small{font-size:11px;color:#9ca7af;margin-left:12px}
+.form{padding:7px 14px;background:#fafbfc;border-bottom:1px solid var(--line2)}.formrow{display:grid;grid-template-columns:78px 140px 78px 150px 90px 150px 90px minmax(160px,1fr);gap:5px;align-items:center}.formrow+.formrow{margin-top:5px}.label{font-weight:700}.field{height:27px;border:1px solid #b5c0c9;background:#fff;padding:0 6px;min-width:0}
+.entrybox,.gridbox{margin:0 14px;border:1px solid var(--line);overflow:auto;background:#fff}.entrybox{height:190px}.gridbox{flex:1;min-height:0}
+.searchline{height:39px;margin:0 14px;display:flex;align-items:center;gap:5px;border-left:1px solid var(--line);border-right:1px solid var(--line);padding:4px 8px;background:#f6f8fa}.searchline input{width:min(430px,48vw);height:27px;border:1px solid #aeb9c3;padding:0 7px}
+.btn{height:29px;min-width:62px;border:1px solid #9ba8b4;background:linear-gradient(#fff,#dfe6eb);cursor:pointer}.btn:hover{background:#fff}
+table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th,td{height:27px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:0 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}th{position:sticky;top:0;z-index:2;text-align:center;background:linear-gradient(var(--head1),var(--head2));color:#405266}tbody tr:nth-child(even) td{background:#fafcfd}tbody tr:hover td{background:#edf6fd}tbody tr.sel td{background:#2d75b7;color:#fff}.c{text-align:center}.num{text-align:right}.toolbar{height:40px;display:flex;align-items:center;gap:5px;padding:4px 14px;background:#f5f7f8;border-bottom:1px solid var(--line2)}
+.foot{height:42px;display:flex;align-items:center;padding:5px 14px;border-top:1px solid var(--line);background:#eef2f5;gap:5px}.msg{margin-left:8px;color:#687784}.right{margin-left:auto;color:#7c8993}
+.split{flex:1;min-height:0;display:grid;grid-template-rows:1fr 1fr;gap:10px;padding:0 14px 8px}.split .gridbox{margin:0}
+@media(max-width:900px){.formrow{grid-template-columns:78px 1fr 78px 1fr}.formrow>*:nth-child(n+5){display:none}.entrybox,.gridbox,.searchline{margin-left:6px;margin-right:6px}}
+
+.formgrid{display:grid;grid-template-columns:repeat(6,72px minmax(96px,1fr));gap:4px 5px;align-items:center;padding:8px 14px;background:#fafbfc;border-bottom:1px solid var(--line2)}
+.formgrid .label{font-weight:700;text-align:right;padding-right:4px}
+.formgrid .field{width:100%}
+.span2{grid-column:span 2}.span3{grid-column:span 3}.span4{grid-column:span 4}
+.lk{display:flex;gap:3px;min-width:0}.lk input{flex:1;min-width:0;height:27px;border:1px solid #b5c0c9;padding:0 6px}
+.lk button{width:24px;height:27px;border:1px solid #9ba8b4;background:linear-gradient(#fff,#dfe6eb);cursor:pointer}
+.att{margin:0 14px;border:1px solid var(--line);flex:1;min-height:0;overflow:auto;background:#fff}
+.secthead{padding:6px 14px 2px;font-weight:700;color:#4b5c6a}
+.mask{position:fixed;inset:0;background:rgba(40,50,60,.28);display:none;align-items:flex-start;justify-content:center;z-index:50}
+.mask.on{display:flex}
+.dlg{margin-top:60px;width:min(520px,92vw);background:#f3f6f8;border:1px solid #7d8d99;box-shadow:0 8px 26px rgba(0,0,0,.25)}
+.dlghead{display:flex;align-items:center;height:30px;padding:0 6px 0 10px;background:linear-gradient(#eef4f9,#dbe6ef);border-bottom:1px solid #b9c6d0;font-weight:700}
+.dlghead button{margin-left:auto;width:26px;height:20px;border:1px solid #b04a4a;background:#c9484a;color:#fff;cursor:pointer;line-height:1}
+.dlgbody{padding:8px}
+.dlgbody .srch{display:flex;gap:4px;margin-bottom:6px}
+.dlgbody .srch input{flex:1;height:26px;border:1px solid #aeb9c3;padding:0 6px}
+.dlgwrap{height:300px;overflow:auto;border:1px solid var(--line);background:#fff}
+.dlgfoot{display:flex;justify-content:center;gap:10px;padding:8px}
+</style></head><body><div class="screen">
+<div class="title"><h1>수주정보 등록</h1><small>1공장</small></div>
+<section class="formgrid">
+ <div class="label">제 번</div><div class="span3"><input id="job_no" class="field"></div>
+ <div class="label">공 장</div><div><select id="plant" class="field"><option>1공장</option><option>2공장</option></select></div>
+ <div class="label">수주일</div><div><input id="order_date" type="date" class="field"></div>
+ <div class="label">S1 예정일</div><div><input id="s1p" type="date" class="field"></div>
+
+ <div class="label">수주상태</div><div><select id="status" class="field"><option>진행</option><option>보류</option><option>완료</option><option>취소</option></select></div>
+ <div class="label">수주유형</div><div><select id="otype" class="field"><option>신작</option><option>개조</option><option>수리</option><option>유상사급</option></select></div>
+ <div class="label">견적서번호</div><div><input id="quo" class="field"></div>
+ <div class="label">아이템</div><div class="lk"><input id="item_code" style="max-width:52px"><input id="item_name" readonly><button onclick="openLook('item','item_code','item_name')">…</button></div>
+ <div class="label">납기예정일</div><div><input id="dlvp" type="date" class="field"></div>
+ <div class="label">국내/해외</div><div><select id="dom" class="field"><option>국내</option><option>해외</option></select></div>
+
+ <div class="label">도 번</div><div class="span3"><input id="drawing_no" class="field"></div>
+ <div class="label">사업부</div><div class="lk"><input id="biz_code" style="max-width:62px"><input id="biz_name" readonly><button onclick="openLook('biz','biz_code','biz_name')">…</button></div>
+ <div class="label">담당자</div><div class="lk"><input id="mgr_code" style="max-width:76px"><input id="mgr_name" readonly><button onclick="openLook('employee','mgr_code','mgr_name')">…</button></div>
+ <div class="label">고객사</div><div class="lk"><input id="cust_code" style="max-width:58px"><input id="cust_name" readonly><button onclick="openLook('vendor','cust_code','cust_name')">…</button></div>
+
+ <div class="label">금형타입</div><div class="lk"><input id="mold_code" style="max-width:62px"><input id="mold_name" readonly><button onclick="openLook('mold','mold_code','mold_name')">…</button></div>
+ <div class="label">개발유형</div><div><select id="devtype" class="field"><option value=""></option><option>사내</option><option>외주</option></select></div>
+ <div class="label">양산처</div><div class="lk"><input id="mp_code" style="max-width:58px"><input id="mp_name" readonly><button onclick="openLook('vendor','mp_code','mp_name')">…</button></div>
+ <div class="label">품 명</div><div><input id="product_name" class="field"></div>
+ <div class="label">모 델</div><div><input id="model" class="field"></div>
+ <div class="label">공정/조수</div><div class="lk"><input id="proc_cnt"><input id="set_qty"></div>
+
+ <div class="label">견적가</div><div><input id="quo_price" class="field num"></div>
+ <div class="label">기계사양</div><div class="lk"><input id="ms_code" style="max-width:62px"><input id="ms_name" readonly><button onclick="openLook('mspec','ms_code','ms_name')">…</button></div>
+ <div class="label">사용재료</div><div><input id="material_used" class="field"></div>
+ <div class="label">S1 완료일</div><div><input id="s1c" type="date" class="field"></div>
+ <div class="label">납기완료일</div><div><input id="dlvc" type="date" class="field"></div>
+ <div class="label">ECO</div><div><input id="eco" class="field"></div>
+
+ <div class="label">비 고</div><div class="span3"><input id="remark" class="field"></div>
+ <div class="label">수주가</div><div><input id="order_price" class="field num"></div>
+ <div class="label">판매가</div><div><input id="sales_price" class="field num"></div>
+ <div class="label">완료일</div><div><input id="comp_date" type="date" class="field"></div>
+ <div></div><div></div>
+</section>
+<div class="secthead">첨부파일</div>
+<div class="toolbar"><button class="btn" onclick="msg('프로토타입에서는 파일첨부를 지원하지 않습니다.')">파일첨부</button><button class="btn" onclick="msg('다운로드 대상 파일이 없습니다.')">다운로드</button><button class="btn" onclick="msg('미리보기 대상 파일이 없습니다.')">미리보기</button><button class="btn" onclick="msg('삭제할 파일이 없습니다.')">파일삭제</button></div>
+<div class="att"><table style="min-width:900px"><thead><tr><th style="width:34px"></th><th>파일명</th><th style="width:150px">Version</th><th style="width:280px">파일내용</th><th style="width:90px">크기</th><th style="width:90px">확장자</th></tr></thead><tbody id="attBody"><tr><td colspan="6" class="c" style="height:120px;color:#8a97a2">첨부파일이 없습니다.</td></tr></tbody></table></div>
+<footer class="foot"><button class="btn" onclick="save()">▤ 저장</button><button class="btn" onclick="clearForm()">✕ 신규</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">사진 기준 초기값을 표시했습니다.</span></footer>
+</div>
+
+<div class="mask" id="mask" onclick="if(event.target===mask)closeLook()"><div class="dlg">
+ <div class="dlghead"><span id="dlgTitle">조회</span><button onclick="closeLook()">×</button></div>
+ <div class="dlgbody">
+  <div class="srch"><input id="dlgQ" placeholder="검색어를 입력하세요.." oninput="renderLook()"><button class="btn" onclick="renderLook()">찾기</button><button class="btn" onclick="dlgQ.value='';renderLook()">지우기</button></div>
+  <div class="dlgwrap"><table id="dlgTable" style="min-width:0"></table></div>
+ </div>
+ <div class="dlgfoot"><button class="btn" onclick="confirmLook()">확 인</button><button class="btn" onclick="closeLook()">취 소</button></div>
+</div></div>
+<script>
+const LOOKUPS={"employee": {"title": "인원정보", "cols": ["사원코드", "사원명"], "rows": [["bgh", "배강현"], ["bhryu", "류병현"], ["bugck", "이중기"], ["cho6498", "조경래"], ["cmlim", "임창민"], ["cool0770", "한영진"], ["cyc", ""], ["dbwls0528", "황유진"], ["DG", "동구"], ["donggu30", "노은성"], ["dongu", ""], ["dream", "김기준"], ["dssim", "심대섭"], ["hbpark", "박형록"], ["hoya5610", "강보롬"], ["hta0123", "함태안"], ["jindonggu", "진동구"], ["jjlee", "이장준"], ["jpok", "옥종필"], ["juj", "장우진"], ["kds9395", "김동석"]]}, "vendor": {"title": "거래처정보", "cols": ["거래처코드", "거래처명", "사업자등록번호"], "rows": [["V000", "동구기업", ""], ["V001", "Electrolux(호주)", ""], ["V002", "Electrolux(브라질)", ""], ["V003", "Electrolux(홍콩)", ""], ["V004", "Electrolux(이태리)", ""], ["V005", "Electrolux(태국)", ""], ["V006", "Electrolux(폴란드)", ""], ["V007", "F&P appliances ltd", ""], ["V008", "LGEIL(인도델리)", ""], ["V009", "LGEIL(인도푸네)", ""], ["V010", "LGEIN", ""], ["V011", "LGEMN", ""], ["V012", "LGRUS", ""], ["V013", "A.L.P", ""], ["V014", "LG디스플레이", ""], ["V019", "LG전자", ""], ["V020", "LG전자 냉장고사업부", ""], ["V021", "LG전자 세탁기사업부", ""], ["V022", "LG전자 에어컨사업부", ""], ["V023", "LG전자 리빙사업부", ""], ["V024", "금아금속", ""], ["V025", "기미전자", ""], ["V026", "대양정기", ""], ["V027", "동우테크", ""], ["V028", "매일정기", ""], ["V029", "메트로테크", ""], ["V030", "명성테크", ""], ["V031", "보성공업사", ""], ["V032", "", ""], ["V115", "LGEIL(인도노이다)", ""], ["V116", "LGESP", ""], ["V117", "만즈", ""], ["V118", "세진공업", ""], ["V119", "", ""]]}, "item": {"title": "아이템", "cols": ["아이템코드", "아이템명"], "rows": [["A", "비품"], ["C", "자동차"], ["D", "기타"], ["G", "에어컨"], ["J", "키친"], ["K", "냉기"], ["P", "부품생산"], ["R", "연구소"], ["S", "연구개발품"], ["T", "TV"], ["U", "세탁기"]]}, "biz": {"title": "사업부", "cols": ["사업부 코드", "사업부 명"], "rows": [["BN001", "금형"], ["BN002", "부품"], ["BN003", "EV사업부"], ["BN004", "연구소"]]}, "mspec": {"title": "기계사양", "cols": ["기계사양 코드", "기계사양 명"], "rows": [["MS001", "110 TON"], ["MS002", "160 TON"], ["MS003", "250 TON"], ["MS004", "300 TON"], ["MS005", "350 TON"], ["MS006", "400 TON"], ["MS007", "500 TON"], ["MS008", "600 TON"], ["MS009", "800 TON"], ["MS010", "1000 TON"], ["MS011", "1500 TON"], ["MS012", "2000 TON"], ["MS013", "200 TON"]]}, "mold": {"title": "금형타입", "cols": ["금형 타입코드", "금형타입 명"], "rows": [["MD001", "PROGRESSIVE"], ["MD002", "SEMI+단발"], ["MD003", "단발"], ["MD004", "TPL"], ["MD005", "TR"]]}};
+const seed={"row_no": 1, "job_no": "J26137", "plant_name": "1공장", "order_status": "진행", "order_type": "신작", "quotation_no": null, "drawing_no": "hfghfgh", "business_division_code": "BN001", "business_division_name": "금형", "item_code": "J", "item_name": "키친", "order_date": "2026-08-22", "s1_planned_date": "2026-08-26", "delivery_planned_date": "2026-08-31", "mold_type_code": null, "mold_type_name": null, "development_type": "사내", "mass_production_vendor_code": "V028", "mass_production_vendor_name": "매일정기", "manager_code": "dbwls0528", "manager_name": "황유진", "domestic_overseas": "국내", "customer_code": "V022", "customer_name": "LG전자 에어컨사업부", "quotation_price": null, "machine_spec_code": null, "machine_spec_name": null, "product_name": "vdfs", "model": "asf", "process_set_qty": null, "remark": null, "order_price": null, "sales_price": null, "material_used": null, "s1_completed_date": null, "delivery_completed_date": null, "eco": null, "completion_date": null, "attachments": []};
+let lkKey=null,lkCode=null,lkName=null,lkSel=-1;
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const msg=t=>message.textContent=t;
+function openLook(key,codeId,nameId){
+ lkKey=key;lkCode=codeId;lkName=nameId;lkSel=-1;dlgQ.value='';
+ dlgTitle.textContent=LOOKUPS[key].title;mask.classList.add('on');renderLook();dlgQ.focus();
+}
+function closeLook(){mask.classList.remove('on');lkKey=null}
+function lkRows(){
+ const L=LOOKUPS[lkKey],q=dlgQ.value.trim().toLowerCase();
+ return !q?L.rows:L.rows.filter(r=>r.some(v=>String(v).toLowerCase().includes(q)));
+}
+function renderLook(){
+ const L=LOOKUPS[lkKey],rows=lkRows();
+ dlgTable.innerHTML='<thead><tr>'+L.cols.map(c=>`<th>${esc(c)}</th>`).join('')+'</tr></thead><tbody>'+
+  (rows.length?rows.map((r,i)=>`<tr onclick="pickRow(${i},this)" ondblclick="pickRow(${i},this);confirmLook()">`+r.map(v=>`<td>${esc(v)}</td>`).join('')+'</tr>').join('')
+   :`<tr><td colspan="${L.cols.length}" class="c" style="height:80px;color:#8a97a2">검색결과가 없습니다.</td></tr>`)+'</tbody>';
+ lkSel=-1;
+}
+function pickRow(i,tr){lkSel=i;dlgTable.querySelectorAll('tbody tr').forEach(x=>x.classList.remove('sel'));tr.classList.add('sel')}
+function confirmLook(){
+ if(lkSel<0){msg('목록에서 항목을 선택하세요.');return}
+ const r=lkRows()[lkSel];
+ document.getElementById(lkCode).value=r[0];
+ document.getElementById(lkName).value=r[1]||'';
+ msg(`${LOOKUPS[lkKey].title}: ${r[0]} ${r[1]||''}`);
+ closeLook();
+}
+const MAP={job_no:'job_no',plant:'plant_name',order_date:'order_date',s1p:'s1_planned_date',
+ status:'order_status',otype:'order_type',quo:'quotation_no',item_code:'item_code',item_name:'item_name',
+ dlvp:'delivery_planned_date',dom:'domestic_overseas',drawing_no:'drawing_no',
+ biz_code:'business_division_code',biz_name:'business_division_name',
+ mgr_code:'manager_code',mgr_name:'manager_name',cust_code:'customer_code',cust_name:'customer_name',
+ mold_code:'mold_type_code',mold_name:'mold_type_name',devtype:'development_type',
+ mp_code:'mass_production_vendor_code',mp_name:'mass_production_vendor_name',
+ product_name:'product_name',model:'model',set_qty:'process_set_qty',quo_price:'quotation_price',
+ ms_code:'machine_spec_code',ms_name:'machine_spec_name',material_used:'material_used',
+ s1c:'s1_completed_date',dlvc:'delivery_completed_date',eco:'eco',remark:'remark',
+ order_price:'order_price',sales_price:'sales_price',comp_date:'completion_date'};
+function load(o){for(const[el,k]of Object.entries(MAP)){const n=document.getElementById(el);if(n)n.value=o[k]??''}}
+function clearForm(){for(const el of Object.keys(MAP)){const n=document.getElementById(el);if(n)n.value=''}plant.value='1공장';document.getElementById('status').value='진행';otype.value='신작';dom.value='국내';msg('신규 입력 상태입니다.')}
+function save(){
+ if(!job_no.value.trim()){msg('제번은 필수입니다.');return}
+ const o={};for(const[el,k]of Object.entries(MAP)){const n=document.getElementById(el);if(n)o[k]=n.value||null}
+ console.log('sale_order',o);msg(`${o.job_no} 저장했습니다. (프로토타입 - 원본 JSON은 변경되지 않습니다.)`);
+}
+window.MES={save,clearForm,setMessage:msg};
+load(seed);
+</script></body></html>

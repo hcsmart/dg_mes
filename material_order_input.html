@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>원재료 발주</title>
+<style>
+:root{--line:#9daab6;--line2:#c5ced6;--ink:#344758}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:var(--ink);background:#fff;overflow:hidden}button,input,select{font:inherit;color:inherit}
+.screen{height:100%;display:flex;flex-direction:column}.title{height:46px;padding:9px 14px 4px;border-bottom:2px solid #3977ad;display:flex;align-items:center;gap:14px}.title h1{margin:0;font-size:21px;font-weight:500;color:#4b5b69}.title h1:before{content:'◯';margin-right:6px;color:#8795a1}.title .plant{margin-left:auto;display:flex;align-items:center;gap:6px;color:#6b7885}
+.filters{padding:7px 14px;border-bottom:1px solid var(--line2);background:#fafbfc;display:flex;gap:6px;align-items:center}.label{font-weight:700;min-width:44px}.field{height:27px;border:1px solid #b7c2cb;background:#fff;padding:0 7px;outline:none}.field:focus{border-color:#4e88bb}
+.panes{display:grid;grid-template-columns:1.15fr .62fr 1.6fr;gap:6px;padding:7px 14px 0;height:210px}
+.box{border:1px solid var(--line);display:flex;flex-direction:column;min-height:0;background:#fff}.box-title{height:24px;display:flex;align-items:center;justify-content:center;background:linear-gradient(#deebf5,#caddea);border-bottom:1px solid var(--line);font-weight:700;color:#536677}
+.tablewrap{flex:1;min-height:0;overflow:auto}table{border-collapse:collapse;width:100%;table-layout:fixed}th,td{height:24px;padding:0 5px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}th{position:sticky;top:0;z-index:2;text-align:center;background:linear-gradient(#dbe9f4,#c7d9e8);color:#405266;font-weight:700}tbody tr:hover td{background:#edf6fd}tbody tr.sel td{background:#2e78bd;color:#fff}.c{text-align:center}.r{text-align:right}
+.midbar{display:flex;align-items:center;gap:6px;padding:6px 14px;justify-content:flex-end}
+.reqbox{flex:1;min-height:0;margin:0 14px 6px;border:1px solid var(--line);display:flex;flex-direction:column}.reqbox table{min-width:1500px}
+.btn{height:28px;min-width:66px;border:1px solid #9ca9b5;background:linear-gradient(#fff,#dfe6eb)}.btn:hover{background:#fff}.btn.primary{background:linear-gradient(#f9ffff,#d2e7f6);color:#1e5e91}
+.foot{height:42px;display:flex;align-items:center;padding:5px 14px;border-top:1px solid var(--line);background:#eef2f5;gap:5px}.msg{margin-left:10px;color:#687784}.foot .right{margin-left:auto;color:#7c8993}
+.modal{position:fixed;inset:0;background:rgba(40,50,60,.45);display:none;align-items:center;justify-content:center;z-index:50}.modal.on{display:flex}.sheet{width:min(720px,94%);max-height:88%;overflow:auto;background:#fff;border:1px solid #7c8894;box-shadow:0 8px 26px rgba(0,0,0,.3)}.sheet-head{height:30px;display:flex;align-items:center;padding:0 8px;background:linear-gradient(#f3f6f8,#dfe6ec);border-bottom:1px solid #b6c1ca;font-weight:700}.sheet-head .x{margin-left:auto;border:1px solid #c0392b;background:#e74c3c;color:#fff;width:24px;height:20px}
+.doc{padding:26px 30px}.doc h2{text-align:center;font-size:19px;font-weight:600;margin:0 0 18px}.doc table{border-collapse:collapse;table-layout:auto}.doc td,.doc th{border:1px solid #666;height:24px;padding:2px 8px}.doc .info{margin-bottom:8px}.doc .items{width:100%;margin-top:10px}
+@media(max-width:900px){.panes{grid-template-columns:1fr;height:auto}.title h1{font-size:18px}}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="title"><h1>원재료 발주</h1><div class="plant"><span>공장</span><select id="plant" class="field"><option>1공장</option><option>2공장</option></select></div></div>
+  <section class="filters">
+    <span class="label">제번</span><input id="jobQ" class="field" style="width:220px" placeholder="제번" value="J26118">
+    <span class="label">품명</span><input id="itemQ" class="field" style="width:260px" placeholder="품명">
+    <button class="btn" onclick="search()">⌕ 조회</button>
+  </section>
+  <section class="panes">
+    <div class="box"><div class="box-title">제번리스트</div><div class="tablewrap"><table>
+      <colgroup><col style="width:36%"><col style="width:34%"><col style="width:15%"><col style="width:15%"></colgroup>
+      <thead><tr><th>제번</th><th>품명</th><th>공정코드</th><th>공정명</th></tr></thead><tbody id="jobBody"></tbody></table></div></div>
+    <div class="box"><div class="box-title">협력업체리스트</div><div class="tablewrap"><table><thead><tr><th>협력업체</th></tr></thead><tbody id="venBody"></tbody></table></div></div>
+    <div class="box"><div class="box-title">자재표 리스트</div><div class="tablewrap"><table>
+      <colgroup><col style="width:38px"><col style="width:15%"><col style="width:18%"><col style="width:14%"><col style="width:23%"><col style="width:10%"><col style="width:12%"></colgroup>
+      <thead><tr><th></th><th>품번</th><th>부품명</th><th>재질</th><th>규격</th><th>수량</th><th>첨부</th></tr></thead><tbody id="bomBody"></tbody></table></div></div>
+  </section>
+  <div class="midbar"><span class="label">입고요구일</span><input id="reqDate" class="field" type="date"><button class="btn" onclick="pushDown()">⬇ 요청추가</button><button class="btn" onclick="pullUp()">⬆ 요청삭제</button></div>
+  <div class="reqbox"><div class="box-title">구매요청 리스트</div><div class="tablewrap"><table>
+    <colgroup><col style="width:40px"><col style="width:38px"><col style="width:100px"><col style="width:100px"><col style="width:50px"><col style="width:70px"><col style="width:120px"><col style="width:66px"><col style="width:130px"><col style="width:66px"><col style="width:66px"><col style="width:66px"><col style="width:56px"><col style="width:70px"><col style="width:70px"><col style="width:88px"><col style="width:88px"><col style="width:60px"><col style="width:90px"></colgroup>
+    <thead><tr><th>No</th><th>선택</th><th>협력업체</th><th>제번</th><th>공정</th><th>품번</th><th>부품명</th><th>재질</th><th>설계치수</th><th>두께/Ø</th><th>가로</th><th>세로</th><th>수량</th><th>발주수량</th><th>총중량</th><th>발주일</th><th>입고요구일</th><th>첨부</th><th>비고</th></tr></thead>
+    <tbody id="reqBody"></tbody>
+    <tfoot><tr><th colspan="12" class="r">합 계</th><th class="r" id="sumQty">0</th><th class="r" id="sumOrd">0</th><th colspan="5"></th></tr></tfoot>
+  </table></div></div>
+  <footer class="foot"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn" onclick="save()">▣ 저장</button><button class="btn primary" onclick="printOrder()">⎙ PRINT</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">제번을 선택하면 자재표가 조회됩니다.</span><span class="right" id="countText"></span></footer>
+</div>
+
+<div class="modal" id="preview"><div class="sheet">
+  <div class="sheet-head"><span>미리 보기</span><button class="x" onclick="preview.classList.remove('on')">×</button></div>
+  <div class="doc" id="docArea"></div>
+</div></div>
+
+<script>
+const JOBS=[
+{job:'J26118',item:'PANEL,CONTROL',proc:'A',procName:'1/4',bom:[
+ {part:'C26D',name:'BLOCK',mat:'SB41P',spec:'20.0*100*100',qty:8,att:''},
+ {part:'C26A',name:'BLOCK',mat:'SB41P',spec:'30.0*760*1300',qty:1,att:'도면'},
+ {part:'C26E',name:'BLOCK',mat:'SB41P',spec:'30.0*760*1300',qty:1,att:''},
+ {part:'C26G',name:'BLOCK',mat:'SB41P',spec:'35*188.0*215',qty:3,att:''},
+ {part:'C26F',name:'BLOCK',mat:'SB41P',spec:'35*188.0*310',qty:2,att:''},
+ {part:'C26B',name:'BLOCK',mat:'SB41P',spec:'25*52.4*540',qty:2,att:''}]},
+{job:'J26118',item:'PANEL,CONTROL',proc:'C',procName:'3/4',bom:[]},
+{job:'J26118',item:'PANEL,CONTROL',proc:'D',procName:'4/4',bom:[]},
+{job:'A25032',item:'',proc:'A',procName:'1/1',bom:[]},
+{job:'A26026',item:'',proc:'A',procName:'1/2',bom:[]},
+{job:'A26026',item:'',proc:'B',procName:'2/2',bom:[]},
+{job:'C14213-S030',item:'BUSBAR',proc:'A',procName:'1/1',bom:[]},
+{job:'C25080-S001',item:'HEADER',proc:'A',procName:'1/2',bom:[]},
+{job:'C25120',item:'STIFFENER',proc:'A',procName:'1/6',bom:[]}];
+const VENDORS=['광주특강','기미전자','달제금속','대웅금속','디와이에스엠','세일특수강','화영철강','대한금속'];
+const REQ=[
+{no:1,vendor:'세일특수강',job:'J26118',proc:'A',part:'B16A',name:'DIE',mat:'STD11',design:'30.00*193*205',th:30.4,w:193.0,l:205.0,qty:1,ord:1,wt:1.00,odate:'2026-07-31',rdate:'2026-08-02',att:'',remark:''},
+{no:2,vendor:'세일특수강',job:'J26118',proc:'A',part:'B16B',name:'DIE',mat:'STD11',design:'30.00*193*205',th:30.4,w:193.0,l:205.0,qty:1,ord:1,wt:1.00,odate:'2026-07-31',rdate:'2026-08-02',att:'',remark:''},
+{no:3,vendor:'세일특수강',job:'J26118',proc:'A',part:'B16C',name:'DIE',mat:'STD11',design:'30.00*193*205',th:30.4,w:193.0,l:205.0,qty:1,ord:1,wt:1.00,odate:'2026-07-31',rdate:'2026-08-02',att:'',remark:''},
+{no:4,vendor:'세일특수강',job:'J26118',proc:'A',part:'B16D',name:'DIE',mat:'STD11',design:'30.00*115*510',th:30.4,w:115.0,l:510.0,qty:1,ord:1,wt:1.00,odate:'2026-07-31',rdate:'2026-08-02',att:'',remark:''},
+{no:5,vendor:'세일특수강',job:'J26118',proc:'A',part:'B16E',name:'DIE',mat:'STD11',design:'30.00*115*510',th:30.4,w:115.0,l:510.0,qty:1,ord:1,wt:1.00,odate:'2026-07-31',rdate:'2026-08-02',att:'',remark:''},
+{no:6,vendor:'세일특수강',job:'J26118',proc:'A',part:'B16F',name:'DIE',mat:'STD11',design:'30.00*180*680',th:30.4,w:180.0,l:680.0,qty:1,ord:1,wt:1.00,odate:'2026-07-31',rdate:'2026-08-02',att:'',remark:''},
+{no:7,vendor:'세일특수강',job:'J26118',proc:'A',part:'B16G',name:'DIE',mat:'STD11',design:'55.0*89.30*622',th:55.0,w:89.7,l:622.0,qty:1,ord:1,wt:1.00,odate:'2026-07-31',rdate:'2026-08-02',att:'도면',remark:''},
+{no:8,vendor:'세일특수강',job:'J26118',proc:'A',part:'B21H',name:'PUNCH, NOTCHING',mat:'STD11',design:'47.0*560*1100',th:47.0,w:560.0,l:1100.0,qty:1,ord:1,wt:null,odate:'2026-07-31',rdate:'2026-08-02',att:'',remark:''},
+{no:9,vendor:'세일특수강',job:'J26118',proc:'A',part:'C22A',name:'SHOE, UPPER',mat:'SB41P',design:'',th:null,w:null,l:null,qty:null,ord:null,wt:null,odate:'2026-07-31',rdate:'2026-08-02',att:'',remark:''}];
+let jobIdx=0,venIdx=5,jobView=[...JOBS];
+const n=v=>v==null?'':Number(v).toLocaleString('ko-KR',{maximumFractionDigits:2});
+function renderJobs(){jobBody.innerHTML=jobView.map((j,i)=>`<tr class="${i===jobIdx?'sel':''}" onclick="pickJob(${i})"><td>${j.job}</td><td>${j.item}</td><td class="c">${j.proc}</td><td class="c">${j.procName}</td></tr>`).join('');countText.textContent=`제번 ${jobView.length}건 / 요청 ${REQ.length}건`}
+function renderVendors(){venBody.innerHTML=VENDORS.map((v,i)=>`<tr class="${i===venIdx?'sel':''}" onclick="pickVendor(${i})"><td>${v}</td></tr>`).join('')}
+function renderBom(){const b=jobView[jobIdx]?.bom||[];bomBody.innerHTML=b.length?b.map((r,i)=>`<tr><td class="c"><input type="checkbox" checked data-i="${i}"></td><td>${r.part}</td><td>${r.name}</td><td class="c">${r.mat}</td><td>${r.spec}</td><td class="r">${r.qty}</td><td class="c">${r.att}</td></tr>`).join(''):'<tr><td colspan="7" class="c" style="color:#8b98a4">자재표가 없습니다.</td></tr>'}
+function renderReq(){reqBody.innerHTML=REQ.map((r,i)=>`<tr onclick="this.classList.toggle('sel')"><td class="c">${i+1}</td><td class="c"><input type="checkbox" data-no="${r.no}"></td><td>${r.vendor}</td><td>${r.job}</td><td class="c">${r.proc}</td><td>${r.part}</td><td>${r.name}</td><td class="c">${r.mat}</td><td>${r.design}</td><td class="r">${n(r.th)}</td><td class="r">${n(r.w)}</td><td class="r">${n(r.l)}</td><td class="r">${r.qty??''}</td><td class="r">${r.ord??''}</td><td class="r">${r.wt==null?'':r.wt.toFixed(2)}</td><td class="c">${r.odate}</td><td class="c">${r.rdate}</td><td class="c">${r.att}</td><td>${r.remark}</td></tr>`).join('');sumQty.textContent=REQ.reduce((a,r)=>a+(r.qty||0),0);sumOrd.textContent=REQ.reduce((a,r)=>a+(r.ord||0),0)}
+function pickJob(i){jobIdx=i;renderJobs();renderBom();msg(`${jobView[i].job} / 공정 ${jobView[i].proc} 자재표를 조회했습니다.`)}
+function pickVendor(i){venIdx=i;renderVendors();msg(`협력업체 ${VENDORS[i]} 선택`)}
+function search(){const j=jobQ.value.trim().toLowerCase(),it=itemQ.value.trim().toLowerCase();jobView=JOBS.filter(x=>(!j||x.job.toLowerCase().includes(j))&&(!it||(x.item||'').toLowerCase().includes(it)));jobIdx=0;renderJobs();renderBom();msg(`제번 ${jobView.length}건을 조회했습니다.`)}
+function pushDown(){const j=jobView[jobIdx];if(!j)return;const picks=[...bomBody.querySelectorAll('input:checked')].map(x=>j.bom[Number(x.dataset.i)]);if(!picks.length)return msg('자재표에서 발주할 품번을 선택하세요.');const d=reqDate.value||new Date().toISOString().slice(0,10);picks.forEach(b=>{const dims=String(b.spec).split('*').map(Number);REQ.push({no:REQ.length?Math.max(...REQ.map(r=>r.no))+1:1,vendor:VENDORS[venIdx],job:j.job,proc:j.proc,part:b.part,name:b.name,mat:b.mat,design:b.spec,th:dims[0]||null,w:dims[1]||null,l:dims[2]||null,qty:b.qty,ord:b.qty,wt:null,odate:new Date().toISOString().slice(0,10),rdate:d,att:b.att,remark:''})});renderReq();msg(`${picks.length}건을 구매요청 리스트에 추가했습니다.`)}
+function pullUp(){const ids=[...reqBody.querySelectorAll('input:checked')].map(x=>Number(x.dataset.no));if(!ids.length)return msg('삭제할 요청 행을 선택하세요.');for(let i=REQ.length-1;i>=0;i--)if(ids.includes(REQ[i].no))REQ.splice(i,1);renderReq();msg(`${ids.length}건을 요청 리스트에서 삭제했습니다.`)}
+function save(){msg(`구매요청 ${REQ.length}건을 원재료 발주로 저장했습니다. (프로토타입)`)}
+function printOrder(){const ids=[...reqBody.querySelectorAll('input:checked')].map(x=>Number(x.dataset.no));const rows=ids.length?REQ.filter(r=>ids.includes(r.no)):REQ.slice(0,1);if(!rows.length)return msg('출력할 행이 없습니다.');const j=jobView[jobIdx]||JOBS[0];const v=rows[0].vendor;
+docArea.innerHTML=`<h2>원재료 발주서</h2>
+<table class="info"><tr><td>발　신 : (주)동구기업</td></tr><tr><td>작성자 : 동구</td></tr><tr><td>수　신 : ${v}</td></tr><tr><td>F A X : 031-295-9047</td></tr></table>
+<table class="info"><tr><th>제 번</th><td>${rows[0].job}_${rows[0].proc}</td><th>품 명</th><td>${j.item||''}</td><th>발주일 :</th><td>${new Date().toISOString().slice(0,10)}</td></tr></table>
+<table class="items"><thead><tr><th>순번</th><th>품번</th><th>부품명</th><th>재질</th><th>발주수량</th><th>설계치수</th><th>발주치수</th><th>납기일</th><th>첨부</th></tr></thead><tbody>
+${rows.map((r,i)=>`<tr><td class="c">${i+1}</td><td class="c">${r.part}</td><td>${r.name}</td><td class="c">${r.mat}</td><td class="r">${r.ord??''}</td><td class="c">${r.design}</td><td class="c">${[r.th,r.w,r.l].every(x=>x!=null)?`${r.th}*${r.w}*${r.l}`:''}</td><td class="c">${r.rdate}</td><td class="c">${r.att}</td></tr>`).join('')}
+</tbody></table>`;
+preview.classList.add('on');msg('원재료 발주서를 미리보기로 출력했습니다.')}
+function exportCsv(){const out=[['협력업체','제번','공정','품번','부품명','재질','설계치수','두께','가로','세로','수량','발주수량','발주일','입고요구일'],...REQ.map(r=>[r.vendor,r.job,r.proc,r.part,r.name,r.mat,r.design,r.th,r.w,r.l,r.qty,r.ord,r.odate,r.rdate])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='material_order_input.csv';a.click();URL.revokeObjectURL(a.href)}
+function msg(t){message.textContent=t}
+reqDate.value='2026-08-24';renderJobs();renderVendors();renderBom();renderReq();
+window.MES={search,save,exportCsv,setMessage:msg,print:printOrder};
+</script>
+</body>
+</html>

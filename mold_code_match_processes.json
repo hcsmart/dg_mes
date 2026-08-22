@@ -1,0 +1,79 @@
+[
+  {
+    "row_no": 1,
+    "process_set": "5분할",
+    "process_code": "A",
+    "process_name": "1/5",
+    "editable": false
+  },
+  {
+    "row_no": 2,
+    "process_set": "5분할",
+    "process_code": "B",
+    "process_name": "2/5",
+    "editable": true
+  },
+  {
+    "row_no": 3,
+    "process_set": "5분할",
+    "process_code": "C",
+    "process_name": "3/5",
+    "editable": true
+  },
+  {
+    "row_no": 4,
+    "process_set": "5분할",
+    "process_code": "D",
+    "process_name": "4/5",
+    "editable": true
+  },
+  {
+    "row_no": 5,
+    "process_set": "5분할",
+    "process_code": "E",
+    "process_name": "5/5",
+    "editable": true
+  },
+  {
+    "row_no": 6,
+    "process_set": "4분할+AS/BS",
+    "process_code": "A",
+    "process_name": "1/4",
+    "editable": false
+  },
+  {
+    "row_no": 7,
+    "process_set": "4분할+AS/BS",
+    "process_code": "B",
+    "process_name": "2/4",
+    "editable": false
+  },
+  {
+    "row_no": 8,
+    "process_set": "4분할+AS/BS",
+    "process_code": "C",
+    "process_name": "3/4",
+    "editable": false
+  },
+  {
+    "row_no": 9,
+    "process_set": "4분할+AS/BS",
+    "process_code": "D",
+    "process_name": "4/4",
+    "editable": true
+  },
+  {
+    "row_no": 10,
+    "process_set": "4분할+AS/BS",
+    "process_code": "AS",
+    "process_name": "1/4",
+    "editable": true
+  },
+  {
+    "row_no": 11,
+    "process_set": "4분할+AS/BS",
+    "process_code": "BS",
+    "process_name": "2/4",
+    "editable": null
+  }
+]

@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>외주가공입고확정</title>
+<style>
+:root{--line:#9daab6;--line2:#c5ced6;--ink:#344758}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:var(--ink);background:#fff;overflow:hidden}button,input,select{font:inherit;color:inherit}
+.screen{height:100%;display:flex;flex-direction:column}.title{height:46px;padding:9px 14px 4px;border-bottom:2px solid #3977ad;display:flex;align-items:center;gap:16px}.title h1{margin:0;font-size:21px;font-weight:500;color:#4b5b69}.title h1:before{content:'◯';margin-right:6px;color:#8795a1}.title .opts{display:flex;align-items:center;gap:10px;color:#5f6d79}.title .plant{margin-left:auto;display:flex;align-items:center;gap:6px;color:#6b7885}
+.filters{padding:7px 14px;border-bottom:1px solid var(--line2);background:#fafbfc;display:flex;gap:6px;align-items:center;flex-wrap:wrap}.label{font-weight:700}.field{height:27px;border:1px solid #b7c2cb;background:#fff;padding:0 7px;outline:none}.field:focus{border-color:#4e88bb}
+.gridbox{flex:1;min-height:0;margin:7px 14px 0;border:1px solid var(--line);display:flex;flex-direction:column;background:#fff}.grid-title{height:26px;display:flex;align-items:center;justify-content:center;background:linear-gradient(#deebf5,#caddea);border-bottom:1px solid var(--line);font-weight:700;color:#536677}
+.tablewrap{flex:1;min-height:0;overflow:auto}table{border-collapse:collapse;min-width:1620px;width:100%;table-layout:fixed}th,td{height:25px;padding:0 5px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}th{position:sticky;top:0;z-index:2;text-align:center;background:linear-gradient(#dbe9f4,#c7d9e8);color:#405266;font-weight:700}tbody tr:nth-child(even) td{background:#fafcfd}tbody tr:hover td{background:#edf6fd}tbody tr.sel td{background:#2e78bd;color:#fff}.c{text-align:center}.r{text-align:right}
+tfoot th{position:sticky;bottom:0;background:linear-gradient(#e6eef5,#d3e0ea)}
+.summary{height:50px;margin:0 14px;border:1px solid var(--line);border-top:0;background:#eef3f6;display:flex;align-items:center;gap:7px;padding:6px}.summary input{height:28px;border:1px solid #aeb9c3;background:#fff;padding:0 6px}.summary .money{width:170px;text-align:right}.summary .rateinput{width:90px;text-align:right}.summary .dateinput{width:135px}.spacer{flex:1}
+.btn{height:28px;min-width:70px;border:1px solid #9ca9b5;background:linear-gradient(#fff,#dfe6eb)}.btn:hover{background:#fff}.btn.primary{background:linear-gradient(#f9ffff,#d2e7f6);color:#1e5e91}.btn.warn{color:#a63a2f}
+.foot{height:42px;display:flex;align-items:center;padding:5px 14px;border-top:1px solid var(--line);background:#eef2f5;gap:5px}.msg{margin-left:10px;color:#687784}.foot .right{margin-left:auto;color:#7c8993}
+@media(max-width:900px){.title h1{font-size:18px}.summary{overflow:auto}}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="title"><h1>외주가공입고확정</h1>
+    <div class="opts"><label><input type="radio" name="done" value="미완료" checked onchange="search()"> 미완료</label><label><input type="radio" name="done" value="완료" onchange="search()"> 완료</label></div>
+    <div class="plant"><span>공장</span><select id="plant" class="field"><option>1공장</option><option>2공장</option></select></div>
+  </div>
+  <section class="filters">
+    <span class="label">협력업체</span><input id="vendorQ" class="field" style="width:190px">
+    <span class="label">제 번</span><input id="jobQ" class="field" style="width:190px">
+    <span class="label">품명</span><input id="itemQ" class="field" style="width:190px">
+    <button class="btn" onclick="search()">⌕ 조회</button>
+  </section>
+  <div class="gridbox">
+    <div class="grid-title">입고 확정 대기 리스트</div>
+    <div class="tablewrap"><table>
+      <colgroup><col style="width:44px"><col style="width:38px"><col style="width:66px"><col style="width:110px"><col style="width:110px"><col style="width:48px"><col style="width:58px"><col style="width:76px"><col style="width:130px"><col style="width:100px"><col style="width:120px"><col style="width:110px"><col style="width:92px"><col style="width:92px"><col style="width:96px"><col style="width:92px"><col style="width:76px"><col style="width:92px"></colgroup>
+      <thead><tr><th>No</th><th>선택</th><th>확정여부</th><th>제번</th><th>품명</th><th>공정</th><th>공정명</th><th>품번</th><th>부품명</th><th>가공공정코드</th><th>가공공정명</th><th>협력업체</th><th>발주월</th><th>입고월</th><th>입고확정일</th><th>견적가</th><th>네고율(%)</th><th>확정가</th></tr></thead>
+      <tbody id="body"></tbody>
+      <tfoot><tr><th colspan="15" class="r">합 계</th><th class="r" id="sumQuote">0</th><th></th><th class="r" id="sumFix">0</th></tr></tfoot>
+    </table></div>
+  </div>
+  <div class="summary">
+    <span class="label">견적가 합계</span><input id="total" class="money" readonly>
+    <span class="label">네고율</span><input id="nego" class="rateinput" type="number" step="0.01" value="0.00"><button class="btn" onclick="applyNego()">네고율 적용</button>
+    <span class="label">입고확정일</span><input id="confirmDate" class="dateinput" type="date"><button class="btn primary" onclick="confirmSelected()">적용</button>
+    <div class="spacer"></div><span id="selectedText">선택 0건</span>
+  </div>
+  <footer class="foot"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn" onclick="save()">▣ 저장</button><button class="btn warn" onclick="cancelConfirm()">✖ 입고취소</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">입고 확정 대기 자료를 조회했습니다.</span><span class="right" id="countText"></span></footer>
+</div>
+<script>
+const rows=[
+{no:1,job:'A26026',item:'',proc:'A',procName:'1/2',part:'T99A1',partName:'MACHINE...',mp:'MS',mpName:'성형밀링(소형)',vendor:'광주특강',odate:'2026-06-02',idate:'2026-05-22',cdate:'',quote:25000,rate:0,status:'대기'},
+{no:2,job:'A26026',item:'',proc:'A',procName:'1/2',part:'T99A2',partName:'MACHINE...',mp:'MS',mpName:'성형밀링(소형)',vendor:'광주특강',odate:'2026-06-02',idate:'2026-05-22',cdate:'',quote:50000,rate:0,status:'대기'},
+{no:3,job:'A26026',item:'',proc:'A',procName:'1/2',part:'T99Y',partName:'MACHINE...',mp:'WS',mpName:'WIRE CUT',vendor:'에스제이테크',odate:'2026-04-20',idate:'2026-04-18',cdate:'',quote:315000,rate:0,status:'대기'},
+{no:4,job:'A26026',item:'',proc:'A',procName:'1/2',part:'T99Y',partName:'MACHINE...',mp:'WS1',mpName:'WIRE CUT1',vendor:'제이케이테크',odate:'2026-04-23',idate:'2026-04-07',cdate:'',quote:105000,rate:0,status:'대기'},
+{no:5,job:'A26026',item:'',proc:'A',procName:'1/2',part:'T99Z',partName:'MACHINE...',mp:'GS',mpName:'성형연삭(소형)',vendor:'동우정밀',odate:'2026-04-22',idate:'2026-04-14',cdate:'',quote:35000,rate:0,status:'대기'},
+{no:6,job:'A26026',item:'',proc:'A',procName:'1/2',part:'T99Z',partName:'MACHINE...',mp:'WS',mpName:'WIRE CUT',vendor:'에스제이테크',odate:'2026-04-22',idate:'2026-04-21',cdate:'',quote:150000,rate:0,status:'대기'},
+{no:7,job:'C25120',item:'STIFFENER',proc:'B',procName:'2/6',part:'B21AY2',partName:'PUNCH, N...',mp:'WS',mpName:'WIRE CUT',vendor:'에스제이테크',odate:'2026-04-16',idate:'2026-04-02',cdate:'',quote:204000,rate:0,status:'대기'},
+{no:8,job:'C25120',item:'STIFFENER',proc:'B',procName:'2/6',part:'B21BY1',partName:'PUNCH, N...',mp:'WS',mpName:'WIRE CUT',vendor:'에스제이테크',odate:'2026-04-16',idate:'2026-04-02',cdate:'',quote:206000,rate:0,status:'대기'},
+{no:9,job:'C25120',item:'STIFFENER',proc:'B',procName:'2/6',part:'B21CY1',partName:'PUNCH, N...',mp:'WS',mpName:'WIRE CUT',vendor:'에스제이테크',odate:'2026-04-16',idate:'2026-04-02',cdate:'',quote:178000,rate:0,status:'대기'},
+{no:10,job:'C25120',item:'STIFFENER',proc:'C',procName:'3/6',part:'B21AY1',partName:'PUNCH, N...',mp:'WS',mpName:'WIRE CUT',vendor:'에스제이테크',odate:'2026-04-16',idate:'2026-04-02',cdate:'',quote:364000,rate:0,status:'대기'},
+{no:11,job:'C25120',item:'STIFFENER',proc:'C',procName:'3/6',part:'B21BY1',partName:'PUNCH, N...',mp:'WS',mpName:'WIRE CUT',vendor:'에스제이테크',odate:'2026-04-16',idate:'2026-04-02',cdate:'',quote:124000,rate:0,status:'대기'},
+{no:12,job:'C25120',item:'STIFFENER',proc:'C',procName:'3/6',part:'B21CY1',partName:'PUNCH, N...',mp:'WS',mpName:'WIRE CUT',vendor:'에스제이테크',odate:'2026-04-16',idate:'2026-04-02',cdate:'',quote:386000,rate:0,status:'대기'},
+{no:13,job:'C25120',item:'STIFFENER',proc:'C',procName:'3/6',part:'B21DY1',partName:'PUNCH, N...',mp:'WS',mpName:'WIRE CUT',vendor:'에스제이테크',odate:'2026-04-16',idate:'2026-04-02',cdate:'',quote:126000,rate:0,status:'대기'},
+{no:14,job:'C25120',item:'STIFFENER',proc:'E',procName:'5/6',part:'B17A',partName:'BUTTON,...',mp:'WS',mpName:'WIRE CUT',vendor:'에스제이테크',odate:'2026-04-16',idate:'2026-04-02',cdate:'',quote:15000,rate:0,status:'대기'},
+{no:15,job:'C25120',item:'STIFFENER',proc:'E',procName:'5/6',part:'C23BY1',partName:'P, P-HOLD...',mp:'WS',mpName:'WIRE CUT',vendor:'에스제이테크',odate:'2026-04-22',idate:'2026-04-04',cdate:'',quote:26000,rate:0,status:'대기'},
+{no:16,job:'C25120',item:'STIFFENER',proc:'E',procName:'5/6',part:'C42DY1',partName:'BUTTON,...',mp:'WS',mpName:'WIRE CUT',vendor:'제이케이테크',odate:'',idate:'',cdate:'',quote:35000,rate:0,status:'대기'}];
+let view=[...rows];
+const money=v=>Number(v||0).toLocaleString('ko-KR');
+const fix=r=>Math.round(r.quote*(1-(r.rate||0)/100));
+function doneMode(){return document.querySelector('input[name=done]:checked').value}
+function render(){body.innerHTML=view.map((r,i)=>`<tr onclick="pick(event,${r.no})"><td class="c">${i+1}</td><td class="c"><input type="checkbox" data-no="${r.no}" onchange="summary()"></td><td class="c">${r.status==='확정'?'확정':''}</td><td>${r.job}</td><td>${r.item}</td><td class="c">${r.proc}</td><td class="c">${r.procName}</td><td>${r.part}</td><td>${r.partName}</td><td class="c">${r.mp}</td><td>${r.mpName}</td><td>${r.vendor}</td><td class="c">${r.odate}</td><td class="c">${r.idate}</td><td class="c">${r.cdate}</td><td class="r">${money(r.quote)}</td><td class="r">${(r.rate||0).toFixed(2)}</td><td class="r">${money(fix(r))}</td></tr>`).join('');
+sumQuote.textContent=money(view.reduce((a,r)=>a+r.quote,0));sumFix.textContent=money(view.reduce((a,r)=>a+fix(r),0));countText.textContent=`${view.length}건`;summary()}
+function pick(e,no){if(e.target.tagName==='INPUT')return;const cb=document.querySelector(`#body input[data-no="${no}"]`);if(cb){cb.checked=!cb.checked;summary()}}
+function selected(){const ids=[...document.querySelectorAll('#body input:checked')].map(x=>Number(x.dataset.no));return rows.filter(r=>ids.includes(r.no))}
+function summary(){const s=selected();total.value=money(s.reduce((a,r)=>a+r.quote,0));selectedText.textContent=`선택 ${s.length}건`;document.querySelectorAll('#body tr').forEach(tr=>tr.classList.toggle('sel',!!tr.querySelector('input:checked')))}
+function search(){const v=vendorQ.value.trim().toLowerCase(),j=jobQ.value.trim().toLowerCase(),it=itemQ.value.trim().toLowerCase(),m=doneMode();view=rows.filter(r=>(m==='완료'?r.status==='확정':r.status!=='확정')&&(!v||r.vendor.toLowerCase().includes(v))&&(!j||r.job.toLowerCase().includes(j))&&(!it||(r.item||'').toLowerCase().includes(it)));render();msg(`${m} 기준 ${view.length}건을 조회했습니다.`)}
+function applyNego(){const s=selected();if(!s.length)return msg('네고율을 적용할 행을 선택하세요.');const rate=Math.max(0,Math.min(100,Number(nego.value)||0));s.forEach(r=>r.rate=rate);render();s.forEach(r=>{const cb=document.querySelector(`#body input[data-no="${r.no}"]`);if(cb)cb.checked=true});summary();msg(`${s.length}건에 네고율 ${rate.toFixed(2)}%를 적용했습니다.`)}
+function confirmSelected(){const s=selected();if(!s.length)return msg('입고확정할 행을 선택하세요.');const d=confirmDate.value||new Date().toISOString().slice(0,10);s.forEach(r=>{r.cdate=d;r.status='확정'});search();msg(`${s.length}건을 ${d} 기준으로 입고확정했습니다.`)}
+function cancelConfirm(){const s=selected();if(!s.length)return msg('입고취소할 행을 선택하세요.');s.forEach(r=>{r.cdate='';r.status='대기'});search();msg(`${s.length}건의 입고확정을 취소했습니다.`)}
+function save(){msg('외주가공 입고확정 변경사항을 저장했습니다. (프로토타입)')}
+function exportCsv(){const out=[['제번','품명','공정','품번','부품명','가공공정코드','가공공정명','협력업체','발주월','입고월','입고확정일','견적가','네고율','확정가'],...view.map(r=>[r.job,r.item,r.proc,r.part,r.partName,r.mp,r.mpName,r.vendor,r.odate,r.idate,r.cdate,r.quote,r.rate,fix(r)])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='outsourcing_receipt_confirmation.csv';a.click();URL.revokeObjectURL(a.href)}
+function msg(t){message.textContent=t}
+confirmDate.value='2026-08-22';render();window.MES={search,save,exportCsv,setMessage:msg};
+</script>
+</body>
+</html>
