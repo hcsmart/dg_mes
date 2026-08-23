@@ -234,7 +234,7 @@ function injectCtx(f){
   if(doc.__mesCtxInjected||doc.querySelector('script[src*="mes_ctx.js"]'))return;
   doc.__mesCtxInjected=1;
   const s=doc.createElement('script');
-  s.src='mes_ctx.js?v='+APP_VER;
+  s.src='mes_ctx.js?v='+APP_VER;   /* 삭제 확인 다이얼로그 */
   doc.body.appendChild(s);
  }catch(e){/* 교차출처(file://)면 무시 — 이때는 각 HTML에 직접 넣어야 함 */}
 }
