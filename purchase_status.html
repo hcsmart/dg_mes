@@ -59,7 +59,7 @@ function search(){const k=document.querySelector('input[name="k"]:checked').valu
  render();msg(`조회결과 ${view.length}건입니다.`);}
 function csv(){msg('프로토타입에서는 EXCEL 내보내기를 지원하지 않습니다.')}
 document.querySelectorAll('input[name="k"]').forEach(x=>x.addEventListener('change',search));
-window.MES={search,setMessage:msg};render();</script><script src="mes_db.js?v=25"></script>
+window.MES={search,setMessage:msg};render();</script><script src="mes_db.js?v=27"></script>
 <script>MESDB.master({page:"purchase_status:data",table:"purchase_status_rows",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "category": "category", "job_no": "job_no", "item_name": "item_name", "process_code": "process_code", "process_name": "process_name", "part_no": "part_no", "part_name": "part_name", "machining_process_code": "machining_process_code", "orderer_name": "orderer_name", "partner_vendor_name": "partner_vendor_name", "order_date": {"col": "order_date", "type": "date"}, "receipt_planned_date": {"col": "receipt_planned_date", "type": "date"}, "receipt_date": {"col": "receipt_date", "type": "date"}, "receipt_confirmed_date": {"col": "receipt_confirmed_date", "type": "date"}, "quotation_price": {"col": "quotation_price", "type": "num"}, "confirmed_price": {"col": "confirmed_price", "type": "num"}, "plant_name": "plant_name"},get:()=>data,render:()=>{if(typeof view!=="undefined")view=[...data];(window.MES&&window.MES.search||window.search||window.render||function(){})()}});
 /* 표가 다시 그려질 때마다 합계 갱신 */
 (function(){const tb=document.querySelector('tbody');if(!tb||typeof renderTotal!=='function')return;new MutationObserver(()=>renderTotal()).observe(tb,{childList:true});renderTotal()})();

@@ -77,13 +77,13 @@ function summary(){const s=selected();total.value=money(s.reduce((a,r)=>a+r.quot
 function search(){const v=vendorQ.value.trim().toLowerCase(),j=jobQ.value.trim().toLowerCase(),it=itemQ.value.trim().toLowerCase(),m=doneMode();view=rows.filter(r=>(m==='완료'?r.status==='확정':r.status!=='확정')&&(!v||r.vendor.toLowerCase().includes(v))&&(!j||r.job.toLowerCase().includes(j))&&(!it||(r.item||'').toLowerCase().includes(it)));render();msg(`${m} 기준 ${view.length}건을 조회했습니다.`)}
 function applyNego(){const s=selected();if(!s.length)return msg('네고율을 적용할 행을 선택하세요.');const rate=Math.max(0,Math.min(100,Number(nego.value)||0));s.forEach(r=>r.rate=rate);render();s.forEach(r=>{const cb=document.querySelector(`#body input[data-no="${r.no}"]`);if(cb)cb.checked=true});summary();msg(`${s.length}건에 네고율 ${rate.toFixed(2)}%를 적용했습니다.`)}
 function confirmSelected(){const s=selected();if(!s.length)return msg('입고확정할 행을 선택하세요.');const d=confirmDate.value||new Date().toISOString().slice(0,10);s.forEach(r=>{r.cdate=d;r.status='확정'});search();msg(`${s.length}건을 ${d} 기준으로 입고확정했습니다.`)}
-function cancelConfirm(){const s=selected();if(!s.length)return msg('입고취소할 행을 선택하세요.');s.forEach(r=>{r.cdate='';r.status='대기'});search();msg(`${s.length}건의 입고확정을 취소했습니다.`)}
+function cancelConfirm(){const s=selected();if(!s.length)return msg('입고취소할 행을 선택하세요.');s.forEach(r=>{r.cdate='';r.status='입고'});search();msg(`${s.length}건의 입고확정을 취소했습니다. (입고 상태로 복귀)`)}
 function save(){msg('외주가공 입고확정 변경사항을 저장했습니다. (프로토타입)')}
 function exportCsv(){const out=[['제번','품명','공정','품번','부품명','가공공정코드','가공공정명','협력업체','발주월','입고월','입고확정일','견적가','네고율','확정가'],...view.map(r=>[r.job,r.item,r.proc,r.part,r.partName,r.mp,r.mpName,r.vendor,r.odate,r.idate,r.cdate,r.quote,r.rate,fix(r)])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='outsourcing_receipt_confirmation.csv';a.click();URL.revokeObjectURL(a.href)}
 function msg(t){message.textContent=t}
 confirmDate.value='2026-08-22';render();window.MES={search,save,exportCsv,setMessage:msg};
 </script>
-<script src="mes_db.js?v=25"></script>
+<script src="mes_db.js?v=27"></script>
 <script>MESDB.lines({page:"outsourcing_receipt_confirmation",category:"외주가공",statuses:["입고", "입고확정"],map:{"no": {"col": "line_id", "type": "num"}, "vendor": "vendor_name", "job": "job_no", "item": "item_name", "proc": "process_code", "procName": "process_name", "part": "part_no", "partName": "part_name", "mp": "machining_process_code", "mpName": "material", "odate": {"col": "order_date", "type": "date"}, "idate": {"col": "receipt_date", "type": "date"}, "cdate": {"col": "confirm_date", "type": "date"}, "quote": {"col": "quote_price", "type": "num"}, "rate": {"col": "nego_rate", "type": "num"}, "status": {"col": "status", "type": "status"}},get:()=>rows,render:()=>{view=[...rows];render()}});</script>
 <script src="mes_ctx.js?v=1"></script>
 </body>

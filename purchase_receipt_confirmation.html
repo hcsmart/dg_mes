@@ -83,7 +83,7 @@ function summary(){const s=selectedRows();total.value=money(s.reduce((a,r)=>a+r.
 function search(){const v=vendorQ.value.trim().toLowerCase(),j=jobQ.value.trim().toLowerCase(),it=itemQ.value.trim().toLowerCase();view=rows.filter(r=>(!v||r.vendor.toLowerCase().includes(v))&&(!j||r.job.toLowerCase().includes(j))&&(!it||r.item.toLowerCase().includes(it)));render();msg(`검색 결과 ${view.length}건입니다.`)}
 function applyNego(){const s=selectedRows();if(!s.length)return msg('네고율을 적용할 행을 선택하세요.');const rate=Math.max(0,Math.min(100,Number(nego.value)||0));s.forEach(r=>r.rate=rate);filterText.textContent=`Starts with([네고율(%)], '${rate.toFixed(2)}')`;render();s.forEach(r=>{const cb=document.querySelector(`#body input[data-id="${r.id}"]`);if(cb)cb.checked=true});summary();msg(`${s.length}건에 네고율 ${rate.toFixed(2)}%를 적용했습니다.`)}
 function confirmSelected(){const s=selectedRows();if(!s.length)return msg('입고확정할 행을 선택하세요.');const d=confirmDate.value||new Date().toISOString().slice(0,10);s.forEach(r=>{r.confirm=d;r.status='확정'});render();msg(`${s.length}건을 ${d} 기준으로 입고확정했습니다.`)}
-function cancelConfirm(){const s=selectedRows();if(!s.length)return msg('확정취소할 행을 선택하세요.');s.forEach(r=>{r.confirm='';r.status='대기'});render();msg(`${s.length}건의 입고확정을 취소했습니다.`)}
+function cancelConfirm(){const s=selectedRows();if(!s.length)return msg('확정취소할 행을 선택하세요.');s.forEach(r=>{r.confirm='';r.status='입고'});render();msg(`${s.length}건의 입고확정을 취소했습니다. (입고 상태로 복귀)`)}
 async function save(){const done=rows.filter(r=>r.status==='확정').length;if(!done){alert('확정 처리된 행이 없습니다.\n\n행을 선택하고 확정 처리한 뒤 [저장]을 눌러주세요.');return msg('저장할 확정 내역이 없습니다.')}if(!window.MESDB||!MESDB.online)return msg('구매품 입고확정 변경사항을 저장했습니다. (DB 미연결 - 로컬)');try{await MESDB.syncLines();const n=rows.filter(r=>r.status==='확정').length;msg(`구매품 입고확정을 DB에 저장했습니다. 확정 ${n}건`)}catch(e){msg('저장 실패: '+e.message.slice(0,140))}}
 function add(){msg('이 화면은 입고 대기자료를 확정하는 화면이므로 신규추가는 사용하지 않습니다.')}
 function remove(){cancelConfirm()}
@@ -91,7 +91,7 @@ function exportCsv(){const out=[['제번','품명','공정','공정명','품번'
 function msg(t){message.textContent=t}
 confirmDate.value=new Date().toISOString().slice(0,10);window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script>
-<script src="mes_db.js?v=25"></script>
+<script src="mes_db.js?v=27"></script>
 <script>MESDB.lines({page:"purchase_receipt_confirmation",category:"구매품",statuses:["입고", "입고확정"],map:{"id": {"col": "line_id", "type": "num"}, "vendor": "vendor_name", "job": "job_no", "item": "item_name", "proc": "process_code", "procName": "process_name", "part": "part_no", "partName": "part_name", "mat": "material", "order": {"col": "order_date", "type": "date"}, "inDate": {"col": "receipt_date", "type": "date"}, "confirm": {"col": "confirm_date", "type": "date"}, "price": {"col": "quote_price", "type": "num"}, "rate": {"col": "nego_rate", "type": "num"}, "status": {"col": "status", "type": "status"}},get:()=>rows,render:()=>{view=[...rows];render()}});</script>
 <script src="mes_ctx.js?v=1"></script>
 </body>

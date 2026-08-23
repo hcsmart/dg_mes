@@ -133,7 +133,7 @@ async function cancelOrder(){
  await loadDets();
  msg(fail.length?`일부 취소 실패: ${fail.join(', ')}`:`${sel.job_no} / ${names} 발주를 취소했습니다.`);
 }
-window.MES={search,save,cancelOrder,loadHeads,setMessage:msg};render();</script><script src="mes_db.js?v=25"></script>
+window.MES={search,save,cancelOrder,loadHeads,setMessage:msg};render();</script><script src="mes_db.js?v=27"></script>
 <script>
 loadHeads();
 MESDB.master({page:"set_order_registration:partners",table:"set_order_partners",pk:"row_no",
