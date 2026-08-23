@@ -4,7 +4,8 @@
  */
 (function(){
 const CFG={url:'https://ipggvrzxfcryzryileuv.supabase.co',key:'sb_publishable_CHO-dAOU00HNwno52255mg_H3C1_vew'};
-const H=()=>({'apikey':CFG.key,'Authorization':'Bearer '+CFG.key,'Content-Type':'application/json'});
+function tok(){try{return (window.MES_AUTH||window.parent.MES_AUTH)?.token||null}catch(e){return null}}
+const H=()=>({'apikey':CFG.key,'Authorization':'Bearer '+(tok()||CFG.key),'Content-Type':'application/json'});
 async function rest(path,opt={}){const r=await fetch(CFG.url+'/rest/v1/'+path,{...opt,headers:{...H(),...(opt.headers||{})}});if(!r.ok){const b=await r.text();if(r.status===401||r.status===403||/permission denied|row-level security/i.test(b))throw new Error('권한 없음(RLS): 로그인이 필요한 자료입니다. '+r.status);if(/violates foreign key/i.test(b))throw new Error('참조 무결성 위반: 마스터에 없는 코드입니다. 기준정보에 먼저 등록하세요.');if(/violates check constraint/i.test(b))throw new Error('허용되지 않는 값입니다(구분/상태 코드 확인).');throw new Error(r.status+' '+b.slice(0,200))}const t=await r.text();return t?JSON.parse(t):null}
 const table=name=>({
   select:(q='select=*')=>rest(`${name}?${q}`),
@@ -22,6 +23,15 @@ async function persist(){if(!online)return;const s=JSON.stringify(snapshot());if
 function bind(p,g){page=p;getter=g;load();document.addEventListener('click',e=>{if(e.target.closest('button,[onclick]')){clearTimeout(timer);timer=setTimeout(persist,400)}},true);document.addEventListener('change',()=>{clearTimeout(timer);timer=setTimeout(persist,400)},true)}
 async function reset(){await rest(`page_state?page=eq.${encodeURIComponent(page)}`,{method:'DELETE'});location.reload()}
 window.MESDB={cfg:CFG,rest,table,bind,persist,reset,get online(){return online}};
+MESDB.auth=()=>{try{return window.MES_AUTH||window.parent.MES_AUTH||null}catch(e){return null}};
+MESDB.pageMenu=()=>{try{const f=location.pathname.split('/').pop();return window.parent.MES_MENU_OF?.(f)||null}catch(e){return null}};
+MESDB.canSave=()=>{const a=MESDB.auth();if(!a)return true;const m=MESDB.pageMenu();return m?a.can(m,'save'):true};
+/* 저장 권한이 없으면 저장/삭제류 버튼 비활성 */
+document.addEventListener('DOMContentLoaded',()=>{const a=MESDB.auth();if(!a||a.role==='admin')return;const m=MESDB.pageMenu();if(!m)return;
+  const cs=a.can(m,'save'),ce=a.can(m,'edit'),cd=a.can(m,'delete');
+  document.querySelectorAll('button[onclick]').forEach(b=>{const oc=b.getAttribute('onclick');
+    if(/save|receive|confirm|apply|register/i.test(oc)&&!cs||/remove|del|cancel/i.test(oc)&&!cd){
+      b.disabled=true;b.title='권한이 없습니다';b.style.opacity=.45}});});
 MESDB.ping=async()=>{try{await rest('page_state?select=page&limit=1');online=true}catch(e){online=false}return online};MESDB.ping();
 })();
 

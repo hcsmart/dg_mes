@@ -185,12 +185,28 @@ const pageRegistry={
 let activeModule='기준정보', activeSecondary='생산/품질', activeId='machining_process_management';
 const openTabs=new Map();
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function buildModules(){modules.innerHTML=MODULES.map(m=>`<button class="module ${m===activeModule?'on':''}" onclick="setModule('${m}')">${m}</button>`).join('')}
+function buildModules(){modules.innerHTML=MODULES.filter(m=>{const a=window.MES_AUTH;if(!a||!a.session||a.role==='admin')return true;
+  return Object.entries(APP[m]?.menus||{}).some(([sec,gs])=>gs.some(g=>g.items.some(n=>a.can(m+'/'+sec+'/'+n,'view'))));
+}).map(m=>`<button class="module ${m===activeModule?'on':''}" onclick="setModule('${m}')">${m}</button>`).join('')}
 function buildSecondary(){
   const list=APP[activeModule]?.secondary||[];
   secondaryNav.innerHTML=list.map(x=>`<button class="tool ${x.name===activeSecondary?'on':''}" onclick="setSecondary('${x.name}')"><span class="ico">${x.icon}</span><span>${x.name}</span></button>`).join('');
 }
-function currentGroups(){return APP[activeModule]?.menus?.[activeSecondary]||[]}
+/* v23 권한: 조회권한 없는 메뉴 숨김 */
+function canView(path){const a=window.MES_AUTH;return !a||!a.session?true:a.can(path,'view')}
+function currentGroups(){
+  const gs=APP[activeModule]?.menus?.[activeSecondary]||[];
+  return gs.map(g=>({name:g.name,items:g.items.filter(n=>canView(activeModule+'/'+activeSecondary+'/'+n))}))
+           .filter(g=>g.items.length);
+}
+/* 화면파일 → 메뉴경로 (iframe의 mes_db.js가 권한 판단에 사용) */
+window.MES_MENU_OF=function(file){
+  for(const [mod,cfg] of Object.entries(APP))
+    for(const [sec,groups] of Object.entries(cfg.menus||{}))
+      for(const g of groups)for(const n of g.items)
+        if(pageRegistry[n]?.file===file)return mod+'/'+sec+'/'+n;
+  return null;
+};
 function buildTree(){
   const gs=currentGroups();
   if(!gs.length){tree.innerHTML='<div style="padding:16px;color:#7a8793">등록된 하위 메뉴가 없습니다.</div>';return}
@@ -216,5 +232,7 @@ function tick(){const d=new Date();now.textContent=d.toLocaleString('sv-SE',{hou
 openTabs.set('machining_process_management',pageRegistry['가공공정관리']);
 buildModules();buildSecondary();buildTree();renderTabs();renderStage();tick();setInterval(tick,1000);
 </script>
+<script src="mes_auth.js"></script>
+<script>window.addEventListener("mes-auth-ready",()=>{try{buildModules();buildSecondary();buildTree()}catch(e){}});</script>
 </body>
 </html>

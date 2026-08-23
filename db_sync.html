@@ -15,7 +15,7 @@ const TABLES={"assembly_result_jobs": ["job"], "business_divisions": ["business_
 const rows=d=>Array.isArray(d)?d:(Object.values(d).find(v=>Array.isArray(v)&&v.length&&typeof v[0]==='object')||[]);
 const body=document.getElementById('body'),msg=t=>document.getElementById('msg').textContent=t;
 function line(t,pk,n,db,res,cls){let tr=document.getElementById('t_'+t);if(!tr){tr=document.createElement('tr');tr.id='t_'+t;body.appendChild(tr)}tr.innerHTML=`<td>${t}</td><td>${pk.join(',')}</td><td class="r">${n??''}</td><td class="r">${db??''}</td><td class="${cls||''}">${res||''}</td>`}
-async function countDb(t){try{const r=await fetch(MESDB.cfg.url+'/rest/v1/'+t+'?select=*',{headers:{apikey:MESDB.cfg.key,Authorization:'Bearer '+MESDB.cfg.key,Prefer:'count=exact',Range:'0-0'}});return (r.headers.get('content-range')||'').split('/')[1]}catch(e){return '?'}}
+async function countDb(t){try{const r=await fetch(MESDB.cfg.url+'/rest/v1/'+t+'?select=*',{headers:{apikey:MESDB.cfg.key,Authorization:'Bearer '+((window.parent.MES_AUTH||window.MES_AUTH)?.token||MESDB.cfg.key),Prefer:'count=exact',Range:'0-0'}});return (r.headers.get('content-range')||'').split('/')[1]}catch(e){return '?'}}
 function normalize(rs){/* PostgREST는 배열 내 모든 객체의 키가 같아야 함(PGRST102) */
   const keys=[];for(const r of rs)for(const k in r)if(!keys.includes(k))keys.push(k);
   return rs.map(r=>{const o={};for(const k of keys)o[k]=(r[k]===undefined?null:r[k]);return o})}
