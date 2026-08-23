@@ -799,6 +799,9 @@
     "사용자 목록에 역할 뱃지 표시: [마스터] 보라색, [관리자] 파란색",
     "사용자 삭제 실제 동작으로 전환: delete_mes_user() RPC가 users 행·로그인 계정(auth.users)·메뉴 권한·발급 비밀번호를 함께 삭제. admin/master만 실행 가능",
     "삭제 안전장치: 본인 계정 삭제 불가, 마스터 계정은 마스터만 삭제, 마지막 남은 마스터는 삭제 불가",
-    "일반 사용자 로그인 시 [삭제]·[신규 사용자 등록]·[비밀번호 재설정] 버튼 자동 비활성"
+    "일반 사용자 로그인 시 [삭제]·[신규 사용자 등록]·[비밀번호 재설정] 버튼 자동 비활성",
+    "치명 버그 수정: mes_db.js 값 변환에서 JS null이 문자열 \"null\"로 전송되어 date 컬럼 저장 시 22007 오류(invalid input syntax for type date) 발생. text/date 변환 모두 null을 정상 null로 처리하도록 수정",
+    "date 컬럼 방어: 날짜 형식(YYYY-MM-DD)이 아닌 값은 null로 정규화",
+    "맵 타입 교정: users.registered_date, design_plan_steps.completion_planned_date, sales_plans의 가공·조립 시작/종료일 5건을 text→date로 지정"
   ]
 }

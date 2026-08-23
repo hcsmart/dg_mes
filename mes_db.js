@@ -27,7 +27,7 @@ MESDB.auth=()=>{try{return window.MES_AUTH||window.parent.MES_AUTH||null}catch(e
 MESDB.pageMenu=()=>{try{const f=location.pathname.split('/').pop();return window.parent.MES_MENU_OF?.(f)||null}catch(e){return null}};
 MESDB.canSave=()=>{const a=MESDB.auth();if(!a)return true;const m=MESDB.pageMenu();return m?a.can(m,'save'):true};
 /* 저장 권한이 없으면 저장/삭제류 버튼 비활성 */
-document.addEventListener('DOMContentLoaded',()=>{const a=MESDB.auth();if(!a||a.role==='admin')return;const m=MESDB.pageMenu();if(!m)return;
+document.addEventListener('DOMContentLoaded',()=>{const a=MESDB.auth();if(!a||a.role==='admin'||a.role==='master')return;const m=MESDB.pageMenu();if(!m)return;
   const cs=a.can(m,'save'),ce=a.can(m,'edit'),cd=a.can(m,'delete');
   document.querySelectorAll('button[onclick]').forEach(b=>{const oc=b.getAttribute('onclick');
     if(/save|receive|confirm|apply|register/i.test(oc)&&!cs||/remove|del|cancel/i.test(oc)&&!cd){
@@ -53,7 +53,7 @@ function toDb(row,map){const o={};for(const k in map){const{col,type}=map[k];let
   if(type==='ynbool')v=(v==='Y'?true:v==='N'?false:null);
   else if(type==='bool')v=(v===''||v===undefined||v===null)?null:!!v;
   else if(type==='num'){v=(v===''||v===null||v===undefined)?null:Number(v);if(Number.isNaN(v))v=null}
-  else v=(v===''||v===undefined)?null:String(v);
+  else v=(v===''||v===undefined||v===null)?null:String(v);
   o[col]=v}return o}
 function badge(t,c){let b=document.getElementById('mesdb-badge');if(!b){b=document.createElement('div');b.id='mesdb-badge';b.style.cssText='position:fixed;right:8px;bottom:50px;font:11px Malgun Gothic,sans-serif;padding:2px 7px;border-radius:9px;color:#fff;opacity:.85;z-index:9999;pointer-events:none';document.body.appendChild(b)}b.textContent=t;b.style.background=c}
 
@@ -109,9 +109,9 @@ const toS=(row,map)=>{const o={_id:row.line_id};for(const k in map){const{col,ty
 const toD=(row,map)=>{const o={};for(const k in map){const{col,type}=map[k];let v=row[k];
   if(col==='line_id')continue;
   if(type==='num'){v=(v===''||v===null||v===undefined)?null:Number(v);if(Number.isNaN(v))v=null}
-  else if(type==='date')v=(v?String(v).slice(0,10):null);
+  else if(type==='date'){v=(v&&v!=='null'&&v!=='undefined')?String(v).slice(0,10):null;if(v&&!/^\d{4}-\d{2}-\d{2}$/.test(v))v=null}
   else if(type==='status')v=S2D[v]||'발주';
-  else v=(v===''||v===undefined)?null:String(v);o[col]=v}return o};
+  else v=(v===''||v===undefined||v===null)?null:String(v);o[col]=v}return o};
 function badge(t,c){let b=document.getElementById('mesdb-badge');if(!b){b=document.createElement('div');b.id='mesdb-badge';b.style.cssText='position:fixed;right:8px;bottom:50px;font:11px Malgun Gothic,sans-serif;padding:2px 7px;border-radius:9px;color:#fff;opacity:.85;z-index:9999;pointer-events:none';document.body.appendChild(b)}b.textContent=t;b.style.background=c}
 
 async function lines(opt){
