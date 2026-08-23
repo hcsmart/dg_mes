@@ -76,7 +76,7 @@ function exportCsv(){const out=[['협력업체','제번','품명','공정','공�
 function msg(t){message.textContent=t}
 inDate.value='2026-08-22';render();window.MES={search,save,exportCsv,setMessage:msg};
 </script>
-<script src="mes_db.js"></script>
+<script src="mes_db.js?v=24"></script>
 <script>MESDB.lines({page:"purchase_receipt_input",category:"구매품",statuses:["발주", "입고"],map:{"no": {"col": "line_id", "type": "num"}, "vendor": "vendor_name", "job": "job_no", "item": "item_name", "proc": "process_code", "procName": "process_name", "part": "part_no", "partName": "part_name", "mat": "material", "spec": "spec", "ord": {"col": "order_qty", "type": "num"}, "inQty": {"col": "receipt_qty", "type": "num"}, "price": {"col": "unit_price", "type": "num"}, "amt": {"col": "receipt_amount", "type": "num"}, "odate": {"col": "order_date", "type": "date"}, "edate": {"col": "required_date", "type": "date"}, "idate": {"col": "receipt_date", "type": "date"}, "owner": "owner_name", "status": {"col": "status", "type": "status"}},get:()=>rows,render:()=>{view=[...rows];render()}});</script>
 </body>
 </html>

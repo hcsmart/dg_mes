@@ -40,6 +40,6 @@ function save(){message.textContent='프로토타입 화면에 입력값을 반�
 function remove(){message.textContent='프로토타입에서는 원본 JSON 삭제를 수행하지 않습니다.'}
 function exportCsv(){const rows=view.filter(r=>r.registered_date);const h=['등록일','가공공정그룹','가공공정코드','가공공정명','협력업체코드','협력업체명','단가','담당자'];const csv='\ufeff'+[h,...rows.map(r=>[r.registered_date,r.process_group,r.process_code,r.process_name,r.vendor_code,r.vendor_name,r.unit_price,r.registered_by])].map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='process_price_change_registration.csv';a.click()}
 window.MES={search,save,delete:remove,exportCsv,setMessage:t=>message.textContent=t};render();
-</script><script src="mes_db.js"></script>
+</script><script src="mes_db.js?v=24"></script>
 <script>MESDB.bind("process_price_change_registration",()=>({data}));</script>
 </body></html>

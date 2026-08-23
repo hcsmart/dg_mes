@@ -56,6 +56,6 @@ function search(){const j=q_job.value.trim().toLowerCase(),it=q_item.value.trim(
  view=heads.filter(r=>(!j||r.job_no.toLowerCase().includes(j))&&(!it||String(r.item_name??'').toLowerCase().includes(it)));dbody.innerHTML='';vbody.innerHTML='';render();msg(`조회결과 ${view.length}건입니다.`);}
 function save(){msg('프로토타입에서는 원본 JSON을 변경하지 않습니다.')}
 function cancel(){msg('프로토타입에서는 발주취소를 수행하지 않습니다.')}
-window.MES={search,save,setMessage:msg};render();</script><script src="mes_db.js"></script>
+window.MES={search,save,setMessage:msg};render();</script><script src="mes_db.js?v=24"></script>
 <script>MESDB.bind("set_order_receipt",()=>({heads,dets}));</script>
 </body></html>

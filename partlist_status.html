@@ -51,7 +51,7 @@ function search(){const k=q_kind.value,j=q_job.value.trim().toLowerCase(),p=q_pa
   &&(!pc||String(r.process_code??'').toLowerCase().includes(pc))&&(!m||String(r.material??'').toLowerCase().includes(m)));
  render();msg(`조회결과 ${view.length}건입니다.`);}
 function csv(){msg('프로토타입에서는 EXCEL 내보내기를 지원하지 않습니다.')}
-window.MES={search,setMessage:msg};render();</script><script src="mes_db.js"></script>
+window.MES={search,setMessage:msg};render();</script><script src="mes_db.js?v=24"></script>
 <script>
 MESDB.master({page:"partlist_status:data",table:"partlist_status_rows",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "process_code": "process_code", "part_no": "part_no", "part_name": "part_name", "order_type": "order_type", "material": "material", "design_dimension": "design_dimension", "qty": {"col": "qty", "type": "num"}, "attachment": "attachment", "order_status": "order_status", "registered_by": "registered_by", "registered_date": {"col": "registered_date", "type": "date"}},get:()=>data,render:()=>{if(typeof view!=="undefined")view=[...data];(window.render||window.search||function(){})()}});
 </script>

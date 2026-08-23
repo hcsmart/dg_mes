@@ -63,6 +63,6 @@ function save(){
   dbody.innerHTML=`<tr><td class="c"><input type="checkbox"></td><td>${esc(pv)}</td><td class="c">A</td><td class="c">1/1</td><td class="c">${new Date().toISOString().slice(0,10)}</td><td></td><td class="num">0</td><td class="num">0</td><td class="c">DG</td></tr>`;
   msg('프로토타입 화면에만 반영했습니다. 원본 JSON은 변경되지 않습니다.');
  }}
-window.MES={search,save,setMessage:msg};render();</script><script src="mes_db.js"></script>
+window.MES={search,save,setMessage:msg};render();</script><script src="mes_db.js?v=24"></script>
 <script>MESDB.bind("set_order_registration",()=>({heads,partners}));</script>
 </body></html>
