@@ -1,1242 +1,1294 @@
 {
-  "version": "15",
-  "tables": {
-    "business_divisions": {
-      "pk": "business_division_code",
-      "columns": {
-        "business_division_code": "text",
-        "business_division_name": "text",
-        "remark": "text?"
-      }
-    },
-    "vendors": {
-      "pk": "vendor_code",
-      "columns": {
-        "vendor_code": "text",
-        "vendor_name": "text",
-        "vendor_type": "text?",
-        "raw_material_flag": "boolean?",
-        "milling_flag": "boolean?",
-        "purchase_item_flag": "boolean?",
-        "outsourcing_flag": "boolean?",
-        "partner_type": "text?",
-        "location_type": "text?",
-        "ceo_name": "text?",
-        "phone": "text?",
-        "postal_code": "text?",
-        "fax": "text?",
-        "remark": "text?"
-      }
-    },
-    "equipment": {
-      "pk": "equipment_code",
-      "columns": {
-        "equipment_code": "text",
-        "equipment_name": "text",
-        "equipment_group": "text?",
-        "remark": "text?",
-        "is_active": "boolean?"
-      }
-    },
-    "materials": {
-      "pk": "material_code",
-      "columns": {
-        "material_code": "text",
-        "material_name": "text",
-        "material_group": "text?",
-        "density": "numeric?",
-        "thickness": "numeric?",
-        "width": "numeric?",
-        "height": "numeric?",
-        "length": "numeric?",
-        "remark": "text?"
-      }
-    },
-    "parts": {
-      "pk": "part_code",
-      "columns": {
-        "part_code": "text",
-        "part_name": "text",
-        "part_group": "text?",
-        "remark": "text?"
-      }
-    },
-    "item_categories": {
-      "pk": "item_code",
-      "columns": {
-        "item_code": "text",
-        "item_name": "text",
-        "remark": "text?"
-      }
-    },
-    "expense_reasons": {
-      "pk": "expense_reason_code",
-      "columns": {
-        "expense_reason_code": "text",
-        "expense_reason_name": "text",
-        "remark": "text?"
-      }
-    },
-    "mold_types": {
-      "pk": "mold_type_code",
-      "columns": {
-        "mold_type_code": "text",
-        "mold_type_name": "text",
-        "remark": "text?"
-      }
-    },
-    "machine_specs": {
-      "pk": "machine_spec_code",
-      "columns": {
-        "machine_spec_code": "text",
-        "machine_spec_name": "text",
-        "remark": "text?"
-      }
-    },
-    "processes": {
-      "pk": "process_code",
-      "columns": {
-        "process_code": "text",
-        "process_name": "text",
-        "process_group": "text?",
-        "sort_order": "integer?",
-        "completion_progress": "integer?",
-        "use_progress": "boolean?",
-        "use_plan": "boolean?",
-        "remark": "text?"
-      }
-    },
-    "standard_processes": {
-      "pk": "standard_process_id",
-      "columns": {
-        "standard_process_id": "integer",
-        "standard_process_name": "text",
-        "owner_name": "text?",
-        "registered_date": "date?"
-      }
-    },
-    "standard_process_steps": {
-      "pk": "(standard_process_id,sequence)",
-      "columns": {
-        "standard_process_id": "integer",
-        "sequence": "integer",
-        "process_code": "text"
-      }
-    },
-    "work_order_item_candidates": {
-      "pk": "item_no",
-      "columns": {
-        "plant_name": "text?",
-        "item_no": "text",
-        "item_name": "text?",
-        "item_type": "text?",
-        "vehicle_type": "text?",
-        "material": "text?",
-        "customer_name": "text?",
-        "stock_value": "numeric?",
-        "unit": "text?",
-        "incoming_inspection_required": "boolean?",
-        "monitoring_enabled": "boolean?",
-        "is_active": "boolean?"
-      }
-    },
-    "work_order_details": {
-      "pk": null,
-      "columns": {
-        "work_order_date": "date?",
-        "work_center_code": "text?",
-        "work_center_name": "text?",
-        "process_code": "text?",
-        "process_name": "text?",
-        "planned_qty": "numeric?",
-        "good_qty": "numeric?",
-        "defect_qty": "numeric?",
-        "completed_qty": "numeric?"
-      }
-    },
-    "purchase_receipt_candidates": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text?",
-        "item_name": "text?",
-        "process_code": "text?",
-        "process_sequence": "text?",
-        "part_no": "text?",
-        "part_name": "text?",
-        "material_code": "text?",
-        "vendor_name": "text?",
-        "order_date": "date?",
-        "receipt_date": "date?",
-        "receipt_confirmed_date": "date?",
-        "purchase_price": "numeric?",
-        "negotiation_rate": "numeric?",
-        "confirmed_price": "numeric?",
-        "status": "text?",
-        "item_name_truncated": "boolean",
-        "part_name_truncated": "boolean",
-        "source_photo": "text?"
-      }
-    },
-    "process_history_cards": {
-      "pk": "card_key",
-      "columns": {
-        "card_key": "text",
-        "issue_date": "date?",
-        "job_no": "text?",
-        "process_code": "text?",
-        "part_no": "text?",
-        "material_code": "text?",
-        "quantity": "numeric?",
-        "product_name": "text?",
-        "part_name": "text?",
-        "order_date": "date?",
-        "design_date": "date?",
-        "machining_date": "date?",
-        "assembly_date": "date?",
-        "s1_date": "date?",
-        "sales_manager": "text?",
-        "design_manager": "text?",
-        "process_sequence": "jsonb?"
-      }
-    },
-    "users": {
-      "pk": "user_key",
-      "columns": {
-        "user_key": "text",
-        "user_id": "text?",
-        "name": "text",
-        "department_code": "text?",
-        "department_name": "text?",
-        "factory": "text?",
-        "registered_date": "date?",
-        "position_code": "text?",
-        "position_name": "text?",
-        "user_group": "text?",
-        "is_active": "boolean?",
-        "business_division": "text?",
-        "email": "text?",
-        "employee_no": "text?",
-        "english_name": "text?",
-        "mobile_phone": "text?",
-        "phone": "text?",
-        "process_group": "text?",
-        "remark": "text?"
-      }
-    },
-    "user_permissions": {
-      "pk": "(user_key,menu_name)",
-      "columns": {
-        "user_key": "text",
-        "menu_name": "text",
-        "menu_path": "text[]",
-        "can_view": "boolean",
-        "can_save": "boolean",
-        "can_edit": "boolean",
-        "can_delete": "boolean",
-        "permission_status": "text (generated)"
-      }
-    },
-    "material_price_changes": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "material_type": "text?",
-        "material_code": "text",
-        "material_name": "text?",
-        "size": "text?",
-        "vendor_code": "text?",
-        "vendor_name": "text?",
-        "unit_price": "numeric?",
-        "manager_name": "text?",
-        "registered_by": "text?",
-        "registered_date": "date?",
-        "effective_date": "date?",
-        "plant_name": "text?"
-      }
-    },
-    "process_price_changes": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "process_group": "text?",
-        "process_code": "text",
-        "process_name": "text?",
-        "vendor_code": "text?",
-        "vendor_name": "text?",
-        "unit_price": "numeric?",
-        "registered_by": "text?",
-        "registered_date": "date?",
-        "manager_name": "text?",
-        "effective_date": "date?",
-        "plant_name": "text?"
-      }
-    },
-    "manufacturing_cost_orders": {
-      "pk": "job_no",
-      "columns": {
-        "row_no": "integer",
-        "order_type": "text?",
-        "completion_date": "date?",
-        "job_no": "text",
-        "model": "text?",
-        "item_name": "text?",
-        "drawing_no": "text?",
-        "drawing_no_truncated": "boolean",
-        "set_qty": "integer?",
-        "development_type": "text?",
-        "order_price": "numeric?",
-        "target_price": "numeric?",
-        "target_ratio_pct": "numeric?",
-        "manufacturing_cost": "numeric?",
-        "profit": "numeric?",
-        "profit_rate_pct": "numeric?",
-        "plant_name": "text?"
-      }
-    },
-    "manufacturing_cost_details": {
-      "pk": "(job_no,cost_stage)",
-      "columns": {
-        "job_no": "text",
-        "model": "text?",
-        "item_name": "text?",
-        "drawing_no": "text?",
-        "cost_stage": "text",
-        "manufacturing_cost": "numeric?",
-        "manufacturing_cost_rate_pct": "numeric?",
-        "design_cost_subtotal": "numeric?",
-        "design_cost_rate_pct": "numeric?",
-        "design_cost_internal": "numeric?",
-        "design_cost_internal_rate_pct": "numeric?",
-        "design_cost_external": "numeric?",
-        "design_cost_external_rate_pct": "numeric?",
-        "material_cost_subtotal": "numeric?",
-        "material_cost_rate_pct": "numeric?",
-        "raw_material_cost": "numeric?",
-        "raw_material_rate_pct": "numeric?",
-        "purchase_item_cost": "numeric?",
-        "purchase_item_rate_pct": "numeric?",
-        "machining_cost_subtotal": "numeric?",
-        "machining_cost_rate_pct": "numeric?",
-        "machining_cost_internal": "numeric?",
-        "machining_cost_external": "numeric?"
-      }
-    },
-    "employees": {
-      "pk": "employee_code",
-      "columns": {
-        "row_no": "integer",
-        "employee_code": "text",
-        "employee_name": "text?",
-        "name_uncertain": "boolean",
-        "source": "text?",
-        "code_uncertain": "boolean?"
-      }
-    },
-    "sale_orders": {
-      "pk": "job_no",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text",
-        "plant_name": "text?",
-        "order_status": "text?",
-        "order_type": "text?",
-        "quotation_no": "text?",
-        "drawing_no": "text?",
-        "business_division_code": "text?",
-        "business_division_name": "text?",
-        "item_code": "text?",
-        "item_name": "text?",
-        "order_date": "date?",
-        "s1_planned_date": "date?",
-        "delivery_planned_date": "date?",
-        "mold_type_code": "text?",
-        "mold_type_name": "text?",
-        "development_type": "text?",
-        "mass_production_vendor_code": "text?",
-        "mass_production_vendor_name": "text?",
-        "manager_code": "text?",
-        "manager_name": "text?",
-        "domestic_overseas": "text?",
-        "customer_code": "text?",
-        "customer_name": "text?",
-        "quotation_price": "numeric?",
-        "machine_spec_code": "text?",
-        "machine_spec_name": "text?",
-        "product_name": "text?",
-        "model": "text?",
-        "process_set_qty": "text?",
-        "remark": "text?",
-        "order_price": "numeric?",
-        "sales_price": "numeric?",
-        "material_used": "text?",
-        "s1_completed_date": "date?",
-        "delivery_completed_date": "date?",
-        "eco": "text?",
-        "completion_date": "date?",
-        "attachments": "jsonb?"
-      }
-    },
-    "sale_order_status_rows": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text",
-        "model": "text?",
-        "drawing_no": "text?",
-        "item_name": "text?",
-        "eco": "text?",
-        "customer_name": "text?",
-        "set_qty": "integer?",
-        "development_type": "text?",
-        "order_type": "text?",
-        "mold_type_name": "text?",
-        "machine_spec_name": "text?",
-        "order_date": "date?",
-        "s1_planned_date": "date?",
-        "completion_date": "date?",
-        "mass_production_vendor_name": "text?",
-        "order_status": "text?",
-        "plant_name": "text?"
-      }
-    },
-    "status_board_rows": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text",
-        "item_name": "text?",
-        "order_date": "date?",
-        "s1_due_date": "date?",
-        "completion_due_date": "date?",
-        "sales_manager": "text?",
-        "assembly_manager": "text?",
-        "s1_overdue": "boolean",
-        "completion_overdue": "boolean",
-        "page": "integer"
-      }
-    },
-    "sales_plans": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text?",
-        "plant_name": "text?",
-        "product_name": "text?",
-        "customer_name": "text?",
-        "process_set_qty": "text?",
-        "item_name": "text?",
-        "order_date": "date?",
-        "mold_type_name": "text?",
-        "s1_planned_date": "date?",
-        "model": "text?",
-        "delivery_planned_date": "date?",
-        "design_start_date": "date?",
-        "design_end_date": "date?",
-        "design_days": "integer?",
-        "design_outsourced": "boolean?",
-        "design_manager": "text?",
-        "machining_start_date": "date?",
-        "machining_end_date": "date?",
-        "machining_outsourced": "boolean?",
-        "machining_manager": "text?",
-        "assembly_start_date": "date?",
-        "assembly_end_date": "date?",
-        "assembly_outsourced": "boolean?",
-        "assembly_manager": "text?",
-        "order_price": "numeric?",
-        "target_price": "numeric?",
-        "profit_rate_pct": "numeric?",
-        "design_internal_amount": "numeric?",
-        "design_internal_pct": "numeric?",
-        "design_external_amount": "numeric?",
-        "design_external_pct": "numeric?",
-        "raw_material_amount": "numeric?",
-        "raw_material_pct": "numeric?",
-        "purchase_amount": "numeric?",
-        "purchase_pct": "numeric?",
-        "machining_internal_amount": "numeric?",
-        "machining_internal_pct": "numeric?",
-        "machining_external_amount": "numeric?",
-        "machining_external_pct": "numeric?",
-        "assembly_internal_amount": "numeric?",
-        "assembly_internal_pct": "numeric?",
-        "assembly_external_amount": "numeric?",
-        "assembly_external_pct": "numeric?",
-        "design_manager_code": "text?",
-        "machining_manager_code": "text?",
-        "assembly_manager_code": "text?",
-        "machining_days": "integer?",
-        "assembly_days": "integer?",
-        "remark": "text?"
-      }
-    },
-    "mold_code_matchings": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text",
-        "quotation_no": "text?",
-        "business_division_name": "text?",
-        "mass_production_vendor_name": "text?",
-        "item_name": "text?",
-        "order_type": "text?",
-        "eco": "text?",
-        "model": "text?",
-        "manager_name": "text?",
-        "customer_name": "text?",
-        "match_status": "text?",
-        "plant_name": "text?"
-      }
-    },
-    "mold_code_match_processes": {
-      "pk": "(process_set,process_code)",
-      "columns": {
-        "row_no": "integer",
-        "process_code": "text",
-        "process_name": "text",
-        "editable": "boolean",
-        "process_set": "text"
-      }
-    },
-    "set_order_status_rows": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text",
-        "item_name": "text?",
-        "model": "text?",
-        "domestic_overseas": "text?",
-        "customer_name": "text?",
-        "order_price": "numeric?",
-        "set_seq": "text?",
-        "paid_supply": "text?",
-        "quotation_price": "numeric?",
-        "negotiated_price": "numeric?",
-        "difference": "numeric?",
-        "partner_vendor_name": "text?",
-        "execution_rate_pct": "numeric?",
-        "receipt_date": "date?",
-        "order_date": "date?",
-        "receipt_planned_date": "date?",
-        "plant_name": "text?"
-      }
-    },
-    "set_order_receipts": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text",
-        "item_name": "text?",
-        "completion_planned_date": "date?",
-        "s1_date": "date?",
-        "customer_request_date": "date?",
-        "receipt_status": "text?"
-      }
-    },
-    "set_order_receipt_details": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text",
-        "receipt_status": "text?",
-        "partner_vendor_name": "text?",
-        "set_seq": "text?",
-        "process_name": "text?",
-        "receipt_planned_date": "date?",
-        "order_date": "date?",
-        "receipt_date": "date?",
-        "unit_price": "numeric?",
-        "confirmed_by": "text?"
-      }
-    },
-    "design_plans": {
-      "pk": "job_no",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text",
-        "item_name": "text?",
-        "customer_name": "text?",
-        "design_completion_planned_date": "date?",
-        "s1_date": "date?",
-        "customer_request_date": "date?",
-        "plant_name": "text?"
-      }
-    },
-    "design_plan_steps": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text",
-        "process_code": "text?",
-        "process_name": "text?",
-        "manager_name": "text?",
-        "machining_process_code": "text?",
-        "machining_process_name": "text?",
-        "completion_planned_date": "date?"
-      }
-    },
-    "design_results": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "work_type": "text",
-        "worker_name": "text",
-        "job_no": "text",
-        "process_code": "text?",
-        "machining_process_code": "text?",
-        "machining_process_name": "text?",
-        "work_date": "date?",
-        "work_minutes": "integer?"
-      }
-    },
-    "design_result_monthly": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "work_type": "text",
-        "worker_name": "text",
-        "year_month": "text",
-        "d01": "numeric?",
-        "d02": "numeric?",
-        "d03": "numeric?",
-        "d04": "numeric?",
-        "d05": "numeric?",
-        "d06": "numeric?",
-        "d07": "numeric?",
-        "d08": "numeric?",
-        "d09": "numeric?",
-        "d10": "numeric?",
-        "d11": "numeric?",
-        "d12": "numeric?",
-        "d13": "numeric?",
-        "d14": "numeric?",
-        "d15": "numeric?",
-        "d16": "numeric?",
-        "d17": "numeric?",
-        "d18": "numeric?",
-        "d19": "numeric?",
-        "d20": "numeric?",
-        "d21": "numeric?",
-        "d22": "numeric?",
-        "d23": "numeric?",
-        "d24": "numeric?",
-        "d25": "numeric?",
-        "d26": "numeric?",
-        "d27": "numeric?",
-        "d28": "numeric?",
-        "d29": "numeric?",
-        "d30": "numeric?",
-        "d31": "numeric?"
-      }
-    },
-    "design_teams": {
-      "pk": "team",
-      "columns": {
-        "team": "text",
-        "members": "jsonb"
-      }
-    },
-    "sales_plan_status_rows": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text",
-        "item_name": "text?",
-        "order_price": "numeric?",
-        "target_price": "numeric?",
-        "profit_rate_pct": "numeric?",
-        "design_start_date": "date?",
-        "design_end_date": "date?",
-        "design_days": "integer?",
-        "design_manager": "text?",
-        "machining_amount": "numeric?",
-        "assembly_amount": "numeric?",
-        "etc_amount": "numeric?",
-        "delivery_planned_date": "date?"
-      }
-    },
-    "set_order_registrations": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text",
-        "item_name": "text?",
-        "completion_planned_date": "date?",
-        "s1_date": "date?",
-        "customer_request_date": "date?"
-      }
-    },
-    "set_order_partners": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "partner_vendor_name": "text"
-      }
-    },
-    "partlist_materials": {
-      "pk": "(job_no,process_code,part_no)",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text",
-        "process_code": "text",
-        "part_no": "text",
-        "part_name": "text?",
-        "material": "text?",
-        "qty": "numeric?",
-        "thickness_dia": "numeric?",
-        "length": "numeric?",
-        "width": "numeric?",
-        "spec": "text?",
-        "registered_by": "text?",
-        "registered_date": "date?",
-        "remark": "text?",
-        "plant_name": "text?"
-      }
-    },
-    "partlist_purchases": {
-      "pk": "(job_no,process_code,part_no)",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text",
-        "process_code": "text",
-        "part_no": "text",
-        "part_name": "text?",
-        "type": "text?",
-        "qty": "numeric?",
-        "spec": "text?",
-        "registered_by": "text?",
-        "registered_date": "date?",
-        "attachment": "text?",
-        "plant_name": "text?"
-      }
-    },
-    "partlist_processes": {
-      "pk": "(job_no,process_code)",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text",
-        "process_code": "text",
-        "process_name": "text?"
-      }
-    },
-    "partlist_status_rows": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text",
-        "process_code": "text?",
-        "part_no": "text",
-        "part_name": "text?",
-        "order_type": "text?",
-        "material": "text?",
-        "design_dimension": "text?",
-        "qty": "numeric?",
-        "attachment": "text?",
-        "order_status": "text?",
-        "registered_by": "text?",
-        "registered_date": "date?"
-      }
-    },
-    "machining_plans": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text",
-        "process_code": "text?",
-        "machining_completion_date": "date?",
-        "s1_date": "date?"
-      }
-    },
-    "machining_standard_routes": {
-      "pk": "standard_process_no",
-      "columns": {
-        "row_no": "integer",
-        "standard_process_no": "integer",
-        "standard_process_name": "text",
-        "steps": "jsonb"
-      }
-    },
-    "machining_plan_parts": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "job_no": "text",
-        "part_no": "text",
-        "part_name": "text?",
-        "standard_process": "text?",
-        "steps": "jsonb"
-      }
-    },
-    "purchase_status_rows": {
-      "pk": "row_no",
-      "columns": {
-        "row_no": "integer",
-        "category": "text",
-        "job_no": "text",
-        "item_name": "text?",
-        "process_code": "text?",
-        "process_name": "text?",
-        "part_no": "text?",
-        "part_name": "text?",
-        "machining_process_code": "text?",
-        "orderer_name": "text?",
-        "partner_vendor_name": "text?",
-        "order_date": "date?",
-        "receipt_planned_date": "date?",
-        "receipt_date": "date?",
-        "receipt_confirmed_date": "date?",
-        "quotation_price": "numeric?",
-        "confirmed_price": "numeric?",
-        "plant_name": "text?"
-      }
-    },
-    "material_order_jobs": {
-      "pk": "(job_no,process_code)",
-      "columns": {
-        "job_no": "text",
-        "item_name": "text?",
-        "process_code": "text",
-        "process_name": "text?",
-        "plant_name": "text?",
-        "bom": "jsonb?"
-      }
-    },
-    "material_purchase_requests": {
-      "pk": "seq",
-      "columns": {
-        "seq": "integer",
-        "vendor_name": "text",
-        "job_no": "text",
-        "process_code": "text?",
-        "part_code": "text",
-        "part_name": "text?",
-        "material": "text?",
-        "design_spec": "text?",
-        "thickness": "numeric?",
-        "width": "numeric?",
-        "length": "numeric?",
-        "quantity": "integer?",
-        "order_quantity": "integer?",
-        "total_weight": "numeric?",
-        "order_date": "date?",
-        "required_date": "date?",
-        "attachment": "text?",
-        "remark": "text?"
-      }
-    },
-    "material_receipt_candidates": {
-      "pk": "seq",
-      "columns": {
-        "seq": "integer",
-        "vendor_name": "text",
-        "job_no": "text",
-        "item_name": "text?",
-        "process_code": "text?",
-        "process_name": "text?",
-        "part_code": "text",
-        "part_name": "text?",
-        "material": "text?",
-        "order_spec": "text?",
-        "order_quantity": "integer?",
-        "receipt_quantity": "integer?",
-        "unit_price": "numeric?",
-        "amount": "numeric?",
-        "order_date": "date?",
-        "expected_date": "date?",
-        "receipt_date": "date?",
-        "owner_name": "text?"
-      }
-    },
-    "material_receipt_confirm_candidates": {
-      "pk": "seq",
-      "columns": {
-        "seq": "integer",
-        "job_no": "text",
-        "item_name": "text?",
-        "process_code": "text?",
-        "process_name": "text?",
-        "part_code": "text",
-        "part_name": "text?",
-        "material": "text?",
-        "vendor_name": "text?",
-        "order_date": "date?",
-        "receipt_date": "date?",
-        "confirm_date": "date?",
-        "purchase_price": "numeric?",
-        "nego_rate": "numeric?",
-        "confirm_price": "numeric?",
-        "status": "text?"
-      }
-    },
-    "material_order_status_rows": {
-      "pk": "seq",
-      "columns": {
-        "seq": "integer",
-        "status_type": "text",
-        "vendor_name": "text?",
-        "job_no": "text",
-        "item_name": "text?",
-        "process_code": "text?",
-        "process_name": "text?",
-        "part_code": "text?",
-        "part_name": "text?",
-        "material": "text?",
-        "order_spec": "text?",
-        "quantity": "integer?",
-        "unit_price": "numeric?",
-        "order_date": "date?",
-        "required_date": "date?",
-        "receipt_date": "date?",
-        "confirm_date": "date?",
-        "quote_price": "numeric?",
-        "confirm_price": "numeric?"
-      }
-    },
-    "purchase_order_jobs": {
-      "pk": "job_no",
-      "columns": {
-        "job_no": "text",
-        "item_name": "text?",
-        "process_code": "text?",
-        "process_name": "text?"
-      }
-    },
-    "purchase_receipt_rows": {
-      "pk": "seq",
-      "columns": {
-        "seq": "integer",
-        "vendor_name": "text",
-        "job_no": "text",
-        "item_name": "text?",
-        "process_code": "text?",
-        "process_name": "text?",
-        "part_code": "text",
-        "part_name": "text?",
-        "material": "text?",
-        "order_quantity": "integer?",
-        "receipt_quantity": "integer?",
-        "spec": "text?",
-        "unit_price": "numeric?",
-        "amount": "numeric?",
-        "order_date": "date?",
-        "expected_date": "date?",
-        "receipt_date": "date?",
-        "owner_name": "text?"
-      }
-    },
-    "outsourced_design_orders": {
-      "pk": "seq",
-      "columns": {
-        "seq": "integer",
-        "job_no": "text",
-        "item_name": "text?",
-        "model_name": "text?",
-        "domestic_type": "text?",
-        "customer_name": "text?",
-        "order_amount": "numeric?",
-        "process_code": "text?",
-        "paid_supply": "text?",
-        "quote_price": "numeric?",
-        "nego_price": "numeric?",
-        "difference": "numeric?",
-        "partner_name": "text?",
-        "progress_rate": "integer?",
-        "receipt_date": "date?",
-        "order_date": "date?",
-        "expected_date": "date?"
-      }
-    },
-    "outsourced_design_partners": {
-      "pk": "partner_name",
-      "columns": {
-        "seq": "integer?",
-        "partner_name": "text"
-      }
-    },
-    "stock_inquiry_rows": {
-      "pk": "job_no",
-      "columns": {
-        "seq": "integer",
-        "job_no": "text",
-        "order_type": "text?",
-        "item_name": "text?",
-        "order_date": "date?",
-        "customer_name": "text?",
-        "develop_type": "text?",
-        "order_amount": "numeric?",
-        "purchase_amount": "numeric?"
-      }
-    },
-    "jobs": {
-      "pk": "job_no",
-      "columns": {
-        "job_no": "text",
-        "prefix": "text?",
-        "year": "integer?",
-        "seq": "integer?",
-        "sub_type": "text?",
-        "sub_no": "integer?",
-        "is_child": "boolean?",
-        "item_name": "text?",
-        "customer_name": "text?",
-        "order_status": "text?",
-        "order_date": "date?",
-        "sources": "text[]",
-        "source_count": "integer"
-      }
-    },
-    "sales_status_rows": {
-      "pk": "no",
-      "columns": {
-        "no": "numeric?",
-        "job": "text?",
-        "type": "text?",
-        "cust": "text?",
-        "item": "text?",
-        "set": "numeric?",
-        "dev": "text?",
-        "cdate": "text?",
-        "order": "numeric?",
-        "sale": "numeric?",
-        "partner": "text?",
-        "month": "numeric?",
-        "total": "numeric?"
-      },
-      "note": "HTML 인라인 데이터에서 추출. 키명은 화면 축약명"
-    },
-    "purchase_order_status_rows": {
-      "pk": "no",
-      "columns": {
-        "no": "numeric?",
-        "st": "text?",
-        "vendor": "text?",
-        "job": "text?",
-        "item": "text?",
-        "proc": "text?",
-        "procName": "text?",
-        "part": "text?",
-        "partName": "text?",
-        "mat": "text?",
-        "spec": "text?",
-        "qty": "numeric?",
-        "price": "numeric?",
-        "odate": "text?",
-        "rdate": "text?",
-        "idate": "text?",
-        "cdate": "text?",
-        "quote": "numeric?"
-      },
-      "note": "HTML 인라인 데이터에서 추출. 키명은 화면 축약명"
-    },
-    "outsourcing_order_jobs": {
-      "pk": "(job,proc)",
-      "columns": {
-        "job": "text?",
-        "item": "text?",
-        "proc": "text?",
-        "procName": "text?"
-      },
-      "note": "HTML 인라인 데이터에서 추출. 키명은 화면 축약명"
-    },
-    "outsourcing_receipt_confirm_candidates": {
-      "pk": "no",
-      "columns": {
-        "no": "numeric?",
-        "job": "text?",
-        "item": "text?",
-        "proc": "text?",
-        "procName": "text?",
-        "part": "text?",
-        "partName": "text?",
-        "mp": "text?",
-        "mpName": "text?",
-        "vendor": "text?",
-        "odate": "text?",
-        "idate": "text?",
-        "cdate": "text?",
-        "quote": "numeric?",
-        "rate": "numeric?",
-        "status": "text?"
-      },
-      "note": "HTML 인라인 데이터에서 추출. 키명은 화면 축약명"
-    },
-    "outsourcing_order_status_rows": {
-      "pk": "no",
-      "columns": {
-        "no": "numeric?",
-        "st": "text?",
-        "vendor": "text?",
-        "job": "text?",
-        "item": "text?",
-        "proc": "text?",
-        "procName": "text?",
-        "part": "text?",
-        "partName": "text?",
-        "mp": "text?",
-        "odate": "text?",
-        "edate": "text?",
-        "idate": "text?",
-        "cdate": "text?",
-        "quote": "numeric?",
-        "fix": "numeric?"
-      },
-      "note": "HTML 인라인 데이터에서 추출. 키명은 화면 축약명"
-    },
-    "machining_purchase_progress_rows": {
-      "pk": "no",
-      "columns": {
-        "no": "numeric?",
-        "job": "text?",
-        "proc": "text?",
-        "part": "text?",
-        "steps": "text?"
-      },
-      "note": "HTML 인라인 데이터에서 추출. 키명은 화면 축약명"
-    },
-    "assembly_result_jobs": {
-      "pk": "job",
-      "columns": {
-        "job": "text?",
-        "item": "text?",
-        "due": "text?",
-        "s1": "text?",
-        "cust": "text?",
-        "insp": "text?",
-        "done": "numeric?"
-      },
-      "note": "HTML 인라인 데이터에서 추출. 키명은 화면 축약명"
-    },
-    "outsourced_design_receipt_candidates": {
-      "pk": "seq",
-      "columns": {
-        "seq": "text?",
-        "job_no": "text?",
-        "item_name": "text?",
-        "partner_name": "text?",
-        "process_code": "text?",
-        "order_date": "text?",
-        "expected_date": "text?",
-        "nego_price": "text?",
-        "progress_rate": "text?",
-        "receipt_date": "text?"
-      }
-    },
-    "outsourced_design_receipts": {
-      "pk": "receipt_no",
-      "columns": {
-        "receipt_no": "text?",
-        "order_seq": "text?",
-        "job_no": "text?",
-        "partner_name": "text?",
-        "process_code": "text?",
-        "receipt_date": "text?",
-        "progress_rate": "text?",
-        "amount": "text?",
-        "inspector": "text?",
-        "remark": "text?"
-      }
-    },
-    "order_lines": {
-      "pk": "(category,job_no,part_no,process_code,vendor_name)",
-      "columns": {
-        "category": "text?",
-        "status": "text?",
-        "vendor_name": "text?",
-        "job_no": "text?",
-        "item_name": "text?",
-        "process_code": "text?",
-        "process_name": "text?",
-        "part_no": "text?",
-        "part_name": "text?",
-        "material": "text?",
-        "spec": "text?",
-        "machining_process_code": "text?",
-        "order_qty": "text?",
-        "receipt_qty": "text?",
-        "unit_price": "text?",
-        "quote_price": "text?",
-        "confirm_price": "text?",
-        "nego_rate": "text?",
-        "receipt_amount": "text?",
-        "order_date": "text?",
-        "required_date": "text?",
-        "expected_date": "text?",
-        "receipt_date": "text?",
-        "confirm_date": "text?",
-        "owner_name": "text?",
-        "remark": "text?",
-        "plant_name": "text?"
-      },
-      "note": "line_id는 DB 생성 컬럼. JSON 적재 시에는 PK 없이 insert"
-    },
-    "positions": {
-      "pk": "position_code",
-      "columns": {
-        "position_code": "text",
-        "position_name": "text",
-        "position_level": "integer?",
-        "position_group": "text?",
-        "is_approver": "boolean?",
-        "is_active": "boolean?",
-        "remark": "text?"
-      }
-    },
-    "inspection_categories": {
-      "pk": "inspection_category_code",
-      "columns": {
-        "inspection_category_code": "text",
-        "inspection_category_name": "text",
-        "inspection_target": "text?",
-        "inspection_timing": "text?",
-        "sampling_type": "text?",
-        "sort_order": "integer?",
-        "is_active": "boolean?",
-        "remark": "text?"
-      }
-    },
-    "inspection_items": {
-      "pk": "inspection_item_code",
-      "columns": {
-        "inspection_item_code": "text",
-        "inspection_item_name": "text",
-        "inspection_group": "text?",
-        "criteria": "text?",
-        "inspection_category_code": "text? (트리거 자동 채움)"
-      }
-    },
-    "inspection_results": {
-      "pk": "inspection_no",
-      "columns": {
-        "inspection_no": "bigint (identity)",
-        "line_id": "bigint? → order_lines",
-        "inspection_category_code": "text? → inspection_categories",
-        "inspection_date": "date",
-        "inspector": "text?",
-        "job_no": "text?",
-        "vendor_name": "text?",
-        "part_no": "text?",
-        "part_name": "text?",
-        "category": "text?",
-        "lot_qty": "numeric?",
-        "sample_qty": "numeric?",
-        "defect_qty": "numeric?",
-        "judgement": "text (대기/합격/불합격/특채)",
-        "action_taken": "text? (입고확정/반품/재작업/특채승인)",
-        "remark": "text?"
-      }
-    },
-    "inspection_result_details": {
-      "pk": "(inspection_no,inspection_item_code)",
-      "columns": {
-        "inspection_no": "bigint → inspection_results",
-        "inspection_item_code": "text → inspection_items",
-        "inspection_item_name": "text?",
-        "criteria": "text?",
-        "measured_value": "text?",
-        "result": "text (대기/OK/NG/N/A)",
-        "remark": "text?"
-      }
-    }
+ "version": "15",
+ "tables": {
+  "business_divisions": {
+   "pk": "business_division_code",
+   "columns": {
+    "business_division_code": "text",
+    "business_division_name": "text",
+    "remark": "text?"
+   }
+  },
+  "vendors": {
+   "pk": "vendor_code",
+   "columns": {
+    "vendor_code": "text",
+    "vendor_name": "text",
+    "vendor_type": "text?",
+    "raw_material_flag": "boolean?",
+    "milling_flag": "boolean?",
+    "purchase_item_flag": "boolean?",
+    "outsourcing_flag": "boolean?",
+    "partner_type": "text?",
+    "location_type": "text?",
+    "ceo_name": "text?",
+    "phone": "text?",
+    "postal_code": "text?",
+    "fax": "text?",
+    "remark": "text?"
+   }
+  },
+  "equipment": {
+   "pk": "equipment_code",
+   "columns": {
+    "equipment_code": "text",
+    "equipment_name": "text",
+    "equipment_group": "text?",
+    "remark": "text?",
+    "is_active": "boolean?"
+   }
+  },
+  "materials": {
+   "pk": "material_code",
+   "columns": {
+    "material_code": "text",
+    "material_name": "text",
+    "material_group": "text?",
+    "density": "numeric?",
+    "thickness": "numeric?",
+    "width": "numeric?",
+    "height": "numeric?",
+    "length": "numeric?",
+    "remark": "text?"
+   }
+  },
+  "parts": {
+   "pk": "part_code",
+   "columns": {
+    "part_code": "text",
+    "part_name": "text",
+    "part_group": "text?",
+    "remark": "text?"
+   }
+  },
+  "item_categories": {
+   "pk": "item_code",
+   "columns": {
+    "item_code": "text",
+    "item_name": "text",
+    "remark": "text?"
+   }
+  },
+  "expense_reasons": {
+   "pk": "expense_reason_code",
+   "columns": {
+    "expense_reason_code": "text",
+    "expense_reason_name": "text",
+    "remark": "text?"
+   }
+  },
+  "mold_types": {
+   "pk": "mold_type_code",
+   "columns": {
+    "mold_type_code": "text",
+    "mold_type_name": "text",
+    "remark": "text?"
+   }
+  },
+  "machine_specs": {
+   "pk": "machine_spec_code",
+   "columns": {
+    "machine_spec_code": "text",
+    "machine_spec_name": "text",
+    "remark": "text?"
+   }
+  },
+  "processes": {
+   "pk": "process_code",
+   "columns": {
+    "process_code": "text",
+    "process_name": "text",
+    "process_group": "text?",
+    "sort_order": "integer?",
+    "completion_progress": "integer?",
+    "use_progress": "boolean?",
+    "use_plan": "boolean?",
+    "remark": "text?"
+   }
+  },
+  "standard_processes": {
+   "pk": "standard_process_id",
+   "columns": {
+    "standard_process_id": "integer",
+    "standard_process_name": "text",
+    "owner_name": "text?",
+    "registered_date": "date?"
+   }
+  },
+  "standard_process_steps": {
+   "pk": "(standard_process_id,sequence)",
+   "columns": {
+    "standard_process_id": "integer",
+    "sequence": "integer",
+    "process_code": "text"
+   }
+  },
+  "work_order_item_candidates": {
+   "pk": "item_no",
+   "columns": {
+    "plant_name": "text?",
+    "item_no": "text",
+    "item_name": "text?",
+    "item_type": "text?",
+    "vehicle_type": "text?",
+    "material": "text?",
+    "customer_name": "text?",
+    "stock_value": "numeric?",
+    "unit": "text?",
+    "incoming_inspection_required": "boolean?",
+    "monitoring_enabled": "boolean?",
+    "is_active": "boolean?"
+   }
+  },
+  "work_order_details": {
+   "pk": null,
+   "columns": {
+    "work_order_date": "date?",
+    "work_center_code": "text?",
+    "work_center_name": "text?",
+    "process_code": "text?",
+    "process_name": "text?",
+    "planned_qty": "numeric?",
+    "good_qty": "numeric?",
+    "defect_qty": "numeric?",
+    "completed_qty": "numeric?"
+   }
+  },
+  "purchase_receipt_candidates": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text?",
+    "item_name": "text?",
+    "process_code": "text?",
+    "process_sequence": "text?",
+    "part_no": "text?",
+    "part_name": "text?",
+    "material_code": "text?",
+    "vendor_name": "text?",
+    "order_date": "date?",
+    "receipt_date": "date?",
+    "receipt_confirmed_date": "date?",
+    "purchase_price": "numeric?",
+    "negotiation_rate": "numeric?",
+    "confirmed_price": "numeric?",
+    "status": "text?",
+    "item_name_truncated": "boolean",
+    "part_name_truncated": "boolean",
+    "source_photo": "text?"
+   }
+  },
+  "process_history_cards": {
+   "pk": "card_key",
+   "columns": {
+    "card_key": "text",
+    "issue_date": "date?",
+    "job_no": "text?",
+    "process_code": "text?",
+    "part_no": "text?",
+    "material_code": "text?",
+    "quantity": "numeric?",
+    "product_name": "text?",
+    "part_name": "text?",
+    "order_date": "date?",
+    "design_date": "date?",
+    "machining_date": "date?",
+    "assembly_date": "date?",
+    "s1_date": "date?",
+    "sales_manager": "text?",
+    "design_manager": "text?",
+    "process_sequence": "jsonb?"
+   }
+  },
+  "users": {
+   "pk": "user_key",
+   "columns": {
+    "user_key": "text",
+    "user_id": "text?",
+    "name": "text",
+    "department_code": "text?",
+    "department_name": "text?",
+    "factory": "text?",
+    "registered_date": "date?",
+    "position_code": "text?",
+    "position_name": "text?",
+    "user_group": "text?",
+    "is_active": "boolean?",
+    "business_division": "text?",
+    "email": "text?",
+    "employee_no": "text?",
+    "english_name": "text?",
+    "mobile_phone": "text?",
+    "phone": "text?",
+    "process_group": "text?",
+    "remark": "text?"
+   }
+  },
+  "user_permissions": {
+   "pk": "(user_key,menu_name)",
+   "columns": {
+    "user_key": "text",
+    "menu_name": "text",
+    "menu_path": "text[]",
+    "can_view": "boolean",
+    "can_save": "boolean",
+    "can_edit": "boolean",
+    "can_delete": "boolean",
+    "permission_status": "text (generated)"
+   }
+  },
+  "material_price_changes": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "material_type": "text?",
+    "material_code": "text",
+    "material_name": "text?",
+    "size": "text?",
+    "vendor_code": "text?",
+    "vendor_name": "text?",
+    "unit_price": "numeric?",
+    "manager_name": "text?",
+    "registered_by": "text?",
+    "registered_date": "date?",
+    "effective_date": "date?",
+    "plant_name": "text?"
+   }
+  },
+  "process_price_changes": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "process_group": "text?",
+    "process_code": "text",
+    "process_name": "text?",
+    "vendor_code": "text?",
+    "vendor_name": "text?",
+    "unit_price": "numeric?",
+    "registered_by": "text?",
+    "registered_date": "date?",
+    "manager_name": "text?",
+    "effective_date": "date?",
+    "plant_name": "text?"
+   }
+  },
+  "manufacturing_cost_orders": {
+   "pk": "job_no",
+   "columns": {
+    "row_no": "integer",
+    "order_type": "text?",
+    "completion_date": "date?",
+    "job_no": "text",
+    "model": "text?",
+    "item_name": "text?",
+    "drawing_no": "text?",
+    "drawing_no_truncated": "boolean",
+    "set_qty": "integer?",
+    "development_type": "text?",
+    "order_price": "numeric?",
+    "target_price": "numeric?",
+    "target_ratio_pct": "numeric?",
+    "manufacturing_cost": "numeric?",
+    "profit": "numeric?",
+    "profit_rate_pct": "numeric?",
+    "plant_name": "text?"
+   }
+  },
+  "manufacturing_cost_details": {
+   "pk": "(job_no,cost_stage)",
+   "columns": {
+    "job_no": "text",
+    "model": "text?",
+    "item_name": "text?",
+    "drawing_no": "text?",
+    "cost_stage": "text",
+    "manufacturing_cost": "numeric?",
+    "manufacturing_cost_rate_pct": "numeric?",
+    "design_cost_subtotal": "numeric?",
+    "design_cost_rate_pct": "numeric?",
+    "design_cost_internal": "numeric?",
+    "design_cost_internal_rate_pct": "numeric?",
+    "design_cost_external": "numeric?",
+    "design_cost_external_rate_pct": "numeric?",
+    "material_cost_subtotal": "numeric?",
+    "material_cost_rate_pct": "numeric?",
+    "raw_material_cost": "numeric?",
+    "raw_material_rate_pct": "numeric?",
+    "purchase_item_cost": "numeric?",
+    "purchase_item_rate_pct": "numeric?",
+    "machining_cost_subtotal": "numeric?",
+    "machining_cost_rate_pct": "numeric?",
+    "machining_cost_internal": "numeric?",
+    "machining_cost_external": "numeric?"
+   }
+  },
+  "employees": {
+   "pk": "employee_code",
+   "columns": {
+    "row_no": "integer",
+    "employee_code": "text",
+    "employee_name": "text?",
+    "name_uncertain": "boolean",
+    "source": "text?",
+    "code_uncertain": "boolean?"
+   }
+  },
+  "sale_orders": {
+   "pk": "job_no",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text",
+    "plant_name": "text?",
+    "order_status": "text?",
+    "order_type": "text?",
+    "quotation_no": "text?",
+    "drawing_no": "text?",
+    "business_division_code": "text?",
+    "business_division_name": "text?",
+    "item_code": "text?",
+    "item_name": "text?",
+    "order_date": "date?",
+    "s1_planned_date": "date?",
+    "delivery_planned_date": "date?",
+    "mold_type_code": "text?",
+    "mold_type_name": "text?",
+    "development_type": "text?",
+    "mass_production_vendor_code": "text?",
+    "mass_production_vendor_name": "text?",
+    "manager_code": "text?",
+    "manager_name": "text?",
+    "domestic_overseas": "text?",
+    "customer_code": "text?",
+    "customer_name": "text?",
+    "quotation_price": "numeric?",
+    "machine_spec_code": "text?",
+    "machine_spec_name": "text?",
+    "product_name": "text?",
+    "model": "text?",
+    "process_set_qty": "text?",
+    "remark": "text?",
+    "order_price": "numeric?",
+    "sales_price": "numeric?",
+    "material_used": "text?",
+    "s1_completed_date": "date?",
+    "delivery_completed_date": "date?",
+    "eco": "text?",
+    "completion_date": "date?",
+    "attachments": "jsonb?"
+   }
+  },
+  "sale_order_status_rows": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text",
+    "model": "text?",
+    "drawing_no": "text?",
+    "item_name": "text?",
+    "eco": "text?",
+    "customer_name": "text?",
+    "set_qty": "integer?",
+    "development_type": "text?",
+    "order_type": "text?",
+    "mold_type_name": "text?",
+    "machine_spec_name": "text?",
+    "order_date": "date?",
+    "s1_planned_date": "date?",
+    "completion_date": "date?",
+    "mass_production_vendor_name": "text?",
+    "order_status": "text?",
+    "plant_name": "text?"
+   }
+  },
+  "status_board_rows": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text",
+    "item_name": "text?",
+    "order_date": "date?",
+    "s1_due_date": "date?",
+    "completion_due_date": "date?",
+    "sales_manager": "text?",
+    "assembly_manager": "text?",
+    "s1_overdue": "boolean",
+    "completion_overdue": "boolean",
+    "page": "integer"
+   }
+  },
+  "sales_plans": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text?",
+    "plant_name": "text?",
+    "product_name": "text?",
+    "customer_name": "text?",
+    "process_set_qty": "text?",
+    "item_name": "text?",
+    "order_date": "date?",
+    "mold_type_name": "text?",
+    "s1_planned_date": "date?",
+    "model": "text?",
+    "delivery_planned_date": "date?",
+    "design_start_date": "date?",
+    "design_end_date": "date?",
+    "design_days": "integer?",
+    "design_outsourced": "boolean?",
+    "design_manager": "text?",
+    "machining_start_date": "date?",
+    "machining_end_date": "date?",
+    "machining_outsourced": "boolean?",
+    "machining_manager": "text?",
+    "assembly_start_date": "date?",
+    "assembly_end_date": "date?",
+    "assembly_outsourced": "boolean?",
+    "assembly_manager": "text?",
+    "order_price": "numeric?",
+    "target_price": "numeric?",
+    "profit_rate_pct": "numeric?",
+    "design_internal_amount": "numeric?",
+    "design_internal_pct": "numeric?",
+    "design_external_amount": "numeric?",
+    "design_external_pct": "numeric?",
+    "raw_material_amount": "numeric?",
+    "raw_material_pct": "numeric?",
+    "purchase_amount": "numeric?",
+    "purchase_pct": "numeric?",
+    "machining_internal_amount": "numeric?",
+    "machining_internal_pct": "numeric?",
+    "machining_external_amount": "numeric?",
+    "machining_external_pct": "numeric?",
+    "assembly_internal_amount": "numeric?",
+    "assembly_internal_pct": "numeric?",
+    "assembly_external_amount": "numeric?",
+    "assembly_external_pct": "numeric?",
+    "design_manager_code": "text?",
+    "machining_manager_code": "text?",
+    "assembly_manager_code": "text?",
+    "machining_days": "integer?",
+    "assembly_days": "integer?",
+    "remark": "text?"
+   }
+  },
+  "mold_code_matchings": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text",
+    "quotation_no": "text?",
+    "business_division_name": "text?",
+    "mass_production_vendor_name": "text?",
+    "item_name": "text?",
+    "order_type": "text?",
+    "eco": "text?",
+    "model": "text?",
+    "manager_name": "text?",
+    "customer_name": "text?",
+    "match_status": "text?",
+    "plant_name": "text?"
+   }
+  },
+  "mold_code_match_processes": {
+   "pk": "(process_set,process_code)",
+   "columns": {
+    "row_no": "integer",
+    "process_code": "text",
+    "process_name": "text",
+    "editable": "boolean",
+    "process_set": "text"
+   }
+  },
+  "set_order_status_rows": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text",
+    "item_name": "text?",
+    "model": "text?",
+    "domestic_overseas": "text?",
+    "customer_name": "text?",
+    "order_price": "numeric?",
+    "set_seq": "text?",
+    "paid_supply": "text?",
+    "quotation_price": "numeric?",
+    "negotiated_price": "numeric?",
+    "difference": "numeric?",
+    "partner_vendor_name": "text?",
+    "execution_rate_pct": "numeric?",
+    "receipt_date": "date?",
+    "order_date": "date?",
+    "receipt_planned_date": "date?",
+    "plant_name": "text?"
+   }
+  },
+  "set_order_receipts": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text",
+    "item_name": "text?",
+    "completion_planned_date": "date?",
+    "s1_date": "date?",
+    "customer_request_date": "date?",
+    "receipt_status": "text?"
+   }
+  },
+  "set_order_receipt_details": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text",
+    "receipt_status": "text?",
+    "partner_vendor_name": "text?",
+    "set_seq": "text?",
+    "process_name": "text?",
+    "receipt_planned_date": "date?",
+    "order_date": "date?",
+    "receipt_date": "date?",
+    "unit_price": "numeric?",
+    "confirmed_by": "text?"
+   }
+  },
+  "design_plans": {
+   "pk": "job_no",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text",
+    "item_name": "text?",
+    "customer_name": "text?",
+    "design_completion_planned_date": "date?",
+    "s1_date": "date?",
+    "customer_request_date": "date?",
+    "plant_name": "text?"
+   }
+  },
+  "design_plan_steps": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text",
+    "process_code": "text?",
+    "process_name": "text?",
+    "manager_name": "text?",
+    "machining_process_code": "text?",
+    "machining_process_name": "text?",
+    "completion_planned_date": "date?"
+   }
+  },
+  "design_results": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "work_type": "text",
+    "worker_name": "text",
+    "job_no": "text",
+    "process_code": "text?",
+    "machining_process_code": "text?",
+    "machining_process_name": "text?",
+    "work_date": "date?",
+    "work_minutes": "integer?"
+   }
+  },
+  "design_result_monthly": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "work_type": "text",
+    "worker_name": "text",
+    "year_month": "text",
+    "d01": "numeric?",
+    "d02": "numeric?",
+    "d03": "numeric?",
+    "d04": "numeric?",
+    "d05": "numeric?",
+    "d06": "numeric?",
+    "d07": "numeric?",
+    "d08": "numeric?",
+    "d09": "numeric?",
+    "d10": "numeric?",
+    "d11": "numeric?",
+    "d12": "numeric?",
+    "d13": "numeric?",
+    "d14": "numeric?",
+    "d15": "numeric?",
+    "d16": "numeric?",
+    "d17": "numeric?",
+    "d18": "numeric?",
+    "d19": "numeric?",
+    "d20": "numeric?",
+    "d21": "numeric?",
+    "d22": "numeric?",
+    "d23": "numeric?",
+    "d24": "numeric?",
+    "d25": "numeric?",
+    "d26": "numeric?",
+    "d27": "numeric?",
+    "d28": "numeric?",
+    "d29": "numeric?",
+    "d30": "numeric?",
+    "d31": "numeric?"
+   }
+  },
+  "design_teams": {
+   "pk": "team",
+   "columns": {
+    "team": "text",
+    "members": "jsonb"
+   }
+  },
+  "sales_plan_status_rows": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text",
+    "item_name": "text?",
+    "order_price": "numeric?",
+    "target_price": "numeric?",
+    "profit_rate_pct": "numeric?",
+    "design_start_date": "date?",
+    "design_end_date": "date?",
+    "design_days": "integer?",
+    "design_manager": "text?",
+    "machining_amount": "numeric?",
+    "assembly_amount": "numeric?",
+    "etc_amount": "numeric?",
+    "delivery_planned_date": "date?"
+   }
+  },
+  "set_order_registrations": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text",
+    "item_name": "text?",
+    "completion_planned_date": "date?",
+    "s1_date": "date?",
+    "customer_request_date": "date?"
+   }
+  },
+  "set_order_partners": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "partner_vendor_name": "text"
+   }
+  },
+  "partlist_materials": {
+   "pk": "(job_no,process_code,part_no)",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text",
+    "process_code": "text",
+    "part_no": "text",
+    "part_name": "text?",
+    "material": "text?",
+    "qty": "numeric?",
+    "thickness_dia": "numeric?",
+    "length": "numeric?",
+    "width": "numeric?",
+    "spec": "text?",
+    "registered_by": "text?",
+    "registered_date": "date?",
+    "remark": "text?",
+    "plant_name": "text?"
+   }
+  },
+  "partlist_purchases": {
+   "pk": "(job_no,process_code,part_no)",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text",
+    "process_code": "text",
+    "part_no": "text",
+    "part_name": "text?",
+    "type": "text?",
+    "qty": "numeric?",
+    "spec": "text?",
+    "registered_by": "text?",
+    "registered_date": "date?",
+    "attachment": "text?",
+    "plant_name": "text?"
+   }
+  },
+  "partlist_processes": {
+   "pk": "(job_no,process_code)",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text",
+    "process_code": "text",
+    "process_name": "text?"
+   }
+  },
+  "partlist_status_rows": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text",
+    "process_code": "text?",
+    "part_no": "text",
+    "part_name": "text?",
+    "order_type": "text?",
+    "material": "text?",
+    "design_dimension": "text?",
+    "qty": "numeric?",
+    "attachment": "text?",
+    "order_status": "text?",
+    "registered_by": "text?",
+    "registered_date": "date?"
+   }
+  },
+  "machining_plans": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text",
+    "process_code": "text?",
+    "machining_completion_date": "date?",
+    "s1_date": "date?"
+   }
+  },
+  "machining_standard_routes": {
+   "pk": "standard_process_no",
+   "columns": {
+    "row_no": "integer",
+    "standard_process_no": "integer",
+    "standard_process_name": "text",
+    "steps": "jsonb"
+   }
+  },
+  "machining_plan_parts": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "job_no": "text",
+    "part_no": "text",
+    "part_name": "text?",
+    "standard_process": "text?",
+    "steps": "jsonb"
+   }
+  },
+  "purchase_status_rows": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "integer",
+    "category": "text",
+    "job_no": "text",
+    "item_name": "text?",
+    "process_code": "text?",
+    "process_name": "text?",
+    "part_no": "text?",
+    "part_name": "text?",
+    "machining_process_code": "text?",
+    "orderer_name": "text?",
+    "partner_vendor_name": "text?",
+    "order_date": "date?",
+    "receipt_planned_date": "date?",
+    "receipt_date": "date?",
+    "receipt_confirmed_date": "date?",
+    "quotation_price": "numeric?",
+    "confirmed_price": "numeric?",
+    "plant_name": "text?"
+   }
+  },
+  "material_order_jobs": {
+   "pk": "(job_no,process_code)",
+   "columns": {
+    "job_no": "text",
+    "item_name": "text?",
+    "process_code": "text",
+    "process_name": "text?",
+    "plant_name": "text?",
+    "bom": "jsonb?"
+   }
+  },
+  "material_purchase_requests": {
+   "pk": "seq",
+   "columns": {
+    "seq": "integer",
+    "vendor_name": "text",
+    "job_no": "text",
+    "process_code": "text?",
+    "part_code": "text",
+    "part_name": "text?",
+    "material": "text?",
+    "design_spec": "text?",
+    "thickness": "numeric?",
+    "width": "numeric?",
+    "length": "numeric?",
+    "quantity": "integer?",
+    "order_quantity": "integer?",
+    "total_weight": "numeric?",
+    "order_date": "date?",
+    "required_date": "date?",
+    "attachment": "text?",
+    "remark": "text?"
+   }
+  },
+  "material_receipt_candidates": {
+   "pk": "seq",
+   "columns": {
+    "seq": "integer",
+    "vendor_name": "text",
+    "job_no": "text",
+    "item_name": "text?",
+    "process_code": "text?",
+    "process_name": "text?",
+    "part_code": "text",
+    "part_name": "text?",
+    "material": "text?",
+    "order_spec": "text?",
+    "order_quantity": "integer?",
+    "receipt_quantity": "integer?",
+    "unit_price": "numeric?",
+    "amount": "numeric?",
+    "order_date": "date?",
+    "expected_date": "date?",
+    "receipt_date": "date?",
+    "owner_name": "text?"
+   }
+  },
+  "material_receipt_confirm_candidates": {
+   "pk": "seq",
+   "columns": {
+    "seq": "integer",
+    "job_no": "text",
+    "item_name": "text?",
+    "process_code": "text?",
+    "process_name": "text?",
+    "part_code": "text",
+    "part_name": "text?",
+    "material": "text?",
+    "vendor_name": "text?",
+    "order_date": "date?",
+    "receipt_date": "date?",
+    "confirm_date": "date?",
+    "purchase_price": "numeric?",
+    "nego_rate": "numeric?",
+    "confirm_price": "numeric?",
+    "status": "text?"
+   }
+  },
+  "material_order_status_rows": {
+   "pk": "seq",
+   "columns": {
+    "seq": "integer",
+    "status_type": "text",
+    "vendor_name": "text?",
+    "job_no": "text",
+    "item_name": "text?",
+    "process_code": "text?",
+    "process_name": "text?",
+    "part_code": "text?",
+    "part_name": "text?",
+    "material": "text?",
+    "order_spec": "text?",
+    "quantity": "integer?",
+    "unit_price": "numeric?",
+    "order_date": "date?",
+    "required_date": "date?",
+    "receipt_date": "date?",
+    "confirm_date": "date?",
+    "quote_price": "numeric?",
+    "confirm_price": "numeric?"
+   }
+  },
+  "purchase_order_jobs": {
+   "pk": "job_no",
+   "columns": {
+    "job_no": "text",
+    "item_name": "text?",
+    "process_code": "text?",
+    "process_name": "text?"
+   }
+  },
+  "purchase_receipt_rows": {
+   "pk": "seq",
+   "columns": {
+    "seq": "integer",
+    "vendor_name": "text",
+    "job_no": "text",
+    "item_name": "text?",
+    "process_code": "text?",
+    "process_name": "text?",
+    "part_code": "text",
+    "part_name": "text?",
+    "material": "text?",
+    "order_quantity": "integer?",
+    "receipt_quantity": "integer?",
+    "spec": "text?",
+    "unit_price": "numeric?",
+    "amount": "numeric?",
+    "order_date": "date?",
+    "expected_date": "date?",
+    "receipt_date": "date?",
+    "owner_name": "text?"
+   }
+  },
+  "outsourced_design_orders": {
+   "pk": "seq",
+   "columns": {
+    "seq": "integer",
+    "job_no": "text",
+    "item_name": "text?",
+    "model_name": "text?",
+    "domestic_type": "text?",
+    "customer_name": "text?",
+    "order_amount": "numeric?",
+    "process_code": "text?",
+    "paid_supply": "text?",
+    "quote_price": "numeric?",
+    "nego_price": "numeric?",
+    "difference": "numeric?",
+    "partner_name": "text?",
+    "progress_rate": "integer?",
+    "receipt_date": "date?",
+    "order_date": "date?",
+    "expected_date": "date?"
+   }
+  },
+  "outsourced_design_partners": {
+   "pk": "partner_name",
+   "columns": {
+    "seq": "integer?",
+    "partner_name": "text"
+   }
+  },
+  "stock_inquiry_rows": {
+   "pk": "job_no",
+   "columns": {
+    "seq": "integer",
+    "job_no": "text",
+    "order_type": "text?",
+    "item_name": "text?",
+    "order_date": "date?",
+    "customer_name": "text?",
+    "develop_type": "text?",
+    "order_amount": "numeric?",
+    "purchase_amount": "numeric?"
+   }
+  },
+  "jobs": {
+   "pk": "job_no",
+   "columns": {
+    "job_no": "text",
+    "prefix": "text?",
+    "year": "integer?",
+    "seq": "integer?",
+    "sub_type": "text?",
+    "sub_no": "integer?",
+    "is_child": "boolean?",
+    "item_name": "text?",
+    "customer_name": "text?",
+    "order_status": "text?",
+    "order_date": "date?",
+    "sources": "text[]",
+    "source_count": "integer"
+   }
+  },
+  "sales_status_rows": {
+   "pk": "no",
+   "columns": {
+    "no": "numeric?",
+    "job": "text?",
+    "type": "text?",
+    "cust": "text?",
+    "item": "text?",
+    "set": "numeric?",
+    "dev": "text?",
+    "cdate": "text?",
+    "order": "numeric?",
+    "sale": "numeric?",
+    "partner": "text?",
+    "month": "numeric?",
+    "total": "numeric?"
+   },
+   "note": "HTML 인라인 데이터에서 추출. 키명은 화면 축약명"
+  },
+  "purchase_order_status_rows": {
+   "pk": "no",
+   "columns": {
+    "no": "numeric?",
+    "st": "text?",
+    "vendor": "text?",
+    "job": "text?",
+    "item": "text?",
+    "proc": "text?",
+    "procName": "text?",
+    "part": "text?",
+    "partName": "text?",
+    "mat": "text?",
+    "spec": "text?",
+    "qty": "numeric?",
+    "price": "numeric?",
+    "odate": "text?",
+    "rdate": "text?",
+    "idate": "text?",
+    "cdate": "text?",
+    "quote": "numeric?"
+   },
+   "note": "HTML 인라인 데이터에서 추출. 키명은 화면 축약명"
+  },
+  "outsourcing_order_jobs": {
+   "pk": "(job,proc)",
+   "columns": {
+    "job": "text?",
+    "item": "text?",
+    "proc": "text?",
+    "procName": "text?"
+   },
+   "note": "HTML 인라인 데이터에서 추출. 키명은 화면 축약명"
+  },
+  "outsourcing_receipt_confirm_candidates": {
+   "pk": "no",
+   "columns": {
+    "no": "numeric?",
+    "job": "text?",
+    "item": "text?",
+    "proc": "text?",
+    "procName": "text?",
+    "part": "text?",
+    "partName": "text?",
+    "mp": "text?",
+    "mpName": "text?",
+    "vendor": "text?",
+    "odate": "text?",
+    "idate": "text?",
+    "cdate": "text?",
+    "quote": "numeric?",
+    "rate": "numeric?",
+    "status": "text?"
+   },
+   "note": "HTML 인라인 데이터에서 추출. 키명은 화면 축약명"
+  },
+  "outsourcing_order_status_rows": {
+   "pk": "no",
+   "columns": {
+    "no": "numeric?",
+    "st": "text?",
+    "vendor": "text?",
+    "job": "text?",
+    "item": "text?",
+    "proc": "text?",
+    "procName": "text?",
+    "part": "text?",
+    "partName": "text?",
+    "mp": "text?",
+    "odate": "text?",
+    "edate": "text?",
+    "idate": "text?",
+    "cdate": "text?",
+    "quote": "numeric?",
+    "fix": "numeric?"
+   },
+   "note": "HTML 인라인 데이터에서 추출. 키명은 화면 축약명"
+  },
+  "machining_purchase_progress_rows": {
+   "pk": "no",
+   "columns": {
+    "no": "numeric?",
+    "job": "text?",
+    "proc": "text?",
+    "part": "text?",
+    "steps": "text?"
+   },
+   "note": "HTML 인라인 데이터에서 추출. 키명은 화면 축약명"
+  },
+  "assembly_result_jobs": {
+   "pk": "job",
+   "columns": {
+    "job": "text?",
+    "item": "text?",
+    "due": "text?",
+    "s1": "text?",
+    "cust": "text?",
+    "insp": "text?",
+    "done": "numeric?"
+   },
+   "note": "HTML 인라인 데이터에서 추출. 키명은 화면 축약명"
+  },
+  "outsourced_design_receipt_candidates": {
+   "pk": "seq",
+   "columns": {
+    "seq": "text?",
+    "job_no": "text?",
+    "item_name": "text?",
+    "partner_name": "text?",
+    "process_code": "text?",
+    "order_date": "text?",
+    "expected_date": "text?",
+    "nego_price": "text?",
+    "progress_rate": "text?",
+    "receipt_date": "text?"
+   }
+  },
+  "outsourced_design_receipts": {
+   "pk": "receipt_no",
+   "columns": {
+    "receipt_no": "text?",
+    "order_seq": "text?",
+    "job_no": "text?",
+    "partner_name": "text?",
+    "process_code": "text?",
+    "receipt_date": "text?",
+    "progress_rate": "text?",
+    "amount": "text?",
+    "inspector": "text?",
+    "remark": "text?"
+   }
+  },
+  "order_lines": {
+   "pk": "(category,job_no,part_no,process_code,vendor_name)",
+   "columns": {
+    "category": "text?",
+    "status": "text?",
+    "vendor_name": "text?",
+    "job_no": "text?",
+    "item_name": "text?",
+    "process_code": "text?",
+    "process_name": "text?",
+    "part_no": "text?",
+    "part_name": "text?",
+    "material": "text?",
+    "spec": "text?",
+    "machining_process_code": "text?",
+    "order_qty": "text?",
+    "receipt_qty": "text?",
+    "unit_price": "text?",
+    "quote_price": "text?",
+    "confirm_price": "text?",
+    "nego_rate": "text?",
+    "receipt_amount": "text?",
+    "order_date": "text?",
+    "required_date": "text?",
+    "expected_date": "text?",
+    "receipt_date": "text?",
+    "confirm_date": "text?",
+    "owner_name": "text?",
+    "remark": "text?",
+    "plant_name": "text?"
+   },
+   "note": "line_id는 DB 생성 컬럼. JSON 적재 시에는 PK 없이 insert"
+  },
+  "positions": {
+   "pk": "position_code",
+   "columns": {
+    "position_code": "text",
+    "position_name": "text",
+    "position_level": "integer?",
+    "position_group": "text?",
+    "is_approver": "boolean?",
+    "is_active": "boolean?",
+    "remark": "text?"
+   }
+  },
+  "inspection_categories": {
+   "pk": "inspection_category_code",
+   "columns": {
+    "inspection_category_code": "text",
+    "inspection_category_name": "text",
+    "inspection_target": "text?",
+    "inspection_timing": "text?",
+    "sampling_type": "text?",
+    "sort_order": "integer?",
+    "is_active": "boolean?",
+    "remark": "text?"
+   }
+  },
+  "inspection_items": {
+   "pk": "inspection_item_code",
+   "columns": {
+    "inspection_item_code": "text",
+    "inspection_item_name": "text",
+    "inspection_group": "text?",
+    "criteria": "text?",
+    "inspection_category_code": "text? (트리거 자동 채움)"
+   }
+  },
+  "inspection_results": {
+   "pk": "inspection_no",
+   "columns": {
+    "inspection_no": "bigint (identity)",
+    "line_id": "bigint? → order_lines",
+    "inspection_category_code": "text? → inspection_categories",
+    "inspection_date": "date",
+    "inspector": "text?",
+    "job_no": "text?",
+    "vendor_name": "text?",
+    "part_no": "text?",
+    "part_name": "text?",
+    "category": "text?",
+    "lot_qty": "numeric?",
+    "sample_qty": "numeric?",
+    "defect_qty": "numeric?",
+    "judgement": "text (대기/합격/불합격/특채)",
+    "action_taken": "text? (입고확정/반품/재작업/특채승인)",
+    "remark": "text?"
+   }
+  },
+  "inspection_result_details": {
+   "pk": "(inspection_no,inspection_item_code)",
+   "columns": {
+    "inspection_no": "bigint → inspection_results",
+    "inspection_item_code": "text → inspection_items",
+    "inspection_item_name": "text?",
+    "criteria": "text?",
+    "measured_value": "text?",
+    "result": "text (대기/OK/NG/N/A)",
+    "remark": "text?"
+   }
+  },
+  "set_order_lines": {
+   "pk": "line_id (identity)",
+   "unique": "(job_no, partner_vendor_name, set_seq, process_name)",
+   "columns": {
+    "line_id": "bigint",
+    "job_no": "text",
+    "partner_vendor_name": "text",
+    "set_seq": "text",
+    "process_code": "text?",
+    "process_name": "text",
+    "status": "text (발주|입고|입고확정)",
+    "order_date": "date",
+    "receipt_planned_date": "date?",
+    "receipt_date": "date?",
+    "quote_price": "numeric?",
+    "nego_price": "numeric?",
+    "unit_price": "numeric?",
+    "writer": "text?",
+    "confirmed_by": "text?",
+    "plant_name": "text?",
+    "remark": "text?",
+    "created_at": "timestamptz",
+    "updated_at": "timestamptz"
+   },
+   "fk": [
+    "job_no -> jobs.job_no",
+    "partner_vendor_name -> vendors.vendor_name"
+   ],
+   "triggers": [
+    "set_order_lines_guard_trg: 상태별 입고일/확정자 정합성 + updated_at",
+    "set_order_lines_no_del_trg: 상태<>'발주' 인 라인 DELETE 차단"
+   ],
+   "note": "SET발주 등록/입고/취소가 공유하는 단일 원장. 화면: set_order_registration, set_order_receipt"
   }
+ },
+ "views": {
+  "set_order_job_list": {
+   "source": "set_order_lines + set_order_registrations + jobs",
+   "columns": {
+    "row_no": "bigint",
+    "job_no": "text",
+    "item_name": "text?",
+    "completion_planned_date": "date?",
+    "s1_date": "date?",
+    "customer_request_date": "date?",
+    "line_cnt": "bigint",
+    "open_cnt": "bigint",
+    "done_cnt": "bigint",
+    "receipt_status": "text (미완료|완료)"
+   },
+   "note": "SET발주입고 화면의 제번리스트 (발주가 존재하는 제번만)"
+  }
+ }
 }
