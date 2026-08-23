@@ -1181,6 +1181,25 @@
         "is_active": "boolean?",
         "remark": "text?"
       }
+    },
+    "inspection_categories": {
+      "pk": "inspection_category_code",
+      "columns": {
+        "inspection_category_code": "text",
+        "inspection_category_name": "text",
+        "inspection_target": "text?",
+        "inspection_timing": "text?",
+        "sampling_type": "text?",
+        "sort_order": "integer?",
+        "is_active": "boolean?",
+        "remark": "text?"
+      }
+    },
+    "inspection_items": {
+      "pk": "inspection_item_code",
+      "columns": {
+        "inspection_category_code": "text?"
+      }
     }
   }
 }
