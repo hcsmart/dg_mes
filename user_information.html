@@ -136,12 +136,15 @@ const permissions = [{"user_key": "10300_장소율", "user_id": "user19", "menu_
 let selectedKey = '10300_장소율';
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function grouped(arr){
+  /* v23: 고정 부서목록으로 필터하던 방식은 새 부서(예: 시스템) 사용자를 목록에서 누락시킴.
+     실제 데이터의 부서를 모두 그룹으로 만들되, 기존 순서를 앞에 유지한다. */
   const order=['경영기획','공통','구매/가공','부서없음','설계','연구소'];
+  const key=u=>String(u.department_name||'').trim()||'부서없음';
+  const seen=new Map();
+  for(const u of arr){const k=key(u); if(!seen.has(k))seen.set(k,[]); seen.get(k).push(u)}
   const out=[];
-  for(const dept of order){
-    const rows=arr.filter(x=>x.department_name===dept);
-    if(rows.length) out.push([dept,rows]);
-  }
+  for(const dept of order) if(seen.has(dept)){out.push([dept,seen.get(dept)]); seen.delete(dept)}
+  for(const [dept,rows] of [...seen.entries()].sort((a,b)=>a[0].localeCompare(b[0],'ko'))) out.push([dept,rows]);
   return out;
 }
 function renderUsers(){
@@ -149,7 +152,7 @@ function renderUsers(){
   const list=users.filter(u=>!qv || [u.name,u.user_id,u.department_name].some(v=>String(v??'').toLowerCase().includes(qv)));
   userList.innerHTML=grouped(list).map(([dept,rows])=>`
     <div class="group-title">부서명: ${esc(dept)}</div>
-    ${rows.map(u=>`<div class="user-row ${u.user_key===selectedKey?'on':''}" onclick="selectUser('${u.user_key.replaceAll("'","\\'")}')"><span>${esc(u.position_name||'')}</span><span>${esc(u.name)}</span></div>`).join('')}
+    ${rows.map(u=>`<div class="user-row ${u.user_key===selectedKey?'on':''}" onclick="selectUser('${u.user_key.replaceAll("'","\\'")}')"><span>${esc(u.position_name||'')}</span><span>${esc(u.name)}${u.role==='master'?' <b style="color:#8e24aa">[마스터]</b>':u.role==='admin'?' <b style="color:#1e5e91">[관리자]</b>':''}</span></div>`).join('')}
   `).join('');
   countText.textContent=`${list.length}명`;
 }
