@@ -3,6 +3,25 @@
  * 2) MESDB.table(name).select()/upsert(rows)/delete(match) : 정규화 테이블 직접 접근
  */
 (function(){
+/* ── v23: 초기 깜빡임 방지 ─────────────────────────────────────
+ * 화면은 DB 연결 실패 대비용 인라인 데이터를 먼저 그린다. 그대로 두면
+ * 인라인 자료가 잠깐 보였다가 DB 자료로 교체되며 깜빡인다.
+ * DB 로드가 끝날 때까지 본문을 가려 최종 결과만 보이게 한다. */
+(function(){
+  if(window.__mesdbLoading)return; window.__mesdbLoading=true;
+  var css='html.mesdb-loading body>*{visibility:hidden}'+
+    'html.mesdb-loading:after{content:"불러오는 중…";position:fixed;inset:0;display:flex;'+
+    'align-items:center;justify-content:center;font:13px "Malgun Gothic",sans-serif;color:#5b6b7a;'+
+    'background:#f7fafc;z-index:99998}';
+  var st=document.createElement('style');st.textContent=css;
+  (document.head||document.documentElement).appendChild(st);
+  document.documentElement.classList.add('mesdb-loading');
+  var done=false;
+  window.__mesdbReady=function(){if(done)return;done=true;
+    document.documentElement.classList.remove('mesdb-loading')};
+  setTimeout(window.__mesdbReady,2500);   /* 바인딩이 없거나 실패해도 반드시 해제 */
+})();
+
 const CFG={url:'https://ipggvrzxfcryzryileuv.supabase.co',key:'sb_publishable_CHO-dAOU00HNwno52255mg_H3C1_vew'};
 function tok(){try{return (window.MES_AUTH||window.parent.MES_AUTH)?.token||null}catch(e){return null}}
 const H=()=>({'apikey':CFG.key,'Authorization':'Bearer '+(tok()||CFG.key),'Content-Type':'application/json'});
@@ -18,7 +37,7 @@ let page=null,getter=null,last='',timer=null,online=false;
 function snapshot(){const o=getter()||{};const out={};for(const k in o)if(Array.isArray(o[k]))out[k]=o[k];return out}
 function badge(t,color){let b=document.getElementById('mesdb-badge');if(!b){b=document.createElement('div');b.id='mesdb-badge';b.style.cssText='position:fixed;right:8px;bottom:50px;font:11px Malgun Gothic,sans-serif;padding:2px 7px;border-radius:9px;color:#fff;opacity:.85;z-index:9999;pointer-events:none';document.body.appendChild(b)}b.textContent=t;b.style.background=color}
 async function load(){try{const rows=await rest(`page_state?page=eq.${encodeURIComponent(page)}&select=data`);online=true;if(rows&&rows[0]){const saved=rows[0].data,cur=getter()||{};for(const k in saved){if(Array.isArray(cur[k])&&Array.isArray(saved[k])){cur[k].length=0;cur[k].push(...saved[k])}}
-  (window.MES?.search||window.search||window.render||(()=>{}))();last=JSON.stringify(snapshot());badge('DB 연결 · 저장본 복원','#2e7d32')}else{last=JSON.stringify(snapshot());badge('DB 연결 · 초기데이터','#1565c0')}}catch(e){online=false;badge('DB 미연결(로컬)','#9e9e9e');console.warn('MESDB',e.message)}}
+  (window.MES?.search||window.search||window.render||(()=>{}))();last=JSON.stringify(snapshot());badge('DB 연결 · 저장본 복원','#2e7d32')}else{last=JSON.stringify(snapshot());badge('DB 연결 · 초기데이터','#1565c0');window.__mesdbReady&&window.__mesdbReady()}}catch(e){online=false;badge('DB 미연결(로컬)','#9e9e9e');console.warn('MESDB',e.message);window.__mesdbReady&&window.__mesdbReady()}}
 async function persist(){if(!online)return;const s=JSON.stringify(snapshot());if(s===last)return;try{await rest('page_state',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify([{page,data:JSON.parse(s),updated_at:new Date().toISOString()}])});last=s;badge('DB 저장됨 '+new Date().toLocaleTimeString('ko-KR'),'#2e7d32')}catch(e){badge('DB 저장실패','#c62828');console.warn('MESDB',e.message)}}
 function bind(p,g){page=p;getter=g;load();document.addEventListener('click',e=>{if(e.target.closest('button,[onclick]')){clearTimeout(timer);timer=setTimeout(persist,400)}},true);document.addEventListener('change',()=>{clearTimeout(timer);timer=setTimeout(persist,400)},true)}
 async function reset(){await rest(`page_state?page=eq.${encodeURIComponent(page)}`,{method:'DELETE'});location.reload()}
@@ -68,8 +87,8 @@ async function master(opt){
     const rows=await MESDB.table(opt.table).select('select=*');
     const a=arr(); a.length=0; a.push(...rows.map(r=>toScreen(r,map)));
     online=true; (opt.render||window.render||(()=>{}))(); take();
-    badge(`DB: ${opt.table} ${rows.length}건`,'#2e7d32');
-  }catch(e){online=false;badge('DB 미연결(로컬)','#9e9e9e');console.warn('MESDB.master',e.message);return}
+    badge(`DB: ${opt.table} ${rows.length}건`,'#2e7d32');window.__mesdbReady&&window.__mesdbReady();
+  }catch(e){online=false;badge('DB 미연결(로컬)','#9e9e9e');console.warn('MESDB.master',e.message);window.__mesdbReady&&window.__mesdbReady();return}
 
   async function sync(){
     if(!online)return;
@@ -124,8 +143,8 @@ async function lines(opt){
     const rows=await MESDB.table('order_lines').select(q.join('&'));
     const a=arr();a.length=0;a.push(...rows.map(r=>toS(r,map)));
     online=true;(opt.render||window.render||(()=>{}))();take();
-    badge(`DB: order_lines ${opt.category} ${rows.length}건`,'#2e7d32');
-  }catch(e){online=false;badge('DB 미연결(로컬)','#9e9e9e');console.warn('MESDB.lines',e.message);return}
+    badge(`DB: order_lines ${opt.category} ${rows.length}건`,'#2e7d32');window.__mesdbReady&&window.__mesdbReady();
+  }catch(e){online=false;badge('DB 미연결(로컬)','#9e9e9e');console.warn('MESDB.lines',e.message);window.__mesdbReady&&window.__mesdbReady();return}
 
   async function sync(){
     if(!online)return;
