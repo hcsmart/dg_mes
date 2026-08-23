@@ -34,7 +34,15 @@ button,input,select{font:inherit;color:inherit}button{cursor:pointer}
 .permission-head{display:grid;grid-template-columns:1fr 250px;background:linear-gradient(#e7f0f7,#cadae7);border-bottom:1px solid var(--line);font-weight:700}
 .permission-head div{padding:6px 8px;border-right:1px solid #aebbc6}
 .permission-list{flex:1;min-height:0;overflow:auto;background:#fff}
-.perm-row{display:grid;grid-template-columns:1fr 250px;min-height:27px;border-bottom:1px solid #e0e6eb}
+.btn.primary{background:linear-gradient(#f9ffff,#d2e7f6);color:#1e5e91}
+.perm-row{display:grid;grid-template-columns:1fr 300px;min-height:26px;border-bottom:1px solid #e0e6eb;align-items:center}
+.perm-row.mod{background:linear-gradient(#eef5fb,#e2edf6);font-weight:700}
+.perm-row.sec{background:#f7fafc}
+.perm-row:hover{background:#edf6fd}
+.perm-row .toggle{cursor:pointer;user-select:none;display:inline-block;width:14px;color:#5b6b7a}
+.rights{display:flex;gap:10px;justify-content:flex-start}
+.rights label{display:flex;align-items:center;gap:3px;cursor:pointer;white-space:nowrap}
+.rights input{margin:0}
 .perm-row div{padding:5px 8px;border-right:1px solid #e0e6eb}
 .path{padding-left:calc(8px + var(--depth)*15px)!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .full{color:#b03a34;font-weight:700}.none{color:#b03a34}
@@ -91,11 +99,15 @@ button,input,select{font:inherit;color:inherit}button{cursor:pointer}
         <button class="btn" onclick="refresh()">⟳ 새로고침</button>
         <button class="btn" onclick="saveUser()">▣ 저장</button>
         <button class="btn" onclick="deleteUser()">✖ 삭제</button>
+        <button class="btn" onclick="expandAll(true)">⊞ 전체펼침</button>
+        <button class="btn" onclick="expandAll(false)">⊟ 접기</button>
+        <button class="btn primary" onclick="savePermissions()">🔒 권한저장</button>
+        <button class="btn" onclick="copyPermissions()">⧉ 권한복사</button>
       </div>
 
       <div class="permission">
         <div class="cap">권한</div>
-        <div class="permission-head"><div>메뉴명</div><div>권한</div></div>
+        <div class="permission-head"><div>메뉴명</div><div class="rights"><label><input type="checkbox" onclick="setAll('view',this.checked)">조회</label><label><input type="checkbox" onclick="setAll('save',this.checked)">저장</label><label><input type="checkbox" onclick="setAll('edit',this.checked)">수정</label><label><input type="checkbox" onclick="setAll('del',this.checked)">삭제</label></div></div>
         <div class="permission-list" id="permList"></div>
       </div>
     </section>
@@ -149,30 +161,112 @@ function selectUser(key){
   d_employee_no.value=u.employee_no||'';
   d_active.checked=!!u.is_active;
   d_remark.value=u.remark||'';
-  renderPermissions(u);
+  renderPermissions(u,true);
   renderUsers();
   message.textContent=`${u.name} 사용자정보를 표시합니다.`;
 }
-function renderPermissions(u){
-  const ps=permissions.filter(p=>p.user_key===u.user_key);
-  if(!ps.length){
-    const roots=['영업관리','설계관리','구매관리','기준정보','원가관리','조립관리'];
-    permList.innerHTML=roots.map(r=>`<div class="perm-row"><div class="path" style="--depth:0">⊞ ${r}</div><div></div></div>`).join('');
-    return;
+const MENU_TREE=[{"name": "영업관리", "secs": [{"name": "수주", "items": ["수주등록", "수주현황", "현황판"]}, {"name": "영업계획", "items": ["영업계획등록", "영업계획현황"]}, {"name": "금형코드매칭", "items": ["금형코드매칭"]}, {"name": "SET발주", "items": ["SET발주등록", "SET발주입고", "SET발주현황"]}, {"name": "경비", "items": ["경비등록", "경비현황"]}]}, {"name": "설계관리", "secs": [{"name": "외주설계발주", "items": ["외주설계발주등록", "외주설계발주입고", "외주설계발주현황"]}, {"name": "설계", "items": ["설계계획등록", "설계실적등록", "설계실적현황", "설계실적조회"]}, {"name": "PARTLIST", "items": ["PartList 등록(원재료)", "PartList 등록(구매품)", "PartList 현황", "PartList 복사"]}]}, {"name": "구매관리", "secs": [{"name": "원재료", "items": ["원재료 발주", "원재료 입고", "원재료 입고확정", "원재료 발주현황"]}, {"name": "구매품", "items": ["구매품 발주", "구매품 입고", "구매품 입고확정", "구매품 발주현황"]}, {"name": "가공", "items": ["가공계획등록", "공정이력카드", "외주가공 발주", "외주가공 입고", "외주가공 입고확정", "외주가공발주현황", "가공구매 진척현황"]}]}, {"name": "조립관리", "secs": [{"name": "조립", "items": ["조립실적등록", "조립실적현황", "조립실적조회"]}, {"name": "검사", "items": []}]}, {"name": "원가관리", "secs": [{"name": "원가관리", "items": ["제조원가조회(실시간)"]}, {"name": "매입매출현황", "items": ["매입현황", "매출현황", "재고조회"]}]}, {"name": "기준정보", "secs": [{"name": "생산/품질", "items": ["가공공정관리", "가공 기준공정관리", "작업지시 관리", "공정이력카드"]}, {"name": "공통", "items": ["사용자정보", "공정관리", "부품관리", "자재등록", "설비등록", "업체관리", "사업부정보", "부서정보", "아이템 관리", "경비사유", "금형타입관리", "기계사양관리", "검사구분", "검사항목", "공지사항 등록", "DB 동기화", "직급정보", "자재단가변동등록", "자재단가변동현황", "공정단가변동등록", "공정단가변동현황"]}]}];
+const RIGHTS=[['view','조회'],['save','저장'],['edit','수정'],['del','삭제']];
+const COL={view:'can_view',save:'can_save',edit:'can_edit',del:'can_delete'};
+let openSet=new Set(MENU_TREE.map(m=>m.name)), permIndex=new Map();
+
+function permKey(u,menu){return u.user_key+'\u0000'+menu}
+function getPerm(menu){
+  const u=users.find(x=>x.user_key===selectedKey); if(!u)return null;
+  let p=permIndex.get(permKey(u,menu));
+  if(!p){p={user_key:u.user_key,menu_name:menu,menu_path:null,can_view:false,can_save:false,can_edit:false,can_delete:false};permIndex.set(permKey(u,menu),p)}
+  return p;
+}
+function rightsCell(menu,path){
+  const p=getPerm(menu)||{};
+  return '<div class="rights">'+RIGHTS.map(([k,l])=>
+    `<label><input type="checkbox" data-menu="${esc(menu)}" data-right="${k}" ${p[COL[k]]?'checked':''} onchange="toggleRight(this)">${l}</label>`).join('')+'</div>';
+}
+let permLoadedFor=null;
+function loadPermIndex(u,force){
+  if(!force && permLoadedFor===u.user_key) return;   /* 편집 중 값 보존 */
+  permIndex=new Map(); permLoadedFor=u.user_key;
+  permissions.filter(p=>p.user_key===u.user_key)
+    .forEach(p=>permIndex.set(permKey(u,p.menu_name),{...p}));
+}
+function renderPermissions(u,force){
+  if(!u){permList.innerHTML='<div class="note">사용자를 선택하세요.</div>';return}
+  loadPermIndex(u,force);
+  const html=[];
+  for(const mod of MENU_TREE){
+    const open=openSet.has(mod.name);
+    html.push(`<div class="perm-row mod"><div class="path" style="--depth:0"><span class="toggle" onclick="toggleNode('${esc(mod.name)}')">${open?'⊟':'⊞'}</span> ${esc(mod.name)}</div>${rightsCell(mod.name,[mod.name])}</div>`);
+    if(!open)continue;
+    for(const sec of mod.secs){
+      const skey=mod.name+'/'+sec.name, sopen=openSet.has(skey);
+      html.push(`<div class="perm-row sec"><div class="path" style="--depth:1"><span class="toggle" onclick="toggleNode('${esc(skey)}')">${sopen?'⊟':'⊞'}</span> ${esc(sec.name)}</div>${rightsCell(skey,[mod.name,sec.name])}</div>`);
+      if(!sopen)continue;
+      for(const it of sec.items){
+        const ikey=mod.name+'/'+sec.name+'/'+it;
+        html.push(`<div class="perm-row"><div class="path" style="--depth:2">└ ${esc(it)}</div>${rightsCell(ikey,[mod.name,sec.name,it])}</div>`);
+      }
+    }
   }
-  const tree=[];
-  const seen=new Set();
-  for(const p of ps){
-    p.menu_path.forEach((name,i)=>{
-      const key=p.menu_path.slice(0,i+1).join('/');
-      if(!seen.has(key)){seen.add(key);tree.push({name,depth:i,right:i===p.menu_path.length-1?p:null})}
-    });
+  permList.innerHTML=html.join('');
+}
+function toggleNode(k){openSet.has(k)?openSet.delete(k):openSet.add(k);renderPermissions(users.find(x=>x.user_key===selectedKey))}
+function expandAll(on){
+  openSet=new Set();
+  if(on)for(const m of MENU_TREE){openSet.add(m.name);for(const s of m.secs)openSet.add(m.name+'/'+s.name)}
+  renderPermissions(users.find(x=>x.user_key===selectedKey));
+}
+function toggleRight(el){
+  const menu=el.dataset.menu, r=el.dataset.right, p=getPerm(menu); if(!p)return;
+  p[COL[r]]=el.checked;
+  if(r!=='view'&&el.checked)p.can_view=true;          // 저장/수정/삭제 권한은 조회를 포함
+  if(r==='view'&&!el.checked){p.can_save=p.can_edit=p.can_delete=false}
+  // 상위 노드를 켜면 하위 전체 적용
+  const parts=menu.split('/');
+  if(parts.length<3){
+    const under=[...allMenus()].filter(m=>m.startsWith(menu+'/'));
+    under.forEach(m=>{const q=getPerm(m);q[COL[r]]=el.checked;if(r!=='view'&&el.checked)q.can_view=true;if(r==='view'&&!el.checked){q.can_save=q.can_edit=q.can_delete=false}});
   }
-  permList.innerHTML=tree.map(x=>{
-    let right='';
-    if(x.right) right=x.right.permission_status==='full'?'조회, 저장, 수정, 삭제':'권한없음';
-    return `<div class="perm-row"><div class="path" style="--depth:${x.depth}">${x.depth<2?'⊞':'└'} ${esc(x.name)}</div><div class="${x.right?.permission_status==='full'?'full':'none'}">${right}</div></div>`;
-  }).join('');
+  renderPermissions(users.find(x=>x.user_key===selectedKey));
+  message.textContent=`${menu} 권한을 변경했습니다. 저장하려면 [권한저장]을 누르세요.`;
+}
+function allMenus(){
+  const out=[];
+  for(const m of MENU_TREE){out.push(m.name);for(const s of m.secs){out.push(m.name+'/'+s.name);for(const i of s.items)out.push(m.name+'/'+s.name+'/'+i)}}
+  return out;
+}
+function setAll(r,on){
+  allMenus().forEach(m=>{const p=getPerm(m);if(!p)return;p[COL[r]]=on;if(r!=='view'&&on)p.can_view=true;if(r==='view'&&!on){p.can_save=p.can_edit=p.can_delete=false}});
+  renderPermissions(users.find(x=>x.user_key===selectedKey));
+  message.textContent=`전체 메뉴의 ${RIGHTS.find(x=>x[0]===r)[1]} 권한을 ${on?'부여':'해제'}했습니다.`;
+}
+async function savePermissions(){
+  const u=users.find(x=>x.user_key===selectedKey); if(!u)return message.textContent='사용자를 선택하세요.';
+  const rows=[...permIndex.values()].filter(p=>p.can_view||p.can_save||p.can_edit||p.can_delete)
+    .map(p=>({user_key:p.user_key,menu_name:p.menu_name,menu_path:p.menu_name.split('/'),
+              can_view:!!p.can_view,can_save:!!p.can_save,can_edit:!!p.can_edit,can_delete:!!p.can_delete}));
+  // 화면 배열도 갱신
+  for(let i=permissions.length-1;i>=0;i--)if(permissions[i].user_key===u.user_key)permissions.splice(i,1);
+  permissions.push(...rows);
+  if(!window.MESDB||!MESDB.online){message.textContent=`${u.name} 권한 ${rows.length}건을 저장했습니다. (DB 미연결 - 로컬)`;return}
+  try{
+    await MESDB.rest(`user_permissions?user_key=eq.${encodeURIComponent(u.user_key)}`,{method:'DELETE',headers:{Prefer:'return=minimal'}});
+    if(rows.length)await MESDB.table('user_permissions').upsert(rows,'user_key,menu_name');
+    permLoadedFor=null;message.textContent=`${u.name} 권한 ${rows.length}건을 DB에 저장했습니다.`;
+  }catch(e){message.textContent='권한 저장 실패: '+e.message.slice(0,140)}
+}
+function copyPermissions(){
+  const u=users.find(x=>x.user_key===selectedKey); if(!u)return;
+  const others=users.filter(x=>x.user_key!==u.user_key).map(x=>x.name).join(', ');
+  const to=prompt(`${u.name}의 권한을 복사할 대상 사용자명을 입력하세요.\n(${others})`);
+  if(!to)return;
+  const t=users.find(x=>x.name===to.trim());
+  if(!t)return message.textContent='해당 사용자를 찾을 수 없습니다.';
+  const src=[...permIndex.values()];
+  for(let i=permissions.length-1;i>=0;i--)if(permissions[i].user_key===t.user_key)permissions.splice(i,1);
+  permissions.push(...src.filter(p=>p.can_view||p.can_save||p.can_edit||p.can_delete)
+    .map(p=>({user_key:t.user_key,menu_name:p.menu_name,menu_path:p.menu_name.split('/'),
+              can_view:p.can_view,can_save:p.can_save,can_edit:p.can_edit,can_delete:p.can_delete})));
+  message.textContent=`${u.name}의 권한을 ${t.name}에게 복사했습니다. ${t.name} 선택 후 [권한저장]을 누르세요.`;
 }
 function refresh(){selectUser(selectedKey);message.textContent='사용자 데이터를 다시 조회했습니다.'}
 function saveUser(){
@@ -188,6 +282,9 @@ window.MES={search:()=>q.focus(),add:()=>{selectedKey='';},delete:deleteUser,sav
 renderUsers();selectUser(selectedKey);
 </script>
 <script src="mes_db.js"></script>
-<script>MESDB.bind("user_information",()=>({users,permissions}));</script>
+<script>
+MESDB.master({page:"user_information:users",table:"users",pk:"user_key",map:{"user_key":"user_key","user_id":"user_id","name":"name","department_code":"department_code","department_name":"department_name","factory":"factory","registered_date":{"col":"registered_date","type":"text"},"position_code":"position_code","position_name":"position_name","user_group":"user_group","is_active":{"col":"is_active","type":"bool"},"english_name":"english_name","business_division":"business_division","process_group":"process_group","mobile_phone":"mobile_phone","email":"email","phone":"phone","employee_no":"employee_no","remark":"remark"},get:()=>users,render:()=>{renderUsers();selectUser(selectedKey||users[0]?.user_key)}});
+MESDB.table("user_permissions").select("select=*").then(rs=>{permissions.length=0;permissions.push(...rs);renderPermissions(users.find(x=>x.user_key===selectedKey),true)}).catch(()=>{});
+</script>
 </body>
 </html>
