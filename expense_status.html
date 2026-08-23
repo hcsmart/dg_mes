@@ -10,7 +10,7 @@ button,input,select{font:inherit;color:inherit}.screen{height:100%;display:flex;
 table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th,td{height:27px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:0 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}th{position:sticky;top:0;z-index:2;text-align:center;background:linear-gradient(var(--head1),var(--head2));color:#405266}tbody tr:nth-child(even) td{background:#fafcfd}tbody tr:hover td{background:#edf6fd}tbody tr.sel td{background:#2d75b7;color:#fff}.c{text-align:center}.num{text-align:right}.toolbar{height:40px;display:flex;align-items:center;gap:5px;padding:4px 14px;background:#f5f7f8;border-bottom:1px solid var(--line2)}
 .foot{height:42px;display:flex;align-items:center;padding:5px 14px;border-top:1px solid var(--line);background:#eef2f5;gap:5px}.msg{margin-left:8px;color:#687784}.right{margin-left:auto;color:#7c8993}
 .split{flex:1;min-height:0;display:grid;grid-template-rows:1fr 1fr;gap:10px;padding:0 14px 8px}.split .gridbox{margin:0}
-@media(max-width:900px){.formrow{grid-template-columns:78px 1fr 78px 1fr}.formrow>*:nth-child(n+5){display:none}.entrybox,.gridbox,.searchline{margin-left:6px;margin-right:6px}}
+@media(max-width:900px){.formrow{grid-template-columns:78px 1fr 78px 1fr}.entrybox,.gridbox,.searchline{margin-left:6px;margin-right:6px}}
 
 .filt{padding:7px 14px;background:#fafbfc;border-bottom:1px solid var(--line2)}
 .fr{display:grid;gap:5px;align-items:center}
@@ -34,6 +34,13 @@ table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th
 .kv .lb{text-align:right}
 .kv .v{border:1px solid #c3ccd4;background:#fff;height:26px;line-height:24px;padding:0 6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .bar{height:14px;background:#3f7fbf;border-radius:2px}
+
+/* v21 입력란 배치 보정: 좁은 폭에서 필드를 숨기지 않고 단계적으로 줄바꿈 */
+.field,.formrow input,.formrow select,.formgrid input,.formgrid select,.detail-grid input,.detail-grid select{min-width:0;max-width:100%}
+.lab,.label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:1400px){.formrow{grid-template-columns:78px minmax(0,1fr) 78px minmax(0,1fr)}}
+@media(max-width:880px){.formrow{grid-template-columns:78px minmax(0,1fr)}}
+.formrow>*{min-width:0}
 </style></head><body><div class="screen"><div class="title"><h1>경비현황</h1><small>설계관리 · 외주설계발주 · 1공장</small></div><section class="filt"><div class="f2"><div class="lb">제 번</div><div><input class="field"></div><div class="lb">품 명</div><div><input class="field"></div><div class="lb">사 유</div><div><select class="field"><option></option></select></div><div class="lb">고객사</div><div><input class="field"></div><div class="lb">등록일자</div><div style="display:flex;gap:4px"><input type="date" class="field"><span>~</span><input type="date" class="field"></div><div class="lb">사유일자</div><div style="display:flex;gap:4px"><input type="date" class="field"><span>~</span><input type="date" class="field"></div><div></div><div></div><div></div><div></div></div></section><div class="gridbox"><table style="min-width:1120px"><thead><tr><th style="width:130px">제번</th><th style="width:220px">품명</th><th style="width:110px">등록일자</th><th style="width:110px">사유일자</th><th style="width:150px">사유</th><th style="width:180px">고객사</th><th style="width:120px">금액</th><th>비고</th></tr></thead><tbody><tr><td colspan="8" class="c" style="height:180px;color:#8a97a2">조회결과가 없습니다.</td></tr></tbody><tfoot><tr class="gtot"><td colspan="6" class="c">합계</td><td class="num">0</td><td></td></tr></tfoot></table></div><footer class="foot"><button class="btn" onclick="detail()">⌕ 상세보기</button><button class="btn" onclick="search()">⌕ 검색</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">사진의 조회결과는 0건입니다.</span></footer></div><script>const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const n=v=>v==null?'':Number(v).toLocaleString();const p=v=>v==null?'':Number(v).toFixed(2)+'%';
 const msg=t=>message.textContent=t;function search(){msg('사진 기준 조회결과 0건입니다.')}function detail(){msg('선택한 행이 없습니다.')}window.MES={search,setMessage:msg};</script></body></html>

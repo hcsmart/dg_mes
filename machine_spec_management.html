@@ -6,7 +6,14 @@ button,input,select,textarea{font:inherit;color:inherit}.screen{height:100%;disp
 .form{padding:8px 0 7px;border-bottom:1px solid var(--line2);background:#fafbfc}.formrow{display:grid;grid-template-columns:96px 150px 96px 210px 70px 1fr;gap:5px;align-items:center}.formrow+.formrow{margin-top:5px}.label{height:27px;display:flex;align-items:center;justify-content:center;border:1px solid #bdc7cf;background:#eef2f5;font-weight:700}.field{height:27px;border:1px solid #b5c0c9;background:#fff;padding:0 6px}.wide{grid-column:2/-1}.searchline{height:39px;display:flex;align-items:center;gap:5px;border:1px solid var(--line);border-bottom:0;padding:4px 8px;background:#f6f8fa}.searchline input{width:min(430px,52vw);height:27px;border:1px solid #aeb9c3;padding:0 7px}.btn{height:28px;min-width:62px;border:1px solid #9ba8b4;background:linear-gradient(#fff,#dfe6eb)}.btn:hover{background:#fff}
 .gridbox{flex:1;min-height:0;border:1px solid var(--line);overflow:auto;background:#fff}.gridbox.compact{max-height:430px;flex:0 1 430px}table{border-collapse:collapse;width:100%;table-layout:fixed}th,td{height:28px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:0 8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}th{position:sticky;top:0;z-index:2;text-align:center;background:linear-gradient(var(--head1),var(--head2));color:#405266}tbody tr:nth-child(even) td{background:#fafcfd}tbody tr:hover td{background:#edf6fd}tbody tr.sel td{background:#2d75b7;color:#fff}.c{text-align:center}
 .foot{height:43px;display:flex;align-items:center;padding:5px 14px;border-top:1px solid var(--line);background:#eef2f5;gap:5px}.msg{margin-left:10px;color:#687784}.foot .right{margin-left:auto;color:#7c8993}
-@media(max-width:760px){.content{width:calc(100% - 12px);margin-left:6px}.formrow{grid-template-columns:82px 1fr}.formrow>*:nth-child(n+3){display:none}}
+@media(max-width:760px){.content{width:calc(100% - 12px);margin-left:6px}.formrow{grid-template-columns:82px 1fr}}
+
+/* v21 입력란 배치 보정: 좁은 폭에서 필드를 숨기지 않고 단계적으로 줄바꿈 */
+.field,.formrow input,.formrow select,.formgrid input,.formgrid select,.detail-grid input,.detail-grid select{min-width:0;max-width:100%}
+.lab,.label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:1400px){.formrow{grid-template-columns:96px minmax(0,1fr) 96px minmax(0,1fr)}}
+@media(max-width:880px){.formrow{grid-template-columns:96px minmax(0,1fr)}}
+.formrow>*{min-width:0}
 </style></head><body><div class="screen">
 <div class="title"><h1>기계사양 관리 <small>기계 사양 코드를 관리합니다.</small></h1></div>
 <div class="content"><section class="form"><div class="formrow"><div class="label">기계사양코드</div><input id="code" class="field"><div class="label">기계사양명</div><input id="name" class="field"><div class="label">비고</div><input id="remark" class="field"></div></section>

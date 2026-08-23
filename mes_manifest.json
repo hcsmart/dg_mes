@@ -1,6 +1,6 @@
 {
   "project": "NEXMES photo-driven MES prototype",
-  "version": "20",
+  "version": "21",
   "entry": "index.html",
   "updated": "2026-08-22",
   "naming_rule": "<domain>_<action>.html (snake_case, English)",
@@ -707,6 +707,14 @@
     "권한 규칙: 저장·수정·삭제를 켜면 조회 자동 포함, 조회를 끄면 나머지 자동 해제",
     "[권한저장] 시 해당 사용자 권한을 DB에서 삭제 후 재삽입(delete+insert), [권한복사]로 다른 사용자에게 권한 세트 복제",
     "user_permissions 테이블 재설계: (user_key, menu_name) 복합 PK, can_* 4개 boolean, permission_status는 full/partial/none 자동 계산 컬럼",
-    "사용자정보 화면을 users 테이블에 직결 (기존 page_state 스냅샷 방식에서 전환)"
+    "사용자정보 화면을 users 테이블에 직결 (기존 page_state 스냅샷 방식에서 전환)",
+    "RLS 조정: 데이터가 전부 가명 처리되었으므로 employees/users도 데모 접근 허용 (기존 401 오류 해소)",
+    "users.json 및 schema에서 password_transcribed 필드 완전 제거 (DB 컬럼 삭제와 불일치로 PGRST204 발생하던 건)"
+  ],
+  "changelog_v21": [
+    "입력란 배치 보정 (전 화면 38개): 좁은 폭에서 입력란을 통째로 숨기던 규칙 37건 제거 - 기존에는 창을 줄이면 성명(영문)·이메일·비고 등 필드가 화면에서 사라졌음",
+    "단계별 줄바꿈 적용: 1400px 이하는 라벨/필드 2쌍, 880px 이하는 1쌍으로 접힘. 필드가 사라지지 않고 아래로 내려감",
+    "필드 오버플로 방지: 모든 입력란에 min-width:0 / max-width:100% 적용 - 3열 폼에서 세 번째 열 입력란이 패널 밖으로 밀려나던 문제 해소",
+    "라벨 말줄임 처리: 긴 라벨이 칸을 밀어내지 않고 ... 으로 잘림"
   ]
 }
