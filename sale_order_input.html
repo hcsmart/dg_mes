@@ -38,6 +38,29 @@ table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th
 @media(max-width:1400px){.formrow{grid-template-columns:78px minmax(0,1fr) 78px minmax(0,1fr)}}
 @media(max-width:880px){.formrow{grid-template-columns:78px minmax(0,1fr)}}
 .formrow>*{min-width:0}
+
+/* ── v24 수주등록 입력박스 크기·배치 정리 ─────────────────────────
+ * 기존: 라벨 72px + 필드 min 96px 짜리 6쌍 고정 → 화면이 좁으면 오른쪽
+ *       3~6번째 쌍의 입력칸이 화면 밖으로 밀려 라벨만 보였다.
+ * 변경: 라벨 폭을 넓히고 쌍 수를 화면 폭에 따라 4→3→2→1로 단계 축소. */
+.formgrid{grid-template-columns:repeat(4,86px minmax(132px,1fr));gap:5px 6px;padding:9px 14px}
+.formgrid>*{min-width:0}
+.field{height:27px}
+.field.r{text-align:right}
+.span3{grid-column:span 3}
+/* 코드+명칭+돋보기 조합: 코드칸을 고정폭으로, 명칭칸이 남는 폭을 차지 */
+.lk{display:grid;grid-template-columns:62px minmax(0,1fr) 26px;gap:3px;align-items:center}
+.lk input{width:100%;min-width:0;height:27px;border:1px solid #b5c0c9;padding:0 6px;box-sizing:border-box}
+.lk input[readonly]{background:#f4f7f9}
+.lk button{width:26px;height:27px}
+/* 코드가 2~3자리인 항목은 코드칸을 더 좁게 */
+#proc_cnt{max-width:56px}
+@media(min-width:1750px){.formgrid{grid-template-columns:repeat(5,86px minmax(132px,1fr))}}
+@media(max-width:1400px){.formgrid{grid-template-columns:repeat(3,86px minmax(120px,1fr))}}
+@media(max-width:1080px){.formgrid{grid-template-columns:repeat(2,86px minmax(120px,1fr))}.span3{grid-column:span 3}}
+@media(max-width:760px){.formgrid{grid-template-columns:86px minmax(0,1fr)}.span3{grid-column:span 1}}
+/* 첨부파일: 비어 있을 때 과도한 여백 축소 */
+.filearea .empty,#fileEmpty{height:64px!important}
 </style></head><body><div class="screen">
 <div class="title"><h1>수주정보 등록</h1><small>1공장</small></div>
 <section class="formgrid">
@@ -49,24 +72,24 @@ table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th
  <div class="label">수주상태</div><div><select id="status" class="field"><option>진행</option><option>보류</option><option>완료</option><option>취소</option></select></div>
  <div class="label">수주유형</div><div><select id="otype" class="field"><option>신작</option><option>개조</option><option>수리</option><option>유상사급</option></select></div>
  <div class="label">견적서번호</div><div><input id="quo" class="field"></div>
- <div class="label">아이템</div><div class="lk"><input id="item_code" style="max-width:68px"><input id="item_name" readonly><button onclick="openLook('item','item_code','item_name')">…</button></div>
+ <div class="label">아이템</div><div class="lk"><input id="item_code"><input id="item_name" readonly><button onclick="openLook('item','item_code','item_name')">…</button></div>
  <div class="label">납기예정일</div><div><input id="dlvp" type="date" class="field"></div>
  <div class="label">국내/해외</div><div><select id="dom" class="field"><option>국내</option><option>해외</option></select></div>
 
  <div class="label">도 번</div><div class="span3"><input id="drawing_no" class="field"></div>
- <div class="label">사업부</div><div class="lk"><input id="biz_code" style="max-width:68px"><input id="biz_name" readonly><button onclick="openLook('biz','biz_code','biz_name')">…</button></div>
- <div class="label">담당자</div><div class="lk"><input id="mgr_code" style="max-width:76px"><input id="mgr_name" readonly><button onclick="openLook('employee','mgr_code','mgr_name')">…</button></div>
- <div class="label">고객사</div><div class="lk"><input id="cust_code" style="max-width:68px"><input id="cust_name" readonly><button onclick="openLook('vendor','cust_code','cust_name')">…</button></div>
+ <div class="label">사업부</div><div class="lk"><input id="biz_code"><input id="biz_name" readonly><button onclick="openLook('biz','biz_code','biz_name')">…</button></div>
+ <div class="label">담당자</div><div class="lk"><input id="mgr_code"><input id="mgr_name" readonly><button onclick="openLook('employee','mgr_code','mgr_name')">…</button></div>
+ <div class="label">고객사</div><div class="lk"><input id="cust_code"><input id="cust_name" readonly><button onclick="openLook('vendor','cust_code','cust_name')">…</button></div>
 
- <div class="label">금형타입</div><div class="lk"><input id="mold_code" style="max-width:68px"><input id="mold_name" readonly><button onclick="openLook('mold','mold_code','mold_name')">…</button></div>
+ <div class="label">금형타입</div><div class="lk"><input id="mold_code"><input id="mold_name" readonly><button onclick="openLook('mold','mold_code','mold_name')">…</button></div>
  <div class="label">개발유형</div><div><select id="devtype" class="field"><option value=""></option><option>사내</option><option>외주</option></select></div>
- <div class="label">양산처</div><div class="lk"><input id="mp_code" style="max-width:68px"><input id="mp_name" readonly><button onclick="openLook('vendor','mp_code','mp_name')">…</button></div>
+ <div class="label">양산처</div><div class="lk"><input id="mp_code"><input id="mp_name" readonly><button onclick="openLook('vendor','mp_code','mp_name')">…</button></div>
  <div class="label">품 명</div><div><input id="product_name" class="field"></div>
  <div class="label">모 델</div><div><input id="model" class="field"></div>
  <div class="label">공정/조수</div><div class="lk"><input id="proc_cnt"><input id="set_qty"></div>
 
  <div class="label">견적가</div><div><input id="quo_price" class="field num"></div>
- <div class="label">기계사양</div><div class="lk"><input id="ms_code" style="max-width:68px"><input id="ms_name" readonly><button onclick="openLook('mspec','ms_code','ms_name')">…</button></div>
+ <div class="label">기계사양</div><div class="lk"><input id="ms_code"><input id="ms_name" readonly><button onclick="openLook('mspec','ms_code','ms_name')">…</button></div>
  <div class="label">사용재료</div><div><input id="material_used" class="field"></div>
  <div class="label">S1 완료일</div><div><input id="s1c" type="date" class="field"></div>
  <div class="label">납기완료일</div><div><input id="dlvc" type="date" class="field"></div>
@@ -80,7 +103,7 @@ table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th
 </section>
 <div class="secthead">첨부파일</div>
 <div class="toolbar"><button class="btn" onclick="msg('프로토타입에서는 파일첨부를 지원하지 않습니다.')">파일첨부</button><button class="btn" onclick="msg('다운로드 대상 파일이 없습니다.')">다운로드</button><button class="btn" onclick="msg('미리보기 대상 파일이 없습니다.')">미리보기</button><button class="btn" onclick="msg('삭제할 파일이 없습니다.')">파일삭제</button></div>
-<div class="att"><table style="min-width:900px"><thead><tr><th style="width:34px"></th><th>파일명</th><th style="width:150px">Version</th><th style="width:280px">파일내용</th><th style="width:90px">크기</th><th style="width:90px">확장자</th></tr></thead><tbody id="attBody"><tr><td colspan="6" class="c" style="height:120px;color:#8a97a2">첨부파일이 없습니다.</td></tr></tbody></table></div>
+<div class="att"><table style="min-width:900px"><thead><tr><th style="width:34px"></th><th>파일명</th><th style="width:150px">Version</th><th style="width:280px">파일내용</th><th style="width:90px">크기</th><th style="width:90px">확장자</th></tr></thead><tbody id="attBody"><tr><td colspan="6" class="c" style="height:64px;color:#8a97a2">첨부파일이 없습니다.</td></tr></tbody></table></div>
 <footer class="foot"><button class="btn" onclick="save()">▤ 저장</button><button class="btn" onclick="clearForm()">✕ 신규</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">사진 기준 초기값을 표시했습니다.</span></footer>
 </div>
 
@@ -111,7 +134,7 @@ function renderLook(){
  const L=LOOKUPS[lkKey],rows=lkRows();
  dlgTable.innerHTML='<thead><tr>'+L.cols.map(c=>`<th>${esc(c)}</th>`).join('')+'</tr></thead><tbody>'+
   (rows.length?rows.map((r,i)=>`<tr onclick="pickRow(${i},this)" ondblclick="pickRow(${i},this);confirmLook()">`+r.map(v=>`<td>${esc(v)}</td>`).join('')+'</tr>').join('')
-   :`<tr><td colspan="${L.cols.length}" class="c" style="height:80px;color:#8a97a2">검색결과가 없습니다.</td></tr>`)+'</tbody>';
+   :`<tr><td colspan="${L.cols.length}" class="c" style="height:56px;color:#8a97a2">검색결과가 없습니다.</td></tr>`)+'</tbody>';
  lkSel=-1;
 }
 function pickRow(i,tr){lkSel=i;dlgTable.querySelectorAll('tbody tr').forEach(x=>x.classList.remove('sel'));tr.classList.add('sel')}
