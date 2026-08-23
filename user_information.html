@@ -342,8 +342,28 @@ function saveUser(){
   u.user_group=d_user_group.value||null; u.is_active=d_active.checked; u.auth_email=(window.d_auth_email?d_auth_email.value:'')||null; u.role=(window.d_role?d_role.value:'user')||'user';
   message.textContent='사용자 정보를 저장했습니다. 로그인메일을 지정하면 해당 계정으로 로그인 시 이 사용자의 권한이 적용됩니다.'||'화면 내 임시 데이터로 저장했습니다. JSON 원본 파일은 변경하지 않습니다.';
 }
-function deleteUser(){
-  message.textContent='프로토타입에서는 실제 JSON 삭제를 수행하지 않습니다.';
+async function deleteUser(){
+  const role=myRole();
+  if(role!=='master'&&role!=='admin')
+    return message.textContent='관리자 또는 마스터만 사용자를 삭제할 수 있습니다.';
+  const u=users.find(x=>x.user_key===selectedKey);
+  if(!u)return message.textContent='삭제할 사용자를 먼저 선택하세요.';
+  if(u.role==='master'&&role!=='master')
+    return message.textContent='마스터 계정은 마스터만 삭제할 수 있습니다.';
+  if(!confirm(`${u.name}${u.user_id?'('+u.user_id+')':''} 사용자를 삭제합니다.\n\n로그인 계정과 메뉴 권한도 함께 삭제되며 되돌릴 수 없습니다.\n계속하시겠습니까?`))return;
+  if(!window.MESDB||!MESDB.online){
+    const i=users.indexOf(u); if(i>=0)users.splice(i,1);
+    selectedKey=users[0]?.user_key||''; renderUsers(); selectUser(selectedKey);
+    return message.textContent=`${u.name}을(를) 목록에서 제거했습니다. (DB 미연결 - 로컬)`;
+  }
+  try{
+    const name=await MESDB.rest('rpc/delete_mes_user',{method:'POST',
+      body:JSON.stringify({p_user_key:u.user_key})});
+    const rows=await MESDB.table('users').select('select=*');
+    users.length=0; users.push(...rows);
+    selectedKey=users[0]?.user_key||''; renderUsers(); if(selectedKey)selectUser(selectedKey);
+    message.textContent=`${name} 사용자를 삭제했습니다. (로그인 계정·메뉴 권한 포함)`;
+  }catch(e){message.textContent='삭제 실패: '+e.message.slice(0,160)}
 }
 window.MES={search:()=>q.focus(),add:()=>{selectedKey='';},delete:deleteUser,save:saveUser,exportCsv:()=>{},setMessage:t=>message.textContent=t};
 renderUsers();selectUser(selectedKey);
@@ -354,7 +374,7 @@ MESDB.master({page:"user_information:users",table:"users",pk:"user_key",map:{"us
 MESDB.table("user_permissions").select("select=*").then(rs=>{permissions.length=0;permissions.push(...rs);renderPermissions(users.find(x=>x.user_key===selectedKey),true)}).catch(()=>{});
 
 /* 마스터 계정일 때만 비밀번호 보기 버튼 노출 */
-function refreshMasterUI(){try{const b=document.getElementById('btnShowPw');if(b)b.style.display=isMaster()?'':'none';const r=document.getElementById('d_role');if(r){const opt=[...r.options].find(o=>o.value==='master');if(opt)opt.disabled=!isMaster()}}catch(e){}}
+function refreshMasterUI(){try{const r0=myRole(),canAdmin=(r0==='master'||r0==='admin');[...document.querySelectorAll('.actions .btn')].forEach(b=>{const oc=b.getAttribute('onclick')||'';  if(/deleteUser|registerUser|resetPassword/.test(oc)){b.disabled=!canAdmin;b.style.opacity=canAdmin?'':'.45';    b.title=canAdmin?'':'관리자 권한이 필요합니다'}});const b=document.getElementById('btnShowPw');if(b)b.style.display=isMaster()?'':'none';const r=document.getElementById('d_role');if(r){const opt=[...r.options].find(o=>o.value==='master');if(opt)opt.disabled=!isMaster()}}catch(e){}}
 refreshMasterUI();
 [200,800,2000].forEach(t=>setTimeout(refreshMasterUI,t));
 try{window.parent.addEventListener('mes-auth-ready',refreshMasterUI)}catch(e){}
