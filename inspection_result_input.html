@@ -1,0 +1,294 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>검사실적등록</title>
+<!-- v22: 사진 없음. 검사구분/검사항목 마스터를 실제로 사용하는 품질 게이트 화면으로 직접 설계 -->
+<style>
+:root{--line:#9daab6;--line2:#c5ced6;--ink:#344758}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:var(--ink);background:#fff;overflow:hidden}button,input,select{font:inherit;color:inherit}
+.screen{height:100%;display:flex;flex-direction:column}.title{height:46px;padding:9px 14px 4px;border-bottom:2px solid #3977ad;display:flex;align-items:center;gap:14px}.title h1{margin:0;font-size:21px;font-weight:500;color:#4b5b69}.title h1:before{content:'◯';margin-right:6px;color:#8795a1}.title .plant{margin-left:auto;display:flex;align-items:center;gap:6px;color:#6b7885}
+.filters{padding:7px 14px;border-bottom:1px solid var(--line2);background:#fafbfc;display:flex;gap:6px;align-items:center}.label{font-weight:700}.field{height:27px;border:1px solid #b7c2cb;background:#fff;padding:0 7px;outline:none}.field:focus{border-color:#4e88bb}
+.top{flex:1.1;min-height:0;padding:7px 14px 0;display:flex}.top .box{flex:1}
+.bottom{flex:1;min-height:0;display:grid;grid-template-columns:1fr 1.6fr;gap:6px;padding:6px 14px}.formgrid{display:grid;grid-template-columns:90px 1fr 90px 1fr;gap:5px;padding:8px;align-content:start}.formgrid .label{height:27px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line2);background:#eef3f7}.formgrid .field{width:100%}.formgrid .wide{grid-column:2/5}.bar{height:8px;background:#e1e8ee;border:1px solid #c5ced6}.bar i{display:block;height:100%;background:#3f87c4}
+.box{border:1px solid var(--line);display:flex;flex-direction:column;min-height:0;background:#fff}.box-title{height:24px;display:flex;align-items:center;justify-content:center;background:linear-gradient(#deebf5,#caddea);border-bottom:1px solid var(--line);font-weight:700;color:#536677}
+.searchbar{height:26px;display:flex;gap:4px;align-items:center;padding:0 4px;border-bottom:1px solid var(--line2);background:#f6f8fa}.searchbar input{flex:1;height:21px;border:1px solid #b7c2cb;padding:0 4px}.searchbar button{height:21px;border:1px solid #9ca9b5;background:linear-gradient(#fff,#e2e8ed)}
+.tablewrap{flex:1;min-height:0;overflow:auto}table{border-collapse:collapse;width:100%;table-layout:fixed}th,td{height:24px;padding:0 5px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}th{position:sticky;top:0;z-index:2;text-align:center;background:linear-gradient(#dbe9f4,#c7d9e8);color:#405266;font-weight:700}tbody tr:hover td{background:#edf6fd}tbody tr.sel td{background:#2e78bd;color:#fff}.c{text-align:center}.r{text-align:right}
+.movebar{display:flex;justify-content:flex-end;gap:6px;padding:0 14px}
+.btn{height:28px;min-width:70px;border:1px solid #9ca9b5;background:linear-gradient(#fff,#dfe6eb)}.btn:hover{background:#fff}.btn.primary{background:linear-gradient(#f9ffff,#d2e7f6);color:#1e5e91}
+.foot{height:42px;display:flex;align-items:center;padding:5px 14px;border-top:1px solid var(--line);background:#eef2f5;gap:5px}.msg{margin-left:10px;color:#687784}.foot .right{margin-left:auto;color:#7c8993}
+input.cell{width:100%;height:20px;border:1px solid #cbd4dc;padding:0 3px;text-align:right}
+@media(max-width:900px){.top,.bottom{grid-template-columns:1fr;height:auto}.title h1{font-size:18px}}
+
+/* v21 입력란 배치 보정: 좁은 폭에서 필드를 숨기지 않고 단계적으로 줄바꿈 */
+.field,.formrow input,.formrow select,.formgrid input,.formgrid select,.detail-grid input,.detail-grid select{min-width:0;max-width:100%}
+.lab,.label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:880px){.formgrid{grid-template-columns:90px minmax(0,1fr)}}
+.formgrid>*{min-width:0}
+
+.formgrid{grid-template-columns:80px 1fr 80px 1fr}
+.c{text-align:center}.r{text-align:right}
+td.ok{color:#1b6b2f;font-weight:700}td.ng{color:#c62828;font-weight:700}
+tr.sel{background:#d8e9f7}
+/* v22 입력란 배치 보정 */
+@media(max-width:1400px){.bottom{grid-template-columns:1fr 1.2fr}}
+@media(max-width:980px){.bottom{grid-template-columns:1fr;overflow:auto}.formgrid{grid-template-columns:80px minmax(0,1fr)}.formgrid .wide{grid-column:2/3}}
+.field,.formgrid input,.formgrid select{min-width:0;max-width:100%}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="title"><h1>검사실적등록</h1><div class="plant"><span>공장</span><select id="plant" class="field"><option>1공장</option><option>2공장</option></select></div></div>
+  <section class="filters">
+    <span class="label">검사구분</span><select id="catQ" class="field"><option value="">전체</option></select>
+    <span class="label">제 번</span><input id="jobQ" class="field" style="width:150px" placeholder="제번/품번/업체">
+    <span class="label">판정</span><select id="judQ" class="field"><option value="">전체</option><option>대기</option><option>합격</option><option>불합격</option><option>특채</option></select>
+    <label><input type="checkbox" id="onlyWait" checked> 미검사만</label>
+    <button class="btn" onclick="search()">⌕ 조회</button>
+    <span class="msg" id="hint">입고된 자재·구매품·외주품 중 검사 대기 건을 표시합니다.</span>
+  </section>
+
+  <section class="top">
+    <div class="box"><div class="box-title">검사 대상 (입고 완료 건)</div><div class="tablewrap"><table>
+      <colgroup><col style="width:36px"><col style="width:9%"><col style="width:11%"><col style="width:12%"><col style="width:9%"><col style="width:14%"><col style="width:11%"><col style="width:7%"><col style="width:9%"><col style="width:8%"><col style="width:8%"></colgroup>
+      <thead><tr><th>No</th><th>구분</th><th>제번</th><th>업체</th><th>품번</th><th>부품명</th><th>검사구분</th><th>수량</th><th>입고일</th><th>판정</th><th>조치</th></tr></thead>
+      <tbody id="tgtBody"></tbody></table></div></div>
+  </section>
+
+  <section class="bottom">
+    <div class="box"><div class="box-title">검사 정보</div>
+      <div class="formgrid">
+        <div class="label">제번</div><input id="fJob" class="field" readonly>
+        <div class="label">품번</div><input id="fPart" class="field" readonly>
+        <div class="label">업체</div><input id="fVen" class="field" readonly>
+        <div class="label">검사구분</div><input id="fCat" class="field" readonly>
+        <div class="label">검사일</div><input id="fDate" class="field" type="date">
+        <div class="label">검사자</div><select id="fInsp" class="field"></select>
+        <div class="label">로트수량</div><input id="fLot" class="field r" type="number" min="0">
+        <div class="label">샘플수량</div><input id="fSample" class="field r" type="number" min="0">
+        <div class="label">불량수량</div><input id="fDefect" class="field r" type="number" min="0" value="0">
+        <div class="label">판정</div><select id="fJud" class="field"><option>대기</option><option>합격</option><option>불합격</option><option>특채</option></select>
+        <div class="label">비고</div><input id="fRemark" class="wide field" placeholder="검사 특이사항">
+      </div></div>
+
+    <div class="box"><div class="box-title">검사 체크시트 <span id="sheetInfo" style="font-weight:400;color:#6b7885"></span></div>
+      <div class="searchbar">
+        <button class="btn" onclick="markAll('OK')">전체 OK</button>
+        <button class="btn" onclick="markAll('NG')">전체 NG</button>
+        <button class="btn" onclick="markAll('대기')">초기화</button>
+        <span class="msg" id="sheetMsg">항목별 판정을 입력하면 종합판정이 자동 계산됩니다.</span>
+      </div>
+      <div class="tablewrap"><table>
+      <colgroup><col style="width:36px"><col style="width:11%"><col style="width:22%"><col style="width:26%"><col style="width:15%"><col style="width:14%"></colgroup>
+      <thead><tr><th>No</th><th>항목코드</th><th>검사항목</th><th>판정기준</th><th>측정값</th><th>결과</th></tr></thead>
+      <tbody id="sheetBody"></tbody></table></div></div>
+  </section>
+
+  <footer class="foot">
+    <button class="btn" onclick="search()">⌕ 검색</button>
+    <button class="btn primary" onclick="saveInspection()">▣ 검사저장</button>
+    <button class="btn" onclick="passLine()">✔ 합격/입고확정</button>
+    <button class="btn" onclick="failLine()">✖ 불합격/반품</button>
+    <button class="btn" onclick="exportCsv()">▤ EXCEL</button>
+    <button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button>
+    <span class="msg" id="message">검사할 건을 선택하세요.</span><span class="right" id="countText"></span>
+  </footer>
+</div>
+
+<script src="mes_db.js"></script>
+<script>
+/* 검사실적등록 - order_lines(입고) → 검사 → 입고확정/반품 */
+let LINES=[], CATS=[], ITEMS=[], RESULTS=[], DETAILS=[], EMPS=[];
+let view=[], sel=-1, sheet=[];
+
+const today=()=>new Date().toISOString().slice(0,10);
+const esc=v=>String(v??'').replace(/[<>&"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]));
+const rowsOf=d=>Array.isArray(d)?d:(d&&d.rows)||[];
+/* 발주 카테고리 → 검사구분 */
+const CAT_MAP={'구매품':'IC02','원재료':'IC01','외주가공':'IC03','외주설계':null};
+
+function catName(code){return CATS.find(c=>c.inspection_category_code===code)?.inspection_category_name||''}
+function resultOf(l){return RESULTS.find(r=>r.line_id===l.line_id)}
+function judOf(l){return resultOf(l)?.judgement||'대기'}
+function actOf(l){return resultOf(l)?.action_taken||''}
+
+function renderTgt(){
+  tgtBody.innerHTML=view.map((l,i)=>{
+    const j=judOf(l), cls=j==='합격'?'ok':j==='불합격'?'ng':'';
+    return `<tr class="${i===sel?'sel':''}" onclick="pick(${i})">
+      <td class="c">${i+1}</td><td class="c">${esc(l.category)}</td><td>${esc(l.job_no)}</td>
+      <td>${esc(l.vendor_name)}</td><td class="c">${esc(l.part_no)}</td><td>${esc(l.part_name)}</td>
+      <td class="c">${esc(catName(CAT_MAP[l.category]))}</td><td class="r">${l.receipt_qty??l.order_qty??''}</td>
+      <td class="c">${esc(l.receipt_date)}</td><td class="c ${cls}">${esc(j)}</td><td class="c">${esc(actOf(l))}</td></tr>`;
+  }).join('');
+  countText.textContent=`검사대상 ${view.length}건 / 검사이력 ${RESULTS.length}건`;
+}
+
+function buildSheet(l){
+  const code=CAT_MAP[l.category];
+  const res=resultOf(l);
+  const saved=res?DETAILS.filter(d=>d.inspection_no===res.inspection_no):[];
+  sheet=ITEMS.filter(it=>it.inspection_category_code===code).map(it=>{
+    const s=saved.find(x=>x.inspection_item_code===it.inspection_item_code);
+    return {code:it.inspection_item_code,name:it.inspection_item_name,criteria:it.criteria,
+            measured:s?.measured_value||'',result:s?.result||'대기',remark:s?.remark||''};
+  });
+  sheetInfo.textContent=code?`${catName(code)} · ${sheet.length}개 항목`:'해당 구분의 검사항목이 없습니다';
+  renderSheet();
+}
+function renderSheet(){
+  sheetBody.innerHTML=sheet.map((s,i)=>`<tr>
+    <td class="c">${i+1}</td><td class="c">${esc(s.code)}</td><td>${esc(s.name)}</td><td>${esc(s.criteria)}</td>
+    <td><input class="field" style="width:100%" value="${esc(s.measured)}" oninput="sheet[${i}].measured=this.value"></td>
+    <td><select class="field" style="width:100%" onchange="setResult(${i},this.value)">
+      ${['대기','OK','NG','N/A'].map(o=>`<option ${s.result===o?'selected':''}>${o}</option>`).join('')}
+    </select></td></tr>`).join('');
+}
+function setResult(i,v){sheet[i].result=v;autoJudge()}
+function markAll(v){sheet.forEach(s=>s.result=v);renderSheet();autoJudge()}
+function autoJudge(){
+  if(!sheet.length)return;
+  const ng=sheet.filter(s=>s.result==='NG').length;
+  const done=sheet.filter(s=>s.result!=='대기').length;
+  if(done<sheet.length){sheetMsg.textContent=`판정 입력 ${done}/${sheet.length}`;return}
+  fJud.value = ng>0 ? '불합격' : '합격';
+  fDefect.value = ng>0 ? (Number(fDefect.value)||ng) : 0;
+  sheetMsg.textContent = ng>0 ? `NG ${ng}건 → 종합판정 불합격` : '전 항목 OK → 종합판정 합격';
+}
+
+function pick(i){
+  sel=i; const l=view[i]; if(!l)return;
+  const res=resultOf(l);
+  fJob.value=l.job_no||''; fPart.value=[l.part_no,l.part_name].filter(Boolean).join(' ');
+  fVen.value=l.vendor_name||''; fCat.value=catName(CAT_MAP[l.category])||'(검사구분 없음)';
+  fDate.value=res?.inspection_date||l.receipt_date||today();
+  fInsp.value=res?.inspector||fInsp.options[0]?.value||'';
+  fLot.value=res?.lot_qty??l.receipt_qty??l.order_qty??'';
+  fSample.value=res?.sample_qty??'';
+  fDefect.value=res?.defect_qty??0;
+  fJud.value=res?.judgement||'대기';
+  fRemark.value=res?.remark||'';
+  buildSheet(l); renderTgt();
+  msg(`${l.job_no} ${l.part_no||''} (${l.vendor_name}) 선택`);
+}
+
+function search(){
+  const c=catQ.value, q=jobQ.value.trim().toLowerCase(), j=judQ.value, w=onlyWait.checked;
+  view=LINES.filter(l=>{
+    if(l.category==='외주설계')return false;
+    if(!['입고','입고확정'].includes(l.status))return false;
+    if(c && CAT_MAP[l.category]!==c)return false;
+    if(j && judOf(l)!==j)return false;
+    if(w && judOf(l)!=='대기')return false;
+    if(q){const t=`${l.job_no} ${l.part_no} ${l.part_name} ${l.vendor_name}`.toLowerCase();if(!t.includes(q))return false}
+    return true;
+  });
+  sel=-1; sheet=[]; renderTgt(); renderSheet(); sheetInfo.textContent='';
+  msg(`검사대상 ${view.length}건을 조회했습니다.`);
+}
+
+async function saveInspection(quiet){
+  if(sel<0)return msg('검사할 건을 선택하세요.');
+  const l=view[sel], code=CAT_MAP[l.category];
+  if(!code)return msg('이 구분은 검사 대상이 아닙니다.');
+  if(!fDate.value)return msg('검사일을 입력하세요.');
+  const head={line_id:l.line_id,inspection_category_code:code,inspection_date:fDate.value,
+    inspector:fInsp.value||null,job_no:l.job_no,vendor_name:l.vendor_name,part_no:l.part_no,
+    part_name:l.part_name,category:l.category,
+    lot_qty:Number(fLot.value)||null,sample_qty:Number(fSample.value)||null,
+    defect_qty:Number(fDefect.value)||0,judgement:fJud.value,
+    action_taken:fJud.value==='합격'?'입고확정':fJud.value==='불합격'?'반품':fJud.value==='특채'?'특채승인':null,
+    remark:fRemark.value||null};
+  if(!window.MESDB||!MESDB.online){
+    const ex=resultOf(l);
+    if(ex)Object.assign(ex,head); else RESULTS.push({...head,inspection_no:Date.now()});
+    if(fJud.value==='합격'||fJud.value==='특채')l.status='입고확정';
+    else if(fJud.value==='불합격'){l.status='발주';l.receipt_date=null}
+    renderTgt(); if(!quiet)msg('검사 결과를 저장했습니다. (DB 미연결 - 로컬)');
+    return;
+  }
+  try{
+    const ex=resultOf(l);
+    let no;
+    if(ex){await MESDB.table('inspection_results').upsert({inspection_no:ex.inspection_no,...head},'inspection_no');no=ex.inspection_no;Object.assign(ex,head)}
+    else{
+      const ins=await MESDB.rest('inspection_results',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify([head])});
+      no=ins[0].inspection_no; RESULTS.push(ins[0]);
+    }
+    if(sheet.length){
+      await MESDB.rest(`inspection_result_details?inspection_no=eq.${no}`,{method:'DELETE',headers:{Prefer:'return=minimal'}});
+      const det=sheet.map(s=>({inspection_no:no,inspection_item_code:s.code,inspection_item_name:s.name,
+        criteria:s.criteria,measured_value:s.measured||null,result:s.result,remark:s.remark||null}));
+      await MESDB.table('inspection_result_details').upsert(det,'inspection_no,inspection_item_code');
+      DETAILS=DETAILS.filter(d=>d.inspection_no!==no).concat(det);
+    }
+    /* 트리거가 order_lines 상태를 바꾸므로 최신값을 다시 읽는다 */
+    const fresh=await MESDB.table('order_lines').select(`select=*&line_id=eq.${l.line_id}`);
+    if(fresh&&fresh[0])Object.assign(l,fresh[0]);
+    renderTgt();
+    if(!quiet)msg(`검사 결과를 저장했습니다. 판정 ${head.judgement}${head.action_taken?' → '+head.action_taken:''}`);
+  }catch(e){msg('저장 실패: '+e.message.slice(0,140))}
+}
+
+async function passLine(){
+  if(sel<0)return msg('검사할 건을 선택하세요.');
+  if(sheet.length && sheet.some(s=>s.result==='대기'))
+    if(!confirm('판정하지 않은 검사항목이 있습니다. 전 항목을 OK로 처리하고 합격시키겠습니까?'))return;
+  sheet.forEach(s=>{if(s.result==='대기')s.result='OK'});
+  fJud.value='합격'; fDefect.value=0; renderSheet();
+  await saveInspection(true);
+  msg(`${view[sel].job_no} 합격 처리했습니다. 발주라인이 입고확정으로 넘어갔습니다.`);
+  if(onlyWait.checked)search();
+}
+async function failLine(){
+  if(sel<0)return msg('검사할 건을 선택하세요.');
+  if(!confirm('불합격 처리하면 해당 발주라인이 입고 취소되고 발주 상태로 되돌아갑니다. 계속하시겠습니까?'))return;
+  if(!Number(fDefect.value))fDefect.value=Number(fLot.value)||1;
+  fJud.value='불합격';
+  sheet.forEach(s=>{if(s.result==='대기')s.result='NG'});
+  renderSheet();
+  await saveInspection(true);
+  msg(`${view[sel].job_no} 불합격 처리했습니다. 발주라인이 발주 상태로 롤백되었습니다.`);
+  if(onlyWait.checked)search();
+}
+
+function exportCsv(){
+  const out=[['검사구분','제번','업체','품번','부품명','검사일','검사자','로트','샘플','불량','판정','조치','비고'],
+    ...RESULTS.map(r=>[catName(r.inspection_category_code),r.job_no,r.vendor_name,r.part_no,r.part_name,
+      r.inspection_date,r.inspector,r.lot_qty,r.sample_qty,r.defect_qty,r.judgement,r.action_taken,r.remark])];
+  const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+  a.download='inspection_results.csv'; a.click(); URL.revokeObjectURL(a.href);
+}
+function msg(t){message.textContent=t}
+
+const FALLBACK={cats:[],items:[],lines:[]};
+async function load(){
+  try{
+    const [c,i,l,r,d,e]=await Promise.all([
+      MESDB.table('inspection_categories').select('select=*&order=sort_order'),
+      MESDB.table('inspection_items').select('select=*&order=inspection_item_code'),
+      MESDB.table('order_lines').select('select=*&status=in.(입고,입고확정)&order=line_id'),
+      MESDB.table('inspection_results').select('select=*&order=inspection_no'),
+      MESDB.table('inspection_result_details').select('select=*'),
+      MESDB.table('employees').select('select=employee_name&order=employee_name')]);
+    CATS=c; ITEMS=i; LINES=l; RESULTS=r; DETAILS=d; EMPS=e.map(x=>x.employee_name).filter(Boolean);
+  }catch(err){
+    CATS=FALLBACK.cats; ITEMS=FALLBACK.items; LINES=FALLBACK.lines; EMPS=['검사자'];
+    msg('DB 미연결 - 로컬 데이터로 표시합니다.');
+  }
+  [...new Set(Object.values(CAT_MAP).filter(Boolean))].forEach(code=>{
+    const n=catName(code); if(n)catQ.insertAdjacentHTML('beforeend',`<option value="${code}">${n}</option>`);
+  });
+  EMPS.slice(0,40).forEach(n=>fInsp.insertAdjacentHTML('beforeend',`<option>${esc(n)}</option>`));
+  fDate.value=today();
+  search();
+}
+load();
+window.MES={search,save:saveInspection,exportCsv,setMessage:msg};
+
+</script>
+</body>
+</html>

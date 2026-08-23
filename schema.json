@@ -1204,6 +1204,39 @@
         "criteria": "text?",
         "inspection_category_code": "text? (트리거 자동 채움)"
       }
+    },
+    "inspection_results": {
+      "pk": "inspection_no",
+      "columns": {
+        "inspection_no": "bigint (identity)",
+        "line_id": "bigint? → order_lines",
+        "inspection_category_code": "text? → inspection_categories",
+        "inspection_date": "date",
+        "inspector": "text?",
+        "job_no": "text?",
+        "vendor_name": "text?",
+        "part_no": "text?",
+        "part_name": "text?",
+        "category": "text?",
+        "lot_qty": "numeric?",
+        "sample_qty": "numeric?",
+        "defect_qty": "numeric?",
+        "judgement": "text (대기/합격/불합격/특채)",
+        "action_taken": "text? (입고확정/반품/재작업/특채승인)",
+        "remark": "text?"
+      }
+    },
+    "inspection_result_details": {
+      "pk": "(inspection_no,inspection_item_code)",
+      "columns": {
+        "inspection_no": "bigint → inspection_results",
+        "inspection_item_code": "text → inspection_items",
+        "inspection_item_name": "text?",
+        "criteria": "text?",
+        "measured_value": "text?",
+        "result": "text (대기/OK/NG/N/A)",
+        "remark": "text?"
+      }
     }
   }
 }

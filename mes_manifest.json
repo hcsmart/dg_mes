@@ -1,6 +1,6 @@
 {
   "project": "NEXMES photo-driven MES prototype",
-  "version": "21",
+  "version": "22",
   "entry": "index.html",
   "updated": "2026-08-22",
   "naming_rule": "<domain>_<action>.html (snake_case, English)",
@@ -620,6 +620,17 @@
         "inspection_categories.json"
       ],
       "note": "사진 없음. 통상 구성으로 설계"
+    },
+    {
+      "menu": "검사실적등록",
+      "file": "inspection_result_input.html",
+      "status": "designed",
+      "source_photo": null,
+      "data_json": [
+        "inspection_results.json",
+        "inspection_result_details.json"
+      ],
+      "note": "원본 사진에 없는 화면. 검사구분/검사항목 마스터를 실제 업무에 연결하기 위해 신규 설계"
     }
   ],
   "database_json": {
@@ -742,5 +753,12 @@
     "검사항목 화면의 검사구분 입력을 자유 입력에서 검사구분 마스터 기반 선택으로 변경, inspection_items에 inspection_category_code 컬럼 추가 및 기존 값 매핑",
     "검사항목 28건 시드: 8개 검사구분별 3~5개 항목과 판정기준 (수입검사 5, 구매품검사 4, 외주가공검사 4, 공정검사 3, 최종검사 3, 조립검사 3, 시험(T/O)검사 3, 출하검사 3). 검색창 추가 및 코드순 정렬",
     "inspection_items에 트리거 추가: 검사구분명 입력 시 inspection_category_code 자동 채움"
+  ],
+  "changelog_v22": [
+    "검사실적등록 화면 신규 설계: order_lines의 입고 건을 불러와 검사구분 자동 판정(구매품→구매품검사, 원재료→수입검사, 외주가공→외주가공검사) 후 해당 구분의 검사항목이 체크시트로 표시됨",
+    "항목별 OK/NG/N/A + 측정값 입력, 전 항목 판정 시 종합판정 자동 계산(NG 1건이라도 있으면 불합격)",
+    "합격/특채 → order_lines가 입고확정으로 전이, 불합격 → 발주 상태로 롤백(입고일·수량 취소). DB 트리거로 처리해 화면을 거치지 않아도 일관성 유지",
+    "inspection_results(검사 헤더) / inspection_result_details(항목별 결과) 테이블 신설, order_lines·inspection_categories·inspection_items에 FK",
+    "검사구분·검사항목 마스터가 실제로 참조되는 구조 완성 - 이전까지는 마스터만 있고 사용처가 없었음"
   ]
 }

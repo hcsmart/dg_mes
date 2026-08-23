@@ -282,7 +282,11 @@
     "order_lines.job_no -> jobs.job_no",
     "order_lines.part_no -> parts.part_code",
     "order_lines.material -> materials.material_code",
-    "sale_orders.job_no / sale_order_status_rows.job_no / design_plans.job_no / machining_plans.job_no / machining_plan_parts.job_no / partlist_materials.job_no / partlist_purchases.job_no / partlist_status_rows.job_no / status_board_rows.job_no / sales_plans.job_no / design_results.job_no / stock_inquiry_rows.job_no -> jobs.job_no"
+    "sale_orders.job_no / sale_order_status_rows.job_no / design_plans.job_no / machining_plans.job_no / machining_plan_parts.job_no / partlist_materials.job_no / partlist_purchases.job_no / partlist_status_rows.job_no / status_board_rows.job_no / sales_plans.job_no / design_results.job_no / stock_inquiry_rows.job_no -> jobs.job_no",
+    "inspection_results.line_id -> order_lines.line_id (on delete cascade)",
+    "inspection_results.inspection_category_code -> inspection_categories.inspection_category_code",
+    "inspection_result_details.inspection_no -> inspection_results.inspection_no (on delete cascade)",
+    "inspection_result_details.inspection_item_code -> inspection_items.inspection_item_code"
   ],
   "check_constraints": [
     "order_lines.status in ('발주','입고','입고확정')",
@@ -291,5 +295,9 @@
   "rls": {
     "tier_a": "업무 테이블 - anon 읽기/쓰기, authenticated 전체",
     "tier_b": "users, user_permissions, employees - anon 완전 차단(로그인 전용)"
-  }
+  },
+  "triggers": [
+    "inspection_results: 판정 합격/특채 → order_lines.status=입고확정, 불합격 → status=발주로 롤백",
+    "inspection_items: 검사구분명 입력 시 inspection_category_code 자동 채움"
+  ]
 }
