@@ -1,242 +1,235 @@
 [
-  {
-    "row_no": 1,
-    "employee_code": "user22",
-    "employee_name": "권소율",
-    "name_uncertain": false
-  },
-  {
-    "row_no": 2,
-    "employee_code": "user14",
-    "employee_name": "이태윤",
-    "name_uncertain": false
-  },
-  {
-    "row_no": 3,
-    "employee_code": "user13",
-    "employee_name": "한서준",
-    "name_uncertain": true
-  },
-  {
-    "row_no": 4,
-    "employee_code": "user07",
-    "employee_name": "강지우",
-    "name_uncertain": true
-  },
-  {
-    "row_no": 5,
-    "employee_code": "user15",
-    "employee_name": "안다인",
-    "name_uncertain": false
-  },
-  {
-    "row_no": 6,
-    "employee_code": "user06",
-    "employee_name": "이지우",
-    "name_uncertain": true
-  },
-  {
-    "row_no": 7,
-    "employee_code": "cyc",
-    "employee_name": null,
-    "name_uncertain": true
-  },
-  {
-    "row_no": 8,
-    "employee_code": "user01",
-    "employee_name": "권태윤",
-    "name_uncertain": false
-  },
-  {
-    "row_no": 9,
-    "employee_code": "user09",
-    "employee_name": "TIC",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 10,
-    "employee_code": "user10",
-    "employee_name": "tic",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 11,
-    "employee_code": "user11",
-    "employee_name": "권민준",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 12,
-    "employee_code": "user12",
-    "employee_name": "김지호",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 13,
-    "employee_code": "user13X",
-    "employee_name": "박민준",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 14,
-    "employee_code": "user14X",
-    "employee_name": "박채원",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 15,
-    "employee_code": "user15X",
-    "employee_name": "안도윤",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 16,
-    "employee_code": "user16",
-    "employee_name": "안지우",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 17,
-    "employee_code": "user17",
-    "employee_name": "오수아",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 18,
-    "employee_code": "user18",
-    "employee_name": "윤서연",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 19,
-    "employee_code": "user19",
-    "employee_name": "임직원",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 20,
-    "employee_code": "user20",
-    "employee_name": "임채원",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 21,
-    "employee_code": "user21",
-    "employee_name": "임태윤",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 22,
-    "employee_code": "user22X",
-    "employee_name": "장소율",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 23,
-    "employee_code": "user23",
-    "employee_name": "전준서",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 24,
-    "employee_code": "user24",
-    "employee_name": "조건우",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 25,
-    "employee_code": "user25",
-    "employee_name": "조시우",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 26,
-    "employee_code": "user26",
-    "employee_name": "최현우",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 27,
-    "employee_code": "user27",
-    "employee_name": "한나윤",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 28,
-    "employee_code": "user28",
-    "employee_name": "한서연",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 29,
-    "employee_code": "user29",
-    "employee_name": "황태윤",
-    "name_uncertain": false,
-    "source": "샘플 참조 보강",
-    "code_uncertain": true
-  },
-  {
-    "row_no": 30,
-    "employee_code": "user02",
-    "employee_name": "윤나윤",
-    "name_uncertain": false,
-    "source": "사용자 계정",
-    "code_uncertain": false
-  },
-  {
-    "row_no": 31,
-    "employee_code": "user31",
-    "employee_name": "류민호",
-    "name_uncertain": false,
-    "source": "사용자 계정",
-    "code_uncertain": false
-  },
-  {
-    "row_no": 32,
-    "employee_code": "user32",
-    "employee_name": "김민수",
-    "name_uncertain": false,
-    "source": "사용자 계정",
-    "code_uncertain": false
-  }
+ {
+  "row_no": 1,
+  "employee_code": "user22",
+  "employee_name": "권소율",
+  "name_uncertain": false
+ },
+ {
+  "row_no": 2,
+  "employee_code": "user14",
+  "employee_name": "이태윤",
+  "name_uncertain": false
+ },
+ {
+  "row_no": 3,
+  "employee_code": "user13",
+  "employee_name": "김지호",
+  "name_uncertain": false,
+  "source": "담당 확인(2026-08-24)"
+ },
+ {
+  "row_no": 4,
+  "employee_code": "user07",
+  "employee_name": "강지우",
+  "name_uncertain": true
+ },
+ {
+  "row_no": 5,
+  "employee_code": "user15",
+  "employee_name": "안다인",
+  "name_uncertain": false
+ },
+ {
+  "row_no": 6,
+  "employee_code": "user06",
+  "employee_name": "이지우",
+  "name_uncertain": true
+ },
+ {
+  "row_no": 7,
+  "employee_code": "cyc",
+  "employee_name": null,
+  "name_uncertain": true
+ },
+ {
+  "row_no": 8,
+  "employee_code": "user01",
+  "employee_name": "권태윤",
+  "name_uncertain": false
+ },
+ {
+  "row_no": 9,
+  "employee_code": "user09",
+  "employee_name": "TIC",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 10,
+  "employee_code": "user10",
+  "employee_name": "tic",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 11,
+  "employee_code": "user11",
+  "employee_name": "권민준",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 13,
+  "employee_code": "user13X",
+  "employee_name": "박민준",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 14,
+  "employee_code": "user14X",
+  "employee_name": "박채원",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 15,
+  "employee_code": "user15X",
+  "employee_name": "안도윤",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 16,
+  "employee_code": "user16",
+  "employee_name": "안지우",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 17,
+  "employee_code": "user17",
+  "employee_name": "오수아",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 18,
+  "employee_code": "user18",
+  "employee_name": "윤서연",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 19,
+  "employee_code": "user19",
+  "employee_name": "임직원",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 20,
+  "employee_code": "user20",
+  "employee_name": "임채원",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 21,
+  "employee_code": "user21",
+  "employee_name": "임태윤",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 22,
+  "employee_code": "user22X",
+  "employee_name": "장소율",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 23,
+  "employee_code": "user23",
+  "employee_name": "전준서",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 24,
+  "employee_code": "user24",
+  "employee_name": "조건우",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 25,
+  "employee_code": "user25",
+  "employee_name": "조시우",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 26,
+  "employee_code": "user26",
+  "employee_name": "최현우",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 27,
+  "employee_code": "user27",
+  "employee_name": "한나윤",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 28,
+  "employee_code": "user28",
+  "employee_name": "한서연",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 29,
+  "employee_code": "user29",
+  "employee_name": "황태윤",
+  "name_uncertain": false,
+  "source": "샘플 참조 보강",
+  "code_uncertain": true
+ },
+ {
+  "row_no": 30,
+  "employee_code": "user02",
+  "employee_name": "윤나윤",
+  "name_uncertain": false,
+  "source": "사용자 계정",
+  "code_uncertain": false
+ },
+ {
+  "row_no": 31,
+  "employee_code": "user31",
+  "employee_name": "류민호",
+  "name_uncertain": false,
+  "source": "사용자 계정",
+  "code_uncertain": false
+ },
+ {
+  "row_no": 32,
+  "employee_code": "user32",
+  "employee_name": "김민수",
+  "name_uncertain": false,
+  "source": "사용자 계정",
+  "code_uncertain": false
+ }
 ]

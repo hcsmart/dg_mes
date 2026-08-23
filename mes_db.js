@@ -22,7 +22,7 @@
   setTimeout(window.__mesdbReady,2500);   /* 바인딩이 없거나 실패해도 반드시 해제 */
 })();
 
-const MES_VER='v35';window.MES_VER=MES_VER;
+const MES_VER='v37';window.MES_VER=MES_VER;
 const CFG={url:'https://ipggvrzxfcryzryileuv.supabase.co',key:'sb_publishable_CHO-dAOU00HNwno52255mg_H3C1_vew'};
 function tok(){try{return (window.MES_AUTH||window.parent.MES_AUTH)?.token||null}catch(e){return null}}
 const H=()=>({'apikey':CFG.key,'Authorization':'Bearer '+(tok()||CFG.key),'Content-Type':'application/json'});
