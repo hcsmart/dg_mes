@@ -27,7 +27,7 @@ const data=[{"code": "AL", "name": "AL", "group": "원재료", "density": "2.70"
 let view=[...data],selected=-1;
 const fieldIds=["code", "name", "group", "density", "thickness", "width", "height", "length", "remark"], colKeys=["code", "name", "group", "density", "thickness", "width", "height", "length"], keyName="code";
 function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-function render(){body.innerHTML=view.map((r,i)=>`<tr onclick="selectRow(${JSON.stringify(String(r[keyName]))},this)"><td class="c">${i+1}</td>`+colKeys.map(k=>`<td>${esc(r[k])}</td>`).join('')+`</tr>`).join('');countText.textContent=`${view.length}건`}
+function render(){body.innerHTML=view.map((r,i)=>`<tr onclick="selectRow(&quot;${String(r[keyName]).replace(/&/g,'&amp;').replace(/"/g,'&quot;')}&quot;,this)"><td class="c">${i+1}</td>`+colKeys.map(k=>`<td>${esc(r[k])}</td>`).join('')+`</tr>`).join('');countText.textContent=`${view.length}건`}
 function selectRow(k,tr){selected=data.findIndex(x=>String(x[keyName])===String(k));document.querySelectorAll('tbody tr').forEach(x=>x.classList.remove('sel'));tr?.classList.add('sel');const r=data[selected];if(!r)return;fieldIds.forEach(id=>{const e=document.getElementById(id);if(e)e.value=r[id]??''});msg(`${k} 항목을 선택했습니다.`)}
 function search(){const q=query.value.trim().toLowerCase();view=!q?[...data]:data.filter(r=>Object.values(r).some(v=>String(v??'').toLowerCase().includes(q)));render();msg(`검색 결과 ${view.length}건입니다.`)}
 function clearSearch(){query.value='';view=[...data];render();msg('검색조건을 초기화했습니다.')}

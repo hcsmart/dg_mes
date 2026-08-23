@@ -536,6 +536,14 @@
       "records": 356,
       "source_screen": "auto",
       "source_photo": null
+    },
+    {
+      "table": "positions",
+      "file": "positions.json",
+      "primary_key": "position_code",
+      "records": 17,
+      "source_screen": "직급정보",
+      "source_photo": null
     }
   ],
   "layout": "flat"
