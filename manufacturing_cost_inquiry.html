@@ -32,7 +32,7 @@ table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th
  <div class="gridbox"><table style="min-width:1320px">
   <thead><tr><th style="width:70px">수주유형</th><th style="width:92px">완료일</th><th style="width:78px">제번</th><th style="width:90px">모델</th><th style="width:180px">품명</th><th style="width:110px">도번</th><th style="width:52px">조수</th><th style="width:72px">개발유형</th><th style="width:112px">수주가</th><th style="width:112px">목표가</th><th style="width:78px">목표가대비</th><th style="width:112px">제조원가</th><th style="width:112px">이윤</th><th style="width:68px">이익률</th></tr></thead>
   <tbody id="obody"></tbody>
-  <tfoot><tr class="gtot"><td colspan="8" class="c">전체 합계(사진 하단 집계값)</td><td class="num">23,884,154,345</td><td class="num">19,108,797,419</td><td></td><td class="num">7,524,079,955</td><td class="num">16,360,074,390</td><td></td></tr></tfoot>
+  <tfoot><tr class="gtot"><td colspan="15" class="c" id="totline">조회 0건</td></tr></tfoot>
  </table></div>
  <div class="gridbox"><table style="min-width:1560px">
   <thead>
@@ -52,6 +52,14 @@ const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&g
 const n=v=>v==null?'':Number(v).toLocaleString();
 const p=v=>v==null?'':Number(v).toFixed(1)+'%';
 const dwv=r=>esc(r.drawing_no??'')+(r.drawing_no_truncated?'\u2026':'');
+
+function renderTotal(){
+  const money=v=>Number(v||0).toLocaleString('ko-KR');
+  const src=(typeof orders!=='undefined'&&orders)||[];
+  const sum=k=>src.reduce((a,r)=>a+(Number(r[k])||0),0);
+  const el=document.getElementById('totline'); if(!el)return;
+  el.textContent = src.length ? `조회 ${src.length}건 · ` + ['수주가 '+money(sum('order_price')),'목표가 '+money(sum('target_price')),'제조원가 '+money(sum('manufacturing_cost')),'이윤 '+money(sum('profit'))].join(' / ') : '조회된 자료가 없습니다.';
+}
 function render(){
  obody.innerHTML=view.map((r,i)=>`<tr onclick="pick(${i},this)"><td class="c">${esc(r.order_type)}</td><td class="c">${esc(r.completion_date||'')}</td><td>${esc(r.job_no)}</td><td>${esc(r.model||'')}</td><td>${esc(r.item_name)}</td><td>${dwv(r)}</td><td class="c">${r.set_qty??''}</td><td class="c">${esc(r.development_type||'')}</td><td class="num">${n(r.order_price)}</td><td class="num">${n(r.target_price)}</td><td class="num">${p(r.target_ratio_pct)}</td><td class="num">${n(r.manufacturing_cost)}</td><td class="num">${n(r.profit)}</td><td class="num">${p(r.profit_rate_pct)}</td></tr>`).join('');
  countText.textContent=view.length+'건';
@@ -81,5 +89,8 @@ render();
 </script><script src="mes_db.js"></script>
 <script>
 MESDB.master({page:"manufacturing_cost_inquiry:orders",table:"manufacturing_cost_orders",pk:"job_no",map:{"row_no": {"col": "row_no", "type": "num"}, "order_type": "order_type", "completion_date": {"col": "completion_date", "type": "date"}, "job_no": "job_no", "model": "model", "item_name": "item_name", "drawing_no": "drawing_no", "drawing_no_truncated": "drawing_no_truncated", "set_qty": {"col": "set_qty", "type": "num"}, "development_type": "development_type", "order_price": {"col": "order_price", "type": "num"}, "target_price": {"col": "target_price", "type": "num"}, "target_ratio_pct": "target_ratio_pct", "manufacturing_cost": "manufacturing_cost", "profit": "profit", "profit_rate_pct": {"col": "profit_rate_pct", "type": "num"}, "plant_name": "plant_name"},get:()=>orders,render:()=>{if(typeof view!=="undefined")view=[...orders];(window.render||window.search||function(){})()}});
+
+/* 표가 다시 그려질 때마다 합계 갱신 */
+(function(){const tb=document.querySelector('tbody');if(!tb||typeof renderTotal!=='function')return;new MutationObserver(()=>renderTotal()).observe(tb,{childList:true});renderTotal()})();
 </script>
 </body></html>
