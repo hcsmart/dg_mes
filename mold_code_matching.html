@@ -56,6 +56,6 @@ function search(){const st=document.querySelector('input[name="st"]:checked').va
 function save(){msg('프로토타입에서는 원본 JSON을 변경하지 않습니다.')}
 function del_(){msg('프로토타입에서는 삭제를 수행하지 않습니다.')}
 document.querySelectorAll('input[name="st"]').forEach(x=>x.addEventListener('change',search));
-window.MES={search,save,setMessage:msg};render();</script><script src="mes_db.js"></script>
+window.MES={search,save,setMessage:msg};render();</script><script src="mes_db.js?v=24"></script>
 <script>MESDB.bind("mold_code_matching",()=>({data,procs}));</script>
 </body></html>

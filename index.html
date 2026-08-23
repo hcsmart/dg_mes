@@ -17,6 +17,7 @@
 <main class="workspace"><div class="tabs" id="tabs"></div><div class="stage" id="stage"></div></main>
 <footer class="status"><span id="now">2026-08-22 10:15:13</span><span class="msg" id="statusMsg">데이터가 조회되었습니다.</span><span class="right">AP0020</span></footer>
 <script>
+const APP_VER='24';
 const APP={
   '영업관리':{
     secondary:[
@@ -185,7 +186,7 @@ const pageRegistry={
 let activeModule='기준정보', activeSecondary='생산/품질', activeId='machining_process_management';
 const openTabs=new Map();
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function buildModules(){modules.innerHTML=MODULES.filter(m=>{const a=window.MES_AUTH;if(!a||!a.session||a.role==='admin')return true;
+function buildModules(){modules.innerHTML=MODULES.filter(m=>{const a=window.MES_AUTH;if(!a||!a.session||a.role==='admin'||a.role==='master')return true;
   return Object.entries(APP[m]?.menus||{}).some(([sec,gs])=>gs.some(g=>g.items.some(n=>a.can(m+'/'+sec+'/'+n,'view'))));
 }).map(m=>`<button class="module ${m===activeModule?'on':''}" onclick="setModule('${m}')">${m}</button>`).join('')}
 function buildSecondary(){
@@ -224,7 +225,7 @@ function slugify(name){const map={'수주등록':'sale_order_input','수주현�
 function openByName(name){let p=pageRegistry[name];if(!p){const id=slugify(name);p={id,title:name,file:null};pageRegistry[name]=p}openPage(p)}
 function openPage(p){if(!openTabs.has(p.id))openTabs.set(p.id,p);activeId=p.id;renderTabs();renderStage();buildTree();statusMsg.textContent=p.file?`${p.title} 화면을 열었습니다.`:`${p.title} 화면은 사진 등록 대기중입니다.`}
 function renderTabs(){tabs.innerHTML=[...openTabs.values()].map(p=>`<div class="tab ${p.id===activeId?'on':''}" onclick="activate('${p.id}')"><span class="title">${p.title}</span><button class="x" onclick="closeTab('${p.id}',event)">×</button></div>`).join('');requestAnimationFrame(()=>tabs.querySelector('.tab.on')?.scrollIntoView({inline:'nearest'}))}
-function renderStage(){for(const p of openTabs.values()){if(document.getElementById('view_'+p.id))continue;if(p.file){const f=document.createElement('iframe');f.id='view_'+p.id;f.src=p.file;stage.appendChild(f)}else{const d=document.createElement('div');d.id='view_'+p.id;d.className='placeholder';d.innerHTML=`<div><b>${esc(p.title)}</b><br><br>해당 업무 화면 사진을 주시면 <code>${p.id}.html</code> 형태로 제작해 이 위치에 연결합니다.</div>`;stage.appendChild(d)}}stage.querySelectorAll('iframe,.placeholder').forEach(x=>x.classList.toggle('on',x.id==='view_'+activeId))}
+function renderStage(){for(const p of openTabs.values()){if(document.getElementById('view_'+p.id))continue;if(p.file){const f=document.createElement('iframe');f.id='view_'+p.id;f.src=p.file+(p.file.includes('?')?'&':'?')+'v='+APP_VER;stage.appendChild(f)}else{const d=document.createElement('div');d.id='view_'+p.id;d.className='placeholder';d.innerHTML=`<div><b>${esc(p.title)}</b><br><br>해당 업무 화면 사진을 주시면 <code>${p.id}.html</code> 형태로 제작해 이 위치에 연결합니다.</div>`;stage.appendChild(d)}}stage.querySelectorAll('iframe,.placeholder').forEach(x=>x.classList.toggle('on',x.id==='view_'+activeId))}
 function activate(id){activeId=id;renderTabs();renderStage();buildTree()}
 function closeTab(id,e){e?.stopPropagation();const ids=[...openTabs.keys()],idx=ids.indexOf(id);openTabs.delete(id);document.getElementById('view_'+id)?.remove();if(activeId===id){activeId=ids[idx+1]||ids[idx-1]||'';if(!openTabs.has(activeId))activeId=[...openTabs.keys()][0]||''}renderTabs();renderStage();buildTree()}
 function closeActive(){if(activeId)closeTab(activeId)}
@@ -232,7 +233,7 @@ function tick(){const d=new Date();now.textContent=d.toLocaleString('sv-SE',{hou
 openTabs.set('machining_process_management',pageRegistry['가공공정관리']);
 buildModules();buildSecondary();buildTree();renderTabs();renderStage();tick();setInterval(tick,1000);
 </script>
-<script src="mes_auth.js"></script>
+<script>document.write('<script src="mes_auth.js?v='+APP_VER+'"><\/script>')</script>
 <script>window.addEventListener("mes-auth-ready",()=>{try{buildModules();buildSecondary();buildTree()}catch(e){}});</script>
 </body>
 </html>

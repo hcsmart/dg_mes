@@ -64,7 +64,7 @@ function csv(){const h=['구분','작업자','제번','공정','가공공정코�
  const c='\ufeff'+[h,...rs].map(x=>x.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');
  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([c],{type:'text/csv;charset=utf-8'}));a.download='design_results.csv';a.click();}
 document.querySelectorAll('input[name="k"]').forEach(x=>x.addEventListener('change',search));
-window.MES={search,exportCsv:csv,setMessage:msg};render();</script><script src="mes_db.js"></script>
+window.MES={search,exportCsv:csv,setMessage:msg};render();</script><script src="mes_db.js?v=24"></script>
 <script>MESDB.bind("design_result_inquiry",()=>({data}));
 /* 표가 다시 그려질 때마다 합계 갱신 */
 (function(){const tb=document.querySelector('tbody');if(!tb||typeof renderTotal!=='function')return;new MutationObserver(()=>renderTotal()).observe(tb,{childList:true});renderTotal()})();

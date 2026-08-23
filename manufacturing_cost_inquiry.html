@@ -86,7 +86,7 @@ function exportCsv(){
 }
 window.MES={search,exportCsv,setMessage:t=>message.textContent=t};
 render();
-</script><script src="mes_db.js"></script>
+</script><script src="mes_db.js?v=24"></script>
 <script>
 MESDB.master({page:"manufacturing_cost_inquiry:orders",table:"manufacturing_cost_orders",pk:"job_no",map:{"row_no": {"col": "row_no", "type": "num"}, "order_type": "order_type", "completion_date": {"col": "completion_date", "type": "date"}, "job_no": "job_no", "model": "model", "item_name": "item_name", "drawing_no": "drawing_no", "drawing_no_truncated": "drawing_no_truncated", "set_qty": {"col": "set_qty", "type": "num"}, "development_type": "development_type", "order_price": {"col": "order_price", "type": "num"}, "target_price": {"col": "target_price", "type": "num"}, "target_ratio_pct": "target_ratio_pct", "manufacturing_cost": "manufacturing_cost", "profit": "profit", "profit_rate_pct": {"col": "profit_rate_pct", "type": "num"}, "plant_name": "plant_name"},get:()=>orders,render:()=>{if(typeof view!=="undefined")view=[...orders];(window.render||window.search||function(){})()}});
 
