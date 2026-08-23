@@ -14,12 +14,15 @@ button,input,select{font:inherit;color:inherit}button{cursor:pointer}
 .body{flex:1;min-height:0;display:grid;grid-template-columns:36% 64%;gap:8px;padding:7px 10px}
 .panel{border:1px solid var(--line);background:#fff;min-height:0;display:flex;flex-direction:column}
 .cap{height:28px;display:flex;align-items:center;padding:0 8px;background:linear-gradient(#f5f8fa,#e6edf2);border-bottom:1px solid var(--line);font-weight:700}
-.filters{display:grid;grid-template-columns:74px 1fr 74px 1fr;gap:3px;padding:5px;border-bottom:1px solid var(--line2)}
+.filters{display:grid;grid-template-columns:74px minmax(0,1fr) 74px minmax(0,1fr) auto;gap:3px;padding:5px;border-bottom:1px solid var(--line2);align-items:center}
 .lab{background:#eef2f5;border:1px solid #c4cdd5;display:flex;align-items:center;justify-content:center;min-height:25px}
 .field{height:25px;border:1px solid #b7c1ca;background:#fff;padding:0 6px;min-width:0}
 .userlist{flex:1;min-height:0;overflow:auto}
 .group-title{height:25px;display:flex;align-items:center;padding:0 8px;background:#edf3f7;border-bottom:1px solid #c8d3dc;color:#3b556d;font-weight:700}
-.user-row{display:grid;grid-template-columns:1fr 1.4fr;min-height:26px;border-bottom:1px solid #e0e6eb}
+.user-row{display:grid;grid-template-columns:1fr 1.4fr 52px;min-height:26px;border-bottom:1px solid #e0e6eb}
+.user-row .use{justify-self:center;font-size:11px;color:#2e7d32}
+.user-row .use.off{color:#c62828}
+.allchk{display:flex;align-items:center;gap:4px;white-space:nowrap;font-size:12px;color:#41556b}
 .user-row span{padding:5px 8px;border-right:1px solid #e0e6eb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .user-row:hover{background:#eef6fc}.user-row.on{background:#2f76b7;color:#fff}
 .right{min-height:0;display:grid;grid-template-rows:auto 42px minmax(0,1fr);gap:7px}
@@ -72,7 +75,9 @@ button,input,select{font:inherit;color:inherit}button{cursor:pointer}
       <div class="filters">
         <div class="lab">사용자</div><input id="q" class="field" oninput="renderUsers()">
         <div class="lab">공장</div><select id="factory" class="field" onchange="renderUsers()"><option>1공장</option></select>
+        <label class="allchk" title="체크하면 사용여부가 해제된(미사용) 사용자까지 표시합니다"><input type="checkbox" id="d_all" onchange="renderUsers()">전체</label>
       </div>
+      <div class="user-row" style="background:#dbe9f4;font-weight:700;color:#33506b"><span style="padding-left:8px">직급</span><span>성명</span><span class="use" style="color:#33506b">사용</span></div>
       <div class="userlist" id="userList"></div>
     </section>
 
@@ -82,7 +87,7 @@ button,input,select{font:inherit;color:inherit}button{cursor:pointer}
         <div class="detail-grid">
           <div class="lab">공장</div><select id="d_factory" class="field"><option>1공장</option></select>
           <div class="lab">등록일</div><input id="d_registered" class="field" type="date">
-          <div class="lab" title="체크하면 사용여부가 해제된 사용자까지 모두 표시합니다">전체</div><div class="check"><input type="checkbox" id="d_all" onchange="renderUsers()" title="미사용 사용자 포함 표시"></div>
+          
 
           <div class="lab">아이디</div><input id="d_user_id" class="field">
           <div class="lab">성명</div><input id="d_name" class="field">
@@ -162,7 +167,7 @@ function renderUsers(){
   });
   userList.innerHTML=grouped(list).map(([dept,rows])=>`
     <div class="group-title">부서명: ${esc(dept)}</div>
-    ${rows.map(u=>`<div class="user-row ${u.user_key===selectedKey?'on':''}" onclick="selectUser('${u.user_key.replaceAll("'","\\'")}')"><span>${esc(u.position_name||'')}</span><span style="${u.is_active===false?'color:#9aa5b1;text-decoration:line-through':''}">${esc(u.name)}${u.role==='master'?' <b style="color:#8e24aa">[마스터]</b>':u.role==='admin'?' <b style="color:#1e5e91">[관리자]</b>':''}${u.is_active===false?' <span style="color:#c62828;font-size:11px">(미사용)</span>':''}</span></div>`).join('')}
+    ${rows.map(u=>`<div class="user-row ${u.user_key===selectedKey?'on':''}" onclick="selectUser('${u.user_key.replaceAll("'","\\'")}')"><span>${esc(u.position_name||'')}</span><span style="${u.is_active===false?'color:#9aa5b1;text-decoration:line-through':''}">${esc(u.name)}${u.role==='master'?' <b style="color:#8e24aa">[마스터]</b>':u.role==='admin'?' <b style="color:#1e5e91">[관리자]</b>':''}</span><span class="use${u.is_active===false?' off':''}">${u.is_active===false?'미사용':'사용'}</span></div>`).join('')}
   `).join('');
   countText.textContent=`${list.length}명`;
 }
