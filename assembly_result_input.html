@@ -90,10 +90,10 @@ function msg(t){message.textContent=t}
 worker.innerHTML=WORKERS.map(w=>`<option>${w}</option>`).join('');workDate.value='2026-08-22';
 renderJobs();renderSteps();renderResults();window.MES={search,save:addResult,exportCsv,setMessage:msg};
 </script>
-<script src="mes_db.js?v=25"></script>
+<script src="mes_db.js?v=27"></script>
 <script>MESDB.bind("assembly_result_input",()=>({JOBS,STEPS,WORKERS}));</script>
 <script src="mes_ctx.js?v=1"></script>
-<script src="mes_lookup.js?v=1"></script>
+<script src="mes_lookup.js?v=27"></script>
 <script>
 (async function(){
  try{

@@ -25,7 +25,7 @@
 <div class="screen">
   <div class="title"><h1>원재료 발주</h1><div class="plant"><span>공장</span><select id="plant" class="field"><option>1공장</option><option>2공장</option></select></div></div>
   <section class="filters">
-    <span class="label">제번</span><input id="jobQ" class="field" style="width:220px" placeholder="제번" value="J26118">
+    <span class="label">제번</span><input id="jobQ" class="field" style="width:220px" placeholder="제번">
     <span class="label">품명</span><input id="itemQ" class="field" style="width:260px" placeholder="품명">
     <button class="btn" onclick="search()">⌕ 조회</button>
   </section>
@@ -82,13 +82,13 @@ function msg(t){message.textContent=t}
 reqDate.value='2026-08-24';renderJobs();renderVendors();renderBom();renderReq();
 window.MES={search,save,exportCsv,setMessage:msg,print:printOrder};
 </script>
-<script src="mes_db.js?v=25"></script>
+<script src="mes_db.js?v=27"></script>
 <script>MESDB.bind("material_order_input",()=>({JOBS,VENDORS,REQ}));
 /* v22: 구매요청 리스트는 화면을 열 때 빈 작업공간으로 시작 (샘플 잔존분이 저장되는 것 방지) */
 REQ.length=0;/*v22*/if(typeof renderReq==='function')renderReq();
 </script>
 <script src="mes_ctx.js?v=1"></script>
-<script src="mes_lookup.js?v=1"></script>
+<script src="mes_lookup.js?v=27"></script>
 <script>
 /* 협력업체 목록: 하드코딩 → 마스터 직결 */
 (async function loadVendors(){

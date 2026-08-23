@@ -56,7 +56,7 @@ function search(){const st=document.querySelector('input[name="st"]:checked').va
 function save(){msg('프로토타입에서는 원본 JSON을 변경하지 않습니다.')}
 function del_(){msg('프로토타입에서는 삭제를 수행하지 않습니다.')}
 document.querySelectorAll('input[name="st"]').forEach(x=>x.addEventListener('change',search));
-window.MES={search,save,setMessage:msg};render();</script><script src="mes_db.js?v=25"></script>
+window.MES={search,save,setMessage:msg};render();</script><script src="mes_db.js?v=27"></script>
 <script>MESDB.master({page:"mold_code_matching:data",table:"mold_code_matchings",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "quotation_no": "quotation_no", "business_division_name": "business_division_name", "mass_production_vendor_name": "mass_production_vendor_name", "item_name": "item_name", "order_type": "order_type", "eco": "eco", "model": "model", "manager_name": "manager_name", "customer_name": "customer_name", "match_status": "match_status", "plant_name": "plant_name"},get:()=>data,render:()=>{if(typeof view!=="undefined")view=[...data];(window.MES&&window.MES.search||window.search||window.render||function(){})()}});</script>
 <script src="mes_ctx.js?v=1"></script>
 </body></html>

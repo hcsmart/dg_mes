@@ -1,6 +1,6 @@
 {
  "project": "NEXMES photo-driven MES prototype",
- "version": "31",
+ "version": "v27",
  "entry": "index.html",
  "updated": "2026-08-23",
  "naming_rule": "<domain>_<action>.html (snake_case, English)",
@@ -832,42 +832,21 @@
   "공정/조수처럼 버튼 없는 2칸 조합은 반반 배치",
   "캐시버스팅 버전 v25로 갱신"
  ],
- "changelog_v26": {
-  "SET발주 실전화": [
-   "신규 테이블 set_order_lines: SET발주 등록/입고/취소가 공유하는 단일 원장",
-   "UNIQUE(job_no,partner_vendor_name,set_seq,process_name) 로 중복발주 DB 차단",
-   "트리거 set_order_lines_guard_trg: 상태별 입고일/확정자 정합성 + updated_at 자동",
-   "트리거 set_order_lines_no_del_trg: 입고된 라인 DELETE 차단(입고취소 선행 강제)",
-   "뷰 set_order_job_list: 발주가 존재하는 제번만 + 미완료/완료 자동판정",
-   "set_order_registration.html: 저장/발주취소 DB 직결, 입고건 체크박스 비활성",
-   "set_order_receipt.html: 입고처리/입고취소/발주취소 실제 동작 (기존 스텁 대체)",
-   "마스터 보강 - vendors 2건, jobs 13건, set_order_partners 3건, set_order_registrations 16건 추가"
-  ],
-  "우클릭 메뉴 제거": [
-   "mes_ctx.js v2: 컨텍스트 메뉴 삭제, 삭제/취소 확인 다이얼로그만 유지",
-   "전 화면 삭제·취소 버튼 클릭 시 대상행을 보여주는 확인창 1회 표시",
-   "화면 자체 confirm() 이 있는 경우 중복 질문 방지"
-  ],
-  "SET발주현황 조인뷰": [
-   "뷰 set_order_status_view: 발주원장 × sale_orders 조인",
-   "수주가 = sale_orders.order_price / 유상사급 = 수주유형이 '유상사급' 인 건 / 집행율 = 네고가÷수주가×100",
-   "견적가·네고가·차액은 set_order_lines 원장에서 산출",
-   "set_order_status.html: 스냅샷(set_order_status_rows) → 뷰 직결, 구분(전체/발주/입고) 필터 실동작",
-   "합계줄에 수주가·집행율 추가, 집행율 100% 초과 시 적색 강조, 발주/입고 행 색상 구분",
-   "sale_orders 에 SET발주 4개 제번 수주정보 시드"
-  ]
- },
- "changelog_v27": {
-  "실적/거래 데이터 초기화 (백지 시작)": [
-   "reset_demo_transactions() 재작성 - 명시적 거래·실적 테이블 목록만 truncate",
-   "DB 초기화 실행: 44개 테이블 약 360행 삭제 (order_lines 48, partlist_purchases 38 등)",
-   "page_state 도 초기화 - 남겨두면 빈 DB 위에 옛 데모 화면이 복원됨",
-   "보존: 기준정보 전체, jobs(제번 51), sale_orders(수주), sale_order_status_rows, set_order_registrations, *_partners",
-   "백업: bak_20260823 스키마에 초기화 대상 47개 테이블 전량 복사",
-   "화면 내장 사진데이터 제거 - 총 144행 (거래·실적 성격만, 기준정보는 유지)",
-   "design_result_inquiry / design_result_status / purchase_status / mold_code_matching 을 bind → MESDB.master 로 전환"
-  ]
- },
+ "changelog_v26": [
+  "결함#1 수정: vendors 구분 플래그(raw_material/purchase_item/outsourcing/milling) 전부 null → 발주등록 협력업체 목록 0건, vendor_name=null 발주 발생",
+  "vendors.json 플래그 보정: 거래 증거(order_lines·발주현황·단가변경 등) 기반 13개사 확정, 나머지 협력업체는 3구분 허용, 고객사·양산처는 false",
+  "mes_lookup.js v26: 구분 플래그 필터 결과가 0건이면 vendor_type='협력업체' fallback으로 표시 (목록 통째 공백 방지)",
+  "DB: vendors.milling_flag 컬럼 타입 text→boolean 정정 후 플래그 일괄 반영",
+  "HTML 6종의 mes_lookup.js 캐시 버전 v=1→v=2"
+ ],
+ "changelog_v27": [
+  "결함#2 수정: material_order_input.html 조회조건 jobQ의 하드코딩 기본값 value=\"J26118\" 제거 (신규 수주 제번이 초기 화면에 안 뜨던 문제). 전 화면 조회조건 재점검 결과 잔존 없음",
+  "결함#3 수정: mes_db.js에 MESDB.delLines(ids) 추가 — 발주취소가 화면 배열에서만 지워지고 order_lines에 남던 문제 해결",
+  "원재료·구매품·외주가공 입고등록의 cancelOrder를 async화: 확인 팝업 + 입고/확정건 취소 차단 + DB DELETE 반영",
+  "확정취소(cancelConfirm) 상태를 '대기'(=발주) → '입고'로 정정: 확정만 풀리고 입고 이력은 유지 (원재료·구매품·외주가공 입고확정 3화면)",
+  "입고취소만 하고 저장할 때 '입고 처리된 행이 없습니다' 가드에 막혀 DB에 반영되지 않던 문제 수정 (dirty 플래그)",
+  "캐시 버전 v=27 일괄 갱신"
+ ],
  "changelog_v28": {
   "수주부터 직접 등록하는 백지 상태": [
    "jobs / sale_orders / sale_order_status_rows / set_order_registrations 초기화 (bak_20260823 에 백업)",

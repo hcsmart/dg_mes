@@ -19,11 +19,14 @@ const KINDS={
             cols:['코드','고객사명','구분'], map:r=>[r.vendor_code,r.vendor_name,r.vendor_type||''],
             filter:r=>r.vendor_type==='고객사'||r.vendor_type==='양산처'},
  vendor_purchase:{title:'협력업체(구매품)', table:'vendors', order:'vendor_name',
-            cols:['코드','업체명'], map:r=>[r.vendor_code,r.vendor_name], filter:r=>r.purchase_item_flag===true},
+            cols:['코드','업체명'], map:r=>[r.vendor_code,r.vendor_name], filter:r=>r.purchase_item_flag===true,
+            fallback:r=>r.vendor_type==='협력업체'},
  vendor_material:{title:'협력업체(원재료)', table:'vendors', order:'vendor_name',
-            cols:['코드','업체명'], map:r=>[r.vendor_code,r.vendor_name], filter:r=>r.raw_material_flag===true},
+            cols:['코드','업체명'], map:r=>[r.vendor_code,r.vendor_name], filter:r=>r.raw_material_flag===true,
+            fallback:r=>r.vendor_type==='협력업체'},
  vendor_outsourcing:{title:'협력업체(외주가공)', table:'vendors', order:'vendor_name',
-            cols:['코드','업체명'], map:r=>[r.vendor_code,r.vendor_name], filter:r=>r.outsourcing_flag===true},
+            cols:['코드','업체명'], map:r=>[r.vendor_code,r.vendor_name], filter:r=>r.outsourcing_flag===true,
+            fallback:r=>r.vendor_type==='협력업체'},
  design_partner:{title:'협력업체(외주설계)', table:'outsourced_design_partners', order:'seq',
             cols:['No','업체명'], map:r=>[r.seq,r.partner_name], code:r=>r.partner_name, name:r=>r.partner_name},
  employee: {title:'사원 조회',      table:'employees', order:'employee_name',
@@ -67,7 +70,12 @@ async function rows(kind,extraFilter){
  if(!online())throw new Error('DB 미연결');
  if(!CACHE[kind])CACHE[kind]=await MESDB.table(K.table).select('select=*&order='+K.order);
  let out=CACHE[kind];
- if(K.filter)out=out.filter(K.filter);
+ if(K.filter){
+  const f=out.filter(K.filter);
+  /* v26: 마스터 구분 플래그가 비어 있어 결과가 0건이면 대체 기준으로 표시한다.
+     (플래그 미입력 때문에 협력업체 목록이 통째로 비는 사고 방지) */
+  out=f.length?f:(K.fallback?out.filter(K.fallback):f);
+ }
  if(extraFilter)out=out.filter(extraFilter);
  return out;
 }

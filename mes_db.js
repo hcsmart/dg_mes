@@ -22,7 +22,7 @@
   setTimeout(window.__mesdbReady,2500);   /* 바인딩이 없거나 실패해도 반드시 해제 */
 })();
 
-const MES_VER='v25';window.MES_VER=MES_VER;
+const MES_VER='v27';window.MES_VER=MES_VER;
 const CFG={url:'https://ipggvrzxfcryzryileuv.supabase.co',key:'sb_publishable_CHO-dAOU00HNwno52255mg_H3C1_vew'};
 function tok(){try{return (window.MES_AUTH||window.parent.MES_AUTH)?.token||null}catch(e){return null}}
 const H=()=>({'apikey':CFG.key,'Authorization':'Bearer '+(tok()||CFG.key),'Content-Type':'application/json'});
@@ -172,6 +172,14 @@ async function lines(opt){
   document.addEventListener('change',()=>{clearTimeout(timer);timer=setTimeout(sync,350)},true);
   window.MESDB.syncLines=sync;
 }
+/* v26: 발주취소 등 라인 삭제 (화면 배열에서만 지우고 DB에 남던 문제 수정) */
+async function delLines(ids){
+  const list=[].concat(ids||[]).map(Number).filter(n=>!Number.isNaN(n));
+  if(!list.length)return 0;
+  for(const id of list)await MESDB.table('order_lines').delete({line_id:id});
+  badge(`DB 발주취소 ${list.length}건 삭제`,'#c62828');return list.length;
+}
+window.MESDB.delLines=delLines;
 /* 발주등록 화면용: 신규 발주 라인 insert */
 async function newLines(rows){
   if(!rows||!rows.length)return 0;

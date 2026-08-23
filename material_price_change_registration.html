@@ -42,7 +42,7 @@ function remove(){message.textContent='프로토타입에서는 원본 JSON 삭�
 function exportCsv(){const h=['등록일','구분','자재코드','자재명','사이즈','협력업체코드','협력업체명','단가','담당자'];const rows=data.map(r=>[r.registered_date,r.material_type,r.material_code,r.material_name,r.size,r.vendor_code,r.vendor_name,r.unit_price,r.registered_by||r.manager_name]);download(h,rows,'material_price_changes.csv')}
 function download(h,rows,n){const csv='\ufeff'+[h,...rows].map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=n;a.click()}
 window.MES={search,save,delete:remove,exportCsv,setMessage:t=>message.textContent=t};render();
-</script><script src="mes_db.js?v=25"></script>
+</script><script src="mes_db.js?v=27"></script>
 <script>MESDB.bind("material_price_change_registration",()=>({data}));</script>
 <script src="mes_ctx.js?v=1"></script>
 </body></html>

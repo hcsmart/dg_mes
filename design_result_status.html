@@ -61,7 +61,7 @@ function render(){
 function search(){const k=document.querySelector('input[name="k"]:checked').value;
  view=k==='전체'?[...data]:data.filter(r=>r.work_type===k);render();msg(`조회결과 ${view.length}명입니다.`);}
 document.querySelectorAll('input[name="k"]').forEach(x=>x.addEventListener('change',search));
-window.MES={search,setMessage:msg};render();</script><script src="mes_db.js?v=25"></script>
+window.MES={search,setMessage:msg};render();</script><script src="mes_db.js?v=27"></script>
 <script>MESDB.master({page:"design_result_status:data",table:"design_result_monthly",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "work_type": "work_type", "worker_name": "worker_name", "year_month": "year_month", "d01": "d01", "d02": "d02", "d03": "d03", "d04": "d04", "d05": "d05", "d06": "d06", "d07": "d07", "d08": "d08", "d09": "d09", "d10": "d10", "d11": "d11", "d12": "d12", "d13": "d13", "d14": "d14", "d15": "d15", "d16": "d16", "d17": "d17", "d18": "d18", "d19": "d19", "d20": "d20", "d21": "d21", "d22": "d22", "d23": "d23", "d24": "d24", "d25": "d25", "d26": "d26", "d27": "d27", "d28": "d28", "d29": "d29", "d30": "d30", "d31": "d31"},get:()=>data,render:()=>{if(typeof view!=="undefined")view=[...data];(window.MES&&window.MES.search||window.search||window.render||function(){})()}});</script>
 <script src="mes_ctx.js?v=1"></script>
 </body></html>
