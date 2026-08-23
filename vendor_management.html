@@ -38,4 +38,5 @@ function exportCsv(){const header=["업체 코드", "업체 명", "구분", "원
 function msg(t){message.textContent=t} window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script><script src="mes_db.js?v=25"></script>
 <script>MESDB.master({page:"vendor_management",table:"vendors",pk:"code",map:{"code": "vendor_code", "name": "vendor_name", "type": "vendor_type", "raw": {"col": "raw_material_flag", "type": "ynbool"}, "milling": "milling_flag", "purchase": {"col": "purchase_item_flag", "type": "ynbool"}, "outsource": {"col": "outsourcing_flag", "type": "ynbool"}, "partner": "partner_type", "location": "location_type", "ceo": "ceo_name", "phone": "phone", "zip": "postal_code", "fax": "fax"},get:()=>data,render:()=>{view=[...data];render()}});</script>
+<script src="mes_ctx.js?v=1"></script>
 </body></html>

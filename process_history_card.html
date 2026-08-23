@@ -75,5 +75,6 @@ function closePreview(){if(window.parent&&window.parent!==window){try{window.par
 function search(){goPage(1)}function add(){return false}function remove(){return false}function save(){window.print()}function exportCsv(){const rows=[['제번','K21136-A005'],['품번','B17A'],['재질','STD11'],['수량','1'],['제품명','SHELF,NET RL'],['부품명','BUTTON, DIE']];const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+v+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='process_history_card.csv';a.click();URL.revokeObjectURL(a.href)}
 window.MES={search,add,delete:remove,save,exportCsv,setMessage:()=>{}};build();goPage(1);
 </script>
+<script src="mes_ctx.js?v=1"></script>
 </body>
 </html>

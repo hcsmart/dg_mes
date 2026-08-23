@@ -57,4 +57,5 @@ render();start();
 <script>
 MESDB.master({page:"status_board:rows",table:"status_board_rows",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "item_name": "item_name", "order_date": {"col": "order_date", "type": "date"}, "s1_due_date": {"col": "s1_due_date", "type": "date"}, "completion_due_date": {"col": "completion_due_date", "type": "date"}, "sales_manager": "sales_manager", "assembly_manager": "assembly_manager", "s1_overdue": {"col": "s1_overdue", "type": "num"}, "completion_overdue": {"col": "completion_overdue", "type": "num"}, "page": {"col": "page", "type": "num"}},get:()=>rows,render:()=>{if(typeof view!=="undefined")view=[...rows];(window.render||window.search||function(){})()}});
 </script>
+<script src="mes_ctx.js?v=1"></script>
 </body></html>

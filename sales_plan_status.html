@@ -91,4 +91,5 @@ MESDB.master({page:"sales_plan_status:plans",table:"sales_plans",pk:"row_no",map
 /* 표가 다시 그려질 때마다 합계 갱신 */
 (function(){const tb=document.querySelector('tbody');if(!tb||typeof renderTotal!=='function')return;new MutationObserver(()=>renderTotal()).observe(tb,{childList:true});renderTotal()})();
 </script>
+<script src="mes_ctx.js?v=1"></script>
 </body></html>

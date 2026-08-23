@@ -38,4 +38,5 @@ function exportCsv(){const header=["부품코드", "부품명", "부품그룹"];
 function msg(t){message.textContent=t} window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script><script src="mes_db.js?v=25"></script>
 <script>MESDB.master({page:"part_management",table:"parts",pk:"code",map:{"code": "part_code", "name": "part_name", "group": "part_group"},get:()=>data,render:()=>{view=[...data];render()}});</script>
+<script src="mes_ctx.js?v=1"></script>
 </body></html>

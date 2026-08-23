@@ -109,5 +109,6 @@ cd1.value='2026-07-02';cd2.value='2026-07-31';month.value='2026-08';search();win
 <script>
 MESDB.master({page:"sales_status:rows",table:"sales_status_rows",pk:"no",map:{"no": {"col": "no", "type": "num"}, "job": "job", "type": "type", "cust": "cust", "item": "item", "set": {"col": "set", "type": "num"}, "dev": "dev", "cdate": {"col": "cdate", "type": "date"}, "order": {"col": "order", "type": "num"}, "sale": {"col": "sale", "type": "num"}, "partner": "partner", "month": {"col": "month", "type": "num"}, "total": {"col": "total", "type": "num"}},get:()=>rows,render:()=>{if(typeof view!=="undefined")view=[...rows];(window.render||window.search||function(){})()}});
 </script>
+<script src="mes_ctx.js?v=1"></script>
 </body>
 </html>
