@@ -53,7 +53,7 @@
 <div class="modal" id="preview"><div class="sheet"><div class="sheet-head"><span>미리 보기</span><button class="x" onclick="preview.classList.remove('on')">×</button></div><div class="doc" id="docArea"></div></div></div>
 <script>
 const JOBS=[];
-const VENDORS=['강철볼트','그라미테크','금원테크','다원시스템','북건텍','가민산업'];
+let VENDORS=[];  /* 협력업체는 마스터에서 로드 (mes_lookup.js) */
 const REQ=[];
 let jobIdx=0,venIdx=0,jobView=[...JOBS],venView=[...VENDORS];
 const money=v=>Number(v||0).toLocaleString('ko-KR');
@@ -88,5 +88,25 @@ window.MES={search,save,exportCsv,setMessage:msg,print:printOrder};
 REQ.length=0;/*v22*/if(typeof renderReq==='function')renderReq();
 </script>
 <script src="mes_ctx.js?v=1"></script>
+<script src="mes_lookup.js?v=1"></script>
+<script>
+/* 협력업체 목록: 하드코딩 → 마스터 직결 */
+(async function loadVendors(){
+ try{
+  VENDORS.length=0;
+  VENDORS.push(...await MESLOOK.names('vendor_purchase'));
+  if(typeof venView!=='undefined'){venView=[...VENDORS]}
+  if(typeof venIdx!=='undefined')venIdx=VENDORS.length?0:-1;
+  if(typeof renderVendors==='function')renderVendors();
+ }catch(e){
+  const m=document.getElementById('message');
+  if(m)m.textContent='협력업체 마스터 조회 실패: '+String(e.message||e).slice(0,100);
+ }
+})();
+window.MESLOOK_RELOAD_VENDORS=async()=>{MESLOOK.invalidate('vendor_purchase');
+ VENDORS.length=0;VENDORS.push(...await MESLOOK.names('vendor_purchase'));
+ if(typeof venView!=='undefined')venView=[...VENDORS];
+ if(typeof renderVendors==='function')renderVendors();};
+</script>
 </body>
 </html>

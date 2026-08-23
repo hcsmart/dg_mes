@@ -21,6 +21,34 @@ table{border-collapse:collapse;min-width:1220px;width:100%;table-layout:fixed}th
 .detail table{min-width:1150px}.detail th.workdate{background:#8aa7df;color:#10294b}.detail th.workname{background:#a6d4c4}.detail th.process{background:#d2c5e7}.detail th.line{background:#b4e0d8}.detail th.qty{background:#9e9bd8;color:#18214a}.detail td{height:28px}
 .footer{height:23px;display:flex;align-items:center;border-top:1px solid #9ba8b4;background:#e6ebef;padding:0 8px;color:#5f6e7b;font-size:11px}.footer .message{margin-left:22px;color:#334d66}.footer .right{margin-left:auto;display:flex;gap:18px}
 @media(max-width:900px){.form-grid{grid-template-columns:90px 1fr 90px 1fr}.form-grid>*:nth-child(5),.form-grid>*:nth-child(6){display:none}.split{grid-template-rows:1.5fr 1fr}}
+.btnbar{display:inline-flex;gap:5px;margin-right:12px}
+.btn{height:24px;min-width:62px;border:1px solid #9ba8b4;background:linear-gradient(#fff,#dfe6eb);cursor:pointer;font-size:12px}
+.btn:hover{background:#fff}
+#detailBody input{width:100%;height:20px;border:1px solid #cbd4dc;padding:0 3px;font:inherit}
+#detailBody input.num{text-align:right}
+#detailBody tr.st-done td{background:#f0f7f2}
+#detailBody tr.st-run td{background:#fffbf0}
+#detailBody tr.dirty td{box-shadow:inset 0 -2px 0 #e4a11b}
+.lkmask{position:fixed;inset:0;background:rgba(20,28,35,.38);z-index:9000;display:none;align-items:center;justify-content:center}
+.lkmask.on{display:flex}
+.lkdlg{width:520px;max-height:78vh;background:#fff;border:1px solid #7f8f9c;box-shadow:0 6px 24px rgba(0,0,0,.3);display:flex;flex-direction:column}
+.lkhead{height:30px;display:flex;align-items:center;padding:0 6px 0 12px;color:#fff;background:linear-gradient(#5f7f9f,#3f5f7d);font-weight:700}
+.lkx{margin-left:auto;width:24px;height:22px;border:0;background:transparent;color:#fff;cursor:pointer}
+.lkbar{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid #dde3e8;background:#f5f7f9}
+.lkbar input#lkQ{flex:1;height:24px;border:1px solid #b9c3cb;padding:0 6px}
+.lkbar label{white-space:nowrap;color:#4d5c69}
+.lkcnt{color:#6d7b88;white-space:nowrap}
+.lkbody{flex:1;overflow:auto;min-height:150px}
+.lkbody table{width:100%;border-collapse:collapse}
+.lkbody th{position:sticky;top:0;background:linear-gradient(#e9eef3,#f5f7f9);border-bottom:1px solid #c3ccd4;height:24px;padding:0 7px;text-align:left}
+.lkbody td{height:23px;border-bottom:1px solid #e7ecf0;padding:0 7px;white-space:nowrap}
+.lkbody tbody tr:hover td{background:#edf6fd;cursor:pointer}
+.lkbody tbody tr.sel td{background:#2d75b7;color:#fff}
+.lkfoot{display:flex;gap:6px;justify-content:flex-end;padding:8px 10px;background:#f7f9fa;border-top:1px solid #e3e9ed}
+.lkcell{position:relative;padding-right:20px!important}
+.lkcell input{width:100%}
+.lkcell .lkbtn{position:absolute;right:2px;top:50%;transform:translateY(-50%);width:16px;height:18px;border:1px solid #b9c3cb;background:#eef2f5;cursor:pointer;font-size:10px;line-height:1;padding:0}
+.lkcell .lkbtn:hover{background:#fff}
 </style>
 </head>
 <body>
@@ -35,41 +63,284 @@ table{border-collapse:collapse;min-width:1220px;width:100%;table-layout:fixed}th
       <div class="label">품목 정보</div><div class="field"><input id="itemSearch" placeholder="품번 / 품명"></div>
     </div>
   </section>
-  <div class="modebar"><button class="mode on" onclick="switchMode(this,'item')">품목별 작업지시</button><button class="mode" onclick="switchMode(this,'order')">수주별 작업지시</button></div>
+  <div class="modebar"><button class="mode on" onclick="switchMode(this,'item')">제번별 작업지시</button><button class="mode" onclick="switchMode(this,'order')">수주별 작업지시</button></div>
   <div class="split">
     <section class="panel">
-      <div class="caption">[품목 정보]<span class="right" id="countText">13건</span></div>
+      <div class="caption">[제번 정보]<span class="right" id="countText">0건</span></div>
       <div class="table-wrap">
         <table id="masterGrid"><thead><tr>
-          <th style="width:42px">No</th><th style="width:58px">신규</th><th style="width:110px">사업장</th><th style="width:130px">품번</th><th style="width:190px">품명</th><th style="width:80px">품목유형</th><th style="width:80px">차종</th><th style="width:85px">재질</th><th style="width:150px">거래처</th><th style="width:64px">소재</th><th style="width:58px">단위</th><th style="width:88px">수입검사여부</th><th style="width:92px">모니터링여부</th><th style="width:74px">사용여부</th>
+          <th style="width:42px">No</th><th style="width:130px">제번</th><th style="width:200px">품명</th><th style="width:110px">모델</th><th style="width:150px">거래처</th><th style="width:80px">수주유형</th><th style="width:100px">수주일</th><th style="width:100px">S1예정일</th><th style="width:70px">상태</th><th style="width:80px">지시건수</th><th style="width:80px">진행/완료</th>
         </tr></thead><tbody id="masterBody"></tbody></table>
       </div>
     </section>
     <section class="panel detail">
-      <div class="caption">[품목별 작업지시 정보]<span class="right">선택 품목 기준</span></div>
+      <div class="caption">[작업지시 정보]<span class="right" id="detCount">제번을 선택하세요</span></div>
       <div class="table-wrap"><table><thead><tr>
-        <th style="width:120px">작업지시번호</th><th style="width:90px">비고</th><th class="workdate" style="width:110px">작업지시일자</th><th style="width:100px">작업장코드</th><th class="workname" style="width:120px">작업장명</th><th class="process" style="width:95px">공정코드</th><th style="width:85px">공정명</th><th class="line" style="width:95px">라인코드</th><th style="width:95px">라인명</th><th class="qty" style="width:70px">지시량</th><th style="width:58px">완료</th><th style="width:58px">불량</th><th style="width:82px">실적수량</th>
-      </tr></thead><tbody id="detailBody"><tr><td class="center">자동생성</td><td></td><td class="center">2026-08-22</td><td class="center">WC0007</td><td>PRO 5-1호기</td><td class="center">CP0037</td><td class="center">PRO</td><td></td><td></td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr></tbody></table></div>
+        <th style="width:32px"></th><th style="width:130px">작업지시번호</th><th class="workdate" style="width:110px">작업지시일자</th><th style="width:150px">부품명</th><th style="width:95px">작업장코드</th><th class="workname" style="width:120px">작업장명</th><th class="process" style="width:90px">공정코드</th><th style="width:85px">공정명</th><th style="width:90px">작업자</th><th class="qty" style="width:70px">지시량</th><th style="width:58px">양품</th><th style="width:58px">불량</th><th style="width:76px">실적수량</th><th style="width:64px">상태</th>
+      </tr></thead><tbody id="detailBody"></tbody></table></div>
     </section>
   </div>
-  <footer class="footer"><span id="time">2026-08-22 10:15:13</span><span class="message" id="message">데이터가 조회되었습니다.</span><span class="right"><span>AP0020</span><span>[DONGGU02] 조영호 로그인 하였습니다.</span></span></footer>
+  <div id="lkMask" class="lkmask"><div class="lkdlg">
+  <div class="lkhead"><span id="lkTitle">조회</span><button class="lkx" onclick="closeLook()">✕</button></div>
+  <div class="lkbar"><input id="lkQ" placeholder="코드 / 명칭 검색" oninput="renderLook()">
+    <label id="lkActiveWrap"><input type="checkbox" id="lkActive" checked onchange="renderLook()">사용중만</label>
+    <span class="lkcnt" id="lkCount"></span></div>
+  <div class="lkbody"><table id="lkTable"></table></div>
+  <div class="lkfoot"><button class="btn" onclick="clearLook()">지우기</button>
+    <button class="btn" onclick="confirmLook()">선택</button>
+    <button class="btn" onclick="closeLook()">닫기</button></div>
+</div></div>
+<footer class="footer"><span class="btnbar">
+  <button class="btn" onclick="doSearch()">⌕ 검색</button>
+  <button class="btn" onclick="loadJobs()">⟳ 새로고침</button>
+  <button class="btn" onclick="addOrder()">＋ 지시등록</button>
+  <button class="btn" onclick="saveOrders()">▣ 저장</button>
+  <button class="btn" onclick="deleteOrder()">✖ 지시삭제</button>
+</span><span id="time">2026-08-22 10:15:13</span><span class="message" id="message">데이터가 조회되었습니다.</span><span class="right"><span>AP0020</span><span>[DONGGU02] 조영호 로그인 하였습니다.</span></span></footer>
 </div>
 <script>
-const rows=[];
-function render(data=rows){const body=document.getElementById('masterBody');body.innerHTML=data.map((r,i)=>`<tr onclick="selectRow(this,${i})"><td class="center">${i+1}</td><td class="newcell">신규</td>${r.map((v,j)=>`<td class="${[7].includes(j)?'num':''} ${[8,9,10,11].includes(j)?'center':''}">${v}</td>`).join('')}</tr>`).join('');document.getElementById('countText').textContent=data.length+'건';body.querySelector('tr')?.classList.add('selected')}
-function selectRow(tr,i){document.querySelectorAll('#masterBody tr').forEach(x=>x.classList.remove('selected'));tr.classList.add('selected');const r=rows[i]||rows[0];document.getElementById('detailBody').innerHTML=`<tr><td class="center">자동생성</td><td>${r[1]}</td><td class="center">2026-08-22</td><td class="center">WC0007</td><td>PRO 5-1호기</td><td class="center">CP0037</td><td class="center">PRO</td><td></td><td></td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>`}
-function doSearch(){const q=(document.getElementById('itemSearch').value+' '+document.getElementById('customer').value+' '+document.getElementById('orderName').value).trim().toLowerCase();const filtered=!q?rows:rows.filter(r=>r.join(' ').toLowerCase().includes(q));render(filtered);setMessage(`데이터가 조회되었습니다. (${filtered.length}건)`)}
-function addRow(){rows.unshift(['(주)동구기업','NEW-'+String(Date.now()).slice(-6),'신규 품목','제품','','','','0','EA','예','예','예']);render(rows);setMessage('신규 행이 추가되었습니다.')}
-function deleteRow(){const selected=document.querySelector('#masterBody tr.selected');if(!selected){setMessage('삭제할 행을 선택하세요.');return}const idx=[...selected.parentNode.children].indexOf(selected);rows.splice(idx,1);render(rows);setMessage('선택 행이 삭제되었습니다.')}
-function save(){setMessage('작업지시 정보가 저장되었습니다.')}
-function exportCsv(){const data=[];const csv='\ufeff'+data.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='work_order_input.csv';a.click();URL.revokeObjectURL(a.href);setMessage('엑셀용 CSV 파일을 생성했습니다.')}
-function switchMode(btn,mode){document.querySelectorAll('.mode').forEach(b=>b.classList.remove('on'));btn.classList.add('on');setMessage(mode==='item'?'품목별 작업지시로 전환했습니다.':'수주별 작업지시로 전환했습니다.')}
+/* ── 작업지시 (제번 기준) ─────────────────────────────────
+ * 좌: 제번리스트(뷰 set_order_job_pool)  우: work_order_details
+ */
+let jobs=[], view=[], selJob=null, dets=[];
+const TBL='work_order_details';
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const num=v=>v==null||v===''?'':Number(v).toLocaleString('ko-KR');
+const today=()=>new Date().toISOString().slice(0,10);
+const online=()=>!!(window.MESDB&&MESDB.online);
+const me=()=>{try{const a=window.MES_AUTH||window.parent.MES_AUTH;return a&&(a.name||a.user_name)||''}catch(e){return ''}};
 function setMessage(t){document.getElementById('message').textContent=t}
-window.MES={search:doSearch,add:addRow,delete:deleteRow,save,exportCsv,setMessage};
-render();
+const msg=setMessage;
+
+/* ── 제번리스트 ─────────────────────────────────────── */
+async function loadJobs(){
+ if(!online()&&window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}
+ if(!online()){msg('DB 미연결 — 제번리스트를 불러올 수 없습니다.');return}
+ try{
+  const rs=await MESDB.table('set_order_job_pool').select('select=*&order=row_no');
+  const cnt=await MESDB.table(TBL).select('select=job_no,status');
+  const g={}; cnt.forEach(w=>{const a=g[w.job_no]=g[w.job_no]||{n:0,run:0,done:0};a.n++;
+    if(w.status==='완료')a.done++; else if(w.status==='진행')a.run++;});
+  jobs=rs.map(r=>({...r,wo:g[r.job_no]||{n:0,run:0,done:0}}));
+  view=[...jobs]; selJob=null; dets=[];
+  render(); renderD();
+  msg(jobs.length?`제번 ${jobs.length}건`:'등록된 수주가 없습니다. 영업관리 > 수주등록에서 먼저 등록하세요.');
+ }catch(e){msg('제번 조회 실패: '+String(e.message||e).slice(0,110))}
+}
+function render(){
+ const b=document.getElementById('masterBody');
+ b.innerHTML=view.length?view.map((r,i)=>`<tr onclick="selectRow(this,${i})"><td class="center">${i+1}</td><td>${esc(r.job_no)}</td><td>${esc(r.item_name||'')}</td><td>${esc(r.model||'')}</td><td>${esc(r.customer_name||'')}</td><td class="center">${esc(r.order_type||'')}</td><td class="center">${esc(r.order_date||'')}</td><td class="center">${esc(r.s1_date||'')}</td><td class="center">${esc(r.order_status||'')}</td><td class="center">${r.wo.n||''}</td><td class="center">${r.wo.n?`${r.wo.run}/${r.wo.done}`:''}</td></tr>`).join('')
+  :'<tr><td colspan="11" class="center" style="height:90px;color:#8a97a2">조회된 제번이 없습니다.</td></tr>';
+ document.getElementById('countText').textContent=view.length+'건';
+}
+async function selectRow(tr,i){
+ document.querySelectorAll('#masterBody tr').forEach(x=>x.classList.remove('selected'));
+ tr.classList.add('selected'); selJob=view[i];
+ await loadDets();
+ msg(`${selJob.job_no} · 작업지시 ${dets.length}건`);
+}
+
+/* ── 작업지시 ───────────────────────────────────────── */
+async function loadDets(){
+ dets=[];
+ if(selJob&&online()){
+  try{dets=await MESDB.table(TBL).select(`select=*&job_no=eq.${encodeURIComponent(selJob.job_no)}&order=work_order_no`)}
+  catch(e){msg('작업지시 조회 실패: '+String(e.message||e).slice(0,110))}
+ }
+ dets.forEach(d=>d._orig=JSON.stringify(d));
+ renderD();
+}
+function renderD(){
+ const b=document.getElementById('detailBody');
+ const cls=s=>s==='완료'?'st-done':(s==='진행'?'st-run':'');
+ b.innerHTML=dets.length?dets.map((d,i)=>`<tr class="${cls(d.status)}" onclick="pickD(this)">
+  <td class="center"><input type="checkbox" data-no="${esc(d.work_order_no)}"></td>
+  <td class="center">${esc(d.work_order_no)}</td>
+  <td class="center"><input type="date" data-i="${i}" data-k="work_order_date" value="${esc(d.work_order_date||'')}"></td>
+  <td><input data-i="${i}" data-k="part_name" value="${esc(d.part_name||'')}"></td>
+  <td class="center lkcell"><input readonly data-i="${i}" data-k="work_center_code" value="${esc(d.work_center_code||'')}" ondblclick="openLook('equip',${i})"><button class="lkbtn" onclick="event.stopPropagation();openLook('equip',${i})">…</button></td>
+  <td><input readonly data-i="${i}" data-k="work_center_name" value="${esc(d.work_center_name||'')}" ondblclick="openLook('equip',${i})"></td>
+  <td class="center lkcell"><input readonly data-i="${i}" data-k="process_code" value="${esc(d.process_code||'')}" ondblclick="openLook('proc',${i})"><button class="lkbtn" onclick="event.stopPropagation();openLook('proc',${i})">…</button></td>
+  <td><input readonly data-i="${i}" data-k="process_name" value="${esc(d.process_name||'')}" ondblclick="openLook('proc',${i})"></td>
+  <td><input data-i="${i}" data-k="worker_name" value="${esc(d.worker_name||'')}"></td>
+  <td><input class="num" type="number" min="0" data-i="${i}" data-k="planned_qty" value="${d.planned_qty??0}"></td>
+  <td><input class="num" type="number" min="0" data-i="${i}" data-k="good_qty" value="${d.good_qty??0}"></td>
+  <td><input class="num" type="number" min="0" data-i="${i}" data-k="defect_qty" value="${d.defect_qty??0}"></td>
+  <td class="num">${num(d.completed_qty)}</td>
+  <td class="center">${esc(d.status||'')}</td></tr>`).join('')
+  :`<tr><td colspan="14" class="center" style="height:80px;color:#8a97a2">${selJob?(online()?'작업지시가 없습니다. [＋ 지시등록] 을 누르세요.':'DB 미연결'):'좌측에서 제번을 선택하세요.'}</td></tr>`;
+ document.getElementById('detCount').textContent=selJob?`${selJob.job_no} · ${dets.length}건`:'제번을 선택하세요';
+}
+function pickD(tr){document.querySelectorAll('#detailBody tr').forEach(x=>x.classList.remove('selected'));tr.classList.add('selected')}
+
+/* 셀 편집 → 메모리 반영 + 변경표시 */
+document.addEventListener('input',e=>{
+ const el=e.target; if(!el.dataset||el.dataset.i===undefined)return;
+ const d=dets[+el.dataset.i]; if(!d)return;
+ const k=el.dataset.k;
+ d[k]=(el.type==='number')?(el.value===''?0:Number(el.value)):el.value;
+ el.closest('tr').classList.toggle('dirty', JSON.stringify({...d,_orig:undefined})!==JSON.stringify({...JSON.parse(d._orig),_orig:undefined}));
+});
+
+/* ── 지시등록 ───────────────────────────────────────── */
+async function addOrder(){
+ if(!selJob){msg('먼저 제번을 선택하세요.');return}
+ if(!online()){msg('DB 미연결 상태에서는 등록할 수 없습니다.');return}
+ try{
+  const no=await MESDB.rpc('next_work_order_no');
+  await MESDB.table(TBL).upsert([{work_order_no:no,job_no:selJob.job_no,part_name:selJob.item_name||'',
+    work_order_date:today(),planned_qty:0,good_qty:0,defect_qty:0,status:'지시',
+    worker_name:me(),plant_name:selJob.plant_name||'1공장'}]);
+  await loadDets(); await refreshCount();
+  msg(`${no} 작업지시를 등록했습니다. 지시량·작업장을 입력하고 저장하세요.`);
+ }catch(e){msg('등록 실패: '+String(e.message||e).slice(0,120))}
+}
+
+/* ── 저장(수정) ─────────────────────────────────────── */
+async function saveOrders(){
+ if(!selJob){msg('제번을 선택하세요.');return}
+ if(!online()){msg('DB 미연결 상태에서는 저장할 수 없습니다.');return}
+ const dirty=dets.filter(d=>JSON.stringify({...d,_orig:undefined})!==JSON.stringify({...JSON.parse(d._orig),_orig:undefined}));
+ if(!dirty.length){msg('변경된 작업지시가 없습니다.');return}
+ const bad=dirty.find(d=>Number(d.good_qty)+Number(d.defect_qty)>Number(d.planned_qty)&&Number(d.planned_qty)>0);
+ if(bad){msg(`${bad.work_order_no}: 실적수량(${Number(bad.good_qty)+Number(bad.defect_qty)})이 지시량(${bad.planned_qty})을 넘습니다.`);return}
+ const fail=[];
+ for(const d of dirty){
+  const {_orig,completed_qty,created_at,updated_at,...row}=d;
+  try{await MESDB.table(TBL).upsert([row],'work_order_no')}
+  catch(e){fail.push(d.work_order_no)}
+ }
+ await loadDets(); await refreshCount();
+ msg(fail.length?`일부 저장 실패: ${fail.join(', ')}`:`${dirty.length}건 저장했습니다.`);
+}
+
+/* ── 지시삭제 ───────────────────────────────────────── */
+async function deleteOrder(){
+ if(!selJob){msg('제번을 선택하세요.');return}
+ if(!online()){msg('DB 미연결 상태에서는 삭제할 수 없습니다.');return}
+ let nos=[...document.querySelectorAll('#detailBody input[type=checkbox]:checked')].map(c=>c.dataset.no);
+ if(!nos.length){const s=document.querySelector('#detailBody tr.selected input[type=checkbox]');if(s)nos=[s.dataset.no]}
+ if(!nos.length){msg('삭제할 작업지시를 체크하세요.');return}
+ const tg=dets.filter(d=>nos.includes(d.work_order_no));
+ const busy=tg.filter(d=>Number(d.good_qty)+Number(d.defect_qty)>0);
+ if(busy.length){msg(`실적이 등록된 지시는 삭제할 수 없습니다. 실적을 0으로 되돌린 뒤 삭제하세요. (${busy.map(d=>d.work_order_no).join(', ')})`);return}
+ if(!confirm(`${selJob.job_no}\n${nos.join(', ')}\n작업지시를 삭제하시겠습니까?`))return;
+ const fail=[];
+ for(const n of nos){try{await MESDB.table(TBL).delete({work_order_no:n})}catch(e){fail.push(n)}}
+ await loadDets(); await refreshCount();
+ msg(fail.length?`일부 삭제 실패: ${fail.join(', ')}`:`${nos.length}건 삭제했습니다.`);
+}
+
+async function refreshCount(){
+ if(!online()||!selJob)return;
+ const j=jobs.find(x=>x.job_no===selJob.job_no); if(!j)return;
+ j.wo={n:dets.length,run:dets.filter(d=>d.status==='진행').length,done:dets.filter(d=>d.status==='완료').length};
+ render();
+ const tr=[...document.querySelectorAll('#masterBody tr')][view.indexOf(selJob)];
+ if(tr)tr.classList.add('selected');
+}
+
+function doSearch(){
+ const q=(document.getElementById('itemSearch').value+' '+document.getElementById('customer').value+' '+document.getElementById('orderName').value).trim().toLowerCase();
+ view=!q?[...jobs]:jobs.filter(r=>[r.job_no,r.item_name,r.model,r.customer_name].join(' ').toLowerCase().includes(q));
+ selJob=null;dets=[];render();renderD();
+ msg(`조회결과 ${view.length}건입니다.`);
+}
+function exportCsv(){
+ const h=['제번','작업지시번호','작업지시일자','부품명','작업장코드','작업장명','공정코드','공정명','작업자','지시량','양품','불량','실적수량','상태'];
+ const rs=dets.map(d=>[selJob?selJob.job_no:'',d.work_order_no,d.work_order_date,d.part_name,d.work_center_code,d.work_center_name,d.process_code,d.process_name,d.worker_name,d.planned_qty,d.good_qty,d.defect_qty,d.completed_qty,d.status]);
+ const csv='\ufeff'+[h,...rs].map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
+ a.download='work_order_input.csv';a.click();URL.revokeObjectURL(a.href);msg('CSV 파일을 생성했습니다.');
+}
+function switchMode(btn,mode){document.querySelectorAll('.mode').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+ msg(mode==='item'?'제번별 작업지시 화면입니다.':'수주별 보기는 준비 중입니다. 현재는 제번 기준으로 동작합니다.')}
+
+/* ── 설비/공정 마스터 조회 팝업 ───────────────────────── */
+const LOOK={
+ equip:{title:'설비(작업장) 조회', table:'equipment', cols:['설비코드','설비명','설비그룹','사용'],
+        codeKey:'work_center_code', nameKey:'work_center_name', hasActive:true,
+        map:r=>[r.equipment_code, r.equipment_name, r.equipment_group||'', r.is_active?'Y':'N'],
+        active:r=>r.is_active!==false},
+ proc:{ title:'공정 조회', table:'processes', cols:['공정코드','공정명','공정그룹','순서'],
+        codeKey:'process_code', nameKey:'process_name', hasActive:false,
+        map:r=>[r.process_code, r.process_name, r.process_group||'', r.sort_order??''],
+        active:()=>true},
+};
+const LKCACHE={};
+let lkKind=null, lkIdx=-1, lkSel=-1;
+
+async function openLook(kind,i){
+ if(!online()){msg('DB 미연결 — 마스터를 조회할 수 없습니다.');return}
+ lkKind=kind; lkIdx=i; lkSel=-1;
+ const L=LOOK[kind];
+ document.getElementById('lkTitle').textContent=L.title;
+ document.getElementById('lkQ').value='';
+ document.getElementById('lkActive').checked=true;   /* 열 때마다 사용중 필터 초기화 */
+ document.getElementById('lkActiveWrap').style.display=L.hasActive?'':'none';
+ document.getElementById('lkMask').classList.add('on');
+ if(!LKCACHE[kind]){
+  document.getElementById('lkTable').innerHTML='<tbody><tr><td style="height:56px;text-align:center;color:#8a97a2">불러오는 중…</td></tr></tbody>';
+  try{
+   const order=kind==='proc'?'&order=process_group,sort_order,process_code':'&order=equipment_code';
+   LKCACHE[kind]=await MESDB.table(L.table).select('select=*'+order);
+  }catch(e){msg('마스터 조회 실패: '+String(e.message||e).slice(0,110));closeLook();return}
+ }
+ renderLook();
+ document.getElementById('lkQ').focus();
+}
+function closeLook(){document.getElementById('lkMask').classList.remove('on');lkKind=null;lkIdx=-1}
+function lkRows(){
+ const L=LOOK[lkKind], q=document.getElementById('lkQ').value.trim().toLowerCase();
+ const onlyActive=L.hasActive&&document.getElementById('lkActive').checked;
+ return (LKCACHE[lkKind]||[]).filter(r=>(!onlyActive||L.active(r))
+   &&(!q||L.map(r).some(v=>String(v).toLowerCase().includes(q))));
+}
+function renderLook(){
+ if(!lkKind)return;
+ const L=LOOK[lkKind], rows=lkRows();
+ document.getElementById('lkTable').innerHTML=
+  '<thead><tr>'+L.cols.map(c=>`<th>${esc(c)}</th>`).join('')+'</tr></thead><tbody>'+
+  (rows.length?rows.map((r,i)=>`<tr onclick="pickLook(${i},this)" ondblclick="pickLook(${i},this);confirmLook()">`
+    +L.map(r).map(v=>`<td>${esc(v)}</td>`).join('')+'</tr>').join('')
+   :`<tr><td colspan="${L.cols.length}" style="height:56px;text-align:center;color:#8a97a2">검색결과가 없습니다.</td></tr>`)
+  +'</tbody>';
+ document.getElementById('lkCount').textContent=rows.length+'건';
+ lkSel=-1;
+}
+function pickLook(i,tr){lkSel=i;document.querySelectorAll('#lkTable tbody tr').forEach(x=>x.classList.remove('sel'));tr.classList.add('sel')}
+function applyLook(code,name){
+ const L=LOOK[lkKind], d=dets[lkIdx];
+ if(!d)return;
+ d[L.codeKey]=code; d[L.nameKey]=name;
+ const dirty=JSON.stringify({...d,_orig:undefined})!==JSON.stringify({...JSON.parse(d._orig),_orig:undefined});
+ const tr=document.querySelectorAll('#detailBody tr')[lkIdx];
+ if(tr){
+  tr.querySelector(`input[data-k="${L.codeKey}"]`).value=code;
+  tr.querySelector(`input[data-k="${L.nameKey}"]`).value=name;
+  tr.classList.toggle('dirty',dirty);
+ }
+ closeLook();
+}
+function confirmLook(){
+ if(lkSel<0){msg('목록에서 항목을 선택하세요.');return}
+ const L=LOOK[lkKind], r=lkRows()[lkSel], v=L.map(r);
+ applyLook(v[0], v[1]);
+ msg(`${L.title.replace(' 조회','')}: ${v[0]} ${v[1]}`);
+}
+function clearLook(){applyLook('','');msg('값을 지웠습니다.')}
+document.addEventListener('keydown',e=>{
+ if(!lkKind)return;
+ if(e.key==='Escape'){e.preventDefault();closeLook()}
+ else if(e.key==='Enter'){e.preventDefault();confirmLook()}
+});
+document.getElementById('lkMask').addEventListener('click',e=>{if(e.target.id==='lkMask')closeLook()});
+
+window.MES={search:doSearch,add:addOrder,save:saveOrders,delete:deleteOrder,loadJobs,exportCsv,openLook,setMessage};
+render();renderD();
 </script>
 <script src="mes_db.js?v=25"></script>
-<script>MESDB.bind("work_order_input",()=>({rows}));</script>
+<script>loadJobs();</script>
 <script src="mes_ctx.js?v=1"></script>
 </body>
 </html>

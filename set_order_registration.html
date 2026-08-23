@@ -65,6 +65,7 @@ async function pick(i,tr){sel=view[i];document.querySelectorAll('#hbody tr').for
 
 /* 제번리스트 = 수주에서 직접 (뷰 set_order_job_pool) — 수주등록만 하면 여기 나타남 */
 async function loadHeads(){
+ if(!online()&&window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}
  if(!online()){msg('DB 미연결 — 제번리스트를 불러올 수 없습니다.');render();return}
  try{
   const rs=await MESDB.table('set_order_job_pool').select('select=*&order=row_no');

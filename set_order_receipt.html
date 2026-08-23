@@ -141,6 +141,7 @@ async function apply(tg,patch,okMsg){
 }
 /* 제번리스트: SET발주가 실제로 존재하는 제번만 (뷰 set_order_job_list) */
 async function loadHeads(){
+ if(!online()&&window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}
  if(!online()){msg('DB 미연결 — 사진 판독 목록을 표시합니다.');render();return}
  try{
   const rs=await MESDB.table('set_order_job_list').select('select=*&order=job_no');

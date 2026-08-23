@@ -141,18 +141,42 @@
    }
   },
   "work_order_details": {
-   "pk": null,
+   "pk": "work_order_no (WO-YYMMDD-NNN 자동채번)",
    "columns": {
-    "work_order_date": "date?",
+    "work_order_no": "text",
+    "job_no": "text",
+    "part_no": "text?",
+    "part_name": "text?",
+    "work_order_date": "date",
     "work_center_code": "text?",
     "work_center_name": "text?",
     "process_code": "text?",
     "process_name": "text?",
-    "planned_qty": "numeric?",
-    "good_qty": "numeric?",
-    "defect_qty": "numeric?",
-    "completed_qty": "numeric?"
-   }
+    "planned_qty": "numeric",
+    "good_qty": "numeric",
+    "defect_qty": "numeric",
+    "completed_qty": "numeric (generated = good+defect)",
+    "status": "text (지시|진행|완료|취소)",
+    "worker_name": "text?",
+    "start_date": "date?",
+    "end_date": "date?",
+    "remark": "text?",
+    "plant_name": "text?",
+    "created_at": "timestamptz",
+    "updated_at": "timestamptz"
+   },
+   "fk": [
+    "job_no -> jobs.job_no",
+    "part_no -> parts.part_code"
+   ],
+   "triggers": [
+    "work_order_guard_trg: 실적수량으로 상태 자동판정(지시/진행/완료) + 착수일·완료일 자동",
+    "work_order_no_del_trg: 실적>0 인 지시 DELETE 차단"
+   ],
+   "functions": [
+    "next_work_order_no(date) -> 작업지시번호 채번"
+   ],
+   "note": "작업지시(제번 기준). 화면: work_order_input"
   },
   "purchase_receipt_candidates": {
    "pk": "row_no",
@@ -1337,6 +1361,33 @@
     "plant_name": "text"
    },
    "note": "SET발주등록 제번리스트. 수주등록만 하면 자동으로 나타남. order_status='취소' 제외"
+  }
+ },
+ "modules": {
+  "mes_lookup.js": {
+   "purpose": "공용 마스터 조회 (팝업/목록/드롭다운)",
+   "kinds": [
+    "vendor",
+    "customer",
+    "vendor_purchase",
+    "vendor_material",
+    "vendor_outsourcing",
+    "design_partner",
+    "employee",
+    "material",
+    "part",
+    "process",
+    "equip",
+    "mold",
+    "mspec",
+    "biz",
+    "item",
+    "inspection_category",
+    "inspection_item",
+    "job"
+   ],
+   "api": "MESLOOK.open(kind,cb) / bindPair(kind,codeId,nameId) / rows(kind) / names(kind) / fillSelect(sel,kind,opt) / invalidate(kind)",
+   "note": "첫 조회 후 캐시. 마스터 화면에서 등록/수정 후 다른 화면은 새로고침 또는 invalidate 로 반영"
   }
  }
 }

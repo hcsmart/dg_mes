@@ -69,6 +69,7 @@ document.querySelectorAll('input[name="k"]').forEach(x=>x.addEventListener('chan
 
 /* SET발주현황 = 발주원장 × 수주 조인 뷰 (set_order_status_view) */
 async function loadRows(){
+ if(!online()&&window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}
  if(!(window.MESDB&&MESDB.online)){msg('DB 미연결 — 사진 판독본을 표시합니다.');render();return}
  try{
   const rs=await MESDB.table('set_order_status_view').select('select=*&order=row_no');

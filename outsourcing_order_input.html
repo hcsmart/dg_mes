@@ -53,7 +53,7 @@ td.route{background:#8fdc6b;text-align:center;font-weight:700;color:#20461a}
 </div>
 <script>
 const JOBS=[];
-const VENDORS=['신우기업','한림메탈','경남정밀','경천정밀','가강텍','기선정밀','동우정밀','금승정기','동빛테크','제이케이테크','대경열처리'];
+let VENDORS=[];  /* 협력업체는 마스터에서 로드 (mes_lookup.js) */
 const PROCNAME={GS:'성형연삭(소형)',AB:'가공ASSY',MS:'성형밀링(소형)',WS:'WIRE CUT',WS1:'WIRE CUT1',MA:'머시닝',HQ:'열처리',NM:'NC밀링'};
 const ROUTES=[
 {part:'T99A',name:'MACHI...',steps:['GS',null,null,null,null,null,null,null,null]},
@@ -85,5 +85,25 @@ window.MES={search,save,exportCsv,setMessage:msg};
 REQ.length=0;/*v22*/if(typeof renderReq==='function')renderReq();
 </script>
 <script src="mes_ctx.js?v=1"></script>
+<script src="mes_lookup.js?v=1"></script>
+<script>
+/* 협력업체 목록: 하드코딩 → 마스터 직결 */
+(async function loadVendors(){
+ try{
+  VENDORS.length=0;
+  VENDORS.push(...await MESLOOK.names('vendor_outsourcing'));
+  if(typeof venView!=='undefined'){venView=[...VENDORS]}
+  if(typeof venIdx!=='undefined')venIdx=VENDORS.length?0:-1;
+  if(typeof renderVendors==='function')renderVendors();
+ }catch(e){
+  const m=document.getElementById('message');
+  if(m)m.textContent='협력업체 마스터 조회 실패: '+String(e.message||e).slice(0,100);
+ }
+})();
+window.MESLOOK_RELOAD_VENDORS=async()=>{MESLOOK.invalidate('vendor_outsourcing');
+ VENDORS.length=0;VENDORS.push(...await MESLOOK.names('vendor_outsourcing'));
+ if(typeof venView!=='undefined')venView=[...VENDORS];
+ if(typeof renderVendors==='function')renderVendors();};
+</script>
 </body>
 </html>
