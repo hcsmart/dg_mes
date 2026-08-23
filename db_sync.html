@@ -29,7 +29,7 @@ async function getJson(t){/* 503/429 등 일시 오류는 지수 백오프로 �
   let last='';for(let i=0;i<4;i++){try{const r=await fetch(t+'.json',{cache:'no-store'});if(r.ok)return await r.json();last=String(r.status);if(![429,500,502,503,504].includes(r.status))throw new Error(last)}catch(e){last=e.message}
     await sleep(400*Math.pow(2,i))}throw new Error(last)}
 let FAILED=[];
-const ORDER=['vendors','materials','parts','processes','equipment','item_categories','mold_types','machine_specs','expense_reasons','business_divisions','departments','inspection_categories','inspection_items','positions','employees','users','user_permissions','standard_processes','standard_process_steps','machining_standard_routes','design_teams','jobs','sale_orders','order_lines'];
+const ORDER=['vendors','materials','parts','processes','equipment','item_categories','mold_types','machine_specs','expense_reasons','business_divisions','departments','inspection_categories','inspection_items','positions','employees','users','user_permissions','standard_processes','standard_process_steps','machining_standard_routes','design_teams','jobs','sale_orders','order_lines','set_order_registrations','set_order_partners','set_order_lines'];
 function ordered(list){/* FK 부모 테이블 먼저 */const a=ORDER.filter(t=>list.includes(t));return[...a,...list.filter(t=>!a.includes(t))]}
 async function syncFromUrl(only){const list=ordered(only||Object.keys(TABLES));FAILED=[];let n=0;
   for(const t of list){msg(`${++n}/${list.length} ${t}`);
