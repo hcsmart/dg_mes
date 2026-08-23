@@ -16,7 +16,7 @@ button,input,select,textarea{font:inherit;color:inherit}.screen{height:100%;disp
 .formrow>*{min-width:0}
 </style><!-- v15 stub: 사진 미촬영. 기존 마스터 템플릿으로 생성, 사진 확보 시 교체 --></head><body><div class="screen">
 <div class="title"><h1>검사항목 <small>검사구분별 검사항목을 관리합니다. (사진 미촬영 - 임시 화면)</small></h1></div>
-<div class="content"><section class="form"><div class="formrow"><div class="label">검사항목코드</div><input id="code" class="field"><div class="label">검사항목명</div><input id="name" class="field"><div class="label">검사구분</div><input id="group" class="field"><div class="label">판정기준</div><input id="remark" class="field"></div></section>
+<div class="content"><section class="form"><div class="formrow"><div class="label">검사항목코드</div><input id="code" class="field"><div class="label">검사항목명</div><input id="name" class="field"><div class="label">검사구분</div><select id="group" class="field"><option>수입검사</option><option>구매품검사</option><option>외주가공검사</option><option>공정검사</option><option>최종검사</option><option>조립검사</option><option>시험(T/O)검사</option><option>출하검사</option><option>무검사</option></select><div class="label">판정기준</div><input id="remark" class="field"></div></section>
 <div class="gridbox compact"><table><thead><tr><th style="width:46px">No</th><th style="width:120px">검사항목코드</th><th style="width:220px">검사항목명</th><th style="width:110px">검사구분</th><th>판정기준</th></tr></thead><tbody id="body"></tbody></table></div></div>
 <footer class="foot"><button class="btn" onclick="save()">▣ 저장</button><button class="btn" onclick="remove()">✖ 삭제</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">데이터를 조회했습니다.</span><span class="right" id="countText"></span></footer>
 </div>

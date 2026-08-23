@@ -1,0 +1,96 @@
+{
+  "version": "21",
+  "description": "검사구분 마스터 (사진 없음, 통상 구성으로 설계)",
+  "rows": [
+    {
+      "inspection_category_code": "IC01",
+      "inspection_category_name": "수입검사",
+      "inspection_target": "원재료",
+      "inspection_timing": "입고시",
+      "sampling_type": "샘플링",
+      "sort_order": 10,
+      "is_active": true,
+      "remark": "재질/치수 확인"
+    },
+    {
+      "inspection_category_code": "IC02",
+      "inspection_category_name": "구매품검사",
+      "inspection_target": "구매품",
+      "inspection_timing": "입고시",
+      "sampling_type": "샘플링",
+      "sort_order": 20,
+      "is_active": true,
+      "remark": "규격품 사양 확인"
+    },
+    {
+      "inspection_category_code": "IC03",
+      "inspection_category_name": "외주가공검사",
+      "inspection_target": "외주품",
+      "inspection_timing": "입고시",
+      "sampling_type": "전수",
+      "sort_order": 30,
+      "is_active": true,
+      "remark": "가공 정밀도 확인"
+    },
+    {
+      "inspection_category_code": "IC04",
+      "inspection_category_name": "공정검사",
+      "inspection_target": "반제품",
+      "inspection_timing": "공정중",
+      "sampling_type": "샘플링",
+      "sort_order": 40,
+      "is_active": true,
+      "remark": "가공 중 자주검사"
+    },
+    {
+      "inspection_category_code": "IC05",
+      "inspection_category_name": "최종검사",
+      "inspection_target": "반제품",
+      "inspection_timing": "공정완료",
+      "sampling_type": "전수",
+      "sort_order": 50,
+      "is_active": true,
+      "remark": "조립 전 부품 확인"
+    },
+    {
+      "inspection_category_code": "IC06",
+      "inspection_category_name": "조립검사",
+      "inspection_target": "완제품",
+      "inspection_timing": "공정완료",
+      "sampling_type": "전수",
+      "sort_order": 60,
+      "is_active": true,
+      "remark": "조립 상태/작동 확인"
+    },
+    {
+      "inspection_category_code": "IC07",
+      "inspection_category_name": "시험(T/O)검사",
+      "inspection_target": "완제품",
+      "inspection_timing": "공정완료",
+      "sampling_type": "전수",
+      "sort_order": 70,
+      "is_active": true,
+      "remark": "트라이아웃 성형품 확인"
+    },
+    {
+      "inspection_category_code": "IC08",
+      "inspection_category_name": "출하검사",
+      "inspection_target": "완제품",
+      "inspection_timing": "출하전",
+      "sampling_type": "전수",
+      "sort_order": 80,
+      "is_active": true,
+      "remark": "포장 전 최종 확인"
+    },
+    {
+      "inspection_category_code": "IC09",
+      "inspection_category_name": "무검사",
+      "inspection_target": "구매품",
+      "inspection_timing": "입고시",
+      "sampling_type": "무검사",
+      "sort_order": 90,
+      "is_active": true,
+      "remark": "승인업체 납품분"
+    }
+  ]
+}
