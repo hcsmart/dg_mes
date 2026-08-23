@@ -802,6 +802,8 @@
     "일반 사용자 로그인 시 [삭제]·[신규 사용자 등록]·[비밀번호 재설정] 버튼 자동 비활성",
     "치명 버그 수정: mes_db.js 값 변환에서 JS null이 문자열 \"null\"로 전송되어 date 컬럼 저장 시 22007 오류(invalid input syntax for type date) 발생. text/date 변환 모두 null을 정상 null로 처리하도록 수정",
     "date 컬럼 방어: 날짜 형식(YYYY-MM-DD)이 아닌 값은 null로 정규화",
-    "맵 타입 교정: users.registered_date, design_plan_steps.completion_planned_date, sales_plans의 가공·조립 시작/종료일 5건을 text→date로 지정"
+    "맵 타입 교정: users.registered_date, design_plan_steps.completion_planned_date, sales_plans의 가공·조립 시작/종료일 5건을 text→date로 지정",
+    "사용자정보 정리: 원본 사진에서 옮겨온 장식용 비밀번호 칸(disabled, id 없음)을 제거하고 그 자리에 실제 동작하는 비밀번호 칸을 배치 - 화면에 비밀번호 칸이 두 개 보이던 문제 해소",
+    "[전체] 체크박스 기능 연결: 원본에서 등록일 옆에 있던 미동작 체크박스를 실제 필터로 구현. 해제 시 등록일 이후 사용자만, 체크 시 전체 표시 (기본 체크)"
   ]
 }

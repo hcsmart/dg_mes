@@ -77,14 +77,14 @@ button,input,select{font:inherit;color:inherit}button{cursor:pointer}
         <div class="cap">사용자정보</div>
         <div class="detail-grid">
           <div class="lab">공장</div><select id="d_factory" class="field"><option>1공장</option></select>
-          <div class="lab">등록일</div><input id="d_registered" class="field" type="date">
-          <div class="lab">전체</div><div class="check"><input type="checkbox" id="d_all"></div>
+          <div class="lab">등록일</div><input id="d_registered" class="field" type="date" onchange="renderUsers()">
+          <div class="lab" title="체크하면 등록일과 무관하게 전체 사용자를 표시합니다">전체</div><div class="check"><input type="checkbox" id="d_all" checked onchange="renderUsers()" title="등록일 조건 없이 전체 표시"></div>
 
           <div class="lab">아이디</div><input id="d_user_id" class="field">
           <div class="lab">성명</div><input id="d_name" class="field">
           <div class="lab">성명(영문)</div><input id="d_english_name" class="field">
 
-          <div class="lab">비밀번호</div><input class="field" value="******" disabled>
+          <div class="lab">비밀번호</div><input id="d_pw" class="field" value="******" readonly title="마스터만 발급 비밀번호를 확인할 수 있습니다">
           <div class="lab">사용자그룹</div><select id="d_user_group" class="field"><option></option><option>사용자</option></select>
           <div class="lab">공정그룹</div><input id="d_process_group" class="field">
 
@@ -99,7 +99,7 @@ button,input,select{font:inherit;color:inherit}button{cursor:pointer}
           <div class="lab">사원번호</div><input id="d_employee_no" class="field">
           <div class="lab">사용여부</div><div class="check"><input id="d_active" type="checkbox"></div>
           <div class="lab">비고</div><input id="d_remark" class="field">
-        <div class="lab">비밀번호</div><input id="d_pw" class="field" value="******" readonly><div class="lab">로그인메일</div><input id="d_auth_email" class="field" placeholder="user@dgmes.demo">
+        <div class="lab">로그인메일</div><input id="d_auth_email" class="field" placeholder="user@dgmes.demo">
         <div class="lab">권한역할</div><select id="d_role" class="field"><option value="user">user</option><option value="admin">admin</option><option value="master">master</option></select>
         </div>
       </div>
@@ -149,7 +149,14 @@ function grouped(arr){
 }
 function renderUsers(){
   const qv=(q.value||'').trim().toLowerCase();
-  const list=users.filter(u=>!qv || [u.name,u.user_id,u.department_name].some(v=>String(v??'').toLowerCase().includes(qv)));
+  /* [전체] 해제 시 등록일 기준으로 목록을 좁힌다 (원본 화면의 '전체' 체크박스 의미) */
+  const showAll=document.getElementById('d_all')?.checked!==false;
+  const from=document.getElementById('d_registered')?.value||'';
+  const list=users.filter(u=>{
+    if(qv && ![u.name,u.user_id,u.department_name].some(v=>String(v??'').toLowerCase().includes(qv)))return false;
+    if(!showAll && from){const r=String(u.registered_date||''); if(!r || r < from)return false}
+    return true;
+  });
   userList.innerHTML=grouped(list).map(([dept,rows])=>`
     <div class="group-title">부서명: ${esc(dept)}</div>
     ${rows.map(u=>`<div class="user-row ${u.user_key===selectedKey?'on':''}" onclick="selectUser('${u.user_key.replaceAll("'","\\'")}')"><span>${esc(u.position_name||'')}</span><span>${esc(u.name)}${u.role==='master'?' <b style="color:#8e24aa">[마스터]</b>':u.role==='admin'?' <b style="color:#1e5e91">[관리자]</b>':''}</span></div>`).join('')}
