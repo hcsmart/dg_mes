@@ -35,6 +35,6 @@ function remove(){if(selected<0)return msg('삭제할 항목을 선택하세요.
 function exportCsv(){const out=[["검사구분코드", "검사구분명", "검사대상", "검사시점", "검사방식", "정렬순서", "사용여부", "비고"],...data.map(r=>[r.code??'',r.name??'',r.target??'',r.timing??'',r.sampling??'',r.order??'',r.use??'',r.remark??''])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='business_division_info.csv';a.click();URL.revokeObjectURL(a.href);msg('CSV 파일을 생성했습니다.')}
 function msg(t){message.textContent=t}window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script>
-<script src="mes_db.js?v=24"></script>
+<script src="mes_db.js?v=25"></script>
 <script>MESDB.master({page:"inspection_category",table:"inspection_categories",pk:"code",map:{"code":"inspection_category_code","name":"inspection_category_name","target":"inspection_target","timing":"inspection_timing","sampling":"sampling_type","order":{"col":"sort_order","type":"num"},"use":{"col":"is_active","type":"ynbool"},"remark":"remark"},get:()=>data,render:()=>{view=[...data];render()}});</script>
 </body></html>
