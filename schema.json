@@ -219,7 +219,6 @@
         "employee_no": "text?",
         "english_name": "text?",
         "mobile_phone": "text?",
-        "password_transcribed": "text?",
         "phone": "text?",
         "process_group": "text?",
         "remark": "text?"

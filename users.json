@@ -57,7 +57,6 @@
     "email": null,
     "phone": null,
     "employee_no": null,
-    "remark": null,
-    "password_transcribed": false
+    "remark": null
   }
 ]
