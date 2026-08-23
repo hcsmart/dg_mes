@@ -7,7 +7,14 @@ button,input,select,textarea{font:inherit;color:inherit}.screen{height:100%;disp
 .searchline{height:38px;margin:0 14px;display:flex;align-items:center;gap:5px;border-left:1px solid var(--line);border-right:1px solid var(--line);padding:4px 8px;background:#f6f8fa}.searchline input{width:min(430px,48vw);height:27px;border:1px solid #aeb9c3;padding:0 7px}.btn{height:28px;min-width:62px;border:1px solid #9ba8b4;background:linear-gradient(#fff,#dfe6eb)}.btn:hover{background:#fff}
 .gridbox{flex:1;min-height:0;margin:0 14px;border:1px solid var(--line);overflow:auto;background:#fff}table{border-collapse:collapse;min-width:900px;width:100%;table-layout:fixed}th,td{height:27px;border-right:1px solid var(--line2);border-bottom:1px solid var(--line2);padding:0 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}th{position:sticky;top:0;z-index:2;text-align:center;background:linear-gradient(var(--head1),var(--head2));color:#405266}tbody tr:nth-child(even) td{background:#fafcfd}tbody tr:hover td{background:#edf6fd}tbody tr.sel td{background:#2d75b7;color:#fff}.c{text-align:center}.num{text-align:right}
 .foot{height:43px;display:flex;align-items:center;padding:5px 14px;border-top:1px solid var(--line);background:#eef2f5;gap:5px}.msg{margin-left:10px;color:#687784}.foot .right{margin-left:auto;color:#7c8993}
-@media(max-width:860px){.formgrid{grid-template-columns:86px 1fr 86px 1fr}.formgrid>*:nth-child(n+5){display:none}.gridbox{margin:0 6px}.searchline{margin:0 6px}}
+@media(max-width:860px){.formgrid{grid-template-columns:86px 1fr 86px 1fr}.gridbox{margin:0 6px}.searchline{margin:0 6px}}
+
+/* v21 입력란 배치 보정: 좁은 폭에서 필드를 숨기지 않고 단계적으로 줄바꿈 */
+.field,.formrow input,.formrow select,.formgrid input,.formgrid select,.detail-grid input,.detail-grid select{min-width:0;max-width:100%}
+.lab,.label{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media(max-width:1400px){.formgrid{grid-template-columns:92px minmax(0,1fr) 92px minmax(0,1fr)}}
+@media(max-width:880px){.formgrid{grid-template-columns:92px minmax(0,1fr)}}
+.formgrid>*{min-width:0}
 </style></head>
 <body><div class="screen">
 <div class="title"><h1>업체 관리 <small>고객사/협력업체 및 연락처 정보를 관리합니다.</small></h1></div>
