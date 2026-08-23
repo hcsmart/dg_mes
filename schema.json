@@ -1198,7 +1198,11 @@
     "inspection_items": {
       "pk": "inspection_item_code",
       "columns": {
-        "inspection_category_code": "text?"
+        "inspection_item_code": "text",
+        "inspection_item_name": "text",
+        "inspection_group": "text?",
+        "criteria": "text?",
+        "inspection_category_code": "text? (트리거 자동 채움)"
       }
     }
   }

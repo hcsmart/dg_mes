@@ -1,0 +1,202 @@
+{
+  "version": "21",
+  "description": "검사구분별 검사항목 (사진 없음, 통상 구성으로 설계)",
+  "rows": [
+    {
+      "inspection_item_code": "IT01",
+      "inspection_item_name": "외관 상태",
+      "inspection_group": "수입검사",
+      "criteria": "흠집·타흔·부식·변형 없을 것",
+      "inspection_category_code": "IC01"
+    },
+    {
+      "inspection_item_code": "IT02",
+      "inspection_item_name": "재질 성적서",
+      "inspection_group": "수입검사",
+      "criteria": "밀시트 대조, 재질 규격 일치",
+      "inspection_category_code": "IC01"
+    },
+    {
+      "inspection_item_code": "IT03",
+      "inspection_item_name": "소재 치수",
+      "inspection_group": "수입검사",
+      "criteria": "발주 규격 대비 +0/-0.5mm 이내",
+      "inspection_category_code": "IC01"
+    },
+    {
+      "inspection_item_code": "IT04",
+      "inspection_item_name": "경도",
+      "inspection_group": "수입검사",
+      "criteria": "도면 지정 HRC ±2",
+      "inspection_category_code": "IC01"
+    },
+    {
+      "inspection_item_code": "IT05",
+      "inspection_item_name": "수량 확인",
+      "inspection_group": "수입검사",
+      "criteria": "발주수량과 일치",
+      "inspection_category_code": "IC01"
+    },
+    {
+      "inspection_item_code": "IT11",
+      "inspection_item_name": "규격 확인",
+      "inspection_group": "구매품검사",
+      "criteria": "발주 사양(형번·용량) 일치",
+      "inspection_category_code": "IC02"
+    },
+    {
+      "inspection_item_code": "IT12",
+      "inspection_item_name": "외관 상태",
+      "inspection_group": "구매품검사",
+      "criteria": "포장 파손·녹 없을 것",
+      "inspection_category_code": "IC02"
+    },
+    {
+      "inspection_item_code": "IT13",
+      "inspection_item_name": "수량 확인",
+      "inspection_group": "구매품검사",
+      "criteria": "발주수량과 일치",
+      "inspection_category_code": "IC02"
+    },
+    {
+      "inspection_item_code": "IT14",
+      "inspection_item_name": "성적서 첨부",
+      "inspection_group": "구매품검사",
+      "criteria": "제조사 시험성적서 확인",
+      "inspection_category_code": "IC02"
+    },
+    {
+      "inspection_item_code": "IT21",
+      "inspection_item_name": "가공 치수",
+      "inspection_group": "외주가공검사",
+      "criteria": "도면 공차 이내 전수 측정",
+      "inspection_category_code": "IC03"
+    },
+    {
+      "inspection_item_code": "IT22",
+      "inspection_item_name": "표면 조도",
+      "inspection_group": "외주가공검사",
+      "criteria": "도면 지정 조도 이상",
+      "inspection_category_code": "IC03"
+    },
+    {
+      "inspection_item_code": "IT23",
+      "inspection_item_name": "열처리 경도",
+      "inspection_group": "외주가공검사",
+      "criteria": "지정 경도 ±2 HRC",
+      "inspection_category_code": "IC03"
+    },
+    {
+      "inspection_item_code": "IT24",
+      "inspection_item_name": "직각도·평행도",
+      "inspection_group": "외주가공검사",
+      "criteria": "도면 기하공차 이내",
+      "inspection_category_code": "IC03"
+    },
+    {
+      "inspection_item_code": "IT31",
+      "inspection_item_name": "가공 치수",
+      "inspection_group": "공정검사",
+      "criteria": "자주검사 체크시트 기록",
+      "inspection_category_code": "IC04"
+    },
+    {
+      "inspection_item_code": "IT32",
+      "inspection_item_name": "기준면 정도",
+      "inspection_group": "공정검사",
+      "criteria": "평면도 0.02mm 이내",
+      "inspection_category_code": "IC04"
+    },
+    {
+      "inspection_item_code": "IT33",
+      "inspection_item_name": "가공면 상태",
+      "inspection_group": "공정검사",
+      "criteria": "버·채터마크 없을 것",
+      "inspection_category_code": "IC04"
+    },
+    {
+      "inspection_item_code": "IT41",
+      "inspection_item_name": "부품 치수",
+      "inspection_group": "최종검사",
+      "criteria": "파트리스트 전 항목 측정",
+      "inspection_category_code": "IC05"
+    },
+    {
+      "inspection_item_code": "IT42",
+      "inspection_item_name": "도면 대조",
+      "inspection_group": "최종검사",
+      "criteria": "최신 개정 도면과 일치",
+      "inspection_category_code": "IC05"
+    },
+    {
+      "inspection_item_code": "IT43",
+      "inspection_item_name": "각인 확인",
+      "inspection_group": "최종검사",
+      "criteria": "품번·제번 각인 확인",
+      "inspection_category_code": "IC05"
+    },
+    {
+      "inspection_item_code": "IT51",
+      "inspection_item_name": "조립 간극",
+      "inspection_group": "조립검사",
+      "criteria": "설계 간극 이내",
+      "inspection_category_code": "IC06"
+    },
+    {
+      "inspection_item_code": "IT52",
+      "inspection_item_name": "작동 상태",
+      "inspection_group": "조립검사",
+      "criteria": "수동 작동 시 간섭 없을 것",
+      "inspection_category_code": "IC06"
+    },
+    {
+      "inspection_item_code": "IT53",
+      "inspection_item_name": "스프링·핀 조립",
+      "inspection_group": "조립검사",
+      "criteria": "누락 없이 규정 위치 조립",
+      "inspection_category_code": "IC06"
+    },
+    {
+      "inspection_item_code": "IT61",
+      "inspection_item_name": "성형품 치수",
+      "inspection_group": "시험(T/O)검사",
+      "criteria": "제품 도면 공차 이내",
+      "inspection_category_code": "IC07"
+    },
+    {
+      "inspection_item_code": "IT62",
+      "inspection_item_name": "성형 불량",
+      "inspection_group": "시험(T/O)검사",
+      "criteria": "크랙·주름·버 없을 것",
+      "inspection_category_code": "IC07"
+    },
+    {
+      "inspection_item_code": "IT63",
+      "inspection_item_name": "금형 작동",
+      "inspection_group": "시험(T/O)검사",
+      "criteria": "연속 타발 시 이상 없을 것",
+      "inspection_category_code": "IC07"
+    },
+    {
+      "inspection_item_code": "IT71",
+      "inspection_item_name": "최종 외관",
+      "inspection_group": "출하검사",
+      "criteria": "도장·방청 상태 양호",
+      "inspection_category_code": "IC08"
+    },
+    {
+      "inspection_item_code": "IT72",
+      "inspection_item_name": "부속품 동봉",
+      "inspection_group": "출하검사",
+      "criteria": "예비부품·공구 동봉 확인",
+      "inspection_category_code": "IC08"
+    },
+    {
+      "inspection_item_code": "IT73",
+      "inspection_item_name": "출하 서류",
+      "inspection_group": "출하검사",
+      "criteria": "검사성적서·도면 첨부",
+      "inspection_category_code": "IC08"
+    }
+  ]
+}
