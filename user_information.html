@@ -108,6 +108,8 @@ button,input,select{font:inherit;color:inherit}button{cursor:pointer}
         <button class="btn" onclick="refresh()">⟳ 새로고침</button>
         <button class="btn" onclick="saveUser()">▣ 저장</button>
         <button class="btn" onclick="deleteUser()">✖ 삭제</button>
+        <button class="btn primary" onclick="registerUser()">＋ 신규 사용자 등록</button>
+        <button class="btn" onclick="resetPassword()">🔑 비밀번호 재설정</button>
         <button class="btn" onclick="expandAll(true)">⊞ 전체펼침</button>
         <button class="btn" onclick="expandAll(false)">⊟ 접기</button>
         <button class="btn primary" onclick="savePermissions()">🔒 권한저장</button>
@@ -247,6 +249,31 @@ function setAll(r,on){
   allMenus().forEach(m=>{const p=getPerm(m);if(!p)return;p[COL[r]]=on;if(r!=='view'&&on)p.can_view=true;if(r==='view'&&!on){p.can_save=p.can_edit=p.can_delete=false}});
   renderPermissions(users.find(x=>x.user_key===selectedKey));
   message.textContent=`전체 메뉴의 ${RIGHTS.find(x=>x[0]===r)[1]} 권한을 ${on?'부여':'해제'}했습니다.`;
+}
+async function registerUser(){
+  if(window.MES_AUTH?.role!=='admin'&&window.parent?.MES_AUTH?.role!=='admin')
+    return message.textContent='관리자만 사용자를 등록할 수 있습니다.';
+  const name=prompt('사용자 이름 (로그인 시 사용)'); if(!name)return;
+  const uid=prompt('아이디 (영문/숫자, 동명이인 구분용)'); if(!uid)return;
+  const pw=prompt('초기 비밀번호 (6자 이상)'); if(!pw)return;
+  const dept=prompt('부서명 (선택, 비워도 됨)')||'';
+  try{
+    const email=await MESDB.rest('rpc/create_mes_user',{method:'POST',
+      body:JSON.stringify({p_name:name.trim(),p_user_id:uid.trim(),p_password:pw,p_department_name:dept.trim()||null,p_role:'user'})});
+    const rows=await MESDB.table('users').select('select=*');
+    users.length=0; users.push(...rows); renderUsers();
+    const nu=users.find(x=>x.user_id===uid.trim()); if(nu)selectUser(nu.user_key);
+    message.textContent=`${name} 등록 완료. 이름 또는 아이디(${uid})와 초기 비밀번호로 로그인할 수 있습니다. 권한 영역에서 메뉴 권한을 지정한 뒤 [권한저장]을 누르세요.`;
+  }catch(e){message.textContent='등록 실패: '+e.message.slice(0,140)}
+}
+async function resetPassword(){
+  const u=users.find(x=>x.user_key===selectedKey);
+  if(!u||!u.user_id)return message.textContent='아이디가 있는 사용자를 먼저 선택하세요.';
+  const pw=prompt(`${u.name}(${u.user_id})의 새 비밀번호 (6자 이상)`); if(!pw)return;
+  try{
+    await MESDB.rest('rpc/reset_user_password',{method:'POST',body:JSON.stringify({p_user_id:u.user_id,p_password:pw})});
+    message.textContent=`${u.name}의 비밀번호를 재설정했습니다.`;
+  }catch(e){message.textContent='재설정 실패: '+e.message.slice(0,140)}
 }
 async function savePermissions(){
   const u=users.find(x=>x.user_key===selectedKey); if(!u)return message.textContent='사용자를 선택하세요.';
