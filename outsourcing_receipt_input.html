@@ -70,7 +70,7 @@ function exportCsv(){const out=[['제번','공정','품번','부품명','가공�
 function msg(t){message.textContent=t}
 inDate.value='2026-08-22';renderWait();renderIn();window.MES={search,save,exportCsv,setMessage:msg};
 </script>
-<script src="mes_db.js?v=24"></script>
+<script src="mes_db.js?v=25"></script>
 <script>MESDB.lines({page:"outsourcing_receipt_input",category:"외주가공",statuses:["발주"],map:{"no": {"col": "line_id", "type": "num"}, "vendor": "vendor_name", "job": "job_no", "item": "item_name", "proc": "process_code", "procName": "process_name", "part": "part_no", "partName": "part_name", "mp": "machining_process_code", "mpName": "material", "odate": {"col": "order_date", "type": "date"}, "edate": {"col": "required_date", "type": "date"}},get:()=>rows,render:()=>{view=[...rows];render()}});</script>
 </body>
 </html>

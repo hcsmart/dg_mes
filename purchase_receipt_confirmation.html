@@ -91,7 +91,7 @@ function exportCsv(){const out=[['제번','품명','공정','공정명','품번'
 function msg(t){message.textContent=t}
 confirmDate.value=new Date().toISOString().slice(0,10);window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script>
-<script src="mes_db.js?v=24"></script>
+<script src="mes_db.js?v=25"></script>
 <script>MESDB.lines({page:"purchase_receipt_confirmation",category:"구매품",statuses:["입고", "입고확정"],map:{"id": {"col": "line_id", "type": "num"}, "vendor": "vendor_name", "job": "job_no", "item": "item_name", "proc": "process_code", "procName": "process_name", "part": "part_no", "partName": "part_name", "mat": "material", "order": {"col": "order_date", "type": "date"}, "inDate": {"col": "receipt_date", "type": "date"}, "confirm": {"col": "confirm_date", "type": "date"}, "price": {"col": "quote_price", "type": "num"}, "rate": {"col": "nego_rate", "type": "num"}, "status": {"col": "status", "type": "status"}},get:()=>rows,render:()=>{view=[...rows];render()}});</script>
 </body>
 </html>

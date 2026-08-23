@@ -35,6 +35,6 @@ function remove(){if(selected<0)return msg('삭제할 항목을 선택하세요.
 function exportCsv(){const out=[["직급코드", "직급명", "직급순위", "직급구분", "결재권한", "사용여부", "비고"],...data.map(r=>[r.code??'',r.name??'',r.level??'',r.group??'',r.approver??'',r.use??'',r.remark??''])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='business_division_info.csv';a.click();URL.revokeObjectURL(a.href);msg('CSV 파일을 생성했습니다.')}
 function msg(t){message.textContent=t}window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script>
-<script src="mes_db.js?v=24"></script>
+<script src="mes_db.js?v=25"></script>
 <script>MESDB.master({page:"position_info",table:"positions",pk:"code",map:{"code":"position_code","name":"position_name","level":{"col":"position_level","type":"num"},"group":"position_group","approver":{"col":"is_approver","type":"ynbool"},"use":{"col":"is_active","type":"ynbool"},"remark":"remark"},get:()=>data,render:()=>{view=[...data];render()}});</script>
 </body></html>
