@@ -1,0 +1,159 @@
+{
+  "version": "21",
+  "description": "직급정보 마스터 (사진 없음, 통상 구성으로 설계)",
+  "rows": [
+    {
+      "position_code": "001",
+      "position_name": "회장",
+      "position_level": 1,
+      "position_group": "임원",
+      "is_approver": true,
+      "is_active": true,
+      "remark": null
+    },
+    {
+      "position_code": "002",
+      "position_name": "대표이사",
+      "position_level": 2,
+      "position_group": "임원",
+      "is_approver": true,
+      "is_active": true,
+      "remark": null
+    },
+    {
+      "position_code": "003",
+      "position_name": "부사장",
+      "position_level": 3,
+      "position_group": "임원",
+      "is_approver": true,
+      "is_active": true,
+      "remark": null
+    },
+    {
+      "position_code": "004",
+      "position_name": "전무",
+      "position_level": 4,
+      "position_group": "임원",
+      "is_approver": true,
+      "is_active": true,
+      "remark": null
+    },
+    {
+      "position_code": "005",
+      "position_name": "상무",
+      "position_level": 5,
+      "position_group": "임원",
+      "is_approver": true,
+      "is_active": true,
+      "remark": null
+    },
+    {
+      "position_code": "006",
+      "position_name": "이사",
+      "position_level": 6,
+      "position_group": "임원",
+      "is_approver": true,
+      "is_active": true,
+      "remark": null
+    },
+    {
+      "position_code": "010",
+      "position_name": "부장",
+      "position_level": 10,
+      "position_group": "관리직",
+      "is_approver": true,
+      "is_active": true,
+      "remark": null
+    },
+    {
+      "position_code": "011",
+      "position_name": "차장",
+      "position_level": 11,
+      "position_group": "관리직",
+      "is_approver": true,
+      "is_active": true,
+      "remark": null
+    },
+    {
+      "position_code": "012",
+      "position_name": "과장",
+      "position_level": 12,
+      "position_group": "관리직",
+      "is_approver": true,
+      "is_active": true,
+      "remark": null
+    },
+    {
+      "position_code": "013",
+      "position_name": "대리",
+      "position_level": 13,
+      "position_group": "일반직",
+      "is_approver": false,
+      "is_active": true,
+      "remark": null
+    },
+    {
+      "position_code": "014",
+      "position_name": "주임",
+      "position_level": 14,
+      "position_group": "일반직",
+      "is_approver": false,
+      "is_active": true,
+      "remark": null
+    },
+    {
+      "position_code": "015",
+      "position_name": "사원",
+      "position_level": 15,
+      "position_group": "일반직",
+      "is_approver": false,
+      "is_active": true,
+      "remark": null
+    },
+    {
+      "position_code": "020",
+      "position_name": "기장",
+      "position_level": 20,
+      "position_group": "기능직",
+      "is_approver": false,
+      "is_active": true,
+      "remark": null
+    },
+    {
+      "position_code": "021",
+      "position_name": "기사",
+      "position_level": 21,
+      "position_group": "기능직",
+      "is_approver": false,
+      "is_active": true,
+      "remark": null
+    },
+    {
+      "position_code": "022",
+      "position_name": "기능원",
+      "position_level": 22,
+      "position_group": "기능직",
+      "is_approver": false,
+      "is_active": true,
+      "remark": null
+    },
+    {
+      "position_code": "030",
+      "position_name": "촉탁",
+      "position_level": 30,
+      "position_group": "기타",
+      "is_approver": false,
+      "is_active": true,
+      "remark": null
+    },
+    {
+      "position_code": "031",
+      "position_name": "고문",
+      "position_level": 31,
+      "position_group": "기타",
+      "is_approver": false,
+      "is_active": false,
+      "remark": "비상근"
+    }
+  ]
+}

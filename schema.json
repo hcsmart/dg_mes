@@ -1169,6 +1169,18 @@
         "plant_name": "text?"
       },
       "note": "line_id는 DB 생성 컬럼. JSON 적재 시에는 PK 없이 insert"
+    },
+    "positions": {
+      "pk": "position_code",
+      "columns": {
+        "position_code": "text",
+        "position_name": "text",
+        "position_level": "integer?",
+        "position_group": "text?",
+        "is_approver": "boolean?",
+        "is_active": "boolean?",
+        "remark": "text?"
+      }
     }
   }
 }
