@@ -47,16 +47,53 @@ function render(){
  mbody.innerHTML=view.map((r,i)=>`<tr onclick="pick(${i},this)"><td class="c">${r.row_no}</td><td>${esc(r.job_no)}</td><td class="c">${esc(r.quotation_no||'')}</td><td class="c">${esc(r.business_division_name||'')}</td><td>${esc(r.mass_production_vendor_name||'')}</td><td class="c">${esc(r.item_name||'')}</td><td class="c">${esc(r.order_type||'')}</td><td>${esc(r.eco||'')}</td><td>${esc(r.model||'')}</td><td class="c">${esc(r.manager_name||'')}</td><td>${esc(r.customer_name||'')}</td><td class="c">${esc(r.match_status)}</td></tr>`).join('');
  countText.textContent=view.length+'건';pbody.innerHTML='';
 }
-function pick(i,tr){const r=view[i];document.querySelectorAll('#mbody tr').forEach(x=>x.classList.remove('sel'));tr.classList.add('sel');
+function pick(i,tr){const r=view[i];sel=r;document.querySelectorAll('#mbody tr').forEach(x=>x.classList.remove('sel'));tr.classList.add('sel');
  pbody.innerHTML=procs.map(q=>`<tr><td>${esc(q.process_code)}</td><td>${esc(q.process_name)}</td><td class="c">${q.editable?'Y':'N'}</td></tr>`).join('');
  msg(`${r.job_no} · 공정 ${procs.length}건`);}
 function search(){const st=document.querySelector('input[name="st"]:checked').value,j=q_job.value.trim().toLowerCase(),it=q_item.value.trim().toLowerCase();
  view=data.filter(r=>(st==='전체'||r.match_status===st)&&(!j||r.job_no.toLowerCase().includes(j))&&(!it||String(r.item_name??'').toLowerCase().includes(it)));
  render();msg(`조회결과 ${view.length}건입니다.`);}
-function save(){msg('프로토타입에서는 원본 JSON을 변경하지 않습니다.')}
-function del_(){msg('프로토타입에서는 삭제를 수행하지 않습니다.')}
+/* v28: 수주 제번 풀(mold_code_match_pool)을 읽어 미확정 건까지 노출하고, 매칭 확정/해제를 DB에 반영 */
+let sel=null;
+const online=()=>!!(window.MESDB&&MESDB.online);
+async function loadPool(){
+ if(!online()&&window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}
+ if(!online()){msg('DB 미연결 — 사진 판독본을 표시합니다.');render();return}
+ try{
+  const rs=await MESDB.table('mold_code_match_pool').select('select=*&order=row_no');
+  data.length=0;data.push(...rs);search();
+  msg(`제번 ${data.length}건 (확정 ${rs.filter(r=>r.match_status==='확정').length} / 미확정 ${rs.filter(r=>r.match_status!=='확정').length})`);
+ }catch(e){msg('조회 실패: '+String(e.message||e).slice(0,120));render()}
+}
+async function save(){
+ if(!sel){msg('제번을 선택하세요.');return}
+ if(!online()){msg('DB 미연결 상태에서는 매칭을 확정할 수 없습니다.');return}
+ try{
+  let rowNo=sel.matched_row_no;
+  if(rowNo==null){
+   const mx=await MESDB.table('mold_code_matchings').select('select=row_no&order=row_no.desc&limit=1');
+   rowNo=(mx&&mx[0]?Number(mx[0].row_no):0)+1;
+  }
+  await MESDB.table('mold_code_matchings').upsert({row_no:Number(rowNo),job_no:sel.job_no,
+   quotation_no:sel.quotation_no,business_division_name:sel.business_division_name,
+   mass_production_vendor_name:sel.mass_production_vendor_name,item_name:sel.item_name,
+   order_type:sel.order_type,eco:sel.eco,model:sel.model,manager_name:sel.manager_name,
+   customer_name:sel.customer_name,match_status:'확정',plant_name:sel.plant_name||'1공장'},'row_no');
+  await loadPool();
+  msg(`${sel.job_no} 금형코드 매칭을 확정했습니다.`);
+ }catch(e){msg('저장 실패: '+String(e.message||e).slice(0,120))}
+}
+async function del_(){
+ if(!sel){msg('제번을 선택하세요.');return}
+ if(sel.matched_row_no==null){msg(`${sel.job_no} 은(는) 아직 매칭되지 않았습니다.`);return}
+ if(!online()){msg('DB 미연결 상태에서는 매칭을 해제할 수 없습니다.');return}
+ if(!confirm(`${sel.job_no} 의 금형코드 매칭을 해제하시겠습니까?`))return;
+ try{await MESDB.table('mold_code_matchings').delete({row_no:Number(sel.matched_row_no)});
+  const job=sel.job_no;sel=null;await loadPool();msg(`${job} 매칭을 해제했습니다.`);
+ }catch(e){msg('해제 실패: '+String(e.message||e).slice(0,120))}
+}
 document.querySelectorAll('input[name="st"]').forEach(x=>x.addEventListener('change',search));
-window.MES={search,save,setMessage:msg};render();</script><script src="mes_db.js?v=27"></script>
-<script>MESDB.master({page:"mold_code_matching:data",table:"mold_code_matchings",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "quotation_no": "quotation_no", "business_division_name": "business_division_name", "mass_production_vendor_name": "mass_production_vendor_name", "item_name": "item_name", "order_type": "order_type", "eco": "eco", "model": "model", "manager_name": "manager_name", "customer_name": "customer_name", "match_status": "match_status", "plant_name": "plant_name"},get:()=>data,render:()=>{if(typeof view!=="undefined")view=[...data];(window.MES&&window.MES.search||window.search||window.render||function(){})()}});</script>
+window.MES={search,save,setMessage:msg,reload:loadPool};render();</script><script src="mes_db.js?v=35"></script>
+<script>loadPool();</script>
 <script src="mes_ctx.js?v=1"></script>
 </body></html>

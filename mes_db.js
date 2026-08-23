@@ -22,7 +22,7 @@
   setTimeout(window.__mesdbReady,2500);   /* 바인딩이 없거나 실패해도 반드시 해제 */
 })();
 
-const MES_VER='v27';window.MES_VER=MES_VER;
+const MES_VER='v35';window.MES_VER=MES_VER;
 const CFG={url:'https://ipggvrzxfcryzryileuv.supabase.co',key:'sb_publishable_CHO-dAOU00HNwno52255mg_H3C1_vew'};
 function tok(){try{return (window.MES_AUTH||window.parent.MES_AUTH)?.token||null}catch(e){return null}}
 const H=()=>({'apikey':CFG.key,'Authorization':'Bearer '+(tok()||CFG.key),'Content-Type':'application/json'});
@@ -181,10 +181,37 @@ async function delLines(ids){
 }
 window.MESDB.delLines=delLines;
 /* 발주등록 화면용: 신규 발주 라인 insert */
+/* v34: order_lines 는 part_no→parts, material→materials, vendor_name→vendors FK 를 가진다.
+   PartList/발주 화면에서 입력한 신규 품번·재질이 마스터에 없으면 저장이 통째로 실패하므로,
+   자식 행을 버리지 않고 부모(마스터) 행을 먼저 만들어 준다. */
+async function ensureRefs(rows){
+  const created=[];
+  const specs=[
+    {col:'part_no',  table:'parts',     key:'part_code',    name:'part_name',    label:'품번'},
+    {col:'material', table:'materials', key:'material_code',name:'material_name',label:'재질'},
+  ];
+  for(const s of specs){
+    const vals=[...new Set(rows.map(r=>r[s.col]).filter(v=>v!==null&&v!==undefined&&String(v).trim()!==''))];
+    if(!vals.length)continue;
+    const inList='('+vals.map(v=>'"'+String(v).replace(/"/g,'')+'"').join(',')+')';
+    let ex=[];
+    try{ex=await MESDB.table(s.table).select(`select=${s.key}&${s.key}=in.${encodeURIComponent(inList)}`)}catch(e){continue}
+    const have=new Set(ex.map(x=>x[s.key]));
+    const miss=vals.filter(v=>!have.has(v));
+    if(!miss.length)continue;
+    const add=miss.map(v=>{
+      const src=rows.find(r=>r[s.col]===v)||{};
+      const o={};o[s.key]=v;o[s.name]=src.part_name||src[s.col]||v;o.remark='발주등록 시 자동 생성';return o});
+    try{await MESDB.table(s.table).upsert(add,s.key);created.push(`${s.label} ${miss.length}건`)}catch(e){}
+  }
+  if(created.length)badge('마스터 자동 등록: '+created.join(' / '),'#f57c00');
+  return created;
+}
 async function newLines(rows){
   if(!rows||!rows.length)return 0;
+  await ensureRefs(rows);
   await MESDB.table('order_lines').upsert(rows);
   badge(`DB 발주 ${rows.length}건 등록`,'#2e7d32');return rows.length;
 }
-window.MESDB.lines=lines;window.MESDB.newLines=newLines;
+window.MESDB.lines=lines;window.MESDB.newLines=newLines;window.MESDB.ensureRefs=ensureRefs;
 })();

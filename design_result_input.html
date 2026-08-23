@@ -41,7 +41,119 @@ table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th
 @media(max-width:1400px){.formrow{grid-template-columns:78px minmax(0,1fr) 78px minmax(0,1fr)}}
 @media(max-width:880px){.formrow{grid-template-columns:78px minmax(0,1fr)}}
 .formrow>*{min-width:0}
-</style></head><body><div class="screen"><div class="title"><h1>설계실적등록</h1><small>설계관리 · 1공장</small></div><section class="filt"><div class="opts"><label><input type="radio" name="k" value="미완료" checked>미완료</label><label><input type="radio" name="k" value="완료">완료</label><span class="lb" style="width:56px">공 장</span><select class="field" style="width:110px"><option>1공장</option></select><span class="lb" style="width:56px">제 번</span><input class="field" style="width:170px"><span class="lb" style="width:56px">품 명</span><input class="field" style="width:170px"></div></section><div class="panes" style="grid-template-rows:1fr 1.2fr"><div class="pane"><div class="ph">제번리스트</div><div class="pb"><table style="min-width:1000px"><thead><tr><th style="width:100px">설계완료여부</th><th style="width:130px">제번</th><th style="width:200px">품명</th><th style="width:90px">공정코드</th><th style="width:90px">공정명</th><th style="width:130px">설계완료예정일</th><th style="width:110px">S1</th><th>고객요구일</th></tr></thead><tbody><tr><td colspan="8" class="c" style="height:120px;color:#8a97a2">조회결과가 없습니다.</td></tr></tbody></table></div></div><div class="panes" style="grid-template-columns:1fr 340px;grid-template-rows:1fr;padding:0;gap:8px"><div class="pane"><div class="ph">세부공정 리스트</div><div class="pb"><table style="min-width:840px"><thead><tr><th style="width:80px">완료여부</th><th style="width:64px">공정</th><th style="width:110px">가공공정코드</th><th style="width:140px">가공공정명</th><th style="width:110px">완료 예정일</th><th style="width:100px">작업시간(분)</th><th>설계진척(%)</th></tr></thead><tbody><tr><td colspan="7" class="c" style="height:120px;color:#8a97a2">조회결과가 없습니다.</td></tr></tbody></table></div></div><div class="pane"><div class="ph">실적등록</div><div class="pb"><table style="min-width:0"><thead><tr><th>작업자</th><th style="width:100px">작업일자</th><th style="width:90px">작업시간(분)</th></tr></thead><tbody><tr><td colspan="3" class="c" style="height:80px;color:#8a97a2">등록된 실적이 없습니다.</td></tr></tbody></table><div style="padding:8px;display:grid;grid-template-columns:72px 1fr;gap:5px;align-items:center"><div class="lb">작업시간</div><input class="field"><div class="lb">작업일</div><input type="date" class="field" value="2026-08-22"><div class="lb">작업자</div><div style="display:flex;gap:4px"><input class="field" value="DG" style="max-width:68px"><input class="field" value="동구" readonly></div></div><div style="padding:0 8px 8px;display:flex;gap:5px;flex-wrap:wrap"><button class="btn" onclick="msg('프로토타입에서는 실적 등록을 수행하지 않습니다.')">실적 등록</button><button class="btn" onclick="msg('삭제할 실적이 없습니다.')">실적 삭제</button><button class="btn" onclick="msg('선택한 세부공정이 없습니다.')">세부공정 완료</button><button class="btn" onclick="msg('선택한 제번이 없습니다.')">설계 완료</button></div></div></div></div></div><footer class="foot"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">사진의 조회결과는 0건입니다.</span></footer></div><script>const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+</style></head><body><div class="screen"><div class="title"><h1>설계실적등록</h1><small>설계관리 · 1공장</small></div><section class="filt"><div class="opts"><label><input type="radio" name="k" value="미완료" checked>미완료</label><label><input type="radio" name="k" value="완료">완료</label><span class="lb" style="width:56px">공 장</span><select class="field" style="width:110px"><option>1공장</option></select><span class="lb" style="width:56px">제 번</span><input id="qJob" class="field" style="width:170px"><span class="lb" style="width:56px">품 명</span><input id="qItem" class="field" style="width:170px"></div></section><div class="panes" style="grid-template-rows:1fr 1.2fr"><div class="pane"><div class="ph">제번리스트</div><div class="pb"><table style="min-width:1000px"><thead><tr><th style="width:100px">설계완료여부</th><th style="width:130px">제번</th><th style="width:200px">품명</th><th style="width:90px">공정코드</th><th style="width:90px">공정명</th><th style="width:130px">설계완료예정일</th><th style="width:110px">S1</th><th>고객요구일</th></tr></thead><tbody id="hbody"></tbody></table></div></div><div class="panes" style="grid-template-columns:1fr 340px;grid-template-rows:1fr;padding:0;gap:8px"><div class="pane"><div class="ph">세부공정 리스트</div><div class="pb"><table style="min-width:840px"><thead><tr><th style="width:80px">완료여부</th><th style="width:64px">공정</th><th style="width:110px">가공공정코드</th><th style="width:140px">가공공정명</th><th style="width:110px">완료 예정일</th><th style="width:100px">작업시간(분)</th><th>설계진척(%)</th></tr></thead><tbody id="sbody"></tbody></table></div></div><div class="pane"><div class="ph">실적등록</div><div class="pb"><table style="min-width:0"><thead><tr><th>작업자</th><th style="width:100px">작업일자</th><th style="width:90px">작업시간(분)</th></tr></thead><tbody id="rbody"></tbody></table><div style="padding:8px;display:grid;grid-template-columns:72px 1fr;gap:5px;align-items:center"><div class="lb">작업시간</div><input id="fMin" class="field"><div class="lb">작업일</div><input id="fDate" type="date" class="field"><div class="lb">작업자</div><div style="display:flex;gap:4px"><input id="fWorkerCd" class="field" value="DG" style="max-width:68px"><input id="fWorker" class="field" value="동구"></div></div><div style="padding:0 8px 8px;display:flex;gap:5px;flex-wrap:wrap"><button class="btn" onclick="addResult()">실적 등록</button><button class="btn" onclick="delResult()">실적 삭제</button><button class="btn" onclick="doneStep()">세부공정 완료</button><button class="btn" onclick="doneDesign()">설계 완료</button></div></div></div></div></div><footer class="foot"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">사진의 조회결과는 0건입니다.</span></footer></div><script>const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const n=v=>v==null?'':Number(v).toLocaleString();const p=v=>v==null?'':Number(v).toFixed(2)+'%';
-const msg=t=>message.textContent=t;function search(){msg('사진 기준 조회결과 0건입니다.')}window.MES={search,setMessage:msg};</script><script src="mes_ctx.js?v=1"></script>
+const msg=t=>message.textContent=t;
+/* v30: 전면 스텁 → design_plans / design_plan_steps / design_results 실연동 */
+const online=()=>!!(window.MESDB&&MESDB.online);
+async function waitDB(){for(let i=0;i<60&&!window.MESDB;i++)await new Promise(r=>setTimeout(r,50));
+ if(window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}}
+const numv=v=>{const x=Number(String(v??'').replace(/[^0-9.-]/g,''));return Number.isNaN(x)?0:x};
+let heads=[],steps=[],results=[],selJob=null,selStep=null;
+
+function renderHeads(){
+ hbody.innerHTML=heads.length?heads.map((r,i)=>`<tr onclick="pickJob(${i},this)">
+  <td class="c">${r.done?'완료':'미완료'}</td><td class="c">${esc(r.job_no)}</td><td>${esc(r.item_name||'')}</td>
+  <td class="c">${esc(r.process_code||'')}</td><td class="c">${esc(r.process_name||'')}</td>
+  <td class="c">${esc(r.design_completion_planned_date||'')}</td><td class="c">${esc(r.s1_date||'')}</td>
+  <td class="c">${esc(r.customer_request_date||'')}</td></tr>`).join('')
+  :'<tr><td colspan="8" class="c" style="height:120px;color:#8a97a2">조회결과가 없습니다.</td></tr>';
+}
+function renderSteps(){
+ sbody.innerHTML=steps.length?steps.map((s,i)=>{
+  const mins=results.filter(r=>r.process_code===s.process_code&&r.machining_process_code===s.machining_process_code)
+    .reduce((a,r)=>a+numv(r.work_minutes),0);
+  const rate=s.plan_minutes?Math.min(100,Math.round(mins/s.plan_minutes*100)):(s.done?100:(mins?50:0));
+  return `<tr onclick="pickStep(${i},this)"><td class="c">${s.done?'완료':'미완료'}</td>
+   <td class="c">${esc(s.process_code)}</td><td class="c">${esc(s.machining_process_code||'')}</td>
+   <td>${esc(s.machining_process_name||'')}</td><td class="c">${esc(s.completion_planned_date||'')}</td>
+   <td class="num">${mins}</td><td class="num">${rate}%</td></tr>`}).join('')
+  :'<tr><td colspan="7" class="c" style="height:120px;color:#8a97a2">조회결과가 없습니다.</td></tr>';
+}
+function renderResults(){
+ rbody.innerHTML=results.length?results.map(r=>`<tr>
+  <td><input type="checkbox" data-row="${r.row_no}"> ${esc(r.worker_name||'')}</td>
+  <td class="c">${esc(r.work_date||'')}</td><td class="num">${numv(r.work_minutes)}</td></tr>`).join('')
+  :'<tr><td colspan="3" class="c" style="height:80px;color:#8a97a2">등록된 실적이 없습니다.</td></tr>';
+}
+async function search(){
+ await waitDB();
+ if(!online()){msg('DB 미연결 — 조회할 수 없습니다.');return}
+ try{
+  const mode=document.querySelector('input[name=k]:checked').value;
+  const plans=await MESDB.table('design_plans').select('select=*&order=row_no');
+  const allSteps=await MESDB.table('design_plan_steps').select('select=*&order=row_no');
+  const j=(qJob.value||'').trim(),it=(qItem.value||'').trim();
+  heads=plans.filter(p=>(!j||String(p.job_no).includes(j))&&(!it||String(p.item_name??'').includes(it)))
+   .map(p=>{const st=allSteps.filter(s=>s.job_no===p.job_no);
+    return {...p,process_code:st[0]?.process_code||'',process_name:st[0]?.process_name||'',
+      done:!!p.design_completed,_steps:st}});
+  if(mode==='완료')heads=heads.filter(h=>h.done);else heads=heads.filter(h=>!h.done);
+  selJob=null;selStep=null;steps=[];results=[];
+  renderHeads();renderSteps();renderResults();
+  msg(`조회결과 ${heads.length}건 (${mode})`);
+ }catch(e){msg('조회 실패: '+String(e.message||e).slice(0,120))}
+}
+async function pickJob(i,tr){
+ selJob=heads[i];selStep=null;
+ document.querySelectorAll('#hbody tr').forEach(x=>x.classList.remove('sel'));if(tr)tr.classList.add('sel');
+ steps=(selJob._steps||[]).map(s=>({...s}));
+ await loadResults();renderSteps();
+ msg(`${selJob.job_no} · 세부공정 ${steps.length}건 · 실적 ${results.length}건`);
+}
+function pickStep(i,tr){selStep=steps[i];
+ document.querySelectorAll('#sbody tr').forEach(x=>x.classList.remove('sel'));if(tr)tr.classList.add('sel');
+ msg(`세부공정 ${selStep.process_code}/${selStep.machining_process_code||'-'} 선택`);}
+async function loadResults(){
+ if(!selJob||!online()){results=[];renderResults();return}
+ try{results=await MESDB.table('design_results').select(`select=*&job_no=eq.${encodeURIComponent(selJob.job_no)}&order=row_no`);
+  renderResults()}catch(e){results=[];renderResults()}
+}
+async function addResult(){
+ if(!selJob){msg('제번을 선택하세요.');return}
+ if(!selStep){msg('세부공정을 선택하세요.');return}
+ const mins=numv(fMin.value);
+ if(!mins){msg('작업시간(분)을 입력하세요.');return}
+ if(!fDate.value){msg('작업일을 선택하세요.');return}
+ if(!online()){msg('DB 미연결 상태에서는 실적을 등록할 수 없습니다.');return}
+ try{
+  const mx=await MESDB.table('design_results').select('select=row_no&order=row_no.desc&limit=1');
+  await MESDB.table('design_results').upsert({row_no:(mx&&mx[0]?Number(mx[0].row_no):0)+1,
+   work_type:'설계',worker_name:(fWorker.value||'').trim()||null,job_no:selJob.job_no,
+   process_code:selStep.process_code,machining_process_code:selStep.machining_process_code||null,
+   machining_process_name:selStep.machining_process_name||null,
+   work_date:fDate.value,work_minutes:mins},'row_no');
+  await loadResults();renderSteps();
+  msg(`${selJob.job_no} 실적 ${mins}분을 등록했습니다. (설계실적현황/조회에 즉시 반영)`);
+ }catch(e){const m=String(e.message||e);
+  msg(/무결성|foreign key/i.test(m)?'등록 실패: 등록되지 않은 제번입니다.':'등록 실패: '+m.slice(0,120))}
+}
+async function delResult(){
+ const ids=[...rbody.querySelectorAll('input[type=checkbox]:checked')].map(c=>Number(c.dataset.row));
+ if(!ids.length){msg('삭제할 실적을 선택하세요.');return}
+ if(!confirm(`실적 ${ids.length}건을 삭제하시겠습니까?`))return;
+ try{for(const id of ids)await MESDB.table('design_results').delete({row_no:id});
+  await loadResults();renderSteps();msg(`실적 ${ids.length}건을 삭제했습니다.`);
+ }catch(e){msg('삭제 실패: '+String(e.message||e).slice(0,120))}
+}
+async function doneStep(){
+ if(!selStep){msg('세부공정을 선택하세요.');return}
+ try{await MESDB.table('design_plan_steps').upsert({row_no:selStep.row_no,step_completed:true,
+   completion_date:new Date().toISOString().slice(0,10)},'row_no');
+  selStep.done=true;renderSteps();msg(`세부공정 ${selStep.process_code} 을(를) 완료 처리했습니다.`);
+ }catch(e){msg('완료 처리 실패: '+String(e.message||e).slice(0,120))}
+}
+async function doneDesign(){
+ if(!selJob){msg('제번을 선택하세요.');return}
+ if(!confirm(`${selJob.job_no} 설계를 완료 처리하시겠습니까?`))return;
+ try{await MESDB.table('design_plans').upsert({row_no:selJob.row_no,job_no:selJob.job_no,
+   design_completed:true,design_completed_date:new Date().toISOString().slice(0,10)},'job_no');
+  msg(`${selJob.job_no} 설계를 완료 처리했습니다.`);await search();
+ }catch(e){msg('완료 처리 실패: '+String(e.message||e).slice(0,120))}
+}
+document.querySelectorAll('input[name=k]').forEach(x=>x.addEventListener('change',search));
+fDate.value=new Date().toISOString().slice(0,10);
+window.MES={search,save:addResult,setMessage:msg};
+search();</script><script src="mes_db.js?v=35"></script>
+<script src="mes_ctx.js?v=1"></script>
 </body></html>

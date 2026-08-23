@@ -70,16 +70,55 @@ function selectStandard(id,tr){const idx=standards.findIndex(x=>x.id===String(id
 function search(){const qid=filterId.value.trim().toLowerCase(),qn=filterName.value.trim().toLowerCase();const data=standards.filter(s=>(!qid||s.id.toLowerCase().includes(qid))&&(!qn||s.name.toLowerCase().includes(qn)));renderMaster(data);setMsg(`검색 결과 ${data.length}건입니다.`)}
 function moveRight(){const codes=[...document.querySelectorAll('#waitingBody input:checked')].map(x=>x.dataset.code);if(!codes.length){setMsg('추가할 공정을 선택하세요.');return}const s=standards[selectedIndex];for(const c of codes)if(!s.processes.includes(c))s.processes.push(c);renderSelected();renderMaster();setMsg(`${codes.length}개 공정을 추가했습니다.`)}
 function moveLeft(){const codes=[...document.querySelectorAll('#selectedBody input:checked')].map(x=>x.dataset.remove);if(!codes.length){setMsg('제거할 공정을 선택하세요.');return}const s=standards[selectedIndex];s.processes=s.processes.filter(c=>!codes.includes(c));renderSelected();renderMaster();setMsg(`${codes.length}개 공정을 제거했습니다.`)}
-function save(){const s=standards[selectedIndex];if(!s){setMsg('저장할 기준공정을 선택하세요.');return}s.id=editId.value.trim()||s.id;s.name=editName.value.trim()||s.name;s.owner=editOwner.value.trim()||s.owner;s.date=new Date().toISOString().slice(0,10);renderMaster();setMsg('가공 기준공정 정보가 저장되었습니다.')}
-function clearForm(){const id=String(Math.max(...standards.map(s=>Number(s.id)||0))+1);standards.push({id,name:'신규 기준공정',owner:'',date:new Date().toISOString().slice(0,10),processes:[]});selectedIndex=standards.length-1;renderMaster();setMsg('신규 기준공정이 추가되었습니다.')}
-function removeStandard(){if(!standards[selectedIndex])return;if(!confirm('선택한 기준공정을 삭제하시겠습니까?'))return;standards.splice(selectedIndex,1);selectedIndex=Math.max(0,Math.min(selectedIndex,standards.length-1));renderMaster();renderSelected();setMsg('선택 기준공정을 삭제했습니다.')}
+/* v33: page_state 스냅샷 → standard_processes / standard_process_steps 실연동 */
+const online=()=>!!(window.MESDB&&MESDB.online);
+async function waitDB(){for(let i=0;i<60&&!window.MESDB;i++)await new Promise(r=>setTimeout(r,50));
+ if(window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}}
+async function loadStandards(){
+ await waitDB();if(!online())return;
+ try{
+  const [hs,ss]=await Promise.all([
+   MESDB.table('standard_processes').select('select=*&order=standard_process_id'),
+   MESDB.table('standard_process_steps').select('select=*&order=standard_process_id,sequence')]);
+  standards.length=0;
+  hs.forEach(h=>standards.push({id:String(h.standard_process_id),name:h.standard_process_name||'',
+    owner:h.owner_name||'',date:h.registered_date||'',
+    processes:ss.filter(s=>String(s.standard_process_id)===String(h.standard_process_id)).map(s=>s.process_code)}));
+  selectedIndex=0;renderMaster();renderSelected();
+  setMsg(`기준공정 ${standards.length}건 (공정 ${ss.length}단계)`);
+ }catch(e){setMsg('조회 실패: '+String(e.message||e).slice(0,110))}
+}
+async function syncSteps(s){
+ if(!online())return;
+ await MESDB.table('standard_process_steps').delete({standard_process_id:Number(s.id)});
+ if(s.processes.length)
+  await MESDB.table('standard_process_steps').upsert(
+   s.processes.map((c,i)=>({standard_process_id:Number(s.id),sequence:i+1,process_code:c})));
+}
+async function save(){
+ const s=standards[selectedIndex];
+ if(!s){setMsg('저장할 기준공정을 선택하세요.');return}
+ s.name=editName.value.trim()||s.name;s.owner=editOwner.value.trim()||s.owner;
+ s.date=new Date().toISOString().slice(0,10);
+ if(!online()){renderMaster();setMsg('가공 기준공정 정보가 저장되었습니다. (DB 미연결 - 로컬)');return}
+ try{
+  await MESDB.table('standard_processes').upsert({standard_process_id:Number(s.id),
+   standard_process_name:s.name,owner_name:s.owner,registered_date:s.date},'standard_process_id');
+  await syncSteps(s);
+  renderMaster();
+  setMsg(`기준공정 ${s.id}·${s.name} 을(를) 저장했습니다. (공정 ${s.processes.length}단계)`);
+ }catch(e){setMsg('저장 실패: '+String(e.message||e).slice(0,110))}
+}
+async function _saveOld(){const s=standards[selectedIndex];if(!s){setMsg('저장할 기준공정을 선택하세요.');return}s.id=editId.value.trim()||s.id;s.name=editName.value.trim()||s.name;s.owner=editOwner.value.trim()||s.owner;s.date=new Date().toISOString().slice(0,10);renderMaster();setMsg('가공 기준공정 정보가 저장되었습니다.')}
+async function clearForm(){const id=String(Math.max(...standards.map(s=>Number(s.id)||0))+1);standards.push({id,name:'신규 기준공정',owner:'',date:new Date().toISOString().slice(0,10),processes:[]});selectedIndex=standards.length-1;renderMaster();if(online()){try{await MESDB.table('standard_processes').upsert({standard_process_id:Number(id),standard_process_name:'신규 기준공정',owner_name:'',registered_date:new Date().toISOString().slice(0,10)},'standard_process_id')}catch(e){}}setMsg(`신규 기준공정 ${id} 을(를) 추가했습니다. 공정 선택 후 저장하세요.`)}
+async function removeStandard(){if(!standards[selectedIndex])return;if(!confirm('선택한 기준공정을 삭제하시겠습니까?'))return;const _s=standards[selectedIndex];if(online()){try{await MESDB.table('standard_process_steps').delete({standard_process_id:Number(_s.id)});await MESDB.table('standard_processes').delete({standard_process_id:Number(_s.id)})}catch(e){setMsg('삭제 실패: '+String(e.message||e).slice(0,110));return}}standards.splice(selectedIndex,1);selectedIndex=Math.max(0,Math.min(selectedIndex,standards.length-1));renderMaster();renderSelected();setMsg('선택 기준공정을 삭제했습니다.')}
 function exportCsv(){const out=[['기준공정ID','기준공정명','담당자','등록일','공정리스트'],...standards.map(s=>[s.id,s.name,s.owner,s.date,s.processes.join('|')])];const csv='\ufeff'+out.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='machining_standard_process.csv';a.click();URL.revokeObjectURL(a.href);setMsg('엑셀용 CSV를 생성했습니다.')}
 function setMsg(t){message.textContent=t}
-window.MES={search,add:clearForm,delete:removeStandard,save,exportCsv,setMessage:setMsg};
+window.MES={search,add:clearForm,delete:removeStandard,save,exportCsv,setMessage:setMsg};loadStandards();
 renderWaiting();renderMaster();
 </script>
-<script src="mes_db.js?v=27"></script>
-<script>MESDB.bind("machining_standard_process",()=>({standards,processes}));</script>
+<script src="mes_db.js?v=35"></script>
+
 <script src="mes_ctx.js?v=1"></script>
 </body>
 </html>

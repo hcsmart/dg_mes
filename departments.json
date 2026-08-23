@@ -1,0 +1,50 @@
+[
+ {
+  "department_code": "10000",
+  "department_name": "공통",
+  "business_division_name": null,
+  "remark": "전사 공통"
+ },
+ {
+  "department_code": "20300",
+  "department_name": "경영기획",
+  "business_division_name": null,
+  "remark": "사용자 마스터 기준"
+ },
+ {
+  "department_code": "30100",
+  "department_name": "영업",
+  "business_division_name": null,
+  "remark": null
+ },
+ {
+  "department_code": "40100",
+  "department_name": "설계",
+  "business_division_name": null,
+  "remark": null
+ },
+ {
+  "department_code": "40200",
+  "department_name": "가공",
+  "business_division_name": null,
+  "remark": null
+ },
+ {
+  "department_code": "40300",
+  "department_name": "조립",
+  "business_division_name": null,
+  "remark": null
+ },
+ {
+  "department_code": "50100",
+  "department_name": "품질",
+  "business_division_name": null,
+  "remark": null
+ },
+ {
+  "department_code": "60100",
+  "department_name": "구매",
+  "business_division_name": null,
+  "remark": null
+ }
+]

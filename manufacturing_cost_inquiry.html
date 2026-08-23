@@ -25,7 +25,7 @@ table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th
 </style></head><body><div class="screen">
 <div class="title"><h1>제조원가 조회</h1><small>1공장 · 기준 2026-08-22</small></div>
 <section class="form">
- <div class="formrow"><div class="label">수주유형</div><select id="otype" class="field"><option>전체</option><option selected>신작</option><option>개조</option><option>수리</option><option>유상사급</option></select><div class="label">제번</div><input id="jobq" class="field" value="K"><div class="label">모델</div><input id="modelq" class="field"><div class="label">품명</div><input id="itemq" class="field"></div>
+ <div class="formrow"><div class="label">수주유형</div><select id="otype" class="field"><option selected>전체</option><option>신작</option><option>개조</option><option>수리</option><option>유상사급</option></select><div class="label">제번</div><input id="jobq" class="field"><div class="label">모델</div><input id="modelq" class="field"><div class="label">품명</div><input id="itemq" class="field"></div>
  <div class="formrow"><div class="label">수주일</div><input type="date" class="field"><div class="label">S1완료일</div><input type="date" class="field"><div class="label">완료일</div><input type="date" class="field"><div class="label">도번</div><input id="drawq" class="field"></div>
 </section>
 <div class="split">
@@ -84,14 +84,27 @@ function exportCsv(){
  const csv='\ufeff'+[h,...rows].map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');
  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='manufacturing_cost_orders.csv';a.click();
 }
-window.MES={search,exportCsv,setMessage:t=>message.textContent=t};
-render();
-</script><script src="mes_db.js?v=27"></script>
-<script>
-MESDB.master({page:"manufacturing_cost_inquiry:orders",table:"manufacturing_cost_orders",pk:"job_no",map:{"row_no": {"col": "row_no", "type": "num"}, "order_type": "order_type", "completion_date": {"col": "completion_date", "type": "date"}, "job_no": "job_no", "model": "model", "item_name": "item_name", "drawing_no": "drawing_no", "drawing_no_truncated": "drawing_no_truncated", "set_qty": {"col": "set_qty", "type": "num"}, "development_type": "development_type", "order_price": {"col": "order_price", "type": "num"}, "target_price": {"col": "target_price", "type": "num"}, "target_ratio_pct": "target_ratio_pct", "manufacturing_cost": "manufacturing_cost", "profit": "profit", "profit_rate_pct": {"col": "profit_rate_pct", "type": "num"}, "plant_name": "plant_name"},get:()=>orders,render:()=>{if(typeof view!=="undefined")view=[...orders];(window.render||window.search||function(){})()}});
 
-/* 표가 다시 그려질 때마다 합계 갱신 */
-(function(){const tb=document.querySelector('tbody');if(!tb||typeof renderTotal!=='function')return;new MutationObserver(()=>renderTotal()).observe(tb,{childList:true});renderTotal()})();
-</script>
+/* v32: 스냅샷 테이블 → manufacturing_cost_view 실집계 조회 */
+const _online=()=>!!(window.MESDB&&MESDB.online);
+async function loadLive(){
+ for(let i=0;i<60&&!window.MESDB;i++)await new Promise(r=>setTimeout(r,50));
+ if(window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}
+ if(!_online())return;
+ try{
+  const rs=await MESDB.table('manufacturing_cost_view').select('select=*');
+  orders.length=0;
+  rs.forEach(r=>orders.push(r));
+  if(typeof view!=='undefined'&&Array.isArray(view))view=[...orders];
+  (window.MES&&window.MES.search||window.search||window.render||function(){})();
+  const m=document.getElementById('message');
+  if(m)m.textContent=`실데이터 ${orders.length}건을 조회했습니다.`;
+ }catch(e){const m=document.getElementById('message');
+  if(m)m.textContent='조회 실패: '+String(e.message||e).slice(0,110)}
+}
+window.MES={search,exportCsv,setMessage:t=>message.textContent=t};loadLive();
+render();
+</script><script src="mes_db.js?v=35"></script>
+
 <script src="mes_ctx.js?v=1"></script>
 </body></html>

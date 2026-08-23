@@ -1,6 +1,6 @@
 {
  "project": "NEXMES photo-driven MES prototype",
- "version": "v27",
+ "version": "v35",
  "entry": "index.html",
  "updated": "2026-08-23",
  "naming_rule": "<domain>_<action>.html (snake_case, English)",
@@ -402,9 +402,12 @@
   {
    "menu": "부서정보",
    "file": "department_registration.html",
-   "status": "stub",
+   "status": "implemented",
    "source_photo": null,
-   "data_json": []
+   "data_json": [
+    "departments.json"
+   ],
+   "note": "v33: 부서 마스터 시드 생성 (사용자 마스터의 부서코드 기준)"
   },
   {
    "menu": "검사항목",
@@ -416,9 +419,10 @@
   {
    "menu": "공지사항 등록",
    "file": "notice_registration.html",
-   "status": "stub",
+   "status": "implemented",
    "source_photo": null,
-   "data_json": []
+   "data_json": [],
+   "note": "v33: notices 테이블 연동 + 현황판 공지 탭 연결"
   },
   {
    "menu": "외주설계발주등록",
@@ -847,52 +851,82 @@
   "입고취소만 하고 저장할 때 '입고 처리된 행이 없습니다' 가드에 막혀 DB에 반영되지 않던 문제 수정 (dirty 플래그)",
   "캐시 버전 v=27 일괄 갱신"
  ],
- "changelog_v28": {
-  "수주부터 직접 등록하는 백지 상태": [
-   "jobs / sale_orders / sale_order_status_rows / set_order_registrations 초기화 (bak_20260823 에 백업)",
-   "reset_demo_transactions() 에 제번·수주 포함 - 언제든 동일 백지 상태로 복원 가능",
-   "뷰 set_order_job_pool 신설: SET발주 제번리스트를 별도 마스터가 아닌 '수주'에서 직접 조회",
-   "set_order_job_list 를 set_order_job_pool 기반으로 재작성",
-   "set_order_registration.html: 제번리스트 → set_order_job_pool, 내장 12행 제거, 새로고침 버튼 추가",
-   "set_order_receipt.html: 내장 6행 제거",
-   "sale_order_input.html 버그 수정 - FK 순서(jobs→sale_orders)가 뒤바뀌어 빈 DB 첫 저장이 실패하던 문제",
-   "sale_order_input.html: 같은 제번 재저장 시 수주현황에 중복행이 쌓이던 문제 수정(기존 row_no 재사용)"
-  ]
- },
- "changelog_v29": {
-  "작업지시 실전화 (제번 기준)": [
-   "work_order_details 재설계 - PK work_order_no, FK job_no->jobs / part_no->parts",
-   "next_work_order_no() 자동채번 (WO-YYMMDD-NNN)",
-   "트리거: 실적수량 기준 상태 자동판정(지시→진행→완료) + 착수일·완료일 자동",
-   "트리거: 실적이 등록된 지시는 삭제 차단",
-   "completed_qty 는 generated column (양품+불량)",
-   "work_order_input.html 전면 재작성 - 좌 제번리스트(set_order_job_pool) / 우 작업지시 인라인 편집",
-   "저장·신규·삭제 버튼 신설 (기존에는 버튼 자체가 없어 수정·삭제 불가였음)",
-   "변경행 표시(dirty), 실적수량>지시량 검증, 제번별 지시건수·진행/완료 집계",
-   "mes_db.js: MESDB.rpc() 헬퍼 추가"
-  ]
- },
- "changelog_v30": {
-  "작업지시 설비/공정 조회 팝업": [
-   "work_order_input.html: 작업장코드·공정코드를 자유입력 → 마스터 조회 팝업으로 변경",
-   "equipment(설비) / processes(공정) 마스터를 DB에서 직접 조회, 첫 조회 후 캐시",
-   "설비는 사용여부(is_active) 필터 기본 ON, 공정은 공정그룹·순서로 정렬",
-   "코드/명칭 입력칸은 readonly - 마스터에 없는 값 입력 불가",
-   "셀의 … 버튼 또는 더블클릭으로 열기, Enter 선택 / Esc·배경클릭 닫기, 지우기 지원",
-   "선택 시 코드·명칭 동시 반영 및 변경행 표시 유지"
-  ]
- },
- "changelog_v31": {
-  "기본정보 마스터 직결 (전 메뉴 유기 연결)": [
-   "공용 모듈 mes_lookup.js 신설 - 거래처/고객사/사원/자재/부품/공정/설비/금형타입/기계사양/사업부/아이템/검사구분/검사항목/제번 조회를 한 곳에서",
-   "MESLOOK.open(팝업) / bindPair(코드·명칭 쌍) / rows·names(목록) / fillSelect(드롭다운) / invalidate(캐시 무효화)",
-   "수주등록: 하드코딩 LOOKUPS(사원 21·거래처 등) 전량 제거 → MESLOOK DB 직결, 판독불가 빈 이름(cyc/dongu) 자동 제외",
-   "발주 4종 협력업체 DB 직결 - 구매품(purchase_item_flag)/원재료(raw_material_flag)/외주가공(outsourcing_flag)/외주설계(outsourced_design_partners)",
-   "vendors 에 발주화면 판독 업체 30개 보강(누락 insert + 기존 flag 세팅), 외주설계 파트너 6개 보강",
-   "조립실적: 작업자 목록 → employees 마스터",
-   "검사실적: 검사구분/검사항목/검사자/입고라인 이미 DB 직결 확인",
-   "MESDB.ready(초기 접속 프라미스) 추가 - 첫 화면 로드 시 DB 미연결 오탐 방지, 커스텀 로더 4종에 적용",
-   "흐름 검증: 수주등록 → SET발주 제번리스트 자동 등장 → 검사화면 입고라인 연동"
-  ]
- }
+ "changelog_v28": [
+  "[A] set_order_status.html: 미정의 online() 참조로 ReferenceError가 나 SET발주현황 화면이 통째로 로드되지 않던 버그 수정",
+  "[B] sales_plan_input.html: 콘솔 출력만 하던 save()를 실제 저장으로 교체 — sales_plans upsert(제번 UNIQUE) + sales_plan_status_rows 동기화, 제번 입력 시 sale_orders에서 수주정보 자동 로드, 비율/이익률 자동 계산, 미등록 제번 차단",
+  "[B] DB: sales_plans(job_no) 부분 UNIQUE 인덱스 추가 (제번당 계획 1건)",
+  "[C] mold_code_matching.html: mold_code_matchings 단독 조회 → 신규 뷰 mold_code_match_pool(jobs⨝sale_orders⨝매칭, 취소 제외) 조회로 변경. 미확정 수주가 매칭 대상으로 노출되고 save()=매칭확정, del_()=매칭해제가 DB에 반영",
+  "[C] DB: mold_code_match_pool 뷰 + mold_code_matchings(job_no) UNIQUE 인덱스 추가",
+  "[C] 풀 뷰를 그대로 upsert 하던 MESDB.master 바인딩 제거",
+  "[F] set_order_registration.html: 조수/공정명/발주일/입고예정일/견적가/네고가 입력란 추가. 기존 A·1/1·0원 하드코딩으로 SET발주현황 실행률이 항상 0%이던 문제 해결 (네고가>견적가 검증 포함)",
+  "캐시 버전 v=28 일괄 갱신"
+ ],
+ "changelog_v29": [
+  "[D] status_board.html: 독립 편집 테이블(status_board_rows)만 보던 현황판을 신규 뷰 status_board_pool(jobs⨝sale_orders⨝sales_plans) 실시간 조회로 전환. 납기지연(S1/완료) 자동 판정, 15행 단위 자동 페이지 계산, 취소·완료 수주 제외. DB 미연결 시 사진 판독본 유지",
+  "[D] 뷰 데이터를 되쓸 위험이 있던 MESDB.master 바인딩 제거",
+  "[E] DB: expenses 테이블(+RLS anon/authenticated) 및 expense_status_view 신설",
+  "[E] expense_registration.html: 저장 미동작 → 제번 입력 시 수주 품명·기존 경비 로드, 행추가/수정/삭제, expenses upsert. 경비사유 코드 입력 시 expense_reasons에서 사유명 자동 완성",
+  "[E] expense_status.html: 고정 '0건' 화면 → expense_status_view 실조회(제번·사유·고객사·등록일/사유일 범위 필터), 합계 자동 집계, 상세보기 동작",
+  "[G] sale_order_input.html: 수주상태를 '취소'로 저장할 때 하위 발주 검사 — 입고·확정건이 있으면 차단, 미입고 발주만 있으면 경고 후 진행",
+  "화면 스크립트가 mes_db.js 로드 전에 실행돼 'DB 미연결'로 오판하던 경합 수정(waitDB)",
+  "캐시 버전 v=29 일괄 갱신"
+ ],
+ "changelog_v30": [
+  "[L] design_result_status.html: PostgREST가 numeric을 문자열로 반환해 v.toFixed 예외로 현황이 0행이 되던 버그 수정 (Number() 방어 + d01~d31 매핑 num)",
+  "[H] outsourced_design_order_input.html: 스텁 save() → order_lines(category 외주설계) 실제 등록. 중복공정·네고>견적 검증 포함",
+  "[H] outsourced_design_order_status.html: page_state 스냅샷 → 신규 뷰 outsourced_design_status_view(발주⨝수주) 실조회, 진행률/차액/합계 자동",
+  "[I] DB: job_pool 뷰 신설(jobs⨝sale_orders⨝수주현황, 취소 제외) — 발주/계획 화면 공용 제번 풀",
+  "[I] design_plan_input / outsourced_design_order_input / material_order_input / purchase_order_input 의 제번 리스트를 job_pool 병합 방식으로 전환 (신규 수주가 안 뜨던 구조적 문제 해결)",
+  "[I] design_plan_input.html: 설계완료예정일·담당자·세부공정 입력바 추가, design_plans/design_plan_steps 저장·추가·삭제 구현",
+  "[K] partlist_material_input / partlist_purchase_input: 스텁 save() → 행 등록/삭제/제번별 조회 구현",
+  "[K] partlist_status.html: 별도 partlist_status_rows → 신규 뷰 partlist_all(원재료+구매품 UNION) 실조회로 전환",
+  "[K] partlist_copy.html: 화면 로그만 남던 복사 → partlist_materials/purchases 실제 복제(중복 품번 제외, 전체/원재료/구매품 구분)",
+  "[K] 원재료·구매품 발주등록의 자재표를 PartList(partlist_materials/purchases)에서 로드",
+  "[J] design_result_input.html: 전면 스텁 → 설계계획 조회, 세부공정 선택, 실적 등록/삭제, 세부공정 완료, 설계 완료 구현",
+  "[J] DB: design_result_monthly_view(건별→월별 자동집계) 신설, design_plans.design_completed / design_plan_steps.step_completed 컬럼 추가",
+  "[J] design_result_status.html: 고정 테이블 → design_result_monthly_view 조회",
+  "캐시 버전 v=30 일괄 갱신"
+ ],
+ "changelog_v31": [
+  "[조립] DB: assembly_jobs / assembly_steps 테이블(+RLS), assembly_job_pool 뷰 신설",
+  "[조립] assembly_result_input.html: 화면 메모리 전용 → 제번풀(assembly_job_pool) 조회, 설계 세부공정 자동 승계, 실적 등록/삭제를 design_results(work_type='조립')에 기록, 세부공정 완료·조립 완료·검사시트 DB 반영",
+  "[조립] 조립실적이 조립실적현황(월별 자동집계)·조립실적조회에 즉시 반영 (설계와 work_type 으로 구분)",
+  "[검사] 조립 검사시트 작성 시 order_lines(category='조립', status='입고') 검사대상 생성 + inspection_result_input 의 CAT_MAP 에 조립검사(IC06) 매핑 — 시트 작성과 검사판정이 연결되지 않던 문제 해결",
+  "[작업지시] work_order_input.html: SET발주 전용 set_order_job_pool → 공용 job_pool 로 전환",
+  "[공정이력카드] process_history_card.html: 더미 인쇄지 → 제번/공정/품번 조회 툴바 추가, process_history_cards 조회(없으면 수주·PartList로 즉석 생성), 설계/가공/조립 실적일자와 공정 계획행을 실데이터에서 채움",
+  "캐시 버전 v=31 일괄 갱신"
+ ],
+ "changelog_v32": [
+  "[원가] DB: purchase_status_view / sales_status_view / stock_inquiry_view / manufacturing_cost_view 신설 — 사진 판독 스냅샷 테이블 대신 실거래에서 집계",
+  "[원가] purchase_status.html: order_lines(4계열) 기준 매입현황 실조회 (네고 반영 확정금액)",
+  "[원가] sales_status.html: sale_orders 기준 매출현황 실조회",
+  "[원가] stock_inquiry.html: 제번별 수주금액 vs 입고확정 매입금액 실집계 (미확정분 제외)",
+  "[원가] manufacturing_cost_inquiry.html: 제조원가 = 확정 매입(원재료·구매품·외주가공·외주설계) + 내작 노무비(설계/조립 실적시간×시급) 실시간 집계, 목표가 대비율·이윤·이익률 자동",
+  "[버그] order_lines 에 존재하지 않는 컬럼(writer)을 저장하던 외주설계발주등록 오류 수정 → owner_name",
+  "[버그] 조회조건 하드코딩 일괄 제거: 제조원가 제번='K'/수주유형 기본 '신작'→'전체', PartList 등록 제번='J26118'·품명, 매출현황 고정기간(2026-07)→당월 자동, 재고조회 고정기준일→오늘"
+ ],
+ "changelog_v33": [
+  "[기준정보] 마스터 15종(공정·아이템·부품·자재·설비·업체·사업부·부서·직급·경비사유·금형타입·기계사양·검사구분·검사항목·공지사항) 조회/저장/삭제 DB 반영 전수 검증 — 15/15 정상",
+  "[기준정보] machining_standard_process.html: page_state 스냅샷 전용 → standard_processes / standard_process_steps 실연동 (신규 추가·공정단계 순서 저장·헤더+단계 동시 삭제)",
+  "[기준정보] DB: notices 테이블(+RLS) 신설. notice_registration.html 을 bind → master(notices) 로 전환",
+  "[기준정보] status_board.html 공지사항 탭을 notices 실데이터와 연결 (기존에는 '내용이 비어 있었습니다' 고정 문구)",
+  "[기준정보] 부서 마스터 공백 해소: departments.json 생성 및 DB 적재(8건) — 사용자정보의 부서명과 일치 확인",
+  "캐시 버전 v=33 일괄 갱신"
+ ],
+ "changelog_v34": [
+  "[라이브검증] 실 Supabase 에 스모크 테스트 제번을 넣어 수주→PartList→설계/조립 실적→발주→입고→검사→입고확정→원가까지 전 구간 확인 후 테스트 데이터 정리",
+  "[결함] order_lines 는 part_no→parts, material→materials FK 가 걸려 있어 신규 품번/재질 발주 시 저장이 통째로 실패. mes_db.js 에 MESDB.ensureRefs() 추가 — 부모(마스터) 행을 자동 생성한 뒤 발주 (자식 행 폐기 대신 부모 보강)",
+  "[결함] 외주설계 라인은 nego_rate 컬럼을 '진행률'로 재사용하는데 원가/매입/재고 뷰가 이를 네고율로 해석 — 진행률 100%면 금액이 0 이 되는 사고. mes_confirmed_amount(category,...) 함수로 카테고리별 계산 분리",
+  "[일관성] 매입현황·재고조회·제조원가의 확정금액 계산식을 mes_confirmed_amount() 하나로 통일 (기존에는 매입현황만 네고율 반영)",
+  "[db_sync] 동기화 대상에 notices / design_plans / design_plan_steps / assembly_jobs / assembly_steps / expenses 추가 (TABLES 79종, ORDER 33단계)",
+  "캐시 버전 v=34 일괄 갱신"
+ ],
+ "changelog_v35": [
+  "[DB정리] vendors.json 에 없던 임시 협력업체 17건(V9101~V9215) 삭제 — 거래·발주 참조 0건 확인 후 진행. 업체 64 → 47건(협력업체 27)",
+  "[DB정리] 삭제 업체를 가리키던 set_order_partners 2행 제거, 잔존 '청영시스템'은 set_order_partners.json 에 반영(7건)",
+  "[감사] mes_preload_check.py 추가 — db_sync 실행 전에 PK 결측·중복 / 스키마에 없는 컬럼 / FK 위반 / CHECK 위반 / 적재 순서를 미리 검증 (db_sync 는 테이블 단위로 조용히 실패하므로 사전 감사 필요)",
+  "[감사] 현재 데이터셋 72종 1,119행 전수 검사 결과 이상 없음 — db_sync 실행 가능",
+  "[문서] schema.json v15 → v34 최신화: 신설 테이블 5종(departments/notices/expenses/assembly_jobs/assembly_steps), 신설 뷰 12종, design_plans·design_plan_steps 추가 컬럼, mes_confirmed_amount() 함수 명세 반영",
+  "캐시 버전 v=35 일괄 갱신"
+ ]
 }

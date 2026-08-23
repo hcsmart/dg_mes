@@ -46,22 +46,35 @@ const n=v=>v==null?'':Number(v).toLocaleString();const p=v=>v==null?'':Number(v)
 const msg=t=>message.textContent=t;
 let view=[...data];
 const D=r=>Array.from({length:31},(_,i)=>r['d'+String(i+1).padStart(2,'0')]);
+/* v30: 고정 테이블 → design_result_monthly_view (건별 실적 자동 집계) */
+const online=()=>!!(window.MESDB&&MESDB.online);
+async function loadMonthly(){
+ for(let i=0;i<60&&!window.MESDB;i++)await new Promise(r=>setTimeout(r,50));
+ if(window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}
+ if(!online()){render();return}
+ try{
+  const rs=await MESDB.table('design_result_monthly_view').select('select=*&order=row_no');
+  data.length=0;data.push(...rs);
+  (window.MES&&window.MES.search||window.search||render)();
+  msg(`설계실적 월별집계 ${data.length}행`);
+ }catch(e){render()}
+}
 function render(){
  body.innerHTML=view.map(r=>{const d=D(r);const t=d.reduce((a,b)=>a+(b||0),0);
-  return `<tr><td class="c">${esc(r.work_type)}</td><td class="c">${esc(r.worker_name)}</td>`+d.map(v=>`<td class="num">${v==null?'-':v.toFixed(2)}</td>`).join('')+`<td class="num">${t.toFixed(2)}</td></tr>`}).join('');
+  return `<tr><td class="c">${esc(r.work_type)}</td><td class="c">${esc(r.worker_name)}</td>`+d.map(v=>`<td class="num">${v==null?'-':Number(v).toFixed(2)}</td>`).join('')+`<td class="num">${t.toFixed(2)}</td></tr>`}).join('');
  countText.textContent=view.length+'명';
  const tot=Array.from({length:31},(_,i)=>view.reduce((a,r)=>a+(D(r)[i]||0),0));
  const mx=Math.max(1,...tot);
  chart.innerHTML='<div style="display:flex;align-items:flex-end;gap:3px;height:150px">'+tot.map((v,i)=>
-  `<div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%" title="${i+1}일 ${v.toFixed(2)}h">`
-  +`<div style="font-size:9px;color:#5d6d7b">${v?v.toFixed(0):''}</div>`
+  `<div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%" title="${i+1}일 ${Number(v).toFixed(2)}h">`
+  +`<div style="font-size:9px;color:#5d6d7b">${v?Number(v).toFixed(0):''}</div>`
   +`<div class="bar" style="width:100%;height:${v/mx*120}px"></div>`
   +`<div style="font-size:9px;color:#5d6d7b">${i+1}</div></div>`).join('')+'</div>';
 }
 function search(){const k=document.querySelector('input[name="k"]:checked').value;
  view=k==='전체'?[...data]:data.filter(r=>r.work_type===k);render();msg(`조회결과 ${view.length}명입니다.`);}
 document.querySelectorAll('input[name="k"]').forEach(x=>x.addEventListener('change',search));
-window.MES={search,setMessage:msg};render();</script><script src="mes_db.js?v=27"></script>
-<script>MESDB.master({page:"design_result_status:data",table:"design_result_monthly",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "work_type": "work_type", "worker_name": "worker_name", "year_month": "year_month", "d01": "d01", "d02": "d02", "d03": "d03", "d04": "d04", "d05": "d05", "d06": "d06", "d07": "d07", "d08": "d08", "d09": "d09", "d10": "d10", "d11": "d11", "d12": "d12", "d13": "d13", "d14": "d14", "d15": "d15", "d16": "d16", "d17": "d17", "d18": "d18", "d19": "d19", "d20": "d20", "d21": "d21", "d22": "d22", "d23": "d23", "d24": "d24", "d25": "d25", "d26": "d26", "d27": "d27", "d28": "d28", "d29": "d29", "d30": "d30", "d31": "d31"},get:()=>data,render:()=>{if(typeof view!=="undefined")view=[...data];(window.MES&&window.MES.search||window.search||window.render||function(){})()}});</script>
+window.MES={search,setMessage:msg};render();</script><script src="mes_db.js?v=35"></script>
+<script>loadMonthly();</script>
 <script src="mes_ctx.js?v=1"></script>
 </body></html>

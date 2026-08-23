@@ -41,7 +41,55 @@ table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th
 @media(max-width:1400px){.formrow{grid-template-columns:78px minmax(0,1fr) 78px minmax(0,1fr)}}
 @media(max-width:880px){.formrow{grid-template-columns:78px minmax(0,1fr)}}
 .formrow>*{min-width:0}
-</style></head><body><div class="screen"><div class="title"><h1>경비현황</h1><small>설계관리 · 외주설계발주 · 1공장</small></div><section class="filt"><div class="f2"><div class="lb">제 번</div><div><input class="field"></div><div class="lb">품 명</div><div><input class="field"></div><div class="lb">사 유</div><div><select class="field"><option></option></select></div><div class="lb">고객사</div><div><input class="field"></div><div class="lb">등록일자</div><div style="display:flex;gap:4px"><input type="date" class="field"><span>~</span><input type="date" class="field"></div><div class="lb">사유일자</div><div style="display:flex;gap:4px"><input type="date" class="field"><span>~</span><input type="date" class="field"></div><div></div><div></div><div></div><div></div></div></section><div class="gridbox"><table style="min-width:1120px"><thead><tr><th style="width:130px">제번</th><th style="width:220px">품명</th><th style="width:110px">등록일자</th><th style="width:110px">사유일자</th><th style="width:150px">사유</th><th style="width:180px">고객사</th><th style="width:120px">금액</th><th>비고</th></tr></thead><tbody><tr><td colspan="8" class="c" style="height:180px;color:#8a97a2">조회결과가 없습니다.</td></tr></tbody><tfoot><tr class="gtot"><td colspan="6" class="c">합계</td><td class="num">0</td><td></td></tr></tfoot></table></div><footer class="foot"><button class="btn" onclick="detail()">⌕ 상세보기</button><button class="btn" onclick="search()">⌕ 검색</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">사진의 조회결과는 0건입니다.</span></footer></div><script>const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+</style></head><body><div class="screen"><div class="title"><h1>경비현황</h1><small>설계관리 · 외주설계발주 · 1공장</small></div><section class="filt"><div class="f2"><div class="lb">제 번</div><div><input id="qJob" class="field"></div><div class="lb">품 명</div><div><input id="qItem" class="field"></div><div class="lb">사 유</div><div><select id="qReason" class="field"><option value="">전체</option></select></div><div class="lb">고객사</div><div><input id="qCust" class="field"></div><div class="lb">등록일자</div><div style="display:flex;gap:4px"><input id="qRegF" type="date" class="field"><span>~</span><input id="qRegT" type="date" class="field"></div><div class="lb">사유일자</div><div style="display:flex;gap:4px"><input id="qRsnF" type="date" class="field"><span>~</span><input id="qRsnT" type="date" class="field"></div><div></div><div></div><div></div><div></div></div></section><div class="gridbox"><table style="min-width:1120px"><thead><tr><th style="width:130px">제번</th><th style="width:220px">품명</th><th style="width:110px">등록일자</th><th style="width:110px">사유일자</th><th style="width:150px">사유</th><th style="width:180px">고객사</th><th style="width:120px">금액</th><th>비고</th></tr></thead><tbody id="ebody"></tbody><tfoot><tr class="gtot"><td colspan="6" class="c">합계</td><td class="num" id="gsum">0</td><td></td></tr></tfoot></table></div><footer class="foot"><button class="btn" onclick="detail()">⌕ 상세보기</button><button class="btn" onclick="search()">⌕ 검색</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">사진의 조회결과는 0건입니다.</span></footer></div><script>const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const n=v=>v==null?'':Number(v).toLocaleString();const p=v=>v==null?'':Number(v).toFixed(2)+'%';
-const msg=t=>message.textContent=t;function search(){msg('사진 기준 조회결과 0건입니다.')}function detail(){msg('선택한 행이 없습니다.')}window.MES={search,setMessage:msg};</script><script src="mes_ctx.js?v=1"></script>
+const msg=t=>message.textContent=t;
+/* v28: expense_status_view(경비 ⨝ 수주) 실조회로 교체 */
+const online=()=>!!(window.MESDB&&MESDB.online);
+const waitDB=async()=>{for(let i=0;i<60&&!window.MESDB;i++)await new Promise(r=>setTimeout(r,50));
+ if(window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}};
+
+let data=[],sel=null;
+function render(){
+ ebody.innerHTML=data.length?data.map((r,i)=>`<tr onclick="pick(${i},this)">
+  <td class="c">${esc(r.job_no)}</td><td>${esc(r.item_name||'')}</td>
+  <td class="c">${esc(r.reg_date||'')}</td><td class="c">${esc(r.reason_date||'')}</td>
+  <td class="c">${esc(r.reason_name||'')}</td><td>${esc(r.customer_name||'')}</td>
+  <td class="num">${n(r.amount)}</td><td>${esc(r.remark||'')}</td></tr>`).join('')
+  :'<tr><td colspan="8" class="c" style="height:180px;color:#8a97a2">조회결과가 없습니다.</td></tr>';
+ gsum.textContent=n(data.reduce((a,r)=>a+Number(r.amount||0),0));
+}
+function pick(i,tr){sel=data[i];document.querySelectorAll('#ebody tr').forEach(x=>x.classList.remove('sel'));tr.classList.add('sel')}
+async function search(){
+ if(!online()&&window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}
+ if(!online()){msg('DB 미연결 — 조회할 수 없습니다.');data=[];render();return}
+ try{
+  let q='select=*&order=reg_date.desc';
+  const j=qJob.value.trim(),c=qCust.value.trim(),rs=qReason.value;
+  if(j)q+=`&job_no=eq.${encodeURIComponent(j)}`;
+  if(rs)q+=`&reason_name=eq.${encodeURIComponent(rs)}`;
+  if(qRegF.value)q+=`&reg_date=gte.${qRegF.value}`;
+  if(qRegT.value)q+=`&reg_date=lte.${qRegT.value}`;
+  if(qRsnF.value)q+=`&reason_date=gte.${qRsnF.value}`;
+  if(qRsnT.value)q+=`&reason_date=lte.${qRsnT.value}`;
+  let rows=await MESDB.table('expense_status_view').select(q);
+  const it=qItem.value.trim();
+  if(it)rows=rows.filter(r=>String(r.item_name??'').includes(it));
+  if(c)rows=rows.filter(r=>String(r.customer_name??'').includes(c));
+  data=rows;render();
+  msg(`조회결과 ${data.length}건 · 합계 ${data.reduce((a,r)=>a+Number(r.amount||0),0).toLocaleString()}원`);
+ }catch(e){msg('조회 실패: '+String(e.message||e).slice(0,120));data=[];render()}
+}
+function detail(){sel?msg(`${sel.job_no} · ${sel.reason_name||''} · ${n(sel.amount)}원 · ${sel.remark||'비고 없음'}`):msg('선택한 행이 없습니다.')}
+(async function initReasons(){
+ await waitDB();
+ try{
+  if(online()){const rs=await MESDB.table('expense_reasons').select('select=*&order=expense_reason_code');
+   qReason.innerHTML='<option value="">전체</option>'+rs.map(r=>`<option>${esc(r.expense_reason_name)}</option>`).join('');}
+ }catch(e){}
+ search();
+})();
+render();
+window.MES={search,setMessage:msg};</script><script src="mes_db.js?v=35"></script>
+<script src="mes_ctx.js?v=1"></script>
 </body></html>

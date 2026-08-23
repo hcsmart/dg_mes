@@ -41,12 +41,12 @@ table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th
 @media(max-width:1400px){.formrow{grid-template-columns:78px minmax(0,1fr) 78px minmax(0,1fr)}}
 @media(max-width:880px){.formrow{grid-template-columns:78px minmax(0,1fr)}}
 .formrow>*{min-width:0}
-</style></head><body><div class="screen"><div class="title"><h1>설계계획등록</h1><small>설계관리 · 1공장</small></div><section class="filt"><div class="f2"><div class="lb">제 번</div><div><input id="q_job" class="field"></div><div class="lb">품 명</div><div><input id="q_item" class="field"></div><div class="lb">공 장</div><div><select class="field"><option>1공장</option></select></div><div></div><div></div></div></section><div class="panes" style="grid-template-rows:1.2fr 1fr"><div class="pane"><div class="ph">제번리스트</div><div class="pb"><table style="min-width:900px"><thead><tr><th style="width:140px">제번</th><th style="width:200px">품명</th><th style="width:170px">고객사</th><th style="width:120px">설계완료 예정일</th><th style="width:110px">S1</th><th>고객요구일</th></tr></thead><tbody id="hbody"></tbody></table></div></div><div class="panes" style="grid-template-columns:1fr 1.3fr;grid-template-rows:1fr;padding:0;gap:8px"><div class="pane"><div class="ph">조수 리스트</div><div class="pb"><table style="min-width:0"><thead><tr><th style="width:110px">공정코드</th><th>공정명</th><th style="width:100px">담당자</th></tr></thead><tbody id="sbody"></tbody></table></div></div><div class="pane"><div class="ph">세부공정 리스트</div><div class="pb"><table style="min-width:640px"><thead><tr><th style="width:90px">공정코드</th><th style="width:80px">공정명</th><th style="width:110px">가공공정코드</th><th style="width:130px">가공공정명</th><th>완료 예정일</th></tr></thead><tbody id="dbody"></tbody></table></div></div></div></div><footer class="foot"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn" onclick="save()">▤ 저장</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">사진에서 판독한 8건을 표시했습니다.</span><span class="right" id="countText"></span></footer></div><script>const heads=[{"row_no": 1, "job_no": "A25032", "item_name": null, "customer_name": null, "design_completion_planned_date": "2025-02-23", "s1_date": "2025-03-02", "customer_request_date": "2025-03-02", "plant_name": "1공장"}, {"row_no": 2, "job_no": "A26026", "item_name": null, "customer_name": null, "design_completion_planned_date": "2026-05-01", "s1_date": "2026-12-31", "customer_request_date": "2026-12-31", "plant_name": "1공장"}, {"row_no": 3, "job_no": "C14213-S030", "item_name": "BUSBAR", "customer_name": null, "design_completion_planned_date": "2025-07-28", "s1_date": "2026-08-30", "customer_request_date": "2026-08-30", "plant_name": "1공장"}, {"row_no": 4, "job_no": "C23130-U001", "item_name": "RETAINER PA RHD", "customer_name": null, "design_completion_planned_date": "2024-10-30", "s1_date": "2024-11-15", "customer_request_date": "2024-11-15", "plant_name": "1공장"}, {"row_no": 5, "job_no": "C23140-U001", "item_name": "RETAINER DR RHD", "customer_name": null, "design_completion_planned_date": "2024-12-07", "s1_date": "2024-12-10", "customer_request_date": "2024-12-10", "plant_name": "1공장"}, {"row_no": 6, "job_no": "C23144-U001", "item_name": "MOTOR BRACKET", "customer_name": null, "design_completion_planned_date": "2024-05-09", "s1_date": "2024-05-15", "customer_request_date": "2024-05-15", "plant_name": "1공장"}, {"row_no": 7, "job_no": "C24028-A001", "item_name": "MOTOR BRACKET", "customer_name": null, "design_completion_planned_date": "2025-05-20", "s1_date": "2025-05-25", "customer_request_date": "2025-05-25", "plant_name": "1공장"}, {"row_no": 8, "job_no": "C24028-U001", "item_name": "MOTOR BRACKET", "customer_name": null, "design_completion_planned_date": "2024-09-01", "s1_date": "2024-09-15", "customer_request_date": "2024-09-15", "plant_name": "1공장"}];const steps=[{"row_no": 1, "job_no": "C23130-U001", "process_code": "A", "process_name": "1/1", "manager_name": null, "machining_process_code": "DA", "machining_process_name": "레이아웃", "completion_planned_date": null}, {"row_no": 2, "job_no": "C23130-U001", "process_code": "A", "process_name": "1/1", "manager_name": null, "machining_process_code": "DL", "machining_process_name": "조립도", "completion_planned_date": null}, {"row_no": 3, "job_no": "C23130-U001", "process_code": "A", "process_name": "1/1", "manager_name": null, "machining_process_code": "DP", "machining_process_name": "부품도", "completion_planned_date": null}];const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+</style></head><body><div class="screen"><div class="title"><h1>설계계획등록</h1><small>설계관리 · 1공장</small></div><section class="filt"><div class="f2"><div class="lb">제 번</div><div><input id="q_job" class="field"></div><div class="lb">품 명</div><div><input id="q_item" class="field"></div><div class="lb">공 장</div><div><select class="field"><option>1공장</option></select></div><div></div><div></div></div></section><div class="panes" style="grid-template-rows:1.2fr 1fr"><div class="pane"><div class="ph">제번리스트</div><div class="pb"><table style="min-width:900px"><thead><tr><th style="width:140px">제번</th><th style="width:200px">품명</th><th style="width:170px">고객사</th><th style="width:120px">설계완료 예정일</th><th style="width:110px">S1</th><th>고객요구일</th></tr></thead><tbody id="hbody"></tbody></table></div></div><div class="panes" style="grid-template-columns:1fr 1.3fr;grid-template-rows:1fr;padding:0;gap:8px"><div class="pane"><div class="ph">조수 리스트</div><div class="pb"><table style="min-width:0"><thead><tr><th style="width:110px">공정코드</th><th>공정명</th><th style="width:100px">담당자</th></tr></thead><tbody id="sbody"></tbody></table></div></div><div class="pane"><div class="ph">세부공정 리스트</div><div class="pb"><table style="min-width:640px"><thead><tr><th style="width:90px">공정코드</th><th style="width:80px">공정명</th><th style="width:110px">가공공정코드</th><th style="width:130px">가공공정명</th><th>완료 예정일</th></tr></thead><tbody id="dbody"></tbody></table></div></div></div></div><div style="display:flex;gap:4px;padding:6px;align-items:center;flex-wrap:wrap;border-top:1px solid #c3ccd4;background:#f4f8fb"><span class="lb">설계완료예정일</span><input id="fPlanDate" class="field" type="date" style="width:140px"><span class="lb">설계담당</span><input id="fManager" class="field" style="width:90px"><span class="lb">공정</span><input id="fProc" class="field" style="width:56px" value="A"><input id="fProcName" class="field" style="width:70px" value="1/1"><span class="lb">가공공정</span><input id="fMach" class="field" style="width:70px" placeholder="DA"><input id="fMachName" class="field" style="width:90px" placeholder="레이아웃"><button class="btn" onclick="addStep()">＋ 세부공정</button><button class="btn" onclick="delStep()">－ 세부공정</button></div><footer class="foot"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn" onclick="save()">▤ 저장</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">사진에서 판독한 8건을 표시했습니다.</span><span class="right" id="countText"></span></footer></div><script>const heads=[{"row_no": 1, "job_no": "A25032", "item_name": null, "customer_name": null, "design_completion_planned_date": "2025-02-23", "s1_date": "2025-03-02", "customer_request_date": "2025-03-02", "plant_name": "1공장"}, {"row_no": 2, "job_no": "A26026", "item_name": null, "customer_name": null, "design_completion_planned_date": "2026-05-01", "s1_date": "2026-12-31", "customer_request_date": "2026-12-31", "plant_name": "1공장"}, {"row_no": 3, "job_no": "C14213-S030", "item_name": "BUSBAR", "customer_name": null, "design_completion_planned_date": "2025-07-28", "s1_date": "2026-08-30", "customer_request_date": "2026-08-30", "plant_name": "1공장"}, {"row_no": 4, "job_no": "C23130-U001", "item_name": "RETAINER PA RHD", "customer_name": null, "design_completion_planned_date": "2024-10-30", "s1_date": "2024-11-15", "customer_request_date": "2024-11-15", "plant_name": "1공장"}, {"row_no": 5, "job_no": "C23140-U001", "item_name": "RETAINER DR RHD", "customer_name": null, "design_completion_planned_date": "2024-12-07", "s1_date": "2024-12-10", "customer_request_date": "2024-12-10", "plant_name": "1공장"}, {"row_no": 6, "job_no": "C23144-U001", "item_name": "MOTOR BRACKET", "customer_name": null, "design_completion_planned_date": "2024-05-09", "s1_date": "2024-05-15", "customer_request_date": "2024-05-15", "plant_name": "1공장"}, {"row_no": 7, "job_no": "C24028-A001", "item_name": "MOTOR BRACKET", "customer_name": null, "design_completion_planned_date": "2025-05-20", "s1_date": "2025-05-25", "customer_request_date": "2025-05-25", "plant_name": "1공장"}, {"row_no": 8, "job_no": "C24028-U001", "item_name": "MOTOR BRACKET", "customer_name": null, "design_completion_planned_date": "2024-09-01", "s1_date": "2024-09-15", "customer_request_date": "2024-09-15", "plant_name": "1공장"}];const steps=[{"row_no": 1, "job_no": "C23130-U001", "process_code": "A", "process_name": "1/1", "manager_name": null, "machining_process_code": "DA", "machining_process_name": "레이아웃", "completion_planned_date": null}, {"row_no": 2, "job_no": "C23130-U001", "process_code": "A", "process_name": "1/1", "manager_name": null, "machining_process_code": "DL", "machining_process_name": "조립도", "completion_planned_date": null}, {"row_no": 3, "job_no": "C23130-U001", "process_code": "A", "process_name": "1/1", "manager_name": null, "machining_process_code": "DP", "machining_process_name": "부품도", "completion_planned_date": null}];const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const n=v=>v==null?'':Number(v).toLocaleString();const p=v=>v==null?'':Number(v).toFixed(2)+'%';
 const msg=t=>message.textContent=t;
 let view=[...heads];
 function render(){hbody.innerHTML=view.map((r,i)=>`<tr onclick="pick(${i},this)"><td>${esc(r.job_no)}</td><td>${esc(r.item_name||'')}</td><td>${esc(r.customer_name||'')}</td><td class="c">${esc(r.design_completion_planned_date||'')}</td><td class="c">${esc(r.s1_date||'')}</td><td class="c">${esc(r.customer_request_date||'')}</td></tr>`).join('');countText.textContent=view.length+'건';}
-function pick(i,tr){const r=view[i];document.querySelectorAll('#hbody tr').forEach(x=>x.classList.remove('sel'));tr.classList.add('sel');
+function pick(i,tr){const r=view[i];sel=r;if(typeof fPlanDate!=='undefined')fPlanDate.value=r.design_completion_planned_date||'';document.querySelectorAll('#hbody tr').forEach(x=>x.classList.remove('sel'));tr.classList.add('sel');
  const rs=steps.filter(s=>s.job_no===r.job_no);
  const seen=new Set();
  sbody.innerHTML=rs.filter(s=>!seen.has(s.process_code)&&seen.add(s.process_code)).map(s=>`<tr><td>${esc(s.process_code)}</td><td>${esc(s.process_name||'')}</td><td>${esc(s.manager_name||'')}</td></tr>`).join('')||'<tr><td colspan="3" class="c" style="height:60px;color:#8a97a2">-</td></tr>';
@@ -55,8 +55,78 @@ function pick(i,tr){const r=view[i];document.querySelectorAll('#hbody tr').forEa
  msg(`${r.job_no} · 세부공정 ${rs.length}건`);}
 function search(){const j=q_job.value.trim().toLowerCase(),it=q_item.value.trim().toLowerCase();
  view=heads.filter(r=>(!j||r.job_no.toLowerCase().includes(j))&&(!it||String(r.item_name??'').toLowerCase().includes(it)));sbody.innerHTML='';dbody.innerHTML='';render();msg(`조회결과 ${view.length}건입니다.`);}
-function save(){msg('프로토타입에서는 원본 JSON을 변경하지 않습니다.')}
-window.MES={search,save,setMessage:msg};render();</script><script src="mes_db.js?v=27"></script>
+/* v30: 설계계획을 design_plans / design_plan_steps 에 실제 저장 + job_pool 연동 */
+let sel=null;
+const online=()=>!!(window.MESDB&&MESDB.online);
+async function waitDB(){for(let i=0;i<60&&!window.MESDB;i++)await new Promise(r=>setTimeout(r,50));
+ if(window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}}
+
+async function loadPool(){
+ await waitDB();if(!online())return;
+ try{
+  const pool=await MESDB.table('job_pool').select('select=*&order=row_no');
+  const seen=new Set(heads.map(h=>h.job_no));
+  pool.forEach(r=>{if(!seen.has(r.job_no))heads.push({row_no:null,job_no:r.job_no,item_name:r.item_name,
+    customer_name:r.customer_name,design_completion_planned_date:null,
+    s1_date:r.s1_date,customer_request_date:r.customer_request_date,plant_name:r.plant_name,_new:true})});
+  view=[...heads];render();
+  msg(`제번 ${heads.length}건 (계획수립 ${heads.filter(h=>!h._new).length} / 미수립 ${heads.filter(h=>h._new).length})`);
+ }catch(e){}
+}
+async function reloadSteps(job){
+ if(!online())return;
+ try{const rs=await MESDB.table('design_plan_steps').select(`select=*&job_no=eq.${encodeURIComponent(job)}&order=row_no`);
+  for(let i=steps.length-1;i>=0;i--)if(steps[i].job_no===job)steps.splice(i,1);
+  steps.push(...rs);
+  const tr=[...document.querySelectorAll('#hbody tr')][view.findIndex(v=>v.job_no===job)];
+  if(tr)pick(view.findIndex(v=>v.job_no===job),tr);
+ }catch(e){}
+}
+async function save(){
+ if(!sel){msg('제번을 선택하세요.');return}
+ if(!online()){msg(`${sel.job_no} 설계계획을 저장했습니다. (DB 미연결 - 로컬)`);return}
+ try{
+  let rowNo=sel.row_no;
+  if(rowNo==null){const mx=await MESDB.table('design_plans').select('select=row_no&order=row_no.desc&limit=1');
+   rowNo=(mx&&mx[0]?Number(mx[0].row_no):0)+1}
+  const o={row_no:Number(rowNo),job_no:sel.job_no,item_name:sel.item_name,customer_name:sel.customer_name,
+   design_completion_planned_date:fPlanDate.value||sel.design_completion_planned_date||null,
+   s1_date:sel.s1_date||null,customer_request_date:sel.customer_request_date||null,
+   plant_name:sel.plant_name||'1공장'};
+  await MESDB.table('design_plans').upsert(o,'job_no');
+  sel.row_no=o.row_no;sel._new=false;
+  sel.design_completion_planned_date=o.design_completion_planned_date;
+  render();
+  msg(`${sel.job_no} 설계계획을 저장했습니다. (설계완료예정 ${o.design_completion_planned_date||'-'})`);
+ }catch(e){const m=String(e.message||e);
+  msg(/무결성|foreign key/i.test(m)?'저장 실패: 등록되지 않은 제번입니다.':'저장 실패: '+m.slice(0,120))}
+}
+async function addStep(){
+ if(!sel){msg('제번을 선택하세요.');return}
+ if(sel._new){msg('먼저 「저장」으로 설계계획을 등록하세요.');return}
+ if(!online()){msg('DB 미연결 상태에서는 세부공정을 추가할 수 없습니다.');return}
+ const proc=(fProc.value||'').trim();if(!proc){msg('공정코드를 입력하세요.');return}
+ try{
+  const mx=await MESDB.table('design_plan_steps').select('select=row_no&order=row_no.desc&limit=1');
+  await MESDB.table('design_plan_steps').upsert({row_no:(mx&&mx[0]?Number(mx[0].row_no):0)+1,
+   job_no:sel.job_no,process_code:proc,process_name:(fProcName.value||'1/1').trim(),
+   manager_name:fManager.value||null,machining_process_code:fMach.value||null,
+   machining_process_name:fMachName.value||null,
+   completion_planned_date:fPlanDate.value||null},'row_no');
+  await reloadSteps(sel.job_no);
+  msg(`${sel.job_no} 세부공정 ${proc} 을(를) 추가했습니다.`);
+ }catch(e){msg('추가 실패: '+String(e.message||e).slice(0,120))}
+}
+async function delStep(){
+ if(!sel){msg('제번을 선택하세요.');return}
+ const rs=steps.filter(s=>s.job_no===sel.job_no&&s.process_code===(fProc.value||'').trim());
+ if(!rs.length){msg('삭제할 세부공정이 없습니다. (공정코드 확인)');return}
+ if(!confirm(`${sel.job_no} / ${fProc.value} 세부공정 ${rs.length}건을 삭제하시겠습니까?`))return;
+ try{for(const r of rs)await MESDB.table('design_plan_steps').delete({row_no:r.row_no});
+  await reloadSteps(sel.job_no);msg(`세부공정 ${rs.length}건을 삭제했습니다.`);
+ }catch(e){msg('삭제 실패: '+String(e.message||e).slice(0,120))}
+}
+window.MES={search,save,setMessage:msg,reload:loadPool};render();loadPool();</script><script src="mes_db.js?v=35"></script>
 <script>
 MESDB.master({page:"design_plan_input:heads",table:"design_plans",pk:"job_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "item_name": "item_name", "customer_name": "customer_name", "design_completion_planned_date": {"col": "design_completion_planned_date", "type": "date"}, "s1_date": {"col": "s1_date", "type": "date"}, "customer_request_date": {"col": "customer_request_date", "type": "date"}, "plant_name": "plant_name"},get:()=>heads,render:()=>{if(typeof view!=="undefined")view=[...heads];(window.render||window.search||function(){})()}});
 MESDB.master({page:"design_plan_input:steps",table:"design_plan_steps",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "process_code": "process_code", "process_name": "process_name", "manager_name": "manager_name", "machining_process_code": "machining_process_code", "machining_process_name": "machining_process_name", "completion_planned_date": {"col": "completion_planned_date", "type": "date"}},get:()=>steps,render:()=>{if(typeof view!=="undefined")view=[...heads];(window.render||window.search||function(){})()}});

@@ -73,27 +73,141 @@ function key(){return `${jobView[jobIdx]?.job}|${STEPS[stepIdx]?.mp}`}
 function renderJobs(){jobBody.innerHTML=jobView.map((j,i)=>`<tr class="${i===jobIdx?'sel':''}" onclick="pickJob(${i})"><td>${j.job}</td><td>${j.item}</td><td class="c">${j.due}</td><td class="c">${j.s1}</td><td class="c">${j.cust}</td><td class="r">${j.insp??''}</td></tr>`).join('');countText.textContent=`제번 ${jobView.length}건`}
 function renderSteps(){procBody.innerHTML=STEPS.map((s,i)=>`<tr class="${i===stepIdx?'sel':''}" onclick="pickStep(${i})"><td class="c">${i===stepIdx?'▶':''}</td><td class="c">${s.done?'완료':''}</td><td class="c">${s.mp}</td><td>${s.mpName}</td><td class="r">${s.min??''}</td><td class="r">${s.rate==null?'':s.rate+'%'}</td></tr>`).join('')}
 function renderResults(){const list=RESULTS[key()]||[];resultBody.innerHTML=list.length?list.map((r,i)=>`<tr onclick="selResult(${i})" class="${r._sel?'sel':''}"><td>${r.worker}</td><td class="c">${r.date}</td><td class="r">${r.min}</td></tr>`).join(''):'<tr><td colspan="3" class="c" style="color:#8b98a4">실적 없음</td></tr>'}
-function pickJob(i){jobIdx=i;stepIdx=0;renderJobs();renderSteps();renderResults();msg(`${jobView[i].job} 세부공정을 조회했습니다.`)}
+function pickJob(i){jobIdx=i;if(typeof loadSteps==='function')setTimeout(loadSteps,0);stepIdx=0;renderJobs();renderSteps();renderResults();msg(`${jobView[i].job} 세부공정을 조회했습니다.`)}
 function pickStep(i){stepIdx=i;renderSteps();renderResults();msg(`세부공정 ${STEPS[i].mp} (${STEPS[i].mpName}) 선택`)}
 function selResult(i){const list=RESULTS[key()]||[];list.forEach((r,k)=>r._sel=(k===i));renderResults()}
 function search(){const j=jobQ.value.trim().toLowerCase(),it=itemQ.value.trim().toLowerCase(),m=document.querySelector('input[name=done]:checked').value;
 jobView=JOBS.filter(x=>(m==='완료'?x.done:!x.done)&&(!j||x.job.toLowerCase().includes(j))&&(!it||(x.item||'').toLowerCase().includes(it)));jobIdx=0;renderJobs();renderSteps();renderResults();msg(`${m} 기준 제번 ${jobView.length}건을 조회했습니다.`)}
-function addResult(){if(!jobView[jobIdx])return msg('제번을 선택하세요.');const m=Number(minutes.value);if(!m||m<=0)return msg('작업시간(분)을 입력하세요.');
-const k=key();(RESULTS[k]=RESULTS[k]||[]).push({worker:worker.value,date:workDate.value||new Date().toISOString().slice(0,10),min:m});
-const s=STEPS[stepIdx];s.min=(RESULTS[k]||[]).reduce((a,r)=>a+r.min,0);minutes.value='';renderSteps();renderResults();msg(`${worker.value} 실적 ${m}분을 등록했습니다.`)}
-function delResult(){const k=key(),list=RESULTS[k]||[];const i=list.findIndex(r=>r._sel);if(i<0)return msg('삭제할 실적 행을 선택하세요.');list.splice(i,1);STEPS[stepIdx].min=list.reduce((a,r)=>a+r.min,0)||null;renderSteps();renderResults();msg('실적을 삭제했습니다.')}
-function completeStep(){const s=STEPS[stepIdx];s.done=true;s.rate=100;renderSteps();msg(`세부공정 ${s.mp}를 완료 처리했습니다.`)}
-function completeAssembly(){const j=jobView[jobIdx];if(!j)return msg('제번을 선택하세요.');STEPS.forEach(s=>{s.done=true;s.rate=100});j.done=true;renderSteps();msg(`${j.job} 조립을 완료 처리했습니다.`)}
-function inspectionSheet(){const j=jobView[jobIdx];if(!j)return msg('제번을 선택하세요.');j.insp=(j.insp||0)+1;renderJobs();msg(`${j.job} 검사시트를 작성했습니다. (검사횟수 ${j.insp})`)}
+/* v31: 화면 메모리 → design_results(work_type='조립') / assembly_* 테이블 실연동 */
+const online=()=>!!(window.MESDB&&MESDB.online);
+async function waitDB(){for(let i=0;i<60&&!window.MESDB;i++)await new Promise(r=>setTimeout(r,50));
+ if(window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}}
+
+async function loadJobs(){
+ await waitDB();if(!online())return;
+ try{
+  const rs=await MESDB.table('assembly_job_pool').select('select=*&order=row_no');
+  JOBS.length=0;
+  rs.forEach(r=>JOBS.push({job:r.job_no,item:r.item_name||'',due:r.completion_date||'',
+    s1:r.s1_date||'',cust:r.customer_request_date||'',insp:Number(r.inspection_count||0),
+    done:!!r.assembly_completed}));
+  search();
+  msg(`조립 대상 제번 ${JOBS.length}건 (완료 ${JOBS.filter(j=>j.done).length})`);
+  await loadSteps();
+ }catch(e){msg('제번 조회 실패: '+String(e.message||e).slice(0,110))}
+}
+async function loadSteps(){
+ const j=jobView[jobIdx];STEPS.length=0;
+ if(!j||!online()){renderSteps();renderResults();return}
+ try{
+  let rs=await MESDB.table('assembly_steps').select(`select=*&job_no=eq.${encodeURIComponent(j.job)}&order=row_no`);
+  if(!rs.length){  /* 조립 공정이 없으면 설계 세부공정을 승계 */
+   const ds=await MESDB.table('design_plan_steps').select(`select=*&job_no=eq.${encodeURIComponent(j.job)}&order=row_no`);
+   rs=ds.map(s=>({row_no:null,job_no:j.job,machining_process_code:s.machining_process_code||s.process_code,
+     machining_process_name:s.machining_process_name||s.process_name,step_completed:false}));
+  }
+  rs.forEach(r=>STEPS.push({row:r.row_no,mp:r.machining_process_code||'',mpName:r.machining_process_name||'',
+    min:null,rate:r.step_completed?100:null,done:!!r.step_completed,plan:Number(r.plan_minutes||0)}));
+  stepIdx=0;await loadResults();
+ }catch(e){renderSteps()}
+}
+async function loadResults(){
+ const j=jobView[jobIdx];
+ for(const k in RESULTS)delete RESULTS[k];
+ if(!j||!online()){renderSteps();renderResults();return}
+ try{
+  const rs=await MESDB.table('design_results')
+    .select(`select=*&job_no=eq.${encodeURIComponent(j.job)}&work_type=eq.조립&order=row_no`);
+  rs.forEach(r=>{const k=`${j.job}|${r.machining_process_code||''}`;
+   (RESULTS[k]=RESULTS[k]||[]).push({id:r.row_no,worker:r.worker_name||'',
+     date:r.work_date||'',min:Number(r.work_minutes||0)})});
+  STEPS.forEach(s=>{const l=RESULTS[`${j.job}|${s.mp}`]||[];
+   const m=l.reduce((a,r)=>a+r.min,0);s.min=m||null;
+   s.rate=s.done?100:(s.plan?Math.min(100,Math.round(m/s.plan*100)):(m?50:null))});
+  renderSteps();renderResults();
+ }catch(e){renderSteps();renderResults()}
+}
+async function addResult(){
+ const j=jobView[jobIdx];if(!j)return msg('제번을 선택하세요.');
+ const s=STEPS[stepIdx];if(!s)return msg('세부공정을 선택하세요.');
+ const m=Number(minutes.value);if(!m||m<=0)return msg('작업시간(분)을 입력하세요.');
+ if(!online())return msg('DB 미연결 상태에서는 실적을 등록할 수 없습니다.');
+ try{
+  const mx=await MESDB.table('design_results').select('select=row_no&order=row_no.desc&limit=1');
+  await MESDB.table('design_results').upsert({row_no:(mx&&mx[0]?Number(mx[0].row_no):0)+1,
+   work_type:'조립',worker_name:worker.value||null,job_no:j.job,process_code:s.mp||null,
+   machining_process_code:s.mp||null,machining_process_name:s.mpName||null,
+   work_date:workDate.value||new Date().toISOString().slice(0,10),work_minutes:m},'row_no');
+  minutes.value='';await loadResults();
+  msg(`${worker.value} 실적 ${m}분을 등록했습니다. (조립실적현황/조회에 즉시 반영)`);
+ }catch(e){const t=String(e.message||e);
+  msg(/무결성|foreign key/i.test(t)?'등록 실패: 등록되지 않은 제번입니다.':'등록 실패: '+t.slice(0,110))}
+}
+async function delResult(){
+ const k=key(),list=RESULTS[k]||[];const i=list.findIndex(r=>r._sel);
+ if(i<0)return msg('삭제할 실적 행을 선택하세요.');
+ if(!online())return msg('DB 미연결 상태에서는 삭제할 수 없습니다.');
+ try{await MESDB.table('design_results').delete({row_no:list[i].id});
+  await loadResults();msg('실적을 삭제했습니다.');
+ }catch(e){msg('삭제 실패: '+String(e.message||e).slice(0,110))}
+}
+async function completeStep(){
+ const j=jobView[jobIdx],s=STEPS[stepIdx];
+ if(!j||!s)return msg('세부공정을 선택하세요.');
+ if(!online())return msg('DB 미연결 상태에서는 완료 처리할 수 없습니다.');
+ try{
+  let row=s.row;
+  if(row==null){const mx=await MESDB.table('assembly_steps').select('select=row_no&order=row_no.desc&limit=1');
+   row=(mx&&mx[0]?Number(mx[0].row_no):0)+1;s.row=row}
+  await MESDB.table('assembly_steps').upsert({row_no:row,job_no:j.job,
+   machining_process_code:s.mp,machining_process_name:s.mpName,step_completed:true,
+   completion_date:new Date().toISOString().slice(0,10),plant_name:'1공장'},'row_no');
+  s.done=true;s.rate=100;renderSteps();
+  msg(`세부공정 ${s.mp}를 완료 처리했습니다.`);
+ }catch(e){msg('완료 처리 실패: '+String(e.message||e).slice(0,110))}
+}
+async function completeAssembly(){
+ const j=jobView[jobIdx];if(!j)return msg('제번을 선택하세요.');
+ const open=STEPS.filter(s=>!s.done);
+ if(open.length&&!confirm(`미완료 세부공정 ${open.length}건이 남아 있습니다.\n${j.job} 조립을 완료 처리하시겠습니까?`))return;
+ if(!online())return msg('DB 미연결 상태에서는 완료 처리할 수 없습니다.');
+ try{
+  await MESDB.table('assembly_jobs').upsert({job_no:j.job,assembly_completed:true,
+   completed_date:new Date().toISOString().slice(0,10),updated_at:new Date().toISOString()},'job_no');
+  j.done=true;await loadJobs();
+  msg(`${j.job} 조립을 완료 처리했습니다.`);
+ }catch(e){msg('완료 처리 실패: '+String(e.message||e).slice(0,110))}
+}
+async function inspectionSheet(){
+ const j=jobView[jobIdx];if(!j)return msg('제번을 선택하세요.');
+ if(!online())return msg('DB 미연결 상태에서는 검사시트를 작성할 수 없습니다.');
+ try{
+  const cur=await MESDB.table('assembly_jobs').select(`select=inspection_count&job_no=eq.${encodeURIComponent(j.job)}&limit=1`);
+  const cnt=(cur&&cur[0]?Number(cur[0].inspection_count||0):0)+1;
+  await MESDB.table('assembly_jobs').upsert({job_no:j.job,inspection_count:cnt,
+   updated_at:new Date().toISOString()},'job_no');
+  /* v31: 검사실적등록(조립검사 IC06)에 검사대상 라인 생성 — 시트 작성이 검사와 연결되지 않던 문제 */
+  const ex=await MESDB.table('order_lines')
+    .select(`select=line_id&category=eq.조립&job_no=eq.${encodeURIComponent(j.job)}&status=eq.입고`);
+  if(!ex.length){
+   await MESDB.table('order_lines').upsert([{category:'조립',status:'입고',job_no:j.job,
+     item_name:j.item||null,part_name:'조립완성품',order_qty:1,receipt_qty:1,
+     receipt_date:new Date().toISOString().slice(0,10),
+     order_date:new Date().toISOString().slice(0,10),updated_at:new Date().toISOString()}]);
+  }
+  j.insp=cnt;renderJobs();
+  msg(`${j.job} 검사시트를 작성했습니다. (검사횟수 ${cnt} · 기준정보>검사실적등록의 조립검사 대상에 등록)`);
+ }catch(e){msg('작성 실패: '+String(e.message||e).slice(0,110))}
+}
 function exportCsv(){const k=key(),list=RESULTS[k]||[];const out=[['제번','가공공정코드','작업자','작업일자','작업시간(분)'],...list.map(r=>[jobView[jobIdx]?.job,STEPS[stepIdx].mp,r.worker,r.date,r.min])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='assembly_result_input.csv';a.click();URL.revokeObjectURL(a.href)}
 function msg(t){message.textContent=t}
 worker.innerHTML=WORKERS.map(w=>`<option>${w}</option>`).join('');workDate.value='2026-08-22';
-renderJobs();renderSteps();renderResults();window.MES={search,save:addResult,exportCsv,setMessage:msg};
+renderJobs();renderSteps();renderResults();window.MES={search,save:addResult,exportCsv,setMessage:msg,reload:loadJobs};loadJobs();
 </script>
-<script src="mes_db.js?v=27"></script>
+<script src="mes_db.js?v=35"></script>
 <script>MESDB.bind("assembly_result_input",()=>({JOBS,STEPS,WORKERS}));</script>
 <script src="mes_ctx.js?v=1"></script>
-<script src="mes_lookup.js?v=27"></script>
+<script src="mes_lookup.js?v=35"></script>
 <script>
 (async function(){
  try{
