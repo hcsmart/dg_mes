@@ -229,14 +229,13 @@
       "pk": "(user_key,menu_name)",
       "columns": {
         "user_key": "text",
-        "user_id": "text?",
-        "menu_path": "jsonb",
         "menu_name": "text",
-        "permission_status": "text?",
+        "menu_path": "text[]",
         "can_view": "boolean",
         "can_save": "boolean",
         "can_edit": "boolean",
-        "can_delete": "boolean"
+        "can_delete": "boolean",
+        "permission_status": "text (generated)"
       }
     },
     "material_price_changes": {

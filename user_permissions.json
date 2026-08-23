@@ -1,1 +1,3516 @@
-[]
+{
+  "version": "20",
+  "description": "메뉴별 접근권한 (시연 샘플)",
+  "rows": [
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "영업관리",
+      "menu_path": [
+        "영업관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "영업관리/수주",
+      "menu_path": [
+        "영업관리",
+        "수주"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "영업관리/수주/수주등록",
+      "menu_path": [
+        "영업관리",
+        "수주",
+        "수주등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "영업관리/수주/수주현황",
+      "menu_path": [
+        "영업관리",
+        "수주",
+        "수주현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "영업관리/수주/현황판",
+      "menu_path": [
+        "영업관리",
+        "수주",
+        "현황판"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "영업관리/영업계획",
+      "menu_path": [
+        "영업관리",
+        "영업계획"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "영업관리/영업계획/영업계획등록",
+      "menu_path": [
+        "영업관리",
+        "영업계획",
+        "영업계획등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "영업관리/영업계획/영업계획현황",
+      "menu_path": [
+        "영업관리",
+        "영업계획",
+        "영업계획현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "영업관리/금형코드매칭",
+      "menu_path": [
+        "영업관리",
+        "금형코드매칭"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "영업관리/금형코드매칭/금형코드매칭",
+      "menu_path": [
+        "영업관리",
+        "금형코드매칭",
+        "금형코드매칭"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "영업관리/SET발주",
+      "menu_path": [
+        "영업관리",
+        "SET발주"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "영업관리/SET발주/SET발주등록",
+      "menu_path": [
+        "영업관리",
+        "SET발주",
+        "SET발주등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "영업관리/SET발주/SET발주입고",
+      "menu_path": [
+        "영업관리",
+        "SET발주",
+        "SET발주입고"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "영업관리/SET발주/SET발주현황",
+      "menu_path": [
+        "영업관리",
+        "SET발주",
+        "SET발주현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "영업관리/경비",
+      "menu_path": [
+        "영업관리",
+        "경비"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "영업관리/경비/경비등록",
+      "menu_path": [
+        "영업관리",
+        "경비",
+        "경비등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "영업관리/경비/경비현황",
+      "menu_path": [
+        "영업관리",
+        "경비",
+        "경비현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "설계관리",
+      "menu_path": [
+        "설계관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "설계관리/외주설계발주",
+      "menu_path": [
+        "설계관리",
+        "외주설계발주"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "설계관리/외주설계발주/외주설계발주등록",
+      "menu_path": [
+        "설계관리",
+        "외주설계발주",
+        "외주설계발주등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "설계관리/외주설계발주/외주설계발주입고",
+      "menu_path": [
+        "설계관리",
+        "외주설계발주",
+        "외주설계발주입고"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "설계관리/외주설계발주/외주설계발주현황",
+      "menu_path": [
+        "설계관리",
+        "외주설계발주",
+        "외주설계발주현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "설계관리/설계",
+      "menu_path": [
+        "설계관리",
+        "설계"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "설계관리/설계/설계계획등록",
+      "menu_path": [
+        "설계관리",
+        "설계",
+        "설계계획등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "설계관리/설계/설계실적등록",
+      "menu_path": [
+        "설계관리",
+        "설계",
+        "설계실적등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "설계관리/설계/설계실적현황",
+      "menu_path": [
+        "설계관리",
+        "설계",
+        "설계실적현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "설계관리/설계/설계실적조회",
+      "menu_path": [
+        "설계관리",
+        "설계",
+        "설계실적조회"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "설계관리/PARTLIST",
+      "menu_path": [
+        "설계관리",
+        "PARTLIST"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "설계관리/PARTLIST/PartList 등록(원재료)",
+      "menu_path": [
+        "설계관리",
+        "PARTLIST",
+        "PartList 등록(원재료)"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "설계관리/PARTLIST/PartList 등록(구매품)",
+      "menu_path": [
+        "설계관리",
+        "PARTLIST",
+        "PartList 등록(구매품)"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "설계관리/PARTLIST/PartList 현황",
+      "menu_path": [
+        "설계관리",
+        "PARTLIST",
+        "PartList 현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "설계관리/PARTLIST/PartList 복사",
+      "menu_path": [
+        "설계관리",
+        "PARTLIST",
+        "PartList 복사"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리",
+      "menu_path": [
+        "구매관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리/원재료",
+      "menu_path": [
+        "구매관리",
+        "원재료"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리/원재료/원재료 발주",
+      "menu_path": [
+        "구매관리",
+        "원재료",
+        "원재료 발주"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리/원재료/원재료 입고",
+      "menu_path": [
+        "구매관리",
+        "원재료",
+        "원재료 입고"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리/원재료/원재료 입고확정",
+      "menu_path": [
+        "구매관리",
+        "원재료",
+        "원재료 입고확정"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리/원재료/원재료 발주현황",
+      "menu_path": [
+        "구매관리",
+        "원재료",
+        "원재료 발주현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리/구매품",
+      "menu_path": [
+        "구매관리",
+        "구매품"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리/구매품/구매품 발주",
+      "menu_path": [
+        "구매관리",
+        "구매품",
+        "구매품 발주"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리/구매품/구매품 입고",
+      "menu_path": [
+        "구매관리",
+        "구매품",
+        "구매품 입고"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리/구매품/구매품 입고확정",
+      "menu_path": [
+        "구매관리",
+        "구매품",
+        "구매품 입고확정"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리/구매품/구매품 발주현황",
+      "menu_path": [
+        "구매관리",
+        "구매품",
+        "구매품 발주현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리/가공",
+      "menu_path": [
+        "구매관리",
+        "가공"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리/가공/가공계획등록",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "가공계획등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리/가공/공정이력카드",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "공정이력카드"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리/가공/외주가공 발주",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "외주가공 발주"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리/가공/외주가공 입고",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "외주가공 입고"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리/가공/외주가공 입고확정",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "외주가공 입고확정"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리/가공/외주가공발주현황",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "외주가공발주현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "구매관리/가공/가공구매 진척현황",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "가공구매 진척현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "조립관리",
+      "menu_path": [
+        "조립관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "조립관리/조립",
+      "menu_path": [
+        "조립관리",
+        "조립"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "조립관리/조립/조립실적등록",
+      "menu_path": [
+        "조립관리",
+        "조립",
+        "조립실적등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "조립관리/조립/조립실적현황",
+      "menu_path": [
+        "조립관리",
+        "조립",
+        "조립실적현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "조립관리/조립/조립실적조회",
+      "menu_path": [
+        "조립관리",
+        "조립",
+        "조립실적조회"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "조립관리/검사",
+      "menu_path": [
+        "조립관리",
+        "검사"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "원가관리",
+      "menu_path": [
+        "원가관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "원가관리/원가관리",
+      "menu_path": [
+        "원가관리",
+        "원가관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "원가관리/원가관리/제조원가조회(실시간)",
+      "menu_path": [
+        "원가관리",
+        "원가관리",
+        "제조원가조회(실시간)"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "원가관리/매입매출현황",
+      "menu_path": [
+        "원가관리",
+        "매입매출현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "원가관리/매입매출현황/매입현황",
+      "menu_path": [
+        "원가관리",
+        "매입매출현황",
+        "매입현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "원가관리/매입매출현황/매출현황",
+      "menu_path": [
+        "원가관리",
+        "매입매출현황",
+        "매출현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "원가관리/매입매출현황/재고조회",
+      "menu_path": [
+        "원가관리",
+        "매입매출현황",
+        "재고조회"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보",
+      "menu_path": [
+        "기준정보"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/생산/품질",
+      "menu_path": [
+        "기준정보",
+        "생산/품질"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/생산/품질/가공공정관리",
+      "menu_path": [
+        "기준정보",
+        "생산/품질",
+        "가공공정관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/생산/품질/가공 기준공정관리",
+      "menu_path": [
+        "기준정보",
+        "생산/품질",
+        "가공 기준공정관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/생산/품질/작업지시 관리",
+      "menu_path": [
+        "기준정보",
+        "생산/품질",
+        "작업지시 관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/생산/품질/공정이력카드",
+      "menu_path": [
+        "기준정보",
+        "생산/품질",
+        "공정이력카드"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통",
+      "menu_path": [
+        "기준정보",
+        "공통"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/사용자정보",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "사용자정보"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/공정관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "공정관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/부품관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "부품관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/자재등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "자재등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/설비등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "설비등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/업체관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "업체관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/사업부정보",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "사업부정보"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/부서정보",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "부서정보"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/아이템 관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "아이템 관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/경비사유",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "경비사유"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/금형타입관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "금형타입관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/기계사양관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "기계사양관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/검사구분",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "검사구분"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/검사항목",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "검사항목"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/공지사항 등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "공지사항 등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/DB 동기화",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "DB 동기화"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/직급정보",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "직급정보"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/자재단가변동등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "자재단가변동등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/자재단가변동현황",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "자재단가변동현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/공정단가변동등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "공정단가변동등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_윤나윤",
+      "menu_name": "기준정보/공통/공정단가변동현황",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "공정단가변동현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": true
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "영업관리",
+      "menu_path": [
+        "영업관리"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "영업관리/수주",
+      "menu_path": [
+        "영업관리",
+        "수주"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "영업관리/수주/수주등록",
+      "menu_path": [
+        "영업관리",
+        "수주",
+        "수주등록"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "영업관리/수주/수주현황",
+      "menu_path": [
+        "영업관리",
+        "수주",
+        "수주현황"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "영업관리/수주/현황판",
+      "menu_path": [
+        "영업관리",
+        "수주",
+        "현황판"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "영업관리/영업계획",
+      "menu_path": [
+        "영업관리",
+        "영업계획"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "영업관리/영업계획/영업계획등록",
+      "menu_path": [
+        "영업관리",
+        "영업계획",
+        "영업계획등록"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "영업관리/영업계획/영업계획현황",
+      "menu_path": [
+        "영업관리",
+        "영업계획",
+        "영업계획현황"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "영업관리/금형코드매칭",
+      "menu_path": [
+        "영업관리",
+        "금형코드매칭"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "영업관리/금형코드매칭/금형코드매칭",
+      "menu_path": [
+        "영업관리",
+        "금형코드매칭",
+        "금형코드매칭"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "영업관리/SET발주",
+      "menu_path": [
+        "영업관리",
+        "SET발주"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "영업관리/SET발주/SET발주등록",
+      "menu_path": [
+        "영업관리",
+        "SET발주",
+        "SET발주등록"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "영업관리/SET발주/SET발주입고",
+      "menu_path": [
+        "영업관리",
+        "SET발주",
+        "SET발주입고"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "영업관리/SET발주/SET발주현황",
+      "menu_path": [
+        "영업관리",
+        "SET발주",
+        "SET발주현황"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "영업관리/경비",
+      "menu_path": [
+        "영업관리",
+        "경비"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "영업관리/경비/경비등록",
+      "menu_path": [
+        "영업관리",
+        "경비",
+        "경비등록"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "영업관리/경비/경비현황",
+      "menu_path": [
+        "영업관리",
+        "경비",
+        "경비현황"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "설계관리",
+      "menu_path": [
+        "설계관리"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "설계관리/외주설계발주",
+      "menu_path": [
+        "설계관리",
+        "외주설계발주"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "설계관리/외주설계발주/외주설계발주등록",
+      "menu_path": [
+        "설계관리",
+        "외주설계발주",
+        "외주설계발주등록"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "설계관리/외주설계발주/외주설계발주입고",
+      "menu_path": [
+        "설계관리",
+        "외주설계발주",
+        "외주설계발주입고"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "설계관리/외주설계발주/외주설계발주현황",
+      "menu_path": [
+        "설계관리",
+        "외주설계발주",
+        "외주설계발주현황"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "설계관리/설계",
+      "menu_path": [
+        "설계관리",
+        "설계"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "설계관리/설계/설계계획등록",
+      "menu_path": [
+        "설계관리",
+        "설계",
+        "설계계획등록"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "설계관리/설계/설계실적등록",
+      "menu_path": [
+        "설계관리",
+        "설계",
+        "설계실적등록"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "설계관리/설계/설계실적현황",
+      "menu_path": [
+        "설계관리",
+        "설계",
+        "설계실적현황"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "설계관리/설계/설계실적조회",
+      "menu_path": [
+        "설계관리",
+        "설계",
+        "설계실적조회"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "설계관리/PARTLIST",
+      "menu_path": [
+        "설계관리",
+        "PARTLIST"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "설계관리/PARTLIST/PartList 등록(원재료)",
+      "menu_path": [
+        "설계관리",
+        "PARTLIST",
+        "PartList 등록(원재료)"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "설계관리/PARTLIST/PartList 등록(구매품)",
+      "menu_path": [
+        "설계관리",
+        "PARTLIST",
+        "PartList 등록(구매품)"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "설계관리/PARTLIST/PartList 현황",
+      "menu_path": [
+        "설계관리",
+        "PARTLIST",
+        "PartList 현황"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "설계관리/PARTLIST/PartList 복사",
+      "menu_path": [
+        "설계관리",
+        "PARTLIST",
+        "PartList 복사"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리",
+      "menu_path": [
+        "구매관리"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리/원재료",
+      "menu_path": [
+        "구매관리",
+        "원재료"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리/원재료/원재료 발주",
+      "menu_path": [
+        "구매관리",
+        "원재료",
+        "원재료 발주"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리/원재료/원재료 입고",
+      "menu_path": [
+        "구매관리",
+        "원재료",
+        "원재료 입고"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리/원재료/원재료 입고확정",
+      "menu_path": [
+        "구매관리",
+        "원재료",
+        "원재료 입고확정"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리/원재료/원재료 발주현황",
+      "menu_path": [
+        "구매관리",
+        "원재료",
+        "원재료 발주현황"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리/구매품",
+      "menu_path": [
+        "구매관리",
+        "구매품"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리/구매품/구매품 발주",
+      "menu_path": [
+        "구매관리",
+        "구매품",
+        "구매품 발주"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리/구매품/구매품 입고",
+      "menu_path": [
+        "구매관리",
+        "구매품",
+        "구매품 입고"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리/구매품/구매품 입고확정",
+      "menu_path": [
+        "구매관리",
+        "구매품",
+        "구매품 입고확정"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리/구매품/구매품 발주현황",
+      "menu_path": [
+        "구매관리",
+        "구매품",
+        "구매품 발주현황"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리/가공",
+      "menu_path": [
+        "구매관리",
+        "가공"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리/가공/가공계획등록",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "가공계획등록"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리/가공/공정이력카드",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "공정이력카드"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리/가공/외주가공 발주",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "외주가공 발주"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리/가공/외주가공 입고",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "외주가공 입고"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리/가공/외주가공 입고확정",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "외주가공 입고확정"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리/가공/외주가공발주현황",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "외주가공발주현황"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "구매관리/가공/가공구매 진척현황",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "가공구매 진척현황"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "조립관리",
+      "menu_path": [
+        "조립관리"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "조립관리/조립",
+      "menu_path": [
+        "조립관리",
+        "조립"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "조립관리/조립/조립실적등록",
+      "menu_path": [
+        "조립관리",
+        "조립",
+        "조립실적등록"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "조립관리/조립/조립실적현황",
+      "menu_path": [
+        "조립관리",
+        "조립",
+        "조립실적현황"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "조립관리/조립/조립실적조회",
+      "menu_path": [
+        "조립관리",
+        "조립",
+        "조립실적조회"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "조립관리/검사",
+      "menu_path": [
+        "조립관리",
+        "검사"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "원가관리",
+      "menu_path": [
+        "원가관리"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "원가관리/원가관리",
+      "menu_path": [
+        "원가관리",
+        "원가관리"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "원가관리/원가관리/제조원가조회(실시간)",
+      "menu_path": [
+        "원가관리",
+        "원가관리",
+        "제조원가조회(실시간)"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "원가관리/매입매출현황",
+      "menu_path": [
+        "원가관리",
+        "매입매출현황"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "원가관리/매입매출현황/매입현황",
+      "menu_path": [
+        "원가관리",
+        "매입매출현황",
+        "매입현황"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "원가관리/매입매출현황/매출현황",
+      "menu_path": [
+        "원가관리",
+        "매입매출현황",
+        "매출현황"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "원가관리/매입매출현황/재고조회",
+      "menu_path": [
+        "원가관리",
+        "매입매출현황",
+        "재고조회"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보",
+      "menu_path": [
+        "기준정보"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/생산/품질",
+      "menu_path": [
+        "기준정보",
+        "생산/품질"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/생산/품질/가공공정관리",
+      "menu_path": [
+        "기준정보",
+        "생산/품질",
+        "가공공정관리"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/생산/품질/가공 기준공정관리",
+      "menu_path": [
+        "기준정보",
+        "생산/품질",
+        "가공 기준공정관리"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/생산/품질/작업지시 관리",
+      "menu_path": [
+        "기준정보",
+        "생산/품질",
+        "작업지시 관리"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/생산/품질/공정이력카드",
+      "menu_path": [
+        "기준정보",
+        "생산/품질",
+        "공정이력카드"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통",
+      "menu_path": [
+        "기준정보",
+        "공통"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/사용자정보",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "사용자정보"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/공정관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "공정관리"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/부품관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "부품관리"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/자재등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "자재등록"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/설비등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "설비등록"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/업체관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "업체관리"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/사업부정보",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "사업부정보"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/부서정보",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "부서정보"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/아이템 관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "아이템 관리"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/경비사유",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "경비사유"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/금형타입관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "금형타입관리"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/기계사양관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "기계사양관리"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/검사구분",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "검사구분"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/검사항목",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "검사항목"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/공지사항 등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "공지사항 등록"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/DB 동기화",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "DB 동기화"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/직급정보",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "직급정보"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/자재단가변동등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "자재단가변동등록"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/자재단가변동현황",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "자재단가변동현황"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/공정단가변동등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "공정단가변동등록"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_류민호",
+      "menu_name": "기준정보/공통/공정단가변동현황",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "공정단가변동현황"
+      ],
+      "can_view": true,
+      "can_save": false,
+      "can_edit": false,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "영업관리",
+      "menu_path": [
+        "영업관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "영업관리/수주",
+      "menu_path": [
+        "영업관리",
+        "수주"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "영업관리/수주/수주등록",
+      "menu_path": [
+        "영업관리",
+        "수주",
+        "수주등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "영업관리/수주/수주현황",
+      "menu_path": [
+        "영업관리",
+        "수주",
+        "수주현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "영업관리/수주/현황판",
+      "menu_path": [
+        "영업관리",
+        "수주",
+        "현황판"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "영업관리/영업계획",
+      "menu_path": [
+        "영업관리",
+        "영업계획"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "영업관리/영업계획/영업계획등록",
+      "menu_path": [
+        "영업관리",
+        "영업계획",
+        "영업계획등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "영업관리/영업계획/영업계획현황",
+      "menu_path": [
+        "영업관리",
+        "영업계획",
+        "영업계획현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "영업관리/금형코드매칭",
+      "menu_path": [
+        "영업관리",
+        "금형코드매칭"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "영업관리/금형코드매칭/금형코드매칭",
+      "menu_path": [
+        "영업관리",
+        "금형코드매칭",
+        "금형코드매칭"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "영업관리/SET발주",
+      "menu_path": [
+        "영업관리",
+        "SET발주"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "영업관리/SET발주/SET발주등록",
+      "menu_path": [
+        "영업관리",
+        "SET발주",
+        "SET발주등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "영업관리/SET발주/SET발주입고",
+      "menu_path": [
+        "영업관리",
+        "SET발주",
+        "SET발주입고"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "영업관리/SET발주/SET발주현황",
+      "menu_path": [
+        "영업관리",
+        "SET발주",
+        "SET발주현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "영업관리/경비",
+      "menu_path": [
+        "영업관리",
+        "경비"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "영업관리/경비/경비등록",
+      "menu_path": [
+        "영업관리",
+        "경비",
+        "경비등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "영업관리/경비/경비현황",
+      "menu_path": [
+        "영업관리",
+        "경비",
+        "경비현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보",
+      "menu_path": [
+        "기준정보"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/생산/품질",
+      "menu_path": [
+        "기준정보",
+        "생산/품질"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/생산/품질/가공공정관리",
+      "menu_path": [
+        "기준정보",
+        "생산/품질",
+        "가공공정관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/생산/품질/가공 기준공정관리",
+      "menu_path": [
+        "기준정보",
+        "생산/품질",
+        "가공 기준공정관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/생산/품질/작업지시 관리",
+      "menu_path": [
+        "기준정보",
+        "생산/품질",
+        "작업지시 관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/생산/품질/공정이력카드",
+      "menu_path": [
+        "기준정보",
+        "생산/품질",
+        "공정이력카드"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통",
+      "menu_path": [
+        "기준정보",
+        "공통"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/사용자정보",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "사용자정보"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/공정관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "공정관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/부품관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "부품관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/자재등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "자재등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/설비등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "설비등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/업체관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "업체관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/사업부정보",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "사업부정보"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/부서정보",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "부서정보"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/아이템 관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "아이템 관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/경비사유",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "경비사유"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/금형타입관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "금형타입관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/기계사양관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "기계사양관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/검사구분",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "검사구분"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/검사항목",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "검사항목"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/공지사항 등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "공지사항 등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/DB 동기화",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "DB 동기화"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/직급정보",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "직급정보"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/자재단가변동등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "자재단가변동등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/자재단가변동현황",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "자재단가변동현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/공정단가변동등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "공정단가변동등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "20300_김민수",
+      "menu_name": "기준정보/공통/공정단가변동현황",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "공정단가변동현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리",
+      "menu_path": [
+        "구매관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리/원재료",
+      "menu_path": [
+        "구매관리",
+        "원재료"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리/원재료/원재료 발주",
+      "menu_path": [
+        "구매관리",
+        "원재료",
+        "원재료 발주"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리/원재료/원재료 입고",
+      "menu_path": [
+        "구매관리",
+        "원재료",
+        "원재료 입고"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리/원재료/원재료 입고확정",
+      "menu_path": [
+        "구매관리",
+        "원재료",
+        "원재료 입고확정"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리/원재료/원재료 발주현황",
+      "menu_path": [
+        "구매관리",
+        "원재료",
+        "원재료 발주현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리/구매품",
+      "menu_path": [
+        "구매관리",
+        "구매품"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리/구매품/구매품 발주",
+      "menu_path": [
+        "구매관리",
+        "구매품",
+        "구매품 발주"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리/구매품/구매품 입고",
+      "menu_path": [
+        "구매관리",
+        "구매품",
+        "구매품 입고"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리/구매품/구매품 입고확정",
+      "menu_path": [
+        "구매관리",
+        "구매품",
+        "구매품 입고확정"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리/구매품/구매품 발주현황",
+      "menu_path": [
+        "구매관리",
+        "구매품",
+        "구매품 발주현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리/가공",
+      "menu_path": [
+        "구매관리",
+        "가공"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리/가공/가공계획등록",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "가공계획등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리/가공/공정이력카드",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "공정이력카드"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리/가공/외주가공 발주",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "외주가공 발주"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리/가공/외주가공 입고",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "외주가공 입고"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리/가공/외주가공 입고확정",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "외주가공 입고확정"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리/가공/외주가공발주현황",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "외주가공발주현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "구매관리/가공/가공구매 진척현황",
+      "menu_path": [
+        "구매관리",
+        "가공",
+        "가공구매 진척현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보",
+      "menu_path": [
+        "기준정보"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/생산/품질",
+      "menu_path": [
+        "기준정보",
+        "생산/품질"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/생산/품질/가공공정관리",
+      "menu_path": [
+        "기준정보",
+        "생산/품질",
+        "가공공정관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/생산/품질/가공 기준공정관리",
+      "menu_path": [
+        "기준정보",
+        "생산/품질",
+        "가공 기준공정관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/생산/품질/작업지시 관리",
+      "menu_path": [
+        "기준정보",
+        "생산/품질",
+        "작업지시 관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/생산/품질/공정이력카드",
+      "menu_path": [
+        "기준정보",
+        "생산/품질",
+        "공정이력카드"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통",
+      "menu_path": [
+        "기준정보",
+        "공통"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/사용자정보",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "사용자정보"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/공정관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "공정관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/부품관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "부품관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/자재등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "자재등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/설비등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "설비등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/업체관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "업체관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/사업부정보",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "사업부정보"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/부서정보",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "부서정보"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/아이템 관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "아이템 관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/경비사유",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "경비사유"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/금형타입관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "금형타입관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/기계사양관리",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "기계사양관리"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/검사구분",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "검사구분"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/검사항목",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "검사항목"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/공지사항 등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "공지사항 등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/DB 동기화",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "DB 동기화"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/직급정보",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "직급정보"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/자재단가변동등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "자재단가변동등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/자재단가변동현황",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "자재단가변동현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/공정단가변동등록",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "공정단가변동등록"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    },
+    {
+      "user_key": "10000_이태윤",
+      "menu_name": "기준정보/공통/공정단가변동현황",
+      "menu_path": [
+        "기준정보",
+        "공통",
+        "공정단가변동현황"
+      ],
+      "can_view": true,
+      "can_save": true,
+      "can_edit": true,
+      "can_delete": false
+    }
+  ]
+}
