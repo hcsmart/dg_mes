@@ -105,22 +105,32 @@ step(2,'영업관리 > 수주현황 : 등록 확인 + 금액 집계');
   console.log('   집계:',d.getElementById('totline')?.textContent);
 }
 
-step(3,'구매관리 > 원재료 발주등록 : order_lines 신규 3건 직접 등록(파트리스트 대체)');
+step(3,'구매관리 > 원재료 발주등록 : 화면에서 제번/자재 선택 → 발주추가 → 저장');
 {
-  // 파트리스트가 비어 있으므로 발주 라인을 직접 생성해 이후 흐름을 검증
-  const parts=DB.parts.slice(0,3), ven=DB.vendors.find(v=>v.vendor_type==='협력업체')||DB.vendors[0];
-  const rows=parts.map((p,i)=>({category:'원재료',status:'발주',vendor_name:ven.vendor_name,job_no:'K26999',
-    item_name:'BRACKET, HINGE',process_code:'A',process_name:'1/1',part_no:p.part_code,part_name:p.part_name,
-    material:DB.materials[0].material_code,spec:`20*100*${200+i}`,order_qty:i+1,unit_price:35000,
-    quote_price:35000*(i+1),order_date:'2026-08-23',required_date:'2026-09-05'}));
-  const f=makeFetch();
-  await f('https://x/rest/v1/order_lines',{method:'POST',body:JSON.stringify(rows)});
-  console.log('   order_lines',DB.order_lines.length,'건 (발주)');
+  const w=await open('material_order_input.html'); const d=w.document;
+  console.log('   제번 목록',cnt(w,'#jobBody tr'),'행 / 업체',cnt(w,'#venBody tr'),'행');
+  // 제번·업체 선택
+  d.querySelector('#jobBody tr')?.click(); d.querySelector('#venBody tr')?.click();
+  await new Promise(r=>setTimeout(r,200));
+  const bom=cnt(w,'#bomBody tr'); console.log('   자재표(BOM)',bom,'행');
+  d.querySelectorAll('#bomBody input[type=checkbox]').forEach((c,i)=>{if(i<3)c.checked=true});
+  const push=[...d.querySelectorAll('button')].find(b=>/추가|▼/.test(b.textContent));
+  push?.click(); await new Promise(r=>setTimeout(r,200));
+  console.log('   구매요청 리스트',cnt(w,'#reqBody tr'),'행');
+  const save=[...d.querySelectorAll('button')].find(b=>/저장/.test(b.textContent));
+  save?.click(); await new Promise(r=>setTimeout(r,600));
+  console.log(' →',okmsg(w));
+  console.log('   order_lines',DB.order_lines.length,'건, 상태별:',JSON.stringify(DB.order_lines.reduce((a,l)=>{a[l.status]=(a[l.status]||0)+1;return a},{})));
 }
 
-step(4,'구매관리 > 원재료 입고등록 : 발주건 조회 → 입고처리');
+step(4,'구매관리 > 원재료 입고등록 : 저장가드 팝업 → 적용 → 저장');
 {
   const w=await open('material_receipt_input.html'); const d=w.document;
+  let alertMsg=''; w.alert=t=>alertMsg=t;
+  // (가드 검증) 적용 없이 저장부터 누르기
+  const saveBtn=[...d.querySelectorAll('button')].find(b=>/저장/.test(b.textContent));
+  saveBtn.click(); await new Promise(r=>setTimeout(r,200));
+  console.log('   [적용 없이 저장] 팝업:', alertMsg? '「'+alertMsg.split('\\n')[0]+'」':'없음(문제)');
   console.log('   조회된 발주',cnt(w,'tbody tr'),'행');
   // 전 행 체크 후 입고처리
   d.querySelectorAll('tbody input[type=checkbox]').forEach(c=>c.checked=true);
@@ -129,8 +139,7 @@ step(4,'구매관리 > 원재료 입고등록 : 발주건 조회 → 입고처�
   const rec=[...d.querySelectorAll('button')].find(b=>/적용/.test(b.textContent));
   if(rec){rec.click();await new Promise(r=>setTimeout(r,600));}
   console.log('   [적용] 후 상태별:',JSON.stringify(DB.order_lines.reduce((a,l)=>{a[l.status]=(a[l.status]||0)+1;return a},{})));
-  const save=[...d.querySelectorAll('button')].find(b=>/저장/.test(b.textContent));
-  if(save){save.click();await new Promise(r=>setTimeout(r,700));}
+  saveBtn.click(); await new Promise(r=>setTimeout(r,700));
   console.log(' →',okmsg(w));
   console.log('   상태별:',JSON.stringify(DB.order_lines.reduce((a,l)=>{a[l.status]=(a[l.status]||0)+1;return a},{})));
 }
@@ -165,6 +174,17 @@ step(6,'검사 불합격 흐름 : 남은 입고건 NG → 발주 롤백');
     console.log(' →',okmsg(w));
     console.log('   상태별:',JSON.stringify(DB.order_lines.reduce((a,l)=>{a[l.status]=(a[l.status]||0)+1;return a},{})));
   }
+}
+
+step('6.5','구매관리 > 원재료 입고확정 : 검사 합격건 표시 + 가드 팝업');
+{
+  const w=await open('material_receipt_confirmation.html'); const d=w.document;
+  let alertMsg=''; w.alert=t=>alertMsg=t;
+  console.log('   표시(입고/확정)',cnt(w,'tbody tr'),'행');
+  const saveBtn=[...d.querySelectorAll('button')].find(b=>/저장/.test(b.textContent));
+  saveBtn?.click(); await new Promise(r=>setTimeout(r,200));
+  const done=DB.order_lines.filter(l=>l.status==='입고확정').length;
+  console.log('   [저장] 가드:', alertMsg?'팝업 표시 「'+alertMsg.split('\\n')[0]+'」':(done?`확정 ${done}건 존재 → 정상 저장(팝업 불필요)`:'없음(문제)'));
 }
 
 step(7,'구매관리 > 원재료 발주현황 : 최종 상태 확인');
