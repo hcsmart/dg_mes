@@ -9,7 +9,7 @@ const store={get(){try{return localStorage.getItem(LS)}catch(e){return null}},se
 const AUTH={session:null,perms:null,role:null,name:null,
   get token(){return AUTH.session?.access_token||null},
   can(menu,right){ /* right: view|save|edit|delete */
-    if(AUTH.role==='admin')return true;
+    if(AUTH.role==='master'||AUTH.role==='admin')return true;
     if(!AUTH.perms)return right==='view';        /* 권한자료 없으면 조회만 */
     const hit=(m)=>AUTH.perms.find(p=>p.menu_name===m);
     /* 화면 권한 → 없으면 상위(중분류/모듈) 권한 상속 */
@@ -72,7 +72,7 @@ function ui(){
     <label>이름 (또는 아이디)</label><input id="lgEmail" type="text" autocomplete="username" placeholder="예: 김민수">
     <label>비밀번호</label><input id="lgPw" type="password" autocomplete="current-password" placeholder="6자리 이상">
     <button id="lgBtn">로그인</button><div class="err" id="lgErr"></div>
-    <div class="hintbox">이름과 비밀번호로 로그인합니다. 계정이 없으면 관리자에게 문의하세요.</div>
+    <div class="hintbox">이름 또는 아이디와 비밀번호로 로그인합니다. 계정이 없으면 관리자에게 문의하세요.</div>
   </div>`;
   document.body.appendChild(div);
   const go=async()=>{
@@ -99,7 +99,7 @@ function ui(){
 function applyMenuPermissions(){
   /* 좌측 트리·상단 모듈에서 조회권한 없는 항목 숨김 */
   try{
-    if(AUTH.role==='admin')return;
+    if(AUTH.role==='master'||AUTH.role==='admin')return;
     document.querySelectorAll('[data-menu-path]').forEach(el=>{
       if(!AUTH.can(el.dataset.menuPath,'view'))el.style.display='none';
     });
@@ -114,12 +114,13 @@ async function changePassword(){
   if(p1!==p2)return alert('두 입력이 일치하지 않습니다.');
   try{
     await api('/auth/v1/user',{method:'PUT',body:JSON.stringify({password:p1})},true);
+    try{await api('/rest/v1/rpc/invalidate_temp_password',{method:'POST',body:'{}'},true)}catch(e){}
     alert('비밀번호가 변경되었습니다. 다음 로그인부터 새 비밀번호를 사용하세요.');
   }catch(e){alert('변경 실패: '+e.message)}
 }
 function userBadge(){
   const u=document.querySelector('.user');
-  if(u&&AUTH.name)u.innerHTML=`${AUTH.name} (${AUTH.role==='admin'?'관리자':'사용자'}) &nbsp;`+
+  if(u&&AUTH.name)u.innerHTML=`${AUTH.name} (${AUTH.role==='master'?'마스터':AUTH.role==='admin'?'관리자':'사용자'}) &nbsp;`+
     `<a href="#" id="pwchg" style="font-size:11px">비밀번호 변경</a> · `+
     `<a href="#" id="lgout" style="font-size:11px">로그아웃</a>`;
   document.getElementById('pwchg')?.addEventListener('click',e=>{e.preventDefault();changePassword()});

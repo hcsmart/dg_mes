@@ -99,8 +99,8 @@ button,input,select{font:inherit;color:inherit}button{cursor:pointer}
           <div class="lab">사원번호</div><input id="d_employee_no" class="field">
           <div class="lab">사용여부</div><div class="check"><input id="d_active" type="checkbox"></div>
           <div class="lab">비고</div><input id="d_remark" class="field">
-        <div class="lab">로그인메일</div><input id="d_auth_email" class="field" placeholder="user@dgmes.demo">
-        <div class="lab">권한역할</div><select id="d_role" class="field"><option value="user">user</option><option value="admin">admin</option></select>
+        <div class="lab">비밀번호</div><input id="d_pw" class="field" value="******" readonly><div class="lab">로그인메일</div><input id="d_auth_email" class="field" placeholder="user@dgmes.demo">
+        <div class="lab">권한역할</div><select id="d_role" class="field"><option value="user">user</option><option value="admin">admin</option><option value="master">master</option></select>
         </div>
       </div>
 
@@ -110,6 +110,7 @@ button,input,select{font:inherit;color:inherit}button{cursor:pointer}
         <button class="btn" onclick="deleteUser()">✖ 삭제</button>
         <button class="btn primary" onclick="registerUser()">＋ 신규 사용자 등록</button>
         <button class="btn" onclick="resetPassword()">🔑 비밀번호 재설정</button>
+        <button class="btn" id="btnShowPw" onclick="togglePasswords()" style="display:none">👁 비밀번호 보기 (마스터)</button>
         <button class="btn" onclick="expandAll(true)">⊞ 전체펼침</button>
         <button class="btn" onclick="expandAll(false)">⊟ 접기</button>
         <button class="btn primary" onclick="savePermissions()">🔒 권한저장</button>
@@ -171,7 +172,7 @@ function selectUser(key){
   d_email.value=u.email||'';
   d_employee_no.value=u.employee_no||'';
   d_active.checked=!!u.is_active;
-  d_remark.value=u.remark||'';if(window.d_auth_email)d_auth_email.value=u.auth_email||'';if(window.d_role)d_role.value=u.role||'user';
+  d_remark.value=u.remark||'';if(window.d_auth_email)d_auth_email.value=u.auth_email||'';fillPassword(u);if(window.d_role)d_role.value=u.role||'user';
   renderPermissions(u,true);
   renderUsers();
   message.textContent=`${u.name} 사용자정보를 표시합니다.`;
@@ -250,6 +251,31 @@ function setAll(r,on){
   renderPermissions(users.find(x=>x.user_key===selectedKey));
   message.textContent=`전체 메뉴의 ${RIGHTS.find(x=>x[0]===r)[1]} 권한을 ${on?'부여':'해제'}했습니다.`;
 }
+let PWMAP=null, PW_SHOWN=false;
+function myRole(){try{return (window.MES_AUTH||window.parent.MES_AUTH)?.role||null}catch(e){return null}}
+function isMaster(){return myRole()==='master'}
+function fillPassword(u){
+  const el=document.getElementById('d_pw'); if(!el)return;
+  if(!PW_SHOWN||!PWMAP){el.value='******';el.title='';return}
+  const p=PWMAP[u?.user_id];
+  if(!p){el.value='(발급 기록 없음)';el.title='이 계정은 발급 비밀번호 기록이 없습니다.';return}
+  el.value=p.temp_password;
+  el.title=p.changed_by_user?'본인이 비밀번호를 변경했습니다. 아래 값은 더 이상 유효하지 않습니다.':'발급 시각 '+String(p.issued_at).slice(0,16);
+  el.style.color=p.changed_by_user?'#c62828':'';
+}
+async function togglePasswords(){
+  if(!isMaster())return message.textContent='마스터 계정만 비밀번호를 확인할 수 있습니다.';
+  if(PW_SHOWN){PW_SHOWN=false;fillPassword(users.find(x=>x.user_key===selectedKey));
+    btnShowPw.textContent='👁 비밀번호 보기 (마스터)';return message.textContent='비밀번호를 가렸습니다.'}
+  try{
+    const rows=await MESDB.rest('rpc/master_passwords',{method:'POST',body:'{}'});
+    PWMAP={}; rows.forEach(r=>{if(r.user_id)PWMAP[r.user_id]=r});
+    PW_SHOWN=true; btnShowPw.textContent='🙈 비밀번호 가리기';
+    fillPassword(users.find(x=>x.user_key===selectedKey));
+    const stale=rows.filter(r=>r.changed_by_user).length;
+    message.textContent=`발급 비밀번호를 표시합니다. ${stale?`본인이 변경한 ${stale}건은 붉게 표시되며 현재 값이 아닙니다.`:''} 사용자가 직접 바꾼 비밀번호는 암호화되어 조회할 수 없습니다.`;
+  }catch(e){message.textContent='조회 실패: '+e.message.slice(0,140)}
+}
 async function registerUser(){
   if(window.MES_AUTH?.role!=='admin'&&window.parent?.MES_AUTH?.role!=='admin')
     return message.textContent='관리자만 사용자를 등록할 수 있습니다.';
@@ -269,6 +295,8 @@ async function registerUser(){
 async function resetPassword(){
   const u=users.find(x=>x.user_key===selectedKey);
   if(!u||!u.user_id)return message.textContent='아이디가 있는 사용자를 먼저 선택하세요.';
+  if(u.role==='master'&&!isMaster())
+    return message.textContent='마스터 계정의 비밀번호는 마스터만 변경할 수 있습니다.';
   const pw=prompt(`${u.name}(${u.user_id})의 새 비밀번호 (6자 이상)`); if(!pw)return;
   try{
     await MESDB.rest('rpc/reset_user_password',{method:'POST',body:JSON.stringify({p_user_id:u.user_id,p_password:pw})});
@@ -321,6 +349,12 @@ renderUsers();selectUser(selectedKey);
 <script>
 MESDB.master({page:"user_information:users",table:"users",pk:"user_key",map:{"user_key":"user_key","user_id":"user_id","name":"name","department_code":"department_code","department_name":"department_name","factory":"factory","registered_date":{"col":"registered_date","type":"text"},"position_code":"position_code","position_name":"position_name","user_group":"user_group","is_active":{"col":"is_active","type":"bool"},"english_name":"english_name","business_division":"business_division","process_group":"process_group","mobile_phone":"mobile_phone","email":"email","phone":"phone","employee_no":"employee_no","remark":"remark","auth_email":"auth_email","role":"role"},get:()=>users,render:()=>{renderUsers();selectUser(selectedKey||users[0]?.user_key)}});
 MESDB.table("user_permissions").select("select=*").then(rs=>{permissions.length=0;permissions.push(...rs);renderPermissions(users.find(x=>x.user_key===selectedKey),true)}).catch(()=>{});
+
+/* 마스터 계정일 때만 비밀번호 보기 버튼 노출 */
+function refreshMasterUI(){try{const b=document.getElementById('btnShowPw');if(b)b.style.display=isMaster()?'':'none';const r=document.getElementById('d_role');if(r){const opt=[...r.options].find(o=>o.value==='master');if(opt)opt.disabled=!isMaster()}}catch(e){}}
+refreshMasterUI();
+[200,800,2000].forEach(t=>setTimeout(refreshMasterUI,t));
+try{window.parent.addEventListener('mes-auth-ready',refreshMasterUI)}catch(e){}
 </script>
 </body>
 </html>
