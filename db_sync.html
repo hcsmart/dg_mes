@@ -6,6 +6,7 @@ table{border-collapse:collapse;width:100%;margin-top:10px}th,td{border:1px solid
 <div class="box">① 같은 폴더의 *.json을 읽어 올립니다 (GitHub Pages/웹서버에서 열었을 때). file:// 로 열었다면 ②에서 json 파일들을 선택하세요.<br>
 <button class="btn primary" onclick="syncFromUrl()">▣ 폴더 JSON → DB 업서트</button><button class="btn" onclick="retryFailed()">↻ 실패분 재시도</button>
 <input type="file" id="files" multiple accept=".json" onchange="syncFromFiles(this.files)"> <span id="msg"></span></div>
+<div class="box" style="border-color:#c98b8b;background:#fff8f8"><b>공정 진행 테스트 준비</b> — 기준정보(업체·품번·자재·공정·검사·사용자 등)는 그대로 두고 <u>거래 데이터만</u> 전부 지웁니다. 수주등록부터 처음 흐름을 따라가며 테스트할 때 사용하세요.<br><button class="btn" style="color:#a33" onclick="resetTx()">⟲ 거래데이터 초기화 (마스터 유지)</button> <span id="txmsg"></span></div>
 <div class="box">화면 저장본(page_state): 각 화면에서 저장/삭제한 내용이 자동 저장된 곳입니다. <button class="btn" onclick="listStates()">목록</button> <button class="btn" onclick="clearStates()">전체 초기화(원본 JSON 상태로)</button></div>
 <table><thead><tr><th>테이블</th><th>PK</th><th>JSON 건수</th><th>DB 건수</th><th>결과</th></tr></thead><tbody id="body"></tbody></table>
 <script src="mes_db.js"></script>
@@ -37,6 +38,17 @@ async function syncFromUrl(only){const list=ordered(only||Object.keys(TABLES));F
   msg(FAILED.length?`완료 (실패 ${FAILED.length}건 - 실패분 재시도 버튼을 누르세요)`:'완료 - 전체 성공')}
 async function retryFailed(){if(!FAILED.length)return msg('재시도할 항목이 없습니다.');await syncFromUrl([...FAILED])}
 async function syncFromFiles(fl){msg('읽는 중…');const arr=[...fl].sort((a,b)=>{const i=t=>{const k=ORDER.indexOf(t.name.replace(/\.json$/,''));return k<0?999:k};return i(a)-i(b)});for(const f of arr){const t=f.name.replace(/\.json$/,'');if(!TABLES[t])continue;try{await upsert(t,JSON.parse(await f.text()))}catch(e){line(t,TABLES[t],'-','-',e.message,'err')}}msg('완료')}
+async function resetTx(){
+  if(!confirm('제번·수주·발주·입고·검사·계획 등 거래 데이터를 모두 삭제합니다.\n기준정보와 사용자 정보는 유지됩니다.\n계속하시겠습니까?'))return;
+  const el=document.getElementById('txmsg'); el.textContent='초기화 중…';
+  try{
+    const r=await MESDB.rest('rpc/reset_demo_transactions',{method:'POST',body:'{}'});
+    const gone=(r||[]).filter(x=>x.deleted>0);
+    const total=gone.reduce((a,b)=>a+Number(b.deleted),0);
+    el.textContent=`완료 - ${gone.length}개 테이블에서 ${total}건 삭제. 이제 영업관리 > 수주등록부터 시작하세요.`;
+    body.innerHTML=''; for(const t of Object.keys(TABLES))line(t,TABLES[t],'',await countDb(t),'');
+  }catch(e){el.textContent='초기화 실패: '+e.message.slice(0,160)}
+}
 async function listStates(){try{const r=await MESDB.table('page_state').select('select=page,updated_at');msg(r.length?r.map(x=>x.page+' ('+x.updated_at.slice(0,16)+')').join(', '):'저장본 없음')}catch(e){msg('DB 연결 실패: '+e.message)}}
 async function clearStates(){try{if(!confirm('모든 화면 저장본을 삭제하고 원본 JSON 상태로 되돌립니까?'))return;await MESDB.rest('page_state?page=neq.__none__',{method:'DELETE'});msg('초기화 완료')}catch(e){msg('DB 연결 실패: '+e.message)}}
 (async()=>{for(const t of Object.keys(TABLES))line(t,TABLES[t],'',await countDb(t),'')})();
