@@ -75,5 +75,6 @@ function msg(t){message.textContent=t}window.MES={search,add,delete:remove,save,
 </script>
 <script src="mes_db.js?v=25"></script>
 <script>MESDB.master({page:"machining_process_management",table:"processes",pk:"code",map:{"code": "process_code", "name": "process_name", "group": "process_group", "order": {"col": "sort_order", "type": "num"}, "complete": {"col": "completion_progress", "type": "num"}, "progress": {"col": "use_progress", "type": "ynbool"}, "plan": {"col": "use_plan", "type": "ynbool"}, "remark": "remark"},get:()=>data,render:()=>{view=[...data];render()}});</script>
+<script src="mes_ctx.js?v=1"></script>
 </body>
 </html>

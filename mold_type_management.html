@@ -37,4 +37,5 @@ function msg(t){message.textContent=t}window.MES={search,add,delete:remove,save,
 </script>
 <script src="mes_db.js?v=25"></script>
 <script>MESDB.master({page:"mold_type_management",table:"mold_types",pk:"code",map:{"code": "mold_type_code", "name": "mold_type_name", "remark": "remark"},get:()=>data,render:()=>{view=[...data];render()}});</script>
+<script src="mes_ctx.js?v=1"></script>
 </body></html>

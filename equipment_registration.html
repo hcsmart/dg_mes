@@ -38,4 +38,5 @@ function exportCsv(){const header=["설비코드", "설비명", "설비그룹", 
 function msg(t){message.textContent=t} window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script><script src="mes_db.js?v=25"></script>
 <script>MESDB.master({page:"equipment_registration",table:"equipment",pk:"code",map:{"code": "equipment_code", "name": "equipment_name", "group": "equipment_group", "remark": "remark", "use": {"col": "is_active", "type": "ynbool"}},get:()=>data,render:()=>{view=[...data];render()}});</script>
+<script src="mes_ctx.js?v=1"></script>
 </body></html>

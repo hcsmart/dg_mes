@@ -37,4 +37,5 @@ function msg(t){message.textContent=t}window.MES={search,add,delete:remove,save,
 </script>
 <script src="mes_db.js?v=25"></script>
 <script>MESDB.master({page:"inspection_item_management",table:"inspection_items",pk:"code",map:{"code": "inspection_item_code", "name": "inspection_item_name", "group": "inspection_group", "remark": "criteria"},get:()=>data,render:()=>{view=[...data];render()}});</script>
+<script src="mes_ctx.js?v=1"></script>
 </body></html>

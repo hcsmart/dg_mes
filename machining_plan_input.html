@@ -66,4 +66,5 @@ window.MES={search,save,setMessage:msg};render();</script><script src="mes_db.js
 MESDB.master({page:"machining_plan_input:heads",table:"machining_plans",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "process_code": "process_code", "machining_completion_date": {"col": "machining_completion_date", "type": "date"}, "s1_date": {"col": "s1_date", "type": "date"}},get:()=>heads,render:()=>{if(typeof view!=="undefined")view=[...heads];(window.render||window.search||function(){})()}});
 MESDB.master({page:"machining_plan_input:parts",table:"machining_plan_parts",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "part_no": "part_no", "part_name": "part_name", "standard_process": "standard_process", "steps": "steps"},get:()=>parts,render:()=>{if(typeof view!=="undefined")view=[...heads];(window.render||window.search||function(){})()}});
 </script>
+<script src="mes_ctx.js?v=1"></script>
 </body></html>

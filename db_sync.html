@@ -52,4 +52,5 @@ async function resetTx(){
 async function listStates(){try{const r=await MESDB.table('page_state').select('select=page,updated_at');msg(r.length?r.map(x=>x.page+' ('+x.updated_at.slice(0,16)+')').join(', '):'저장본 없음')}catch(e){msg('DB 연결 실패: '+e.message)}}
 async function clearStates(){try{if(!confirm('모든 화면 저장본을 삭제하고 원본 JSON 상태로 되돌립니까?'))return;await MESDB.rest('page_state?page=neq.__none__',{method:'DELETE'});msg('초기화 완료')}catch(e){msg('DB 연결 실패: '+e.message)}}
 (async()=>{for(const t of Object.keys(TABLES))line(t,TABLES[t],'',await countDb(t),'')})();
-</script></body></html>
+</script><script src="mes_ctx.js?v=1"></script>
+</body></html>

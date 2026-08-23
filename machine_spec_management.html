@@ -37,4 +37,5 @@ function msg(t){message.textContent=t}window.MES={search,add,delete:remove,save,
 </script>
 <script src="mes_db.js?v=25"></script>
 <script>MESDB.master({page:"machine_spec_management",table:"machine_specs",pk:"code",map:{"code": "machine_spec_code", "name": "machine_spec_name", "remark": "remark"},get:()=>data,render:()=>{view=[...data];render()}});</script>
+<script src="mes_ctx.js?v=1"></script>
 </body></html>

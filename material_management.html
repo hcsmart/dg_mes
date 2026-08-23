@@ -38,4 +38,5 @@ function exportCsv(){const header=["자재코드", "자재명", "자재그룹", 
 function msg(t){message.textContent=t} window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script><script src="mes_db.js?v=25"></script>
 <script>MESDB.master({page:"material_management",table:"materials",pk:"code",map:{"code": "material_code", "name": "material_name", "group": "material_group", "density": {"col": "density", "type": "num"}, "thickness": {"col": "thickness", "type": "num"}, "width": {"col": "width", "type": "num"}, "height": {"col": "height", "type": "num"}, "length": {"col": "length", "type": "num"}, "remark": "remark"},get:()=>data,render:()=>{view=[...data];render()}});</script>
+<script src="mes_ctx.js?v=1"></script>
 </body></html>
