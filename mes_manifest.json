@@ -1,6 +1,6 @@
 {
  "project": "NEXMES photo-driven MES prototype",
- "version": "28",
+ "version": "31",
  "entry": "index.html",
  "updated": "2026-08-23",
  "naming_rule": "<domain>_<action>.html (snake_case, English)",
@@ -878,6 +878,42 @@
    "set_order_receipt.html: 내장 6행 제거",
    "sale_order_input.html 버그 수정 - FK 순서(jobs→sale_orders)가 뒤바뀌어 빈 DB 첫 저장이 실패하던 문제",
    "sale_order_input.html: 같은 제번 재저장 시 수주현황에 중복행이 쌓이던 문제 수정(기존 row_no 재사용)"
+  ]
+ },
+ "changelog_v29": {
+  "작업지시 실전화 (제번 기준)": [
+   "work_order_details 재설계 - PK work_order_no, FK job_no->jobs / part_no->parts",
+   "next_work_order_no() 자동채번 (WO-YYMMDD-NNN)",
+   "트리거: 실적수량 기준 상태 자동판정(지시→진행→완료) + 착수일·완료일 자동",
+   "트리거: 실적이 등록된 지시는 삭제 차단",
+   "completed_qty 는 generated column (양품+불량)",
+   "work_order_input.html 전면 재작성 - 좌 제번리스트(set_order_job_pool) / 우 작업지시 인라인 편집",
+   "저장·신규·삭제 버튼 신설 (기존에는 버튼 자체가 없어 수정·삭제 불가였음)",
+   "변경행 표시(dirty), 실적수량>지시량 검증, 제번별 지시건수·진행/완료 집계",
+   "mes_db.js: MESDB.rpc() 헬퍼 추가"
+  ]
+ },
+ "changelog_v30": {
+  "작업지시 설비/공정 조회 팝업": [
+   "work_order_input.html: 작업장코드·공정코드를 자유입력 → 마스터 조회 팝업으로 변경",
+   "equipment(설비) / processes(공정) 마스터를 DB에서 직접 조회, 첫 조회 후 캐시",
+   "설비는 사용여부(is_active) 필터 기본 ON, 공정은 공정그룹·순서로 정렬",
+   "코드/명칭 입력칸은 readonly - 마스터에 없는 값 입력 불가",
+   "셀의 … 버튼 또는 더블클릭으로 열기, Enter 선택 / Esc·배경클릭 닫기, 지우기 지원",
+   "선택 시 코드·명칭 동시 반영 및 변경행 표시 유지"
+  ]
+ },
+ "changelog_v31": {
+  "기본정보 마스터 직결 (전 메뉴 유기 연결)": [
+   "공용 모듈 mes_lookup.js 신설 - 거래처/고객사/사원/자재/부품/공정/설비/금형타입/기계사양/사업부/아이템/검사구분/검사항목/제번 조회를 한 곳에서",
+   "MESLOOK.open(팝업) / bindPair(코드·명칭 쌍) / rows·names(목록) / fillSelect(드롭다운) / invalidate(캐시 무효화)",
+   "수주등록: 하드코딩 LOOKUPS(사원 21·거래처 등) 전량 제거 → MESLOOK DB 직결, 판독불가 빈 이름(cyc/dongu) 자동 제외",
+   "발주 4종 협력업체 DB 직결 - 구매품(purchase_item_flag)/원재료(raw_material_flag)/외주가공(outsourcing_flag)/외주설계(outsourced_design_partners)",
+   "vendors 에 발주화면 판독 업체 30개 보강(누락 insert + 기존 flag 세팅), 외주설계 파트너 6개 보강",
+   "조립실적: 작업자 목록 → employees 마스터",
+   "검사실적: 검사구분/검사항목/검사자/입고라인 이미 DB 직결 확인",
+   "MESDB.ready(초기 접속 프라미스) 추가 - 첫 화면 로드 시 DB 미연결 오탐 방지, 커스텀 로더 4종에 적용",
+   "흐름 검증: 수주등록 → SET발주 제번리스트 자동 등장 → 검사화면 입고라인 연동"
   ]
  }
 }

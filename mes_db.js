@@ -42,7 +42,12 @@ async function load(){try{const rows=await rest(`page_state?page=eq.${encodeURIC
 async function persist(){if(!online)return;const s=JSON.stringify(snapshot());if(s===last)return;try{await rest('page_state',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify([{page,data:JSON.parse(s),updated_at:new Date().toISOString()}])});last=s;badge('DB 저장됨 '+new Date().toLocaleTimeString('ko-KR'),'#2e7d32')}catch(e){badge('DB 저장실패','#c62828');console.warn('MESDB',e.message)}}
 function bind(p,g){page=p;getter=g;load();document.addEventListener('click',e=>{if(e.target.closest('button,[onclick]')){clearTimeout(timer);timer=setTimeout(persist,400)}},true);document.addEventListener('change',()=>{clearTimeout(timer);timer=setTimeout(persist,400)},true)}
 async function reset(){await rest(`page_state?page=eq.${encodeURIComponent(page)}`,{method:'DELETE'});location.reload()}
-window.MESDB={cfg:CFG,rest,table,bind,persist,reset,get online(){return online}};
+/* RPC (Postgres 함수) 호출 */
+async function rpc(fn,args){
+  const r=await rest('rpc/'+fn,{method:'POST',body:JSON.stringify(args||{})});
+  return Array.isArray(r)?r[0]:r;
+}
+window.MESDB={cfg:CFG,rest,table,bind,persist,reset,rpc,get online(){return online}};
 MESDB.auth=()=>{try{return window.MES_AUTH||window.parent.MES_AUTH||null}catch(e){return null}};
 MESDB.pageMenu=()=>{try{const f=location.pathname.split('/').pop();return window.parent.MES_MENU_OF?.(f)||null}catch(e){return null}};
 MESDB.canSave=()=>{const a=MESDB.auth();if(!a)return true;const m=MESDB.pageMenu();return m?a.can(m,'save'):true};
@@ -52,7 +57,7 @@ document.addEventListener('DOMContentLoaded',()=>{const a=MESDB.auth();if(!a||a.
   document.querySelectorAll('button[onclick]').forEach(b=>{const oc=b.getAttribute('onclick');
     if(/save|receive|confirm|apply|register/i.test(oc)&&!cs||/remove|del|cancel/i.test(oc)&&!cd){
       b.disabled=true;b.title='권한이 없습니다';b.style.opacity=.45}});});
-MESDB.ping=async()=>{try{await rest('page_state?select=page&limit=1');online=true}catch(e){online=false}return online};MESDB.ping();
+MESDB.ping=async()=>{try{await rest('page_state?select=page&limit=1');online=true}catch(e){online=false}return online};MESDB.ready=MESDB.ping();
 })();
 
 /* ── v17: 마스터 화면 ↔ 정규화 테이블 직결 ──────────────────────────

@@ -66,7 +66,7 @@
 <script>
 const JOBS=[];
 const STEPS=[];
-const WORKERS=['강지우','윤서연','최현우','박민준','임태윤','황태윤','권소율','안지우','안서연','장소율','권민준'];
+let WORKERS=[];  /* 작업자는 사원 마스터에서 로드 */
 const RESULTS={};
 let jobIdx=0,stepIdx=0,jobView=[...JOBS];
 function key(){return `${jobView[jobIdx]?.job}|${STEPS[stepIdx]?.mp}`}
@@ -93,5 +93,15 @@ renderJobs();renderSteps();renderResults();window.MES={search,save:addResult,exp
 <script src="mes_db.js?v=25"></script>
 <script>MESDB.bind("assembly_result_input",()=>({JOBS,STEPS,WORKERS}));</script>
 <script src="mes_ctx.js?v=1"></script>
+<script src="mes_lookup.js?v=1"></script>
+<script>
+(async function(){
+ try{
+  WORKERS.length=0;WORKERS.push(...await MESLOOK.names('employee'));
+  if(typeof renderWorkers==='function')renderWorkers();
+  if(typeof fillWorkers==='function')fillWorkers();
+ }catch(e){}
+})();
+</script>
 </body>
 </html>

@@ -55,7 +55,7 @@
 
 <script>
 const JOBS=[];
-const VENDORS=['가강텍','금민공업','달제금속','대웅금속','나건메탈','라건시스템','신호금속','태수메탈'];
+let VENDORS=[];  /* 협력업체는 마스터에서 로드 (mes_lookup.js) */
 const REQ=[];
 let jobIdx=0,venIdx=5,jobView=[...JOBS];
 const n=v=>v==null?'':Number(v).toLocaleString('ko-KR',{maximumFractionDigits:2});
@@ -88,5 +88,25 @@ window.MES={search,save,exportCsv,setMessage:msg,print:printOrder};
 REQ.length=0;/*v22*/if(typeof renderReq==='function')renderReq();
 </script>
 <script src="mes_ctx.js?v=1"></script>
+<script src="mes_lookup.js?v=1"></script>
+<script>
+/* 협력업체 목록: 하드코딩 → 마스터 직결 */
+(async function loadVendors(){
+ try{
+  VENDORS.length=0;
+  VENDORS.push(...await MESLOOK.names('vendor_material'));
+  if(typeof venView!=='undefined'){venView=[...VENDORS]}
+  if(typeof venIdx!=='undefined')venIdx=VENDORS.length?0:-1;
+  if(typeof renderVendors==='function')renderVendors();
+ }catch(e){
+  const m=document.getElementById('message');
+  if(m)m.textContent='협력업체 마스터 조회 실패: '+String(e.message||e).slice(0,100);
+ }
+})();
+window.MESLOOK_RELOAD_VENDORS=async()=>{MESLOOK.invalidate('vendor_material');
+ VENDORS.length=0;VENDORS.push(...await MESLOOK.names('vendor_material'));
+ if(typeof venView!=='undefined')venView=[...VENDORS];
+ if(typeof renderVendors==='function')renderVendors();};
+</script>
 </body>
 </html>
