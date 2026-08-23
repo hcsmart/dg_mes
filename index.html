@@ -225,7 +225,20 @@ function slugify(name){const map={'수주등록':'sale_order_input','수주현�
 function openByName(name){let p=pageRegistry[name];if(!p){const id=slugify(name);p={id,title:name,file:null};pageRegistry[name]=p}openPage(p)}
 function openPage(p){if(!openTabs.has(p.id))openTabs.set(p.id,p);activeId=p.id;renderTabs();renderStage();buildTree();statusMsg.textContent=p.file?`${p.title} 화면을 열었습니다.`:`${p.title} 화면은 사진 등록 대기중입니다.`}
 function renderTabs(){tabs.innerHTML=[...openTabs.values()].map(p=>`<div class="tab ${p.id===activeId?'on':''}" onclick="activate('${p.id}')"><span class="title">${p.title}</span><button class="x" onclick="closeTab('${p.id}',event)">×</button></div>`).join('');requestAnimationFrame(()=>tabs.querySelector('.tab.on')?.scrollIntoView({inline:'nearest'}))}
-function renderStage(){for(const p of openTabs.values()){if(document.getElementById('view_'+p.id))continue;if(p.file){const f=document.createElement('iframe');f.id='view_'+p.id;f.src=p.file+(p.file.includes('?')?'&':'?')+'v='+APP_VER;stage.appendChild(f)}else{const d=document.createElement('div');d.id='view_'+p.id;d.className='placeholder';d.innerHTML=`<div><b>${esc(p.title)}</b><br><br>해당 업무 화면 사진을 주시면 <code>${p.id}.html</code> 형태로 제작해 이 위치에 연결합니다.</div>`;stage.appendChild(d)}}stage.querySelectorAll('iframe,.placeholder').forEach(x=>x.classList.toggle('on',x.id==='view_'+activeId))}
+/* 화면 iframe에 공용 우클릭 메뉴/삭제확인 스크립트 자동 주입
+   (각 HTML을 수정하지 않아도 되며, 이미 들어있는 화면은 건너뜀) */
+function injectCtx(f){
+ try{
+  const doc=f.contentDocument;
+  if(!doc||!doc.body)return;
+  if(doc.__mesCtxInjected||doc.querySelector('script[src*="mes_ctx.js"]'))return;
+  doc.__mesCtxInjected=1;
+  const s=doc.createElement('script');
+  s.src='mes_ctx.js?v='+APP_VER;
+  doc.body.appendChild(s);
+ }catch(e){/* 교차출처(file://)면 무시 — 이때는 각 HTML에 직접 넣어야 함 */}
+}
+function renderStage(){for(const p of openTabs.values()){if(document.getElementById('view_'+p.id))continue;if(p.file){const f=document.createElement('iframe');f.id='view_'+p.id;f.src=p.file+(p.file.includes('?')?'&':'?')+'v='+APP_VER;f.addEventListener('load',()=>injectCtx(f));stage.appendChild(f)}else{const d=document.createElement('div');d.id='view_'+p.id;d.className='placeholder';d.innerHTML=`<div><b>${esc(p.title)}</b><br><br>해당 업무 화면 사진을 주시면 <code>${p.id}.html</code> 형태로 제작해 이 위치에 연결합니다.</div>`;stage.appendChild(d)}}stage.querySelectorAll('iframe,.placeholder').forEach(x=>x.classList.toggle('on',x.id==='view_'+activeId))}
 function activate(id){activeId=id;renderTabs();renderStage();buildTree()}
 function closeTab(id,e){e?.stopPropagation();const ids=[...openTabs.keys()],idx=ids.indexOf(id);openTabs.delete(id);document.getElementById('view_'+id)?.remove();if(activeId===id){activeId=ids[idx+1]||ids[idx-1]||'';if(!openTabs.has(activeId))activeId=[...openTabs.keys()][0]||''}renderTabs();renderStage();buildTree()}
 function closeActive(){if(activeId)closeTab(activeId)}
