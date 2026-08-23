@@ -164,6 +164,10 @@ function renderUsers(){
   countText.textContent=`${list.length}명`;
 }
 function selectUser(key){
+  if(dirty && selectedKey && key!==selectedKey){
+    if(!confirm('저장하지 않은 권한 변경이 있습니다. 저장하지 않고 다른 사용자로 이동할까요?')){return}
+    dirty=false; permLoadedFor=null; markDirty();
+  }
   selectedKey=key;
   const u=users.find(x=>x.user_key===key);
   if(!u)return;
@@ -204,7 +208,14 @@ function rightsCell(menu,path){
   return '<div class="rights">'+RIGHTS.map(([k,l])=>
     `<label><input type="checkbox" data-menu="${esc(menu)}" data-right="${k}" ${p[COL[k]]?'checked':''} onchange="toggleRight(this)">${l}</label>`).join('')+'</div>';
 }
-let permLoadedFor=null;
+let permLoadedFor=null, dirty=false;
+function markDirty(){
+  const b=[...document.querySelectorAll('.actions .btn')].find(x=>/savePermissions/.test(x.getAttribute('onclick')||''));
+  if(!b)return;
+  b.textContent = dirty ? '🔒 권한저장 ●' : '🔒 권한저장';
+  b.style.background = dirty ? 'linear-gradient(#fff6d8,#ffe9a8)' : '';
+  b.title = dirty ? '저장하지 않은 권한 변경이 있습니다' : '';
+}
 function loadPermIndex(u,force){
   if(!force && permLoadedFor===u.user_key) return;   /* 편집 중 값 보존 */
   permIndex=new Map(); permLoadedFor=u.user_key;
@@ -248,7 +259,7 @@ function toggleRight(el){
     const under=[...allMenus()].filter(m=>m.startsWith(menu+'/'));
     under.forEach(m=>{const q=getPerm(m);q[COL[r]]=el.checked;if(r!=='view'&&el.checked)q.can_view=true;if(r==='view'&&!el.checked){q.can_save=q.can_edit=q.can_delete=false}});
   }
-  renderPermissions(users.find(x=>x.user_key===selectedKey));
+  dirty=true; renderPermissions(users.find(x=>x.user_key===selectedKey)); markDirty();
   message.textContent=`${menu} 권한을 변경했습니다. 저장하려면 [권한저장]을 누르세요.`;
 }
 function allMenus(){
@@ -258,7 +269,7 @@ function allMenus(){
 }
 function setAll(r,on){
   allMenus().forEach(m=>{const p=getPerm(m);if(!p)return;p[COL[r]]=on;if(r!=='view'&&on)p.can_view=true;if(r==='view'&&!on){p.can_save=p.can_edit=p.can_delete=false}});
-  renderPermissions(users.find(x=>x.user_key===selectedKey));
+  dirty=true; renderPermissions(users.find(x=>x.user_key===selectedKey)); markDirty();
   message.textContent=`전체 메뉴의 ${RIGHTS.find(x=>x[0]===r)[1]} 권한을 ${on?'부여':'해제'}했습니다.`;
 }
 let PWMAP=null, PW_SHOWN=false;
@@ -325,7 +336,16 @@ async function savePermissions(){
   try{
     await MESDB.rest(`user_permissions?user_key=eq.${encodeURIComponent(u.user_key)}`,{method:'DELETE',headers:{Prefer:'return=minimal'}});
     if(rows.length)await MESDB.table('user_permissions').upsert(rows,'user_key,menu_name');
-    permLoadedFor=null;message.textContent=`${u.name} 권한 ${rows.length}건을 DB에 저장했습니다.`;
+    /* 저장 결과를 DB에서 다시 읽어 실제 반영 건수를 확인 */
+    const back=await MESDB.table('user_permissions').select(`select=*&user_key=eq.${encodeURIComponent(u.user_key)}`);
+    for(let i=permissions.length-1;i>=0;i--)if(permissions[i].user_key===u.user_key)permissions.splice(i,1);
+    permissions.push(...back);
+    permLoadedFor=null; dirty=false; markDirty();
+    let note='';
+    if(u.role==='master'||u.role==='admin')
+      note=` ※ ${u.name}은(는) ${u.role==='master'?'마스터':'관리자'}라 권한 설정과 무관하게 전체 메뉴를 사용합니다.`;
+    else note=' 해당 사용자가 다시 로그인하면 적용됩니다.';
+    message.textContent=`${u.name} 권한 ${back.length}건 저장 확인.${note}`;
   }catch(e){message.textContent='권한 저장 실패: '+e.message.slice(0,140)}
 }
 function copyPermissions(){
