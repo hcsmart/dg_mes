@@ -48,7 +48,11 @@ button,input,select{font:inherit;color:inherit}button{cursor:pointer}
 .full{color:#b03a34;font-weight:700}.none{color:#b03a34}
 .note{padding:10px;color:#7c8993}
 .foot{height:40px;display:flex;align-items:center;padding:5px 10px;border-top:1px solid var(--line);background:#edf2f5;gap:5px}
-.msg{margin-left:8px;color:#687784}.rightmsg{margin-left:auto;color:#7d8993}
+.msg{margin-left:8px;color:#687784}
+#toast{position:fixed;left:50%;top:22px;transform:translateX(-50%) translateY(-14px);z-index:99999;padding:10px 22px;border-radius:4px;font-size:13px;color:#fff;background:#2e7d32;box-shadow:0 4px 16px rgba(0,0,0,.22);opacity:0;pointer-events:none;transition:opacity .18s ease,transform .18s ease}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#toast.err{background:#c62828}
+#toast.warn{background:#ef6c00}.rightmsg{margin-left:auto;color:#7d8993}
 @media(max-width:1000px){.body{grid-template-columns:42% 58%}.detail-grid{grid-template-columns:74px 1fr 74px 1fr}}
 
 /* v21 입력란 배치 보정: 좁은 폭에서 필드를 숨기지 않고 단계적으로 줄바꿈 */
@@ -209,6 +213,14 @@ function rightsCell(menu,path){
     `<label><input type="checkbox" data-menu="${esc(menu)}" data-right="${k}" ${p[COL[k]]?'checked':''} onchange="toggleRight(this)">${l}</label>`).join('')+'</div>';
 }
 let permLoadedFor=null, dirty=false;
+let _toastT=null;
+function toast(text,kind){
+  let el=document.getElementById('toast');
+  if(!el){el=document.createElement('div');el.id='toast';document.body.appendChild(el)}
+  el.textContent=text; el.className='show'+(kind?' '+kind:'');
+  clearTimeout(_toastT);
+  _toastT=setTimeout(()=>{el.className=''},2200);
+}
 function markDirty(){
   const b=[...document.querySelectorAll('.actions .btn')].find(x=>/savePermissions/.test(x.getAttribute('onclick')||''));
   if(!b)return;
@@ -310,8 +322,8 @@ async function registerUser(){
     const rows=await MESDB.table('users').select('select=*');
     users.length=0; users.push(...rows); renderUsers();
     const nu=users.find(x=>x.user_id===uid.trim()); if(nu)selectUser(nu.user_key);
-    message.textContent=`${name} 등록 완료. 이름 또는 아이디(${uid})와 초기 비밀번호로 로그인할 수 있습니다. 권한 영역에서 메뉴 권한을 지정한 뒤 [권한저장]을 누르세요.`;
-  }catch(e){message.textContent='등록 실패: '+e.message.slice(0,140)}
+    message.textContent=`${name} 등록 완료. 이름 또는 아이디(${uid})와 초기 비밀번호로 로그인할 수 있습니다. 권한 영역에서 메뉴 권한을 지정한 뒤 [권한저장]을 누르세요.`;toast(`${name} 사용자가 등록되었습니다`);
+  }catch(e){message.textContent='등록 실패: '+e.message.slice(0,140);toast('사용자 등록 실패','err')}
 }
 async function resetPassword(){
   const u=users.find(x=>x.user_key===selectedKey);
@@ -321,8 +333,8 @@ async function resetPassword(){
   const pw=prompt(`${u.name}(${u.user_id})의 새 비밀번호 (6자 이상)`); if(!pw)return;
   try{
     await MESDB.rest('rpc/reset_user_password',{method:'POST',body:JSON.stringify({p_user_id:u.user_id,p_password:pw})});
-    message.textContent=`${u.name}의 비밀번호를 재설정했습니다.`;
-  }catch(e){message.textContent='재설정 실패: '+e.message.slice(0,140)}
+    message.textContent=`${u.name}의 비밀번호를 재설정했습니다.`;toast('비밀번호가 재설정되었습니다');
+  }catch(e){message.textContent='재설정 실패: '+e.message.slice(0,140);toast('비밀번호 재설정 실패','err')}
 }
 async function savePermissions(){
   const u=users.find(x=>x.user_key===selectedKey); if(!u)return message.textContent='사용자를 선택하세요.';
@@ -332,7 +344,7 @@ async function savePermissions(){
   // 화면 배열도 갱신
   for(let i=permissions.length-1;i>=0;i--)if(permissions[i].user_key===u.user_key)permissions.splice(i,1);
   permissions.push(...rows);
-  if(!window.MESDB||!MESDB.online){message.textContent=`${u.name} 권한 ${rows.length}건을 저장했습니다. (DB 미연결 - 로컬)`;return}
+  if(!window.MESDB||!MESDB.online){message.textContent=`${u.name} 권한 ${rows.length}건을 저장했습니다. (DB 미연결 - 로컬)`;toast('DB 미연결 - 로컬에만 저장됨','warn');return}
   try{
     await MESDB.rest(`user_permissions?user_key=eq.${encodeURIComponent(u.user_key)}`,{method:'DELETE',headers:{Prefer:'return=minimal'}});
     if(rows.length)await MESDB.table('user_permissions').upsert(rows,'user_key,menu_name');
@@ -346,7 +358,8 @@ async function savePermissions(){
       note=` ※ ${u.name}은(는) ${u.role==='master'?'마스터':'관리자'}라 권한 설정과 무관하게 전체 메뉴를 사용합니다.`;
     else note=' 해당 사용자가 다시 로그인하면 적용됩니다.';
     message.textContent=`${u.name} 권한 ${back.length}건 저장 확인.${note}`;
-  }catch(e){message.textContent='권한 저장 실패: '+e.message.slice(0,140)}
+    toast(`권한이 저장되었습니다 (${back.length}건)`);
+  }catch(e){message.textContent='권한 저장 실패: '+e.message.slice(0,140);toast('권한 저장 실패','err')}
 }
 function copyPermissions(){
   const u=users.find(x=>x.user_key===selectedKey); if(!u)return;
@@ -389,8 +402,8 @@ async function deleteUser(){
     const rows=await MESDB.table('users').select('select=*');
     users.length=0; users.push(...rows);
     selectedKey=users[0]?.user_key||''; renderUsers(); if(selectedKey)selectUser(selectedKey);
-    message.textContent=`${name} 사용자를 삭제했습니다. (로그인 계정·메뉴 권한 포함)`;
-  }catch(e){message.textContent='삭제 실패: '+e.message.slice(0,160)}
+    message.textContent=`${name} 사용자를 삭제했습니다. (로그인 계정·메뉴 권한 포함)`;toast(`${name} 사용자를 삭제했습니다`);
+  }catch(e){message.textContent='삭제 실패: '+e.message.slice(0,160);toast('삭제 실패','err')}
 }
 window.MES={search:()=>q.focus(),add:()=>{selectedKey='';},delete:deleteUser,save:saveUser,exportCsv:()=>{},setMessage:t=>message.textContent=t};
 renderUsers();selectUser(selectedKey);
@@ -406,5 +419,6 @@ refreshMasterUI();
 [200,800,2000].forEach(t=>setTimeout(refreshMasterUI,t));
 try{window.parent.addEventListener('mes-auth-ready',refreshMasterUI)}catch(e){}
 </script>
+<div id="toast"></div>
 </body>
 </html>
