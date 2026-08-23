@@ -64,20 +64,8 @@
   <footer class="foot"><button class="btn" onclick="search()">⌕ 검 색</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">제번을 선택하면 세부공정 리스트가 조회됩니다.</span><span class="right" id="countText"></span></footer>
 </div>
 <script>
-const JOBS=[
-{job:'A23007',item:'',due:'2023-01-30',s1:'2023-08-22',cust:'2023-08-22',insp:null,done:false},
-{job:'A24040',item:'',due:'2024-03-19',s1:'2024-03-20',cust:'2024-03-21',insp:0,done:false},
-{job:'A25032',item:'',due:'2025-03-02',s1:'2025-03-02',cust:'2025-03-02',insp:0,done:false},
-{job:'A26026',item:'',due:'2026-12-31',s1:'2026-12-31',cust:'2026-12-31',insp:0,done:false},
-{job:'C14213-S030',item:'BUSBAR',due:'2025-08-10',s1:'2026-08-30',cust:'2026-08-30',insp:0,done:false},
-{job:'C19022-S003',item:'BRACKET',due:'2024-06-09',s1:'2024-06-10',cust:'2024-06-10',insp:0,done:false},
-{job:'C19022-S004',item:'BRACKET',due:'2025-02-05',s1:'2025-02-06',cust:'2025-02-06',insp:0,done:false},
-{job:'C23011',item:'MOTOR BRACKET',due:'2023-04-21',s1:'2023-04-22',cust:'2024-07-30',insp:0,done:false}];
-const STEPS=[
-{mp:'AS',mpName:'래핑,조립',min:null,rate:null,done:false},
-{mp:'CQ',mpName:'품질육성',min:null,rate:null,done:false},
-{mp:'S1',mpName:'S1',min:null,rate:0,done:false},
-{mp:'TO',mpName:'시험',min:null,rate:null,done:false}];
+const JOBS=[];
+const STEPS=[];
 const WORKERS=['강지우','윤서연','최현우','박민준','임태윤','황태윤','권소율','안지우','안서연','장소율','권민준'];
 const RESULTS={};
 let jobIdx=0,stepIdx=0,jobView=[...JOBS];

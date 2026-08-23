@@ -1,6 +1,6 @@
 {
  "project": "NEXMES photo-driven MES prototype",
- "version": "26",
+ "version": "28",
  "entry": "index.html",
  "updated": "2026-08-23",
  "naming_rule": "<domain>_<action>.html (snake_case, English)",
@@ -855,6 +855,29 @@
    "set_order_status.html: 스냅샷(set_order_status_rows) → 뷰 직결, 구분(전체/발주/입고) 필터 실동작",
    "합계줄에 수주가·집행율 추가, 집행율 100% 초과 시 적색 강조, 발주/입고 행 색상 구분",
    "sale_orders 에 SET발주 4개 제번 수주정보 시드"
+  ]
+ },
+ "changelog_v27": {
+  "실적/거래 데이터 초기화 (백지 시작)": [
+   "reset_demo_transactions() 재작성 - 명시적 거래·실적 테이블 목록만 truncate",
+   "DB 초기화 실행: 44개 테이블 약 360행 삭제 (order_lines 48, partlist_purchases 38 등)",
+   "page_state 도 초기화 - 남겨두면 빈 DB 위에 옛 데모 화면이 복원됨",
+   "보존: 기준정보 전체, jobs(제번 51), sale_orders(수주), sale_order_status_rows, set_order_registrations, *_partners",
+   "백업: bak_20260823 스키마에 초기화 대상 47개 테이블 전량 복사",
+   "화면 내장 사진데이터 제거 - 총 144행 (거래·실적 성격만, 기준정보는 유지)",
+   "design_result_inquiry / design_result_status / purchase_status / mold_code_matching 을 bind → MESDB.master 로 전환"
+  ]
+ },
+ "changelog_v28": {
+  "수주부터 직접 등록하는 백지 상태": [
+   "jobs / sale_orders / sale_order_status_rows / set_order_registrations 초기화 (bak_20260823 에 백업)",
+   "reset_demo_transactions() 에 제번·수주 포함 - 언제든 동일 백지 상태로 복원 가능",
+   "뷰 set_order_job_pool 신설: SET발주 제번리스트를 별도 마스터가 아닌 '수주'에서 직접 조회",
+   "set_order_job_list 를 set_order_job_pool 기반으로 재작성",
+   "set_order_registration.html: 제번리스트 → set_order_job_pool, 내장 12행 제거, 새로고침 버튼 추가",
+   "set_order_receipt.html: 내장 6행 제거",
+   "sale_order_input.html 버그 수정 - FK 순서(jobs→sale_orders)가 뒤바뀌어 빈 DB 첫 저장이 실패하던 문제",
+   "sale_order_input.html: 같은 제번 재저장 시 수주현황에 중복행이 쌓이던 문제 수정(기존 row_no 재사용)"
   ]
  }
 }
