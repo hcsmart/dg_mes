@@ -104,7 +104,7 @@ table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th
 <div class="secthead">첨부파일</div>
 <div class="toolbar"><button class="btn" onclick="msg('프로토타입에서는 파일첨부를 지원하지 않습니다.')">파일첨부</button><button class="btn" onclick="msg('다운로드 대상 파일이 없습니다.')">다운로드</button><button class="btn" onclick="msg('미리보기 대상 파일이 없습니다.')">미리보기</button><button class="btn" onclick="msg('삭제할 파일이 없습니다.')">파일삭제</button></div>
 <div class="att"><table style="min-width:900px"><thead><tr><th style="width:34px"></th><th>파일명</th><th style="width:150px">Version</th><th style="width:280px">파일내용</th><th style="width:90px">크기</th><th style="width:90px">확장자</th></tr></thead><tbody id="attBody"><tr><td colspan="6" class="c" style="height:64px;color:#8a97a2">첨부파일이 없습니다.</td></tr></tbody></table></div>
-<footer class="foot"><button class="btn" onclick="save()">▤ 저장</button><button class="btn" onclick="clearForm()">✕ 신규</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">사진 기준 초기값을 표시했습니다.</span></footer>
+<footer class="foot"><button class="btn" onclick="save()">▤ 저장</button><button class="btn" onclick="clearForm()">✕ 신규</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">제번 등 필수항목을 입력하고 저장하세요.</span></footer>
 </div>
 
 <div class="mask" id="mask" onclick="if(event.target===mask)closeLook()"><div class="dlg">
@@ -168,16 +168,28 @@ async function save(){
  for(const k of DATEF)if(o[k]==='')o[k]=null;
  if(!window.MESDB||!MESDB.online){msg(`${o.job_no} 저장했습니다. (DB 미연결 - 로컬)`);return}
  try{
-  await MESDB.table('sale_orders').upsert(o,'job_no');
+  /* FK 순서: jobs(부모) → sale_orders → 수주현황 */
   await MESDB.table('jobs').upsert({job_no:o.job_no,item_name:o.item_name,customer_name:o.customer_name,
     order_status:o.order_status,order_date:o.order_date,source_count:1},'job_no');
-  await MESDB.table('sale_order_status_rows').upsert({row_no:Date.now()%2000000000,job_no:o.job_no,model:o.model,
+  await MESDB.table('sale_orders').upsert(o,'job_no');
+  /* 같은 제번을 다시 저장해도 현황에 중복행이 생기지 않도록 기존 row_no 재사용 */
+  let rowNo=null;
+  try{
+   const ex=await MESDB.table('sale_order_status_rows')
+     .select(`select=row_no&job_no=eq.${encodeURIComponent(o.job_no)}&limit=1`);
+   if(ex&&ex[0])rowNo=ex[0].row_no;
+   if(rowNo==null){
+    const mx=await MESDB.table('sale_order_status_rows').select('select=row_no&order=row_no.desc&limit=1');
+    rowNo=(mx&&mx[0]?Number(mx[0].row_no):0)+1;
+   }
+  }catch(e){rowNo=Date.now()%2000000000}
+  await MESDB.table('sale_order_status_rows').upsert({row_no:rowNo,job_no:o.job_no,model:o.model,
     drawing_no:o.drawing_no,item_name:o.item_name,eco:o.eco,customer_name:o.customer_name,set_qty:o.process_set_qty,
     development_type:o.development_type,order_type:o.order_type,mold_type_name:o.mold_type_name,
     machine_spec_name:o.machine_spec_name,order_date:o.order_date,s1_planned_date:o.s1_planned_date,
     completion_date:o.completion_date,mass_production_vendor_name:o.mass_production_vendor_name,
     order_status:o.order_status,plant_name:o.plant_name},'row_no');
-  msg(`${o.job_no} 수주를 DB에 저장했습니다. (sale_orders / jobs / 수주현황 반영)`);
+  msg(`${o.job_no} 수주를 저장했습니다. (제번·수주·수주현황 반영 / 현황 No.${rowNo})`);
  }catch(e){msg('DB 저장 실패: '+e.message.slice(0,140))}
 }
 window.MES={save,clearForm,setMessage:msg};

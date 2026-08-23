@@ -1289,6 +1289,54 @@
     "receipt_status": "text (미완료|완료)"
    },
    "note": "SET발주입고 화면의 제번리스트 (발주가 존재하는 제번만)"
+  },
+  "set_order_status_view": {
+   "source": "set_order_lines × sale_orders × sale_order_status_rows × set_order_registrations × jobs",
+   "grain": "SET발주 라인 1건 (제번 × 협력업체 × 조수 × 공정)",
+   "columns": {
+    "row_no": "bigint",
+    "line_id": "bigint",
+    "job_no": "text",
+    "status": "text (발주|입고|입고확정)",
+    "item_name": "text?",
+    "model": "text?",
+    "domestic_overseas": "text?",
+    "customer_name": "text?",
+    "order_price": "numeric? (수주가 = sale_orders.order_price)",
+    "set_seq": "text",
+    "process_name": "text",
+    "partner_vendor_name": "text",
+    "paid_supply": "text? (수주유형='유상사급' 일 때만)",
+    "quotation_price": "numeric (견적가 = set_order_lines.quote_price)",
+    "negotiated_price": "numeric (네고가 = set_order_lines.nego_price)",
+    "difference": "numeric (견적가-네고가)",
+    "execution_rate_pct": "numeric? (네고가/수주가*100, 수주가 0/null 이면 null)",
+    "receipt_date": "date?",
+    "order_date": "date",
+    "receipt_planned_date": "date?",
+    "unit_price": "numeric?",
+    "writer": "text?",
+    "confirmed_by": "text?",
+    "plant_name": "text"
+   },
+   "note": "SET발주현황 화면 전용. 수주가·유상사급·집행율은 sale_orders 조인으로 산출"
+  },
+  "set_order_job_pool": {
+   "source": "jobs × sale_orders × sale_order_status_rows",
+   "columns": {
+    "row_no": "bigint",
+    "job_no": "text",
+    "item_name": "text?",
+    "completion_planned_date": "date?",
+    "s1_date": "date?",
+    "customer_request_date": "date?",
+    "customer_name": "text?",
+    "order_type": "text?",
+    "order_status": "text?",
+    "order_price": "numeric?",
+    "plant_name": "text"
+   },
+   "note": "SET발주등록 제번리스트. 수주등록만 하면 자동으로 나타남. order_status='취소' 제외"
   }
  }
 }

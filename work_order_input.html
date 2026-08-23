@@ -55,28 +55,14 @@ table{border-collapse:collapse;min-width:1220px;width:100%;table-layout:fixed}th
   <footer class="footer"><span id="time">2026-08-22 10:15:13</span><span class="message" id="message">데이터가 조회되었습니다.</span><span class="right"><span>AP0020</span><span>[DONGGU02] 조영호 로그인 하였습니다.</span></span></footer>
 </div>
 <script>
-const rows=[
-['(주)동구기업','01-1300-00690A','1010180421M DRUM-LOOK UP','제품','','','공조사업부','0','EA','예','예','예'],
-['(주)동구기업','01-9000-0188','207 BRKT','제품','덕스','','공조사업부','0','EA','예','예','예'],
-['(주)동구기업','01-9000-0342','C/PLATE (너트,2코팅)','제품','TO/TRW','','공조사업부','0','EA','예','예','예'],
-['(주)동구기업','01-9000-0344','C/PLATE (6m)','제품','TO/TRW','','공조사업부','0','EA','예','예','예'],
-['(주)동구기업','01-9000-0365','C/PLATE (8m)','제품','TO/TRW','','공조사업부','0','EA','예','예','예'],
-['(주)동구기업','01-9000-03850B','1238 BRKT','제품','TO/덕스','','공조사업부','0','EA','예','예','예'],
-['(주)동구기업','01-9000-03870A','1232 BRKT','제품','TO/덕스','','공조사업부','0','EA','예','예','예'],
-['(주)동구기업','01-9000-0437T0','1229 BRKT','제품','덕스','','공조사업부','0','EA','예','예','예'],
-['(주)동구기업','01-9000-0438T0','1262 BRKT','부자재','덕스','','공조사업부','0','EA','예','예','예'],
-['(주)동구기업','01-9000-0478','1275 P1A1','제품','TO/덕스','EA','공조사업부','0','EA','예','예','예'],
-['(주)동구기업','01-9000-0482','BRKT PART 3','제품','TO/TRW','','공조사업부','0','EA','예','예','예'],
-['(주)동구기업','01-9000-0491PA1','E1490001153 P1A1','제품','TO/덕스','','공조사업부','0','EA','예','예','예'],
-['(주)동구기업','01-9000-0491PA2','E1490001153 P1A2','제품','TO/덕스','','공조사업부','0','EA','예','예','예']
-];
+const rows=[];
 function render(data=rows){const body=document.getElementById('masterBody');body.innerHTML=data.map((r,i)=>`<tr onclick="selectRow(this,${i})"><td class="center">${i+1}</td><td class="newcell">신규</td>${r.map((v,j)=>`<td class="${[7].includes(j)?'num':''} ${[8,9,10,11].includes(j)?'center':''}">${v}</td>`).join('')}</tr>`).join('');document.getElementById('countText').textContent=data.length+'건';body.querySelector('tr')?.classList.add('selected')}
 function selectRow(tr,i){document.querySelectorAll('#masterBody tr').forEach(x=>x.classList.remove('selected'));tr.classList.add('selected');const r=rows[i]||rows[0];document.getElementById('detailBody').innerHTML=`<tr><td class="center">자동생성</td><td>${r[1]}</td><td class="center">2026-08-22</td><td class="center">WC0007</td><td>PRO 5-1호기</td><td class="center">CP0037</td><td class="center">PRO</td><td></td><td></td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr>`}
 function doSearch(){const q=(document.getElementById('itemSearch').value+' '+document.getElementById('customer').value+' '+document.getElementById('orderName').value).trim().toLowerCase();const filtered=!q?rows:rows.filter(r=>r.join(' ').toLowerCase().includes(q));render(filtered);setMessage(`데이터가 조회되었습니다. (${filtered.length}건)`)}
 function addRow(){rows.unshift(['(주)동구기업','NEW-'+String(Date.now()).slice(-6),'신규 품목','제품','','','','0','EA','예','예','예']);render(rows);setMessage('신규 행이 추가되었습니다.')}
 function deleteRow(){const selected=document.querySelector('#masterBody tr.selected');if(!selected){setMessage('삭제할 행을 선택하세요.');return}const idx=[...selected.parentNode.children].indexOf(selected);rows.splice(idx,1);render(rows);setMessage('선택 행이 삭제되었습니다.')}
 function save(){setMessage('작업지시 정보가 저장되었습니다.')}
-function exportCsv(){const data=[['사업장','품번','품명','품목유형','차종','재질','거래처','소재','단위','수입검사여부','모니터링여부','사용여부'],...rows];const csv='\ufeff'+data.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='work_order_input.csv';a.click();URL.revokeObjectURL(a.href);setMessage('엑셀용 CSV 파일을 생성했습니다.')}
+function exportCsv(){const data=[];const csv='\ufeff'+data.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='work_order_input.csv';a.click();URL.revokeObjectURL(a.href);setMessage('엑셀용 CSV 파일을 생성했습니다.')}
 function switchMode(btn,mode){document.querySelectorAll('.mode').forEach(b=>b.classList.remove('on'));btn.classList.add('on');setMessage(mode==='item'?'품목별 작업지시로 전환했습니다.':'수주별 작업지시로 전환했습니다.')}
 function setMessage(t){document.getElementById('message').textContent=t}
 window.MES={search:doSearch,add:addRow,delete:deleteRow,save,exportCsv,setMessage};

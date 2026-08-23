@@ -52,23 +52,13 @@ td.route{background:#8fdc6b;text-align:center;font-weight:700;color:#20461a}
   <footer class="foot"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn primary" onclick="save()">▣ 저장</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫 기</button><span class="msg" id="message">제번·협력업체를 고르고 가공공정을 내려 외주가공 발주를 등록합니다.</span><span class="right" id="countText"></span></footer>
 </div>
 <script>
-const JOBS=[
-{job:'A25032',item:'',proc:'A',procName:'1/1'},
-{job:'A26026',item:'',proc:'A',procName:'1/2'},
-{job:'A26026',item:'',proc:'B',procName:'2/2'},
-{job:'C14213-S030',item:'BUSBAR',proc:'A',procName:'1/1'},
-{job:'C25080-S001',item:'HEADER',proc:'A',procName:'1/2'},
-{job:'C25120',item:'STIFFENER',proc:'A',procName:'1/6'},
-{job:'C25120',item:'STIFFENER',proc:'B',procName:'2/6'},
-{job:'C25120',item:'STIFFENER',proc:'C',procName:'3/6'}];
+const JOBS=[];
 const VENDORS=['신우기업','한림메탈','경남정밀','경천정밀','가강텍','기선정밀','동우정밀','금승정기','동빛테크','제이케이테크','대경열처리'];
 const PROCNAME={GS:'성형연삭(소형)',AB:'가공ASSY',MS:'성형밀링(소형)',WS:'WIRE CUT',WS1:'WIRE CUT1',MA:'머시닝',HQ:'열처리',NM:'NC밀링'};
 const ROUTES=[
 {part:'T99A',name:'MACHI...',steps:['GS',null,null,null,null,null,null,null,null]},
 {part:'T99B',name:'MACHI...',steps:['AB',null,null,null,null,null,null,null,null]}];
-const REQ=[
-{no:1,vendor:'동우정밀',job:'A25032',item:'',proc:'A',procName:'1/1',part:'T99A',partName:'MACHINERY ...',mp:'GS',mpName:'성형연삭(소형)',odate:'2025-02-25',rdate:'2025-02-25',remark:'',writer:'한서연'},
-{no:2,vendor:'동우정밀',job:'A25032',item:'',proc:'A',procName:'1/1',part:'T99B',partName:'MACHINERY ...',mp:'AB',mpName:'가공ASSY',odate:'2025-02-26',rdate:'2025-02-26',remark:'',writer:'한서연'}];
+const REQ=[];
 let jobIdx=0,venIdx=6,jobView=[...JOBS],venView=[...VENDORS];
 function renderJobs(){jobBody.innerHTML=jobView.map((j,i)=>`<tr class="${i===jobIdx?'sel':''}" onclick="pickJob(${i})"><td>${j.job}</td><td>${j.item}</td><td class="c">${j.proc}</td><td class="c">${j.procName}</td></tr>`).join('');countText.textContent=`제번 ${jobView.length}건 / 요청 ${REQ.length}건`}
 function renderVendors(){venBody.innerHTML=venView.map((v,i)=>`<tr class="${i===venIdx?'sel':''}" onclick="pickVendor(${i})"><td>${v}</td></tr>`).join('')}

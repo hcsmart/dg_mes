@@ -50,16 +50,10 @@ input.cell{width:100%;height:20px;border:1px solid #cbd4dc;padding:0 3px;text-al
   <footer class="foot"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn primary" onclick="save()">▣ 저장</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">제번과 공정, 협력업체를 선택해 외주설계 발주를 등록합니다.</span><span class="right" id="countText"></span></footer>
 </div>
 <script>
-const JOBS=[
-{job:'A25032',item:'',due:'2025-03-02',s1:'2025-03-02',cust:'2025-03-02'},
-{job:'A26026',item:'',due:'2026-12-31',s1:'2026-12-31',cust:'2026-12-31'},
-{job:'C14213-S030',item:'BUSBAR',due:'2025-08-10',s1:'2026-08-30',cust:'2026-08-30'},
-{job:'C23130-U001',item:'RETAINER PA RHD',due:'2024-11-14',s1:'2024-11-15',cust:'2024-11-15'},
-{job:'C23140-U001',item:'RETAINER DR RHD',due:'2024-12-10',s1:'2024-12-10',cust:'2024-12-10'},
-{job:'C23144-U001',item:'MOTOR BRACKET',due:'2024-05-15',s1:'2024-05-15',cust:'2024-05-15'}];
-const POOL=[{proc:'A',procName:'1/1'},{proc:'B',procName:'1/2'},{proc:'C',procName:'2/2'}];
+const JOBS=[];
+const POOL=[];
 const VENDORS=['태건정밀','북평ENG','바건금속','BTC','바한텍','금재공업'];
-const ORD=[{no:1,vendor:'태건정밀',proc:'A',procName:'1/1',odate:'2026-08-22',edate:'',quote:0,nego:0,writer:'동구'}];
+const ORD=[];
 let jobIdx=0,venIdx=0,jobView=[...JOBS],venView=[...VENDORS];
 const money=v=>Number(v||0).toLocaleString('ko-KR');
 function renderJobs(){jobBody.innerHTML=jobView.map((j,i)=>`<tr class="${i===jobIdx?'sel':''}" onclick="pickJob(${i})"><td class="c">${i===jobIdx?'▶':''}</td><td>${j.job}</td><td>${j.item}</td><td class="c">${j.due}</td><td class="c">${j.s1}</td><td class="c">${j.cust}</td></tr>`).join('');countText.textContent=`제번 ${jobView.length}건 / 발주 ${ORD.length}건`}

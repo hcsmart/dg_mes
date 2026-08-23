@@ -52,15 +52,7 @@
 </div>
 <div class="modal" id="preview"><div class="sheet"><div class="sheet-head"><span>미리 보기</span><button class="x" onclick="preview.classList.remove('on')">×</button></div><div class="doc" id="docArea"></div></div></div>
 <script>
-const JOBS=[
-{job:'A25032',item:'',proc:'A',procName:'1/1',bom:[]},
-{job:'A26026',item:'',proc:'A',procName:'1/2',bom:[
- {part:'T99A',name:'MACHINERY',mat:'-',spec:'20.00*30.00*220.00',qty:1,att:''},
- {part:'T99C',name:'MACHINERY',mat:'SM45C',spec:'150*200*300',qty:1,att:''}]},
-{job:'C14213-S030',item:'BUSBAR',proc:'A',procName:'1/1',bom:[]},
-{job:'C23130-U001',item:'RETAINER PA RHD',proc:'A',procName:'1/1',bom:[]},
-{job:'C23140-U001',item:'RETAINER DR RHD',proc:'A',procName:'1/2',bom:[]},
-{job:'C23144-U001',item:'MOTOR BRACKET',proc:'A',procName:'1/1',bom:[]}];
+const JOBS=[];
 const VENDORS=['강철볼트','그라미테크','금원테크','다원시스템','북건텍','가민산업'];
 const REQ=[];
 let jobIdx=0,venIdx=0,jobView=[...JOBS],venView=[...VENDORS];
