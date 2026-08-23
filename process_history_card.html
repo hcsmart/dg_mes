@@ -21,19 +21,19 @@
     <button class="navbtn" onclick="goPage(1)">|◀</button><button class="navbtn" onclick="prevPage()">◀</button><button class="navbtn" onclick="nextPage()">▶</button><button class="navbtn" onclick="goPage(2)">▶|</button><span class="counter" id="counter">페이지 1 / 2</span><div class="sep"></div>
     <button class="ico" title="인쇄" onclick="window.print()">🖨</button><button class="ico" title="닫기" onclick="closePreview()">⊗</button>
   </div>
-  <div class="canvas" id="canvas">
+  <div style="display:flex;gap:4px;padding:6px;align-items:center;background:#f4f8fb;border-bottom:1px solid #c3ccd4"><span class="lb">제번</span><input id="qJob" class="field" style="width:150px"><span class="lb">공정</span><input id="qProc" class="field" style="width:60px"><span class="lb">품번</span><input id="qPart" class="field" style="width:100px"><button class="btn" onclick="loadCard()">⌕ 카드조회</button><span class="msg" id="message"></span></div><div class="canvas" id="canvas">
     <section class="paper firstpage on" id="page1">
       <div class="report">
         <div class="head">
-          <div class="brandcell"><h1>공정이력카드</h1><div class="qr"></div><div class="issue"><span>발행일 :　2026-08-22</span><span>K21136-A005_A_B11ADY1</span></div></div>
+          <div class="brandcell"><h1>공정이력카드</h1><div class="qr"></div><div class="issue"><span id="issueDate">발행일 :　2026-08-22</span><span id="cardKey">K21136-A005_A_B11ADY1</span></div></div>
           <div class="dates">
             <div class="th">납기</div><div class="th">수주일</div><div class="th">설계</div><div class="th">가공</div><div class="th">조립</div><div class="th">S1</div>
-            <div>기</div><div>2021-11-09</div><div>2024-05-23</div><div>2024-05-27</div><div>2024-05-28</div><div>2024-06-05</div>
-            <div class="th">담당자</div><div colspan="2">영업　 박채원</div><div colspan="2">설계　 장소율</div><div>조립</div>
+            <div id="dDue">기</div><div id="dOrder">2021-11-09</div><div id="dDesign">2024-05-23</div><div id="dMach">2024-05-27</div><div id="dAsm">2024-05-28</div><div id="dS1">2024-06-05</div>
+            <div class="th">담당자</div><div colspan="2" id="mSales">영업　 박채원</div><div colspan="2" id="mDesign">설계　 장소율</div><div id="mAsm">조립</div>
           </div>
         </div>
         <div class="meta th"><div>제번</div><div>공정</div><div>품번</div><div>재질</div><div>수량</div><div>제품명</div><div>부품명</div></div>
-        <div class="meta"><div>K21136-A005</div><div>A</div><div>B11ADY1</div><div>STD11</div><div>2</div><div>SHELF,NET RL</div><div>PUNCH</div></div>
+        <div class="meta"><div id="mJob">K21136-A005</div><div id="mProc">A</div><div id="mPart">B11ADY1</div><div id="mMat">STD11</div><div id="mQty">2</div><div id="mProd">SHELF,NET RL</div><div id="mPartName">PUNCH</div></div>
         <div class="section">
           <table class="small-table"><thead><tr><th style="width:55px">NO</th><th style="width:100px">공정</th><th style="width:130px">작업장</th><th>작업내용</th><th style="width:90px">계획일</th><th style="width:90px">완료일</th></tr></thead><tbody id="planRows"></tbody></table>
           <div class="summary"><div><b>가공 유의사항</b><br><br>1. 1/8 가공여유 -0.5<br>2. 외각치수 일반치수 ±0.2<br>3. 연삭가공여유 ±0.2~0.3</div><div><b>검사 / 승인</b><br><br>치수검사 및 공정별 확인 후 다음 공정으로 이관합니다.<br>기준 온도 : 20℃ ±1℃</div></div>
@@ -72,9 +72,74 @@ function goPage(n){page=Math.max(1,Math.min(2,n));document.querySelectorAll('.pa
 function prevPage(){goPage(page-1)}function nextPage(){goPage(page+1)}
 function applyZoom(){const scale=parseInt(zoom.value)/100;document.querySelectorAll('.paper').forEach(p=>p.style.transform=`scale(${scale})`);const active=document.querySelector('.paper.on');if(active){active.style.marginBottom=(active.offsetHeight*(scale-1)+18)+'px'}}
 function closePreview(){if(window.parent&&window.parent!==window){try{window.parent.closeActive()}catch(e){}}else history.back()}
-function search(){goPage(1)}function add(){return false}function remove(){return false}function save(){window.print()}function exportCsv(){const rows=[];const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+v+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='process_history_card.csv';a.click();URL.revokeObjectURL(a.href)}
-window.MES={search,add,delete:remove,save,exportCsv,setMessage:()=>{}};build();goPage(1);
+/* v31: 더미 인쇄지 → process_history_cards + 실적(order_lines/design_results) 조회 */
+const online=()=>!!(window.MESDB&&MESDB.online);
+const msg=t=>{const m=document.getElementById('message');if(m)m.textContent=t};
+async function waitDB(){for(let i=0;i<60&&!window.MESDB;i++)await new Promise(r=>setTimeout(r,50));
+ if(window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}}
+const setTxt=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v??''};
+
+async function loadCard(){
+ await waitDB();
+ if(!online()){msg('DB 미연결 — 사진 판독본을 표시합니다.');return}
+ const job=(qJob.value||'').trim();
+ try{
+  let q='select=*&order=card_key&limit=1';
+  if(job)q+=`&job_no=eq.${encodeURIComponent(job)}`;
+  if((qProc.value||'').trim())q+=`&process_code=eq.${encodeURIComponent(qProc.value.trim())}`;
+  if((qPart.value||'').trim())q+=`&part_no=eq.${encodeURIComponent(qPart.value.trim())}`;
+  const cs=await MESDB.table('process_history_cards').select(q);
+  let c=cs&&cs[0];
+  if(!c&&job){   /* 카드가 없으면 수주/설계/조립 실적으로 즉석 생성 */
+   const jp=await MESDB.table('job_pool').select(`select=*&job_no=eq.${encodeURIComponent(job)}&limit=1`);
+   if(!jp||!jp[0]){msg(`${job} 제번을 찾을 수 없습니다.`);return}
+   const pl=await MESDB.table('partlist_all').select(`select=*&job_no=eq.${encodeURIComponent(job)}&limit=1`);
+   c={card_key:`${job}_${pl[0]?.process_code||'A'}_${pl[0]?.part_no||''}`,issue_date:new Date().toISOString().slice(0,10),
+      job_no:job,process_code:pl[0]?.process_code||'A',part_no:pl[0]?.part_no||'',
+      material_code:pl[0]?.material||'',quantity:pl[0]?.qty||'',product_name:jp[0].item_name,
+      part_name:pl[0]?.part_name||'',order_date:jp[0].order_date,s1_date:jp[0].s1_date,
+      design_date:null,machining_date:null,assembly_date:null,sales_manager:null,design_manager:null};
+  }
+  if(!c){msg('조회된 공정이력카드가 없습니다.');return}
+  /* 실적일자 보정 */
+  try{
+   const dr=await MESDB.table('design_results').select(`select=work_type,work_date&job_no=eq.${encodeURIComponent(c.job_no)}&order=work_date`);
+   const d1=dr.filter(r=>r.work_type==='설계').pop();const a1=dr.filter(r=>r.work_type==='조립').pop();
+   if(d1)c.design_date=c.design_date||d1.work_date;
+   if(a1)c.assembly_date=c.assembly_date||a1.work_date;
+   const ol=await MESDB.table('order_lines').select(`select=category,receipt_date&job_no=eq.${encodeURIComponent(c.job_no)}&category=eq.외주가공&order=receipt_date`);
+   const m1=ol.filter(r=>r.receipt_date).pop();if(m1)c.machining_date=c.machining_date||m1.receipt_date;
+  }catch(e){}
+  setTxt('cardKey',c.card_key);setTxt('issueDate','발행일 :　'+(c.issue_date||''));
+  setTxt('dOrder',c.order_date||'');setTxt('dDesign',c.design_date||'');
+  setTxt('dMach',c.machining_date||'');setTxt('dAsm',c.assembly_date||'');setTxt('dS1',c.s1_date||'');
+  setTxt('mSales','영업　 '+(c.sales_manager||''));setTxt('mDesign','설계　 '+(c.design_manager||''));
+  setTxt('mJob',c.job_no);setTxt('mProc',c.process_code||'');setTxt('mPart',c.part_no||'');
+  setTxt('mMat',c.material_code||'');setTxt('mQty',c.quantity??'');
+  setTxt('mProd',c.product_name||'');setTxt('mPartName',c.part_name||'');
+  await buildPlan(c);
+  goPage(1);msg(`${c.card_key} 공정이력카드를 조회했습니다.`);
+ }catch(e){msg('조회 실패: '+String(e.message||e).slice(0,110))}
+}
+/* 공정 계획 행: 가공 기준공정(machining_standard_routes) + 외주가공 실적 */
+async function buildPlan(c){
+ let route=[];
+ try{route=await MESDB.table('machining_standard_routes').select(`select=*&order=row_no&limit=11`)}catch(e){}
+ let done=[];
+ try{done=await MESDB.table('order_lines').select(`select=process_code,process_name,vendor_name,order_date,receipt_date&job_no=eq.${encodeURIComponent(c.job_no)}&order=line_id`)}catch(e){}
+ const rows=(route.length?route:done).slice(0,11);
+ planRows.innerHTML=rows.length?rows.map((r,i)=>{
+  const d=done[i]||{};
+  return `<tr><td>${i+1}</td><td>${r.process_code||r.machining_process_code||''}</td>
+   <td>${r.process_name||r.machining_process_name||d.vendor_name||''}</td>
+   <td style="text-align:left;padding-left:8px">공정 작업 및 검사 기록</td>
+   <td>${d.order_date||''}</td><td>${d.receipt_date||''}</td></tr>`}).join('')
+  :'<tr><td colspan="6" style="height:60px;color:#8a97a2">공정 정보가 없습니다.</td></tr>';
+}
+function search(){const j=(qJob.value||'').trim();if(j)return loadCard();goPage(1)}function add(){return false}function remove(){return false}function save(){window.print()}function exportCsv(){const rows=[];const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+v+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='process_history_card.csv';a.click();URL.revokeObjectURL(a.href)}
+window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg,reload:loadCard};build();goPage(1);(async()=>{await waitDB();if(online())loadCard()})();
 </script>
+<script src="mes_db.js?v=35"></script>
 <script src="mes_ctx.js?v=1"></script>
 </body>
 </html>

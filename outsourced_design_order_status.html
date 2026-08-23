@@ -48,6 +48,24 @@ tfoot th{position:sticky;bottom:0;background:linear-gradient(#e6eef5,#d3e0ea)}
 const rows=[];
 let view=[...rows];
 const money=v=>Number(v||0).toLocaleString('ko-KR');
+/* v30: page_state 스냅샷 → outsourced_design_status_view 실조회 */
+const online=()=>!!(window.MESDB&&MESDB.online);
+async function loadRows(){
+ for(let i=0;i<60&&!window.MESDB;i++)await new Promise(r=>setTimeout(r,50));
+ if(window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}
+ if(!online()){msg('DB 미연결 — 사진 판독본을 표시합니다.');render();return}
+ try{
+  const rs=await MESDB.table('outsourced_design_status_view').select('select=*&order=row_no');
+  rows.length=0;
+  rs.forEach(r=>rows.push({job:r.job_no,item:r.item_name||'',model:r.model||'',area:r.area||'',
+   cust:r.customer_name||'',amount:Number(r.order_price||0),proc:r.process_code||'',
+   paid:r.paid_supply||'',quote:Number(r.quote_price||0),nego:Number(r.nego_price||0),
+   diff:Number(r.difference||0),partner:r.vendor_name||'',rate:Number(r.progress_rate||0),
+   idate:r.receipt_date||'',odate:r.order_date||'',edate:r.required_date||''}));
+  view=[...rows];render();
+  msg(`외주설계발주 ${rows.length}건 (입고 ${rs.filter(r=>r.status!=='발주').length} / 미입고 ${rs.filter(r=>r.status==='발주').length})`);
+ }catch(e){msg('조회 실패: '+String(e.message||e).slice(0,120));render()}
+}
 function within(v,a,b){if(!a&&!b)return true;if(!v)return false;return (!a||v>=a)&&(!b||v<=b)}
 function render(){body.innerHTML=view.map((r,i)=>`<tr onclick="sel(this)"><td class="c">${i+1}</td><td>${r.job}</td><td>${r.item}</td><td>${r.model}</td><td class="c">${r.area}</td><td>${r.cust}</td><td class="r">${money(r.amount)}</td><td class="c">${r.proc}</td><td class="c">${r.paid}</td><td class="r">${money(r.quote)}</td><td class="r">${money(r.nego)}</td><td class="r">${money(r.diff)}</td><td>${r.partner}</td><td><div class="bar"><i style="width:${r.rate}%"></i><b>${r.rate}%</b></div></td><td class="c">${r.idate}</td><td class="c">${r.odate}</td><td class="c">${r.edate}</td></tr>`).join('');
 sumQuote.textContent=money(view.reduce((a,r)=>a+r.quote,0));sumNego.textContent=money(view.reduce((a,r)=>a+r.nego,0));sumDiff.textContent=money(view.reduce((a,r)=>a+r.diff,0));countText.textContent=`${view.length}건`}
@@ -59,8 +77,8 @@ function exportCsv(){const out=[['제번','품명','모델','국내/해외','거
 function msg(t){message.textContent=t}
 render();window.MES={search,exportCsv,setMessage:msg};
 </script>
-<script src="mes_db.js?v=27"></script>
-<script>MESDB.bind("outsourced_design_order_status",()=>({rows}));</script>
+<script src="mes_db.js?v=35"></script>
+<script>loadRows();</script>
 <script src="mes_ctx.js?v=1"></script>
 </body>
 </html>

@@ -61,22 +61,76 @@ function renderPool(){poolBody.innerHTML=POOL.map((p,i)=>`<tr><td class="c"><inp
 function renderVendors(){venBody.innerHTML=venView.map((v,i)=>`<tr class="${i===venIdx?'sel':''}" onclick="pickVendor(${i})"><td>${v}</td></tr>`).join('')}
 function renderOrd(){ordBody.innerHTML=ORD.map((r,i)=>`<tr><td class="c">${i+1}</td><td class="c"><input type="checkbox" data-no="${r.no}"></td><td>${r.vendor}</td><td class="c">${r.proc}</td><td class="c">${r.procName}</td><td class="c">${r.odate}</td><td class="c"><input class="cell" type="date" value="${r.edate}" onchange="setVal(${r.no},'edate',this.value)"></td><td><input class="cell" value="${r.quote}" onchange="setVal(${r.no},'quote',Number(this.value)||0)"></td><td><input class="cell" value="${r.nego}" onchange="setVal(${r.no},'nego',Number(this.value)||0)"></td><td class="c">${r.writer}</td></tr>`).join('');countText.textContent=`제번 ${jobView.length}건 / 발주 ${ORD.length}건`}
 function setVal(no,k,v){const r=ORD.find(x=>x.no===no);if(r){r[k]=v;msg(`${r.vendor} ${r.proc} 항목을 수정했습니다.`)}}
-function pickJob(i){jobIdx=i;renderJobs();msg(`${jobView[i].job} 선택 (완료예정일 ${jobView[i].due})`)}
+function pickJob(i){jobIdx=i;renderJobs();if(typeof loadPool==='function')loadPool();msg(`${jobView[i].job} 선택 (완료예정일 ${jobView[i].due||'-'})`)}
 function pickVendor(i){venIdx=i;renderVendors();msg(`협력업체 ${venView[i]} 선택`)}
 function findVendor(){const q=venQ.value.trim().toLowerCase();venView=VENDORS.filter(v=>!q||v.toLowerCase().includes(q));venIdx=0;renderVendors()}
 function clearVendor(){venQ.value='';venView=[...VENDORS];venIdx=0;renderVendors()}
 function search(){const j=jobQ.value.trim().toLowerCase(),it=itemQ.value.trim().toLowerCase();jobView=JOBS.filter(x=>(!j||x.job.toLowerCase().includes(j))&&(!it||(x.item||'').toLowerCase().includes(it)));jobIdx=0;renderJobs();msg(`제번 ${jobView.length}건을 조회했습니다.`)}
 function addRow(){const picks=[...poolBody.querySelectorAll('input:checked')].map(x=>POOL[Number(x.dataset.i)]);if(!picks.length)return msg('대기 리스트에서 공정을 선택하세요.');picks.forEach(p=>ORD.push({no:ORD.length?Math.max(...ORD.map(r=>r.no))+1:1,vendor:venView[venIdx],proc:p.proc,procName:p.procName,odate:new Date().toISOString().slice(0,10),edate:'',quote:0,nego:0,writer:'동구'}));renderOrd();msg(`${picks.length}건을 조수공정 리스트에 추가했습니다.`)}
 function delRow(){const ids=[...ordBody.querySelectorAll('input:checked')].map(x=>Number(x.dataset.no));if(!ids.length)return msg('삭제할 발주 행을 선택하세요.');for(let i=ORD.length-1;i>=0;i--)if(ids.includes(ORD[i].no))ORD.splice(i,1);renderOrd();msg(`${ids.length}건을 삭제했습니다.`)}
-function save(){msg(`${jobView[jobIdx]?.job||''} 외주설계발주 ${ORD.length}건을 저장했습니다. (프로토타입)`)}
+/* v30: 프로토타입 스텁 → order_lines(외주설계) 실제 기록 */
+const online=()=>!!(window.MESDB&&MESDB.online);
+async function save(){
+ const job=jobView[jobIdx]?.job||'';
+ if(!job){msg('제번을 선택하세요.');return}
+ if(!ORD.length){msg('조수공정 리스트에 발주할 공정을 추가하세요.');return}
+ if(!online()){msg(`${job} 외주설계발주 ${ORD.length}건을 저장했습니다. (DB 미연결 - 로컬)`);return}
+ const bad=ORD.filter(r=>Number(r.nego||0)>Number(r.quote||0)&&Number(r.quote||0)>0);
+ if(bad.length){msg('네고가는 견적가를 넘을 수 없습니다.');return}
+ try{
+  const ex=await MESDB.table('order_lines')
+    .select(`select=line_id,process_code,vendor_name&category=eq.외주설계&job_no=eq.${encodeURIComponent(job)}`);
+  const dup=ORD.filter(r=>ex.some(e=>e.process_code===r.proc&&e.vendor_name===r.vendor));
+  if(dup.length){msg(`이미 발주된 공정이 있습니다: ${dup.map(r=>r.proc).join(', ')}`);return}
+  const item=jobView[jobIdx]?.item||null;
+  const payload=ORD.map(r=>({
+    category:'외주설계',status:'발주',job_no:job,item_name:item,
+    vendor_name:r.vendor,process_code:r.proc,process_name:r.procName,
+    order_date:r.odate||null,required_date:r.edate||null,
+    quote_price:Number(r.quote)||0,confirm_price:Number(r.nego)||Number(r.quote)||0,
+    order_qty:1,owner_name:r.writer||null,updated_at:new Date().toISOString()}));
+  if(MESDB.ensureRefs)await MESDB.ensureRefs(payload);
+  await MESDB.table('order_lines').upsert(payload);
+  const n=ORD.length;ORD.length=0;renderOrd();
+  msg(`${job} 외주설계발주 ${n}건을 DB에 등록했습니다. 외주설계발주입고/현황에서 확인하세요.`);
+ }catch(e){
+  const m=String(e.message||e);
+  msg(/무결성|foreign key/i.test(m)?'등록 실패: 마스터에 없는 제번 또는 업체입니다.':'등록 실패: '+m.slice(0,120));
+ }
+}
+/* v30: 제번 리스트를 job_pool 뷰에서 로드 (page_state 스냅샷에 갇혀 신규 수주가 안 뜨던 문제) */
+async function loadJobs(){
+ for(let i=0;i<60&&!window.MESDB;i++)await new Promise(r=>setTimeout(r,50));
+ if(window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}
+ if(!online())return;
+ try{
+  const rs=await MESDB.table('job_pool').select('select=*&order=row_no');
+  const seen=new Set(JOBS.map(j=>j.job));
+  rs.forEach(r=>{if(!seen.has(r.job_no))JOBS.push({job:r.job_no,item:r.item_name||'',
+    due:r.completion_date||'',s1:r.s1_date||'',cust:r.customer_name||''})});
+  jobView=[...JOBS];jobIdx=JOBS.length?0:-1;renderJobs();
+  await loadPool();
+ }catch(e){}
+}
+/* 대기 공정 리스트: 설계계획 세부공정 → 없으면 표준공정 A/1/1 */
+async function loadPool(){
+ const job=jobView[jobIdx]?.job;if(!job||!online())return;
+ try{
+  const st=await MESDB.table('design_plan_steps').select(`select=*&job_no=eq.${encodeURIComponent(job)}&order=row_no`);
+  POOL.length=0;
+  if(st&&st.length)st.forEach(s=>POOL.push({proc:s.process_code,procName:s.process_name}));
+  else POOL.push({proc:'A',procName:'1/1'});
+  renderPool();
+ }catch(e){}
+}
 function exportCsv(){const out=[['제번','협력업체','공정','공정명','발주일','입고예정일','견적가','네고가','작성자'],...ORD.map(r=>[jobView[jobIdx]?.job||'',r.vendor,r.proc,r.procName,r.odate,r.edate,r.quote,r.nego,r.writer])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='outsourced_design_order_input.csv';a.click();URL.revokeObjectURL(a.href)}
 function msg(t){message.textContent=t}
-renderJobs();renderPool();renderVendors();renderOrd();window.MES={search,save,exportCsv,setMessage:msg};
+renderJobs();renderPool();renderVendors();renderOrd();window.MES={search,save,exportCsv,setMessage:msg,reload:loadJobs};loadJobs();
 </script>
-<script src="mes_db.js?v=27"></script>
+<script src="mes_db.js?v=35"></script>
 <script>MESDB.bind("outsourced_design_order_input",()=>({JOBS,POOL,VENDORS,ORD}));</script>
 <script src="mes_ctx.js?v=1"></script>
-<script src="mes_lookup.js?v=27"></script>
+<script src="mes_lookup.js?v=35"></script>
 <script>
 /* 협력업체 목록: 하드코딩 → 마스터 직결 */
 (async function loadVendors(){

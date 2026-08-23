@@ -92,15 +92,89 @@ function load(o){
  recalc();
 }
 function clearForm(){document.querySelectorAll('input').forEach(n=>{if(n.type==='checkbox')n.checked=false;else n.value=''});recalc();message.textContent='입력값을 비웠습니다.'}
-function save(){
- const o={};AK.forEach((k,i)=>o[k]=num(document.getElementById('a'+(i+1)).value)||null);
- o.target_price=num(target_price.value)||null;o.job_no=job_no.value||null;
- console.log('sales_plan',o);
- message.textContent='저장했습니다. (프로토타입 - 원본 JSON은 변경되지 않습니다.)';
+/* v28: 영업계획을 sales_plans 테이블에 실제 저장 + 수주정보 연동 */
+const PCT={design_internal_amount:'design_internal_pct',design_external_amount:'design_external_pct',
+ raw_material_amount:'raw_material_pct',purchase_amount:'purchase_pct',
+ machining_internal_amount:'machining_internal_pct',machining_external_amount:'machining_external_pct',
+ assembly_internal_amount:'assembly_internal_pct',assembly_external_amount:'assembly_external_pct'};
+const HK=['job_no','plant_name','product_name','customer_name','process_set_qty','item_name','order_date',
+ 'mold_type_name','s1_planned_date','model','delivery_planned_date','design_start_date','design_end_date',
+ 'design_days','design_manager','machining_start_date','machining_end_date','machining_manager',
+ 'assembly_start_date','assembly_end_date','assembly_manager','order_price','target_price'];
+const DATEK=['order_date','s1_planned_date','delivery_planned_date','design_start_date','design_end_date',
+ 'machining_start_date','machining_end_date','assembly_start_date','assembly_end_date'];
+const NUMK=['process_set_qty','design_days','order_price','target_price'];
+const online=()=>!!(window.MESDB&&MESDB.online);
+const msg=t=>message.textContent=t;
+
+function collect(){
+ const o={};
+ HK.forEach(k=>{const n=document.getElementById(k);o[k]=n?(n.value||null):null});
+ NUMK.forEach(k=>{o[k]=o[k]==null?null:(num(o[k])||null)});
+ DATEK.forEach(k=>{if(o[k]==='')o[k]=null});
+ o.design_outsourced=!!design_outsourced.checked;
+ o.machining_outsourced=!!machining_outsourced.checked;
+ o.assembly_outsourced=!!assembly_outsourced.checked;
+ const t=num(target_price.value);let s=0;
+ AK.forEach((k,i)=>{const a=num(document.getElementById('a'+(i+1)).value);
+  o[k]=a||null;o[PCT[k]]=t?Math.round(a/t*1000)/10:0;s+=a});
+ const op=num(order_price.value);
+ o.profit_rate_pct=op?Math.round((op-s)/op*1000)/10:null;
+ return o;
 }
-window.MES={save,clearForm,setMessage:t=>message.textContent=t};
+
+/* 제번 입력 → 기존 계획 우선, 없으면 수주정보(sale_orders)로 헤더 채움 */
+async function loadJob(){
+ const job=(job_no.value||'').trim();if(!job)return;
+ if(!online()){msg('DB 미연결 - 수주정보를 불러올 수 없습니다.');return}
+ try{
+  const ex=await MESDB.table('sales_plans').select(`select=*&job_no=eq.${encodeURIComponent(job)}&limit=1`);
+  if(ex&&ex[0]){load(ex[0]);msg(`${job} 기존 영업계획을 불러왔습니다. (row_no ${ex[0].row_no})`);return}
+  const so=await MESDB.table('sale_orders').select(`select=*&job_no=eq.${encodeURIComponent(job)}&limit=1`);
+  if(!so||!so[0]){msg(`${job} 수주정보가 없습니다. 수주등록을 먼저 진행하세요.`);return}
+  const s=so[0];
+  const set=(k,v)=>{const n=document.getElementById(k);if(n)n.value=v??''};
+  set('item_name',s.item_name);set('product_name',s.product_name);set('customer_name',s.customer_name);
+  set('model',s.model);set('order_date',s.order_date);set('s1_planned_date',s.s1_planned_date);
+  set('delivery_planned_date',s.delivery_planned_date);set('mold_type_name',s.mold_type_name);
+  set('process_set_qty',s.process_set_qty);set('order_price',s.order_price);set('plant_name',s.plant_name||'1공장');
+  recalc();msg(`${job} 수주정보를 불러왔습니다. (신규 영업계획)`);
+ }catch(e){msg('조회 실패: '+String(e.message||e).slice(0,120))}
+}
+
+async function save(){
+ const o=collect();
+ if(!o.job_no){msg('제번은 필수입니다.');return}
+ if(!online()){msg(`${o.job_no} 저장했습니다. (DB 미연결 - 로컬)`);return}
+ try{
+  const jb=await MESDB.table('jobs').select(`select=job_no&job_no=eq.${encodeURIComponent(o.job_no)}&limit=1`);
+  if(!jb||!jb[0]){msg(`${o.job_no} 은(는) 등록된 제번이 아닙니다. 수주등록을 먼저 진행하세요.`);return}
+  const ex=await MESDB.table('sales_plans').select(`select=row_no&job_no=eq.${encodeURIComponent(o.job_no)}&limit=1`);
+  if(ex&&ex[0])o.row_no=Number(ex[0].row_no);
+  else{const mx=await MESDB.table('sales_plans').select('select=row_no&order=row_no.desc&limit=1');
+   o.row_no=(mx&&mx[0]?Number(mx[0].row_no):0)+1}
+  await MESDB.table('sales_plans').upsert(o,'row_no');
+  /* 영업계획현황 행 동기화 */
+  const sum=(...ks)=>{const v=ks.reduce((a,k)=>a+Number(o[k]||0),0);return v||null};
+  const r={row_no:o.row_no,job_no:o.job_no,item_name:o.item_name,
+   order_price:o.order_price,target_price:o.target_price,profit_rate_pct:o.profit_rate_pct,
+   design_start_date:o.design_start_date,design_end_date:o.design_end_date,
+   design_days:o.design_days,design_manager:o.design_manager,
+   machining_amount:sum('machining_internal_amount','machining_external_amount'),
+   assembly_amount:sum('assembly_internal_amount','assembly_external_amount'),
+   etc_amount:sum('design_internal_amount','design_external_amount','raw_material_amount','purchase_amount'),
+   delivery_planned_date:o.delivery_planned_date};
+  try{await MESDB.table('sales_plan_status_rows').upsert(r,'row_no')}catch(e){}
+  msg(`${o.job_no} 영업계획을 저장했습니다. (목표원가 ${Number(o.target_price||0).toLocaleString()}원 / 이익률 ${o.profit_rate_pct ?? '-'}%)`);
+ }catch(e){
+  const m=String(e.message||e);
+  msg(/무결성|foreign key/i.test(m)?'저장 실패: 등록되지 않은 제번입니다.':'저장 실패: '+m.slice(0,120));
+ }
+}
+window.MES={save,clearForm,setMessage:t=>message.textContent=t,search:loadJob};
+job_no.addEventListener('change',loadJob);
 load(seed);
-</script><script src="mes_db.js?v=27"></script>
-<script>MESDB.bind("sales_plan_input",()=>({AK}));</script>
+</script><script src="mes_db.js?v=35"></script>
+
 <script src="mes_ctx.js?v=1"></script>
 </body></html>

@@ -69,6 +69,7 @@ document.querySelectorAll('input[name="k"]').forEach(x=>x.addEventListener('chan
 
 /* SET발주현황 = 발주원장 × 수주 조인 뷰 (set_order_status_view) */
 async function loadRows(){
+ const online=()=>!!(window.MESDB&&MESDB.online);   /* v28: 미정의 online() 참조로 화면이 죽던 버그 수정 */
  if(!online()&&window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}
  if(!(window.MESDB&&MESDB.online)){msg('DB 미연결 — 사진 판독본을 표시합니다.');render();return}
  try{
@@ -82,7 +83,7 @@ function csv(){const h=['구분','제번','품명','모델','국내/해외','거
  const rs=view.map(r=>[r.status||'',r.job_no,r.item_name,r.model,r.domestic_overseas,r.customer_name,r.order_price,r.set_seq,r.quotation_price,r.negotiated_price,r.difference,r.partner_vendor_name,r.execution_rate_pct,r.receipt_date,r.order_date,r.receipt_planned_date]);
  const c='\ufeff'+[h,...rs].map(a=>a.map(x=>'"'+String(x??'').replaceAll('"','""')+'"').join(',')).join('\n');
  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([c],{type:'text/csv;charset=utf-8'}));a.download='set_order_status.csv';a.click();}
-window.MES={search,exportCsv:csv,loadRows,setMessage:msg};render();</script><script src="mes_db.js?v=27"></script>
+window.MES={search,exportCsv:csv,loadRows,setMessage:msg};render();</script><script src="mes_db.js?v=35"></script>
 <script>loadRows();
 /* 표가 다시 그려질 때마다 합계 갱신 */
 (function(){const tb=document.querySelector('tbody');if(!tb||typeof renderTotal!=='function')return;new MutationObserver(()=>renderTotal()).observe(tb,{childList:true});renderTotal()})();

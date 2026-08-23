@@ -1,5 +1,5 @@
 {
- "version": "15",
+ "version": "34",
  "tables": {
   "business_divisions": {
    "pk": "business_division_code",
@@ -584,7 +584,9 @@
     "design_completion_planned_date": "date?",
     "s1_date": "date?",
     "customer_request_date": "date?",
-    "plant_name": "text?"
+    "plant_name": "text?",
+    "design_completed": "boolean?",
+    "design_completed_date": "date?"
    }
   },
   "design_plan_steps": {
@@ -597,7 +599,10 @@
     "manager_name": "text?",
     "machining_process_code": "text?",
     "machining_process_name": "text?",
-    "completion_planned_date": "date?"
+    "completion_planned_date": "date?",
+    "step_completed": "boolean?",
+    "completion_date": "date?",
+    "plan_minutes": "numeric?"
    }
   },
   "design_results": {
@@ -1295,6 +1300,74 @@
     "set_order_lines_no_del_trg: 상태<>'발주' 인 라인 DELETE 차단"
    ],
    "note": "SET발주 등록/입고/취소가 공유하는 단일 원장. 화면: set_order_registration, set_order_receipt"
+  },
+  "departments": {
+   "pk": "department_code",
+   "columns": {
+    "department_code": "text",
+    "department_name": "text?",
+    "business_division_name": "text?",
+    "remark": "text?"
+   },
+   "note": "v33 신설 시드(사용자 마스터 부서코드 기준 8건)"
+  },
+  "notices": {
+   "pk": "code",
+   "columns": {
+    "code": "text",
+    "name": "text?",
+    "writer": "text?",
+    "remark": "text?",
+    "body": "text?",
+    "posted_date": "date?",
+    "is_active": "boolean?",
+    "updated_at": "timestamptz?"
+   },
+   "note": "v33 신설. 공지사항 등록 ↔ 현황판 공지 탭"
+  },
+  "expenses": {
+   "pk": "expense_id",
+   "columns": {
+    "expense_id": "bigint (identity)",
+    "job_no": "text? → jobs",
+    "reg_date": "date?",
+    "reason_date": "date?",
+    "reason_code": "text?",
+    "reason_name": "text?",
+    "customer_code": "text?",
+    "customer_name": "text?",
+    "amount": "numeric?",
+    "remark": "text?",
+    "plant_name": "text?",
+    "created_at": "timestamptz?",
+    "updated_at": "timestamptz?"
+   },
+   "note": "v28 신설. 경비등록 ↔ 경비현황"
+  },
+  "assembly_jobs": {
+   "pk": "job_no",
+   "columns": {
+    "job_no": "text → jobs",
+    "assembly_completed": "boolean?",
+    "completed_date": "date?",
+    "inspection_count": "int?",
+    "updated_at": "timestamptz?"
+   },
+   "note": "v31 신설. 조립 완료·검사시트 횟수"
+  },
+  "assembly_steps": {
+   "pk": "row_no",
+   "columns": {
+    "row_no": "bigint",
+    "job_no": "text → jobs",
+    "machining_process_code": "text?",
+    "machining_process_name": "text?",
+    "plan_minutes": "numeric?",
+    "step_completed": "boolean?",
+    "completion_date": "date?",
+    "plant_name": "text?"
+   },
+   "note": "v31 신설. 조립 세부공정 완료"
   }
  },
  "views": {
@@ -1361,6 +1434,87 @@
     "plant_name": "text"
    },
    "note": "SET발주등록 제번리스트. 수주등록만 하면 자동으로 나타남. order_status='취소' 제외"
+  },
+  "job_pool": {
+   "source": "jobs × sale_orders × sale_order_status_rows",
+   "note": "v30. 전 발주/계획 화면 공용 제번 풀. order_status='취소' 제외",
+   "columns": {
+    "row_no": "bigint",
+    "job_no": "text",
+    "item_name": "text?",
+    "customer_name": "text?",
+    "order_date": "date?",
+    "s1_date": "date?",
+    "completion_date": "date?",
+    "customer_request_date": "date?",
+    "model": "text?",
+    "order_status": "text",
+    "order_price": "numeric?",
+    "plant_name": "text"
+   }
+  },
+  "status_board_pool": {
+   "source": "job_pool × sales_plans",
+   "note": "v28. 현황판 실시간. 취소·완료 제외, 납기초과 자동판정, 15행/페이지",
+   "columns": {
+    "row_no": "bigint",
+    "job_no": "text",
+    "item_name": "text?",
+    "order_date": "date?",
+    "s1_due_date": "date?",
+    "completion_due_date": "date?",
+    "sales_manager": "text?",
+    "assembly_manager": "text?",
+    "s1_overdue": "int",
+    "completion_overdue": "int",
+    "page": "int"
+   }
+  },
+  "mold_code_match_pool": {
+   "source": "jobs × sale_orders × mold_code_matchings",
+   "note": "v28. 미확정 수주까지 매칭 대상으로 노출",
+   "columns": {
+    "row_no": "bigint",
+    "job_no": "text",
+    "matched_row_no": "numeric?",
+    "match_status": "text (확정|미확정)"
+   }
+  },
+  "expense_status_view": {
+   "source": "expenses × jobs × sale_orders",
+   "note": "v28. 경비현황 조회"
+  },
+  "partlist_all": {
+   "source": "partlist_materials ∪ partlist_purchases",
+   "note": "v30. PartList 현황(원재료+구매품 통합)"
+  },
+  "design_result_monthly_view": {
+   "source": "design_results",
+   "note": "v30. 건별 실적 → 월별 매트릭스(d01~d31, 시간 단위). work_type 으로 설계/조립 구분"
+  },
+  "outsourced_design_status_view": {
+   "source": "order_lines(외주설계) × sale_orders",
+   "note": "v30. 외주설계발주현황. nego_rate 컬럼은 진행률 의미"
+  },
+  "assembly_job_pool": {
+   "source": "job_pool × assembly_jobs",
+   "note": "v31. 조립 대상 제번 + 완료여부/검사횟수"
+  },
+  "purchase_status_view": {
+   "source": "order_lines(4계열) × job_pool",
+   "note": "v32/v34. 매입현황. 확정금액=mes_confirmed_amount()"
+  },
+  "sales_status_view": {
+   "source": "sale_orders",
+   "note": "v32. 매출현황"
+  },
+  "stock_inquiry_view": {
+   "source": "job_pool × order_lines(입고확정)",
+   "note": "v32/v34. 제번별 수주액 vs 매입확정액"
+  },
+  "manufacturing_cost_view": {
+   "source": "job_pool × sales_plans × order_lines(입고확정) × design_results",
+   "note": "v32/v34. 제조원가=확정매입+내작노무비(실적시간×30,000원/h)"
   }
  },
  "modules": {
@@ -1389,5 +1543,8 @@
    "api": "MESLOOK.open(kind,cb) / bindPair(kind,codeId,nameId) / rows(kind) / names(kind) / fillSelect(sel,kind,opt) / invalidate(kind)",
    "note": "첫 조회 후 캐시. 마스터 화면에서 등록/수정 후 다른 화면은 새로고침 또는 invalidate 로 반영"
   }
+ },
+ "functions": {
+  "mes_confirmed_amount(category,quote,confirm,nego)": "v34. 확정금액 통일 계산식. confirm_price 우선, 없으면 견적×(1-네고율). 단 category='외주설계' 는 nego_rate 가 진행률이므로 할인 미적용"
  }
 }

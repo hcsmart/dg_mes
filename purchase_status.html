@@ -59,10 +59,25 @@ function search(){const k=document.querySelector('input[name="k"]:checked').valu
  render();msg(`조회결과 ${view.length}건입니다.`);}
 function csv(){msg('프로토타입에서는 EXCEL 내보내기를 지원하지 않습니다.')}
 document.querySelectorAll('input[name="k"]').forEach(x=>x.addEventListener('change',search));
-window.MES={search,setMessage:msg};render();</script><script src="mes_db.js?v=27"></script>
-<script>MESDB.master({page:"purchase_status:data",table:"purchase_status_rows",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "category": "category", "job_no": "job_no", "item_name": "item_name", "process_code": "process_code", "process_name": "process_name", "part_no": "part_no", "part_name": "part_name", "machining_process_code": "machining_process_code", "orderer_name": "orderer_name", "partner_vendor_name": "partner_vendor_name", "order_date": {"col": "order_date", "type": "date"}, "receipt_planned_date": {"col": "receipt_planned_date", "type": "date"}, "receipt_date": {"col": "receipt_date", "type": "date"}, "receipt_confirmed_date": {"col": "receipt_confirmed_date", "type": "date"}, "quotation_price": {"col": "quotation_price", "type": "num"}, "confirmed_price": {"col": "confirmed_price", "type": "num"}, "plant_name": "plant_name"},get:()=>data,render:()=>{if(typeof view!=="undefined")view=[...data];(window.MES&&window.MES.search||window.search||window.render||function(){})()}});
-/* 표가 다시 그려질 때마다 합계 갱신 */
-(function(){const tb=document.querySelector('tbody');if(!tb||typeof renderTotal!=='function')return;new MutationObserver(()=>renderTotal()).observe(tb,{childList:true});renderTotal()})();
-</script>
+
+/* v32: 스냅샷 테이블 → purchase_status_view 실집계 조회 */
+const _online=()=>!!(window.MESDB&&MESDB.online);
+async function loadLive(){
+ for(let i=0;i<60&&!window.MESDB;i++)await new Promise(r=>setTimeout(r,50));
+ if(window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}
+ if(!_online())return;
+ try{
+  const rs=await MESDB.table('purchase_status_view').select('select=*');
+  data.length=0;
+  rs.forEach(r=>data.push(r));
+  if(typeof view!=='undefined'&&Array.isArray(view))view=[...data];
+  (window.MES&&window.MES.search||window.search||window.render||function(){})();
+  const m=document.getElementById('message');
+  if(m)m.textContent=`실데이터 ${data.length}건을 조회했습니다.`;
+ }catch(e){const m=document.getElementById('message');
+  if(m)m.textContent='조회 실패: '+String(e.message||e).slice(0,110)}
+}
+window.MES={search,setMessage:msg};loadLive();render();</script><script src="mes_db.js?v=35"></script>
+
 <script src="mes_ctx.js?v=1"></script>
 </body></html>

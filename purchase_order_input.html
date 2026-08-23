@@ -62,7 +62,7 @@ function renderVendors(){venBody.innerHTML=venView.map((v,i)=>`<tr class="${i===
 function renderBom(){const b=jobView[jobIdx]?.bom||[];bomBody.innerHTML=b.length?b.map((r,i)=>`<tr><td class="c"><input type="checkbox" data-i="${i}"></td><td>${r.part}</td><td>${r.name}</td><td class="c">${r.mat}</td><td>${r.spec}</td><td class="r">${r.qty}</td><td class="c">${r.att}</td></tr>`).join(''):'<tr><td colspan="7" class="c" style="color:#8b98a4">자재표가 없습니다.</td></tr>'}
 function renderReq(){reqBody.innerHTML=REQ.map((r,i)=>`<tr onclick="this.classList.toggle('sel')"><td class="c">${i+1}</td><td class="c"><input type="checkbox" data-no="${r.no}"></td><td>${r.vendor}</td><td>${r.job}</td><td class="c">${r.proc}</td><td>${r.part}</td><td>${r.name}</td><td class="c">${r.mat}</td><td>${r.spec}</td><td class="r">${r.qty}</td><td class="r">${r.ord}</td><td class="c">${r.odate}</td><td class="c">${r.rdate}</td><td class="c">${r.att}</td><td>${r.remark}</td><td class="c">${r.owner}</td><td class="r">${money(r.stdPrice)}</td><td class="r">${money(r.buyPrice)}</td><td class="r">${money(r.amount)}</td></tr>`).join('');
 sumQty.textContent=REQ.reduce((a,r)=>a+(r.qty||0),0);sumOrd.textContent=REQ.reduce((a,r)=>a+(r.ord||0),0);sumBuy.textContent=money(REQ.reduce((a,r)=>a+(r.buyPrice||0),0));sumAmt.textContent=money(REQ.reduce((a,r)=>a+(r.amount||0),0));countText.textContent=`제번 ${jobView.length}건 / 요청 ${REQ.length}건`}
-function pickJob(i){jobIdx=i;renderJobs();renderBom();msg(`${jobView[i].job} 자재표를 조회했습니다.`)}
+function pickJob(i){jobIdx=i;renderJobs();renderBom();if(typeof loadBom==='function')loadBom();msg(`${jobView[i].job} 자재표를 조회했습니다.`)}
 function pickVendor(i){venIdx=i;renderVendors();msg(`협력업체 ${venView[i]} 선택`)}
 function findVendor(){const q=venQ.value.trim().toLowerCase();venView=VENDORS.filter(v=>!q||v.toLowerCase().includes(q));venIdx=0;renderVendors()}
 function clearVendor(){venQ.value='';venView=[...VENDORS];venIdx=0;renderVendors()}
@@ -80,15 +80,41 @@ ${REQ.map((r,i)=>`<tr><td class="c">${i+1}</td><td class="c">${r.part}</td><td>$
 function exportCsv(){const out=[['협력업체','제번','공정','품번','부품명','재질','규격','수량','발주수량','발주월','입고요구일','담당자','기준단가','매입단가','책정금액'],...REQ.map(r=>[r.vendor,r.job,r.proc,r.part,r.name,r.mat,r.spec,r.qty,r.ord,r.odate,r.rdate,r.owner,r.stdPrice,r.buyPrice,r.amount])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='purchase_order_input.csv';a.click();URL.revokeObjectURL(a.href)}
 function msg(t){message.textContent=t}
 reqDate.value='2026-08-29';renderJobs();renderVendors();renderBom();renderReq();
-window.MES={search,save,exportCsv,setMessage:msg,print:printOrder};
+
+/* v30: 제번 리스트는 job_pool 뷰, 자재표는 partlist_purchases(PartList)에서 로드
+   — page_state 스냅샷에 갇혀 신규 수주/신규 PartList가 반영되지 않던 문제 해결 */
+const _online=()=>!!(window.MESDB&&MESDB.online);
+async function _waitDB(){for(let i=0;i<60&&!window.MESDB;i++)await new Promise(r=>setTimeout(r,50));
+ if(window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}}
+async function loadJobs(){
+ await _waitDB();if(!_online())return;
+ try{
+  const rs=await MESDB.table('job_pool').select('select=*&order=row_no');
+  const seen=new Set(JOBS.map(j=>j.job));
+  rs.forEach(r=>{if(!seen.has(r.job_no))JOBS.push({job:r.job_no,item:r.item_name||'',proc:'A',procName:'1/1',bom:[]})});
+  if(typeof search==='function')search();else{jobView=[...JOBS];renderJobs()}
+  await loadBom();
+ }catch(e){}
+}
+async function loadBom(){
+ const j=jobView[jobIdx];if(!j||!_online())return;
+ try{
+  const rs=await MESDB.table('partlist_purchases').select(`select=*&job_no=eq.${encodeURIComponent(j.job)}&order=row_no`);
+  if(!rs.length&&j.bom&&j.bom.length)return;      /* PartList 없으면 기존 스냅샷 유지 */
+  j.bom=rs.map(r=>({part:r.part_no,name:r.part_name,mat:r.type||'',spec:r.spec||'',qty:r.qty??1,att:r.attachment||''}));
+  if(rs.length)j.proc=rs[0].process_code||j.proc;
+  renderBom();
+ }catch(e){}
+}
+window.MES={search,save,exportCsv,setMessage:msg,print:printOrder};loadJobs();
 </script>
-<script src="mes_db.js?v=27"></script>
+<script src="mes_db.js?v=35"></script>
 <script>MESDB.bind("purchase_order_input",()=>({JOBS,VENDORS,REQ}));
 /* v22: 구매요청 리스트는 화면을 열 때 빈 작업공간으로 시작 (샘플 잔존분이 저장되는 것 방지) */
 REQ.length=0;/*v22*/if(typeof renderReq==='function')renderReq();
 </script>
 <script src="mes_ctx.js?v=1"></script>
-<script src="mes_lookup.js?v=27"></script>
+<script src="mes_lookup.js?v=35"></script>
 <script>
 /* 협력업체 목록: 하드코딩 → 마스터 직결 */
 (async function loadVendors(){

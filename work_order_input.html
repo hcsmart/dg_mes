@@ -117,7 +117,7 @@ async function loadJobs(){
  if(!online()&&window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}
  if(!online()){msg('DB 미연결 — 제번리스트를 불러올 수 없습니다.');return}
  try{
-  const rs=await MESDB.table('set_order_job_pool').select('select=*&order=row_no');
+  const rs=await MESDB.table('job_pool').select('select=*&order=row_no')   /* v31: SET발주 전용 풀 → 공용 job_pool */;
   const cnt=await MESDB.table(TBL).select('select=job_no,status');
   const g={}; cnt.forEach(w=>{const a=g[w.job_no]=g[w.job_no]||{n:0,run:0,done:0};a.n++;
     if(w.status==='완료')a.done++; else if(w.status==='진행')a.run++;});
@@ -339,7 +339,7 @@ document.getElementById('lkMask').addEventListener('click',e=>{if(e.target.id===
 window.MES={search:doSearch,add:addOrder,save:saveOrders,delete:deleteOrder,loadJobs,exportCsv,openLook,setMessage};
 render();renderD();
 </script>
-<script src="mes_db.js?v=27"></script>
+<script src="mes_db.js?v=35"></script>
 <script>loadJobs();</script>
 <script src="mes_ctx.js?v=1"></script>
 </body>

@@ -63,17 +63,51 @@ table{border-collapse:collapse;width:100%;table-layout:fixed}th,td{height:24px;p
 const LOG=[];
 function kind(){return document.querySelector('input[name=kind]:checked').value}
 function renderLog(){logBody.innerHTML=LOG.length?LOG.map((r,i)=>`<tr><td class="c">${i+1}</td><td>${r.sj}</td><td>${r.si}</td><td class="c">${r.sp}</td><td>${r.dj}</td><td>${r.di}</td><td class="c">${r.dp}</td></tr>`).join(''):'<tr><td colspan="7" class="c" style="color:#8b98a4">복사 이력이 없습니다.</td></tr>';countText.textContent=LOG.length?`${LOG.length}건 복사`:''}
-function copyPartList(){
-  if(!srcJob.value.trim())return msg('원본 제번을 입력하세요.');
-  if(!dstJob.value.trim())return msg('복사본 제번을 입력하세요.');
-  if(srcJob.value.trim()===dstJob.value.trim()&&srcProc.value===dstProc.value)return msg('원본과 복사본의 제번/공정이 동일합니다.');
-  LOG.unshift({sj:srcJob.value.trim(),si:srcItem.value.trim(),sp:srcProc.value,dj:dstJob.value.trim(),di:dstItem.value.trim()||srcItem.value.trim(),dp:dstProc.value||srcProc.value});
-  renderLog();msg(`${kind()} PartList를 ${srcJob.value.trim()}(${srcProc.value}) → ${dstJob.value.trim()}(${dstProc.value||srcProc.value}) 으로 복사했습니다.`)}
+/* v30: 화면 로그만 남기던 복사 → partlist_materials / partlist_purchases 실제 복제 */
+const online=()=>!!(window.MESDB&&MESDB.online);
+const TBLS=()=>kind()==='구매품'?['partlist_purchases']:kind()==='원재료'?['partlist_materials']:['partlist_materials','partlist_purchases'];
+async function copyPartList(){
+  const sj=srcJob.value.trim(),dj=dstJob.value.trim();
+  if(!sj)return msg('원본 제번을 입력하세요.');
+  if(!dj)return msg('복사본 제번을 입력하세요.');
+  if(sj===dj&&srcProc.value===dstProc.value)return msg('원본과 복사본의 제번/공정이 동일합니다.');
+  const sp=srcProc.value,dp=dstProc.value||srcProc.value;
+  if(!online()){LOG.unshift({sj,si:srcItem.value.trim(),sp,dj,di:dstItem.value.trim()||srcItem.value.trim(),dp});
+    renderLog();return msg(`${kind()} PartList를 복사했습니다. (DB 미연결 - 로컬)`)}
+  try{
+    let total=0,skipped=0;
+    for(const tbl of TBLS()){
+    let q=`select=*&job_no=eq.${encodeURIComponent(sj)}&order=row_no`;
+    if(sp)q+=`&process_code=eq.${encodeURIComponent(sp)}`;
+    const src=await MESDB.table(tbl).select(q);
+    if(!src.length)continue;
+    let dq=`select=part_no&job_no=eq.${encodeURIComponent(dj)}`;
+    if(dp)dq+=`&process_code=eq.${encodeURIComponent(dp)}`;
+    const exist=await MESDB.table(tbl).select(dq);
+    const dup=new Set(exist.map(r=>r.part_no));
+    const target=src.filter(r=>!dup.has(r.part_no));
+    skipped+=src.length-target.length;
+    if(!target.length)continue;
+    if(!total&&!confirm(`${kind()} PartList\n${sj}(${sp||'전체'}) → ${dj}(${dp||sp||'전체'})\n복사하시겠습니까?`))return;
+    const mx=await MESDB.table(tbl).select('select=row_no&order=row_no.desc&limit=1');
+    let next=(mx&&mx[0]?Number(mx[0].row_no):0)+1;
+    const rows=target.map(r=>({...r,row_no:next++,job_no:dj,process_code:dp||r.process_code,
+      registered_date:new Date().toISOString().slice(0,10)}));
+    await MESDB.table(tbl).upsert(rows,'row_no');
+    total+=rows.length;
+    }
+    if(!total)return msg(`복사할 ${kind()} PartList가 없습니다.${skipped?` (중복 ${skipped}건 제외)`:''}`);
+    LOG.unshift({sj,si:srcItem.value.trim(),sp,dj,di:dstItem.value.trim()||srcItem.value.trim(),dp});
+    renderLog();
+    msg(`${kind()} PartList ${total}건을 ${sj}(${sp||'전체'}) → ${dj}(${dp||sp||'전체'}) 으로 복사했습니다.${skipped?` (중복 ${skipped}건 제외)`:''}`);
+  }catch(e){const m=String(e.message||e);
+    msg(/무결성|foreign key/i.test(m)?'복사 실패: 등록되지 않은 제번입니다.':'복사 실패: '+m.slice(0,120))}
+}
 function reset(){dstJob.value='';dstItem.value='';dstProc.value='';msg('복사본 입력값을 초기화했습니다.')}
 function msg(t){message.textContent=t}
 renderLog();window.MES={save:copyPartList,setMessage:msg};
 </script>
-<script src="mes_db.js?v=27"></script>
+<script src="mes_db.js?v=35"></script>
 <script>MESDB.bind("partlist_copy",()=>({LOG}));</script>
 <script src="mes_ctx.js?v=1"></script>
 </body>

@@ -46,14 +46,25 @@ const n=v=>v==null?'':Number(v).toLocaleString();const p=v=>v==null?'':Number(v)
 const msg=t=>message.textContent=t;
 let view=[...data];
 function render(){body.innerHTML=view.map(r=>`<tr><td class="c">${r.row_no}</td><td>${esc(r.job_no)}</td><td class="c">${esc(r.process_code||'')}</td><td>${esc(r.part_no)}</td><td>${esc(r.part_name||'')}</td><td class="c">${esc(r.order_type||'')}</td><td class="c">${esc(r.material||'')}</td><td>${esc(r.design_dimension||'')}</td><td class="num">${r.qty??''}</td><td>${esc(r.attachment||'')}</td><td class="c">${esc(r.order_status||'')}</td><td class="c">${esc(r.registered_by||'')}</td><td class="c">${esc(r.registered_date||'')}</td></tr>`).join('');countText.textContent=view.length+'건';}
+/* v30: 별도 테이블(partlist_status_rows) → partlist_all 뷰(원재료+구매품 통합) 실조회 */
+const online=()=>!!(window.MESDB&&MESDB.online);
+async function loadAll(){
+ for(let i=0;i<60&&!window.MESDB;i++)await new Promise(r=>setTimeout(r,50));
+ if(window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}
+ if(!online()){render();return}
+ try{
+  const rs=await MESDB.table('partlist_all').select('select=*&order=job_no,process_code,part_no');
+  data.length=0;data.push(...rs.map((r,i)=>({...r,row_no:i+1,order_status:r.order_status||''})));
+  search();
+  msg(`PartList ${data.length}건 (원재료 ${rs.filter(r=>r.order_type==='원재료').length} / 구매품 ${rs.filter(r=>r.order_type==='구매품').length})`);
+ }catch(e){msg('조회 실패: '+String(e.message||e).slice(0,120));render()}
+}
 function search(){const k=q_kind.value,j=q_job.value.trim().toLowerCase(),p=q_part.value.trim().toLowerCase(),pc=q_pc.value.trim().toLowerCase(),m=q_mat.value.trim().toLowerCase();
  view=data.filter(r=>(k==='전체'||r.order_type===k)&&(!j||r.job_no.toLowerCase().includes(j))&&(!p||String(r.part_name??'').toLowerCase().includes(p))
   &&(!pc||String(r.process_code??'').toLowerCase().includes(pc))&&(!m||String(r.material??'').toLowerCase().includes(m)));
  render();msg(`조회결과 ${view.length}건입니다.`);}
 function csv(){msg('프로토타입에서는 EXCEL 내보내기를 지원하지 않습니다.')}
-window.MES={search,setMessage:msg};render();</script><script src="mes_db.js?v=27"></script>
-<script>
-MESDB.master({page:"partlist_status:data",table:"partlist_status_rows",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "process_code": "process_code", "part_no": "part_no", "part_name": "part_name", "order_type": "order_type", "material": "material", "design_dimension": "design_dimension", "qty": {"col": "qty", "type": "num"}, "attachment": "attachment", "order_status": "order_status", "registered_by": "registered_by", "registered_date": {"col": "registered_date", "type": "date"}},get:()=>data,render:()=>{if(typeof view!=="undefined")view=[...data];(window.render||window.search||function(){})()}});
-</script>
+window.MES={search,setMessage:msg};render();</script><script src="mes_db.js?v=35"></script>
+<script>loadAll();</script>
 <script src="mes_ctx.js?v=1"></script>
 </body></html>

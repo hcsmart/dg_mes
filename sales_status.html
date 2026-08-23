@@ -103,12 +103,30 @@ view=rows.filter(r=>(d==='전체'||(d==='사내'?r.dev==='사내':r.dev&&r.dev!=
 render();msg(`${d} 기준 ${view.length}건을 조회했습니다.`)}
 function exportCsv(){const out=[['제번','구분','고객사','품명','조수','개발유형','완료일','수주가','판매가','SET외주업체','당월 매입금액','총매입금액'],...view.map(r=>[r.job,r.type,r.cust,r.item,r.set,r.dev,r.cdate,r.order,r.sale,r.partner,r.month,r.total])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='sales_status.csv';a.click();URL.revokeObjectURL(a.href);msg('EXCEL(CSV) 파일을 생성했습니다.')}
 function msg(t){message.textContent=t}
-cd1.value='2026-07-02';cd2.value='2026-07-31';month.value='2026-08';search();window.MES={search,exportCsv,setMessage:msg};
+cd1.value=new Date(new Date().getFullYear(),new Date().getMonth(),1).toISOString().slice(0,10);  /* v32: 사진 기준 고정기간 → 당월 */cd2.value=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).toISOString().slice(0,10);month.value='2026-08';search();
+/* v32: 스냅샷 테이블 → sales_status_view 실집계 조회 */
+const _online=()=>!!(window.MESDB&&MESDB.online);
+async function loadLive(){
+ for(let i=0;i<60&&!window.MESDB;i++)await new Promise(r=>setTimeout(r,50));
+ if(window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}
+ if(!_online())return;
+ try{
+  const rs=await MESDB.table('sales_status_view').select('select=*');
+  rows.length=0;
+  rs.forEach(r=>rows.push({no:r.no,job:r.job,type:r.type||'',cust:r.cust||'',item:r.item||'',
+   set:Number(r.set_qty||0),dev:r.dev||'',cdate:r.cdate||'',order:Number(r.order_price||0),
+   sale:Number(r.sale||0),partner:r.partner||'',month:0,total:0}));
+  if(typeof view!=='undefined'&&Array.isArray(view))view=[...rows];
+  (window.MES&&window.MES.search||window.search||window.render||function(){})();
+  const m=document.getElementById('message');
+  if(m)m.textContent=`실데이터 ${rows.length}건을 조회했습니다.`;
+ }catch(e){const m=document.getElementById('message');
+  if(m)m.textContent='조회 실패: '+String(e.message||e).slice(0,110)}
+}
+window.MES={search,exportCsv,setMessage:msg};loadLive();
 </script>
-<script src="mes_db.js?v=27"></script>
-<script>
-MESDB.master({page:"sales_status:rows",table:"sales_status_rows",pk:"no",map:{"no": {"col": "no", "type": "num"}, "job": "job", "type": "type", "cust": "cust", "item": "item", "set": {"col": "set", "type": "num"}, "dev": "dev", "cdate": {"col": "cdate", "type": "date"}, "order": {"col": "order", "type": "num"}, "sale": {"col": "sale", "type": "num"}, "partner": "partner", "month": {"col": "month", "type": "num"}, "total": {"col": "total", "type": "num"}},get:()=>rows,render:()=>{if(typeof view!=="undefined")view=[...rows];(window.render||window.search||function(){})()}});
-</script>
+<script src="mes_db.js?v=35"></script>
+
 <script src="mes_ctx.js?v=1"></script>
 </body>
 </html>

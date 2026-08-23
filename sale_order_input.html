@@ -108,7 +108,7 @@ table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th
 </div>
 
 
-<script src="mes_lookup.js?v=27"></script>
+<script src="mes_lookup.js?v=35"></script>
 
 <script>
 /* 마스터 조회는 mes_lookup.js(MESLOOK) 사용 - DB 직결 */
@@ -140,6 +140,20 @@ async function save(){
  for(const k of NUMF){const v=Number(o[k]);o[k]=(o[k]===null||o[k]===''||Number.isNaN(v))?null:v}
  for(const k of DATEF)if(o[k]==='')o[k]=null;
  if(!window.MESDB||!MESDB.online){msg(`${o.job_no} 저장했습니다. (DB 미연결 - 로컬)`);return}
+ /* v28: 수주취소 시 하위 진행분 경고 (취소 파급이 없어 발주가 고아로 남던 문제) */
+ if(o.order_status==='취소'){
+  try{
+   const [sl,ol]=await Promise.all([
+    MESDB.table('set_order_lines').select(`select=line_id,status&job_no=eq.${encodeURIComponent(o.job_no)}`),
+    MESDB.table('order_lines').select(`select=line_id,status&job_no=eq.${encodeURIComponent(o.job_no)}`)]);
+   const done=[...(sl||[]),...(ol||[])].filter(r=>r.status!=='발주').length;
+   const open=[...(sl||[]),...(ol||[])].filter(r=>r.status==='발주').length;
+   if(open+done>0){
+    if(done>0){msg(`${o.job_no} 은(는) 이미 입고·확정된 건이 ${done}건 있어 취소할 수 없습니다. 입고취소 후 진행하세요.`);return}
+    if(!confirm(`${o.job_no}\n미입고 발주 ${open}건이 남아 있습니다.\n수주를 취소하면 해당 발주는 SET발주등록 / 입고등록 화면에서 직접 취소해야 합니다.\n계속하시겠습니까?`))return;
+   }
+  }catch(e){}
+ }
  try{
   /* FK 순서: jobs(부모) → sale_orders → 수주현황 */
   await MESDB.table('jobs').upsert({job_no:o.job_no,item_name:o.item_name,customer_name:o.customer_name,
@@ -167,6 +181,6 @@ async function save(){
 }
 window.MES={save,clearForm,setMessage:msg};
 load(seed);
-</script><script src="mes_db.js?v=27"></script>
+</script><script src="mes_db.js?v=35"></script>
 <script src="mes_ctx.js?v=1"></script>
 </body></html>

@@ -41,23 +41,66 @@ table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th
 @media(max-width:1400px){.formrow{grid-template-columns:78px minmax(0,1fr) 78px minmax(0,1fr)}}
 @media(max-width:880px){.formrow{grid-template-columns:78px minmax(0,1fr)}}
 .formrow>*{min-width:0}
-</style></head><body><div class="screen"><div class="title"><h1>PartList 등록(원재료)</h1><small>설계관리 · PARTLIST · 1공장</small></div><section class="filt"><div class="f2"><div class="lb">제 번</div><div><input id="q_job" class="field" value="J26118"></div><div class="lb">품 명</div><div><input id="q_item" class="field"></div><div class="lb">공 장</div><div><select class="field"><option>1공장</option></select></div><div></div><div></div></div></section><div class="pane" style="margin:0 14px 8px;height:120px"><div class="ph">제번 / 공정</div><div class="pb"><table style="min-width:520px"><thead><tr><th style="width:180px">제번</th><th style="width:110px">공정코드</th><th>공정명</th></tr></thead><tbody id="pbody"></tbody></table></div></div><div class="gridbox"><table style="min-width:1380px"><thead><tr><th style="width:44px">NO</th><th style="width:36px"></th><th style="width:110px">품번</th><th style="width:190px">품명</th><th style="width:90px">재질</th><th style="width:60px">수량</th><th style="width:80px">두께/Ø</th><th style="width:88px">세로/길이</th><th style="width:80px">가로</th><th style="width:170px">규격</th><th style="width:84px">등록자</th><th style="width:100px">등록일자</th><th>비고</th></tr></thead><tbody id="body"></tbody></table></div><footer class="foot"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn" onclick="save()">▤ 저장</button><button class="btn" onclick="del_()">✕ 삭제</button><button class="btn" onclick="xls()">▤ 엑셀불러오기</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">공정을 선택하면 해당 공정의 품목이 표시됩니다.</span><span class="right" id="countText"></span></footer></div><script>const data=[];const procs=[];const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+</style></head><body><div class="screen"><div class="title"><h1>PartList 등록(원재료)</h1><small>설계관리 · PARTLIST · 1공장</small></div><section class="filt"><div class="f2"><div class="lb">제 번</div><div><input id="q_job" class="field"></div><div class="lb">품 명</div><div><input id="q_item" class="field"></div><div class="lb">공 장</div><div><select class="field"><option>1공장</option></select></div><div></div><div></div></div></section><div class="pane" style="margin:0 14px 8px;height:120px"><div class="ph">제번 / 공정</div><div class="pb"><table style="min-width:520px"><thead><tr><th style="width:180px">제번</th><th style="width:110px">공정코드</th><th>공정명</th></tr></thead><tbody id="pbody"></tbody></table></div></div><div class="gridbox"><table style="min-width:1380px"><thead><tr><th style="width:44px">NO</th><th style="width:36px"></th><th style="width:110px">품번</th><th style="width:190px">품명</th><th style="width:90px">재질</th><th style="width:60px">수량</th><th style="width:80px">두께/Ø</th><th style="width:88px">세로/길이</th><th style="width:80px">가로</th><th style="width:170px">규격</th><th style="width:84px">등록자</th><th style="width:100px">등록일자</th><th>비고</th></tr></thead><tbody id="body"></tbody></table></div><div style="display:flex;gap:4px;padding:6px;align-items:center;flex-wrap:wrap;border-top:1px solid #c3ccd4;background:#f4f8fb"><span class="lb">공정</span><input id="fProc" class="field" style="width:50px" value="A"><span class="lb">품번</span><input id="fPart" class="field" style="width:80px"><span class="lb">품명</span><input id="fName" class="field" style="width:140px"><span class="lb">재질</span><input id="fMat" class="field" style="width:80px"><span class="lb">두께</span><input id="fThk" class="field" style="width:60px"><span class="lb">길이</span><input id="fLen" class="field" style="width:60px"><span class="lb">폭</span><input id="fWid" class="field" style="width:60px"><span class="lb">수량</span><input id="fQty" class="field" style="width:56px"><span class="lb">규격</span><input id="fSpec" class="field" style="width:130px"><span class="lb">등록자</span><input id="fBy" class="field" style="width:70px"></div><footer class="foot"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn" onclick="save()">▤ 저장</button><button class="btn" onclick="del_()">✕ 삭제</button><button class="btn" onclick="xls()">▤ 엑셀불러오기</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">공정을 선택하면 해당 공정의 품목이 표시됩니다.</span><span class="right" id="countText"></span></footer></div><script>const data=[];const procs=[];const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const n=v=>v==null?'':Number(v).toLocaleString();const p=v=>v==null?'':Number(v).toFixed(2)+'%';
 const msg=t=>message.textContent=t;
 let pc='A';
 function render(){
  pbody.innerHTML=procs.map((p,i)=>`<tr class="${p.process_code===pc?'sel':''}" onclick="pick('${p.process_code}')"><td>${esc(p.job_no)}</td><td>${esc(p.process_code)}</td><td>${esc(p.process_name)}</td></tr>`).join('');
  const rs=data.filter(r=>r.process_code===pc);
- body.innerHTML=rs.length?rs.map(r=>`<tr><td class="c">${r.row_no}</td><td class="c"><input type="checkbox"></td><td>${esc(r.part_no)}</td><td>${esc(r.part_name)}</td><td>${esc(r.material||'')}</td><td class="num">${r.qty??''}</td><td class="num">${r.thickness_dia??''}</td><td class="num">${r.length??''}</td><td class="num">${r.width??''}</td><td>${esc(r.spec||'')}</td><td class="c">${esc(r.registered_by||'')}</td><td class="c">${esc(r.registered_date||'')}</td><td>${esc(r.remark||'')}</td></tr>`).join('')
+ body.innerHTML=rs.length?rs.map(r=>`<tr><td class="c">${r.row_no}</td><td class="c"><input type="checkbox" data-row="${r.row_no}"></td><td>${esc(r.part_no)}</td><td>${esc(r.part_name)}</td><td>${esc(r.material||'')}</td><td class="num">${r.qty??''}</td><td class="num">${r.thickness_dia??''}</td><td class="num">${r.length??''}</td><td class="num">${r.width??''}</td><td>${esc(r.spec||'')}</td><td class="c">${esc(r.registered_by||'')}</td><td class="c">${esc(r.registered_date||'')}</td><td>${esc(r.remark||'')}</td></tr>`).join('')
   :'<tr><td colspan="13" class="c" style="height:120px;color:#8a97a2">해당 공정의 품목이 없습니다.</td></tr>';
  countText.textContent=rs.length+'건';
 }
 function pick(c){pc=c;render();msg(`공정 ${c} · ${data.filter(r=>r.process_code===c).length}건`)}
-function search(){render();msg('사진 기준 J26118 데이터를 표시했습니다.')}
-function save(){msg('프로토타입에서는 저장을 수행하지 않습니다.')}
-function del_(){msg('선택한 행이 없습니다.')}
+function search(){const j=(q_job.value||'').trim();if(j&&online())return loadJob(j);render();msg(`조회결과 ${data.length}건`)}
+/* v30: 스텁 → partlist_materials 실제 저장 (행추가/수정/삭제) */
+const online=()=>!!(window.MESDB&&MESDB.online);
+const numv=v=>{const x=Number(String(v??'').replace(/[^0-9.-]/g,''));return Number.isNaN(x)?null:x};
+async function waitDB(){for(let i=0;i<60&&!window.MESDB;i++)await new Promise(r=>setTimeout(r,50));
+ if(window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}}
+let curJob=null;
+async function loadJob(job){
+ await waitDB();if(!online())return;
+ curJob=job||curJob;if(!curJob)return;
+ try{
+  const rs=await MESDB.table('partlist_materials').select(`select=*&job_no=eq.${encodeURIComponent(curJob)}&order=row_no`);
+  data.length=0;data.push(...rs);
+  const ps=[...new Set(rs.map(r=>r.process_code))];
+  procs.length=0;ps.forEach(c=>procs.push({job_no:curJob,process_code:c,process_name:c}));
+  if(!procs.some(p=>p.process_code===pc))pc=procs[0]?.process_code||pc;
+  render();msg(`${curJob} 원재료 PartList ${rs.length}건`);
+ }catch(e){msg('조회 실패: '+String(e.message||e).slice(0,120))}
+}
+async function save(){
+ const job=(q_job.value||curJob||'').trim();
+ if(!job){msg('제번을 입력하세요.');return}
+ if(!fPart.value.trim()){msg('품번을 입력하세요.');return}
+ if(!online()){msg('DB 미연결 상태에서는 저장할 수 없습니다.');return}
+ try{
+  const mx=await MESDB.table('partlist_materials').select('select=row_no&order=row_no.desc&limit=1');
+  const row={row_no:(mx&&mx[0]?Number(mx[0].row_no):0)+1,job_no:job,
+   process_code:(fProc.value||pc||'A').trim(),part_no:(fPart.value||'').trim(),part_name:(fName.value||'').trim(),material:fMat.value||null,thickness_dia:numv(fThk.value)||null,length:numv(fLen.value)||null,width:numv(fWid.value)||null,qty:numv(fQty.value)||null,spec:fSpec.value||null,
+   registered_by:(fBy.value||'').trim()||null,registered_date:new Date().toISOString().slice(0,10),
+   plant_name:'1공장'};
+  if(MESDB.ensureRefs)await MESDB.ensureRefs([{part_no:row.part_no,part_name:row.part_name,material:row.material}]);
+  await MESDB.table('partlist_materials').upsert(row,'row_no');
+  await loadJob(job);
+  msg(`${job} / ${row.part_no} 을(를) 등록했습니다.`);
+ }catch(e){const m=String(e.message||e);
+  msg(/무결성|foreign key/i.test(m)?'저장 실패: 등록되지 않은 제번입니다.':'저장 실패: '+m.slice(0,120))}
+}
+async function del_(){
+ const ids=[...body.querySelectorAll('input[type=checkbox]:checked')].map(c=>Number(c.dataset.row)).filter(n=>!Number.isNaN(n));
+ if(!ids.length){msg('삭제할 행을 선택하세요.');return}
+ if(!online()){msg('DB 미연결 상태에서는 삭제할 수 없습니다.');return}
+ if(!confirm(`${ids.length}건을 삭제하시겠습니까?`))return;
+ try{for(const id of ids)await MESDB.table('partlist_materials').delete({row_no:id});
+  await loadJob();msg(`${ids.length}건을 삭제했습니다.`);
+ }catch(e){msg('삭제 실패: '+String(e.message||e).slice(0,120))}
+}
 function xls(){msg('프로토타입에서는 엑셀 불러오기를 지원하지 않습니다.')}
-window.MES={search,save,setMessage:msg};render();</script><script src="mes_db.js?v=27"></script>
+window.MES={search,save,setMessage:msg,reload:loadJob};render();(async()=>{await waitDB();const j=(q_job.value||data[0]?.job_no||'').trim();if(j)loadJob(j)})();</script><script src="mes_db.js?v=35"></script>
 <script>
 MESDB.master({page:"partlist_material_input:data",table:"partlist_materials",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "process_code": "process_code", "part_no": "part_no", "part_name": "part_name", "material": "material", "qty": {"col": "qty", "type": "num"}, "thickness_dia": {"col": "thickness_dia", "type": "num"}, "length": {"col": "length", "type": "num"}, "width": {"col": "width", "type": "num"}, "spec": "spec", "registered_by": "registered_by", "registered_date": {"col": "registered_date", "type": "date"}, "remark": "remark", "plant_name": "plant_name"},get:()=>data,render:()=>{if(typeof view!=="undefined")view=[...data];(window.render||window.search||function(){})()}});
 </script>
