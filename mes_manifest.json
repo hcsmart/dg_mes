@@ -1,6 +1,6 @@
 {
  "project": "NEXMES photo-driven MES prototype",
- "version": "42",
+ "version": "43",
  "entry": "index.html",
  "updated": "2026-08-23",
  "naming_rule": "<domain>_<action>.html (snake_case, English)",
@@ -985,6 +985,16 @@
    "조회창에서 구분 열 제거 (목록 자체가 구분별로 나뉘므로 불필요)",
    " 양산처 조회 = 고객사 + 협력업체 (자사 제외 42곳)",
    "협력업체 조회(원재료/구매품/외주가공)에 구분 조건 추가 - 플래그만 보던 탓에 고객사가 섞일 수 있었음"
+  ],
+  "v43": [
+   "제조원가에 경비 반영: manufacturing_cost_view 가 expenses 를 전혀 참조하지 않아",
+   " 경비를 등록해도 원가가 그대로였다. expense_cost 컬럼 추가 후 제조원가에 합산",
+   "제조원가 조회 화면에 '경비' 열 추가",
+   "process_price_changes.json 시드 동기화: 가공단가 8건(MS/HQ/GS/WS/NL/NL1/GM/NM2)이 누락되어",
+   " 새 환경 배포 시 외주가공비가 0으로 집계되던 문제 (6건 → 14건)",
+   "material_price_changes.json 시드 동기화 (사이즈별 단가 6건)",
+   "design_result_input: design_plans 완료처리 시 identity 컬럼(row_no) 을 전송하지 않도록 수정",
+   " (값이 비면 null 이 전송돼 NOT NULL 위반이 날 수 있었음)"
   ]
  },
  "files": [

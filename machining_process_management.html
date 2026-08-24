@@ -73,8 +73,8 @@ function remove(){if(selected<0)return msg('삭제할 공정을 선택하세요.
 function exportCsv(){const out=[['가공공정코드','가공공정명','공정그룹','정렬','완료시진척률','진척률 사용여부','계획 사용여부','비고'],...data.map(r=>[r.code,r.name,r.group,r.order,r.complete,r.progress,r.plan,r.remark])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='machining_process_management.csv';a.click();URL.revokeObjectURL(a.href);msg('CSV 파일을 생성했습니다.')}
 function msg(t){message.textContent=t}window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script>
-<script src="mes_db.js?v=42"></script>
+<script src="mes_db.js?v=43"></script>
 <script>MESDB.master({page:"machining_process_management",table:"processes",pk:"code",map:{"code": "process_code", "name": "process_name", "group": "process_group", "order": {"col": "sort_order", "type": "num"}, "complete": {"col": "completion_progress", "type": "num"}, "progress": {"col": "use_progress", "type": "ynbool"}, "plan": {"col": "use_plan", "type": "ynbool"}, "remark": "remark"},get:()=>data,render:()=>{view=[...data];render()}});</script>
-<script src="mes_ctx.js?v=42"></script>
+<script src="mes_ctx.js?v=43"></script>
 </body>
 </html>

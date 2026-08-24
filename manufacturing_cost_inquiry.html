@@ -30,9 +30,9 @@ table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th
 </section>
 <div class="split">
  <div class="gridbox"><table style="min-width:1320px">
-  <thead><tr><th style="width:70px">수주유형</th><th style="width:92px">완료일</th><th style="width:78px">제번</th><th style="width:90px">모델</th><th style="width:180px">품명</th><th style="width:110px">도번</th><th style="width:52px">조수</th><th style="width:72px">개발유형</th><th style="width:112px">수주가</th><th style="width:112px">목표가</th><th style="width:78px">목표가대비</th><th style="width:112px">제조원가</th><th style="width:112px">이윤</th><th style="width:68px">이익률</th></tr></thead>
+  <thead><tr><th style="width:70px">수주유형</th><th style="width:92px">완료일</th><th style="width:78px">제번</th><th style="width:90px">모델</th><th style="width:180px">품명</th><th style="width:110px">도번</th><th style="width:52px">조수</th><th style="width:72px">개발유형</th><th style="width:112px">수주가</th><th style="width:112px">목표가</th><th style="width:78px">목표가대비</th><th style="width:100px">경비</th><th style="width:112px">제조원가</th><th style="width:112px">이윤</th><th style="width:68px">이익률</th></tr></thead>
   <tbody id="obody"></tbody>
-  <tfoot><tr class="gtot"><td colspan="15" class="c" id="totline">조회 0건</td></tr></tfoot>
+  <tfoot><tr class="gtot"><td colspan="16" class="c" id="totline">조회 0건</td></tr></tfoot>
  </table></div>
  <div class="gridbox"><table style="min-width:1560px">
   <thead>
@@ -61,7 +61,7 @@ function renderTotal(){
   el.textContent = src.length ? `조회 ${src.length}건 · ` + ['수주가 '+money(sum('order_price')),'목표가 '+money(sum('target_price')),'제조원가 '+money(sum('manufacturing_cost')),'이윤 '+money(sum('profit'))].join(' / ') : '조회된 자료가 없습니다.';
 }
 function render(){
- obody.innerHTML=view.map((r,i)=>`<tr onclick="pick(${i},this)"><td class="c">${esc(r.order_type)}</td><td class="c">${esc(r.completion_date||'')}</td><td>${esc(r.job_no)}</td><td>${esc(r.model||'')}</td><td>${esc(r.item_name)}</td><td>${dwv(r)}</td><td class="c">${r.set_qty??''}</td><td class="c">${esc(r.development_type||'')}</td><td class="num">${n(r.order_price)}</td><td class="num">${n(r.target_price)}</td><td class="num">${p(r.target_ratio_pct)}</td><td class="num">${n(r.manufacturing_cost)}</td><td class="num">${n(r.profit)}</td><td class="num">${p(r.profit_rate_pct)}</td></tr>`).join('');
+ obody.innerHTML=view.map((r,i)=>`<tr onclick="pick(${i},this)"><td class="c">${esc(r.order_type)}</td><td class="c">${esc(r.completion_date||'')}</td><td>${esc(r.job_no)}</td><td>${esc(r.model||'')}</td><td>${esc(r.item_name)}</td><td>${dwv(r)}</td><td class="c">${r.set_qty??''}</td><td class="c">${esc(r.development_type||'')}</td><td class="num">${n(r.order_price)}</td><td class="num">${n(r.target_price)}</td><td class="num">${p(r.target_ratio_pct)}</td><td class="num">${n(r.expense_cost)}</td><td class="num">${n(r.manufacturing_cost)}</td><td class="num">${n(r.profit)}</td><td class="num">${p(r.profit_rate_pct)}</td></tr>`).join('');
  countText.textContent=view.length+'건';
 }
 function pick(i,tr){
@@ -104,7 +104,7 @@ async function loadLive(){
 }
 window.MES={search,exportCsv,setMessage:t=>message.textContent=t};loadLive();
 render();
-</script><script src="mes_db.js?v=42"></script>
+</script><script src="mes_db.js?v=43"></script>
 
-<script src="mes_ctx.js?v=42"></script>
+<script src="mes_ctx.js?v=43"></script>
 </body></html>

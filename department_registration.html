@@ -35,7 +35,7 @@ function remove(){if(selected<0)return msg('삭제할 항목을 선택하세요.
 function exportCsv(){const out=[["부서코드", "부서명", "사업부", "비고"],...data.map(r=>[r.code||'',r.name||'',r.division||'',r.remark||''])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='business_division_info.csv';a.click();URL.revokeObjectURL(a.href);msg('CSV 파일을 생성했습니다.')}
 function msg(t){message.textContent=t}window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script>
-<script src="mes_db.js?v=42"></script>
+<script src="mes_db.js?v=43"></script>
 <script>MESDB.master({page:"department_registration",table:"departments",pk:"code",map:{"code": "department_code", "name": "department_name", "division": "business_division_name", "remark": "remark"},get:()=>data,render:()=>{view=[...data];render()}});</script>
-<script src="mes_ctx.js?v=42"></script>
+<script src="mes_ctx.js?v=43"></script>
 </body></html>
