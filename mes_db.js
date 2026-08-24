@@ -19,14 +19,38 @@
   var done=false;
   window.__mesdbReady=function(){if(done)return;done=true;
     document.documentElement.classList.remove('mesdb-loading')};
-  setTimeout(window.__mesdbReady,2500);   /* 바인딩이 없거나 실패해도 반드시 해제 */
+  setTimeout(window.__mesdbReady,900);   /* v36: 2500 -> 900ms */
+  /* v36: MESDB.bind/master/lines 를 쓰지 않는 화면은 기다릴 이유가 없다 → 즉시 해제 */
+  document.addEventListener('DOMContentLoaded',function(){
+    setTimeout(function(){if(!window.__mesdbBound)window.__mesdbReady()},0)});
+  /* v36: DNS/TLS 를 미리 열어 첫 REST 요청 지연 제거 */
+  try{var lk=document.createElement('link');lk.rel='preconnect';lk.crossOrigin='';
+      lk.href='https://ipggvrzxfcryzryileuv.supabase.co';
+      (document.head||document.documentElement).appendChild(lk)}catch(e){}
 })();
 
-const MES_VER='v38';window.MES_VER=MES_VER;
+const MES_VER='v36';window.MES_VER=MES_VER;
 const CFG={url:'https://ipggvrzxfcryzryileuv.supabase.co',key:'sb_publishable_CHO-dAOU00HNwno52255mg_H3C1_vew'};
 function tok(){try{return (window.MES_AUTH||window.parent.MES_AUTH)?.token||null}catch(e){return null}}
 const H=()=>({'apikey':CFG.key,'Authorization':'Bearer '+(tok()||CFG.key),'Content-Type':'application/json'});
-async function rest(path,opt={}){const r=await fetch(CFG.url+'/rest/v1/'+path,{...opt,headers:{...H(),...(opt.headers||{})}});if(!r.ok){const b=await r.text();if(r.status===401||r.status===403||/permission denied|row-level security/i.test(b))throw new Error('권한 없음(RLS): 로그인이 필요한 자료입니다. '+r.status);if(/violates foreign key/i.test(b))throw new Error('참조 무결성 위반: 마스터에 없는 코드입니다. 기준정보에 먼저 등록하세요.');if(/violates check constraint/i.test(b))throw new Error('허용되지 않는 값입니다(구분/상태 코드 확인).');throw new Error(r.status+' '+b.slice(0,200))}const t=await r.text();return t?JSON.parse(t):null}
+/* v36: 최상위 창에 GET 응답 캐시를 두어 화면(iframe)마다 같은 마스터를 다시 받지 않게 한다.
+   쓰기(POST/PATCH/DELETE) 시 해당 테이블 캐시는 즉시 무효화한다. */
+const XC=(function(){try{var w=window.top;if(!w.__MESXC)w.__MESXC=new Map();return w.__MESXC}
+  catch(e){if(!window.__MESXC)window.__MESXC=new Map();return window.__MESXC}})();
+const XTTL=20000;
+const xclone=v=>(v===null||v===undefined)?v:JSON.parse(JSON.stringify(v));
+const xdrop=path=>{const tb=String(path).split(/[?/]/)[0];
+  if(tb==='rpc'){XC.clear();return}          /* RPC 는 어느 테이블을 바꿀지 모르므로 전체 무효화 */
+  for(const k of [...XC.keys()])if(k.indexOf('|'+tb)>-1)XC.delete(k)};
+async function rest(path,opt={}){
+  const mth=(opt.method||'GET').toUpperCase();
+  if(mth!=='GET'){xdrop(path);return rest_(path,opt)}
+  const k=(tok()||'a')+'|'+path, c=XC.get(k);
+  if(c&&Date.now()-c.t<XTTL)return xclone(await c.p);
+  const p=rest_(path,opt);XC.set(k,{t:Date.now(),p});
+  try{return xclone(await p)}catch(e){XC.delete(k);throw e}
+}
+async function rest_(path,opt={}){const r=await fetch(CFG.url+'/rest/v1/'+path,{...opt,headers:{...H(),...(opt.headers||{})}});if(!r.ok){const b=await r.text();if(r.status===401||r.status===403||/permission denied|row-level security/i.test(b))throw new Error('권한 없음(RLS): 로그인이 필요한 자료입니다. '+r.status);if(/violates foreign key/i.test(b))throw new Error('참조 무결성 위반: 마스터에 없는 코드입니다. 기준정보에 먼저 등록하세요.');if(/violates check constraint/i.test(b))throw new Error('허용되지 않는 값입니다(구분/상태 코드 확인).');throw new Error(r.status+' '+b.slice(0,200))}const t=await r.text();return t?JSON.parse(t):null}
 const table=name=>({
   select:(q='select=*')=>rest(`${name}?${q}`),
   upsert:(rows,onConflict)=>{const a=Array.isArray(rows)?rows:[rows];const keys=[];for(const r of a)for(const k in r)if(!keys.includes(k))keys.push(k);
@@ -38,9 +62,9 @@ let page=null,getter=null,last='',timer=null,online=false;
 function snapshot(){const o=getter()||{};const out={};for(const k in o)if(Array.isArray(o[k]))out[k]=o[k];return out}
 function badge(t,color){t=t+' · '+MES_VER;let b=document.getElementById('mesdb-badge');if(!b){b=document.createElement('div');b.id='mesdb-badge';b.style.cssText='position:fixed;right:8px;bottom:50px;font:11px Malgun Gothic,sans-serif;padding:2px 7px;border-radius:9px;color:#fff;opacity:.85;z-index:9999;pointer-events:none';document.body.appendChild(b)}b.textContent=t;b.style.background=color}
 async function load(){try{const rows=await rest(`page_state?page=eq.${encodeURIComponent(page)}&select=data`);online=true;if(rows&&rows[0]){const saved=rows[0].data,cur=getter()||{};for(const k in saved){if(Array.isArray(cur[k])&&Array.isArray(saved[k])){cur[k].length=0;cur[k].push(...saved[k])}}
-  (window.MES?.search||window.search||window.render||(()=>{}))();last=JSON.stringify(snapshot());badge('DB 연결 · 저장본 복원','#2e7d32')}else{last=JSON.stringify(snapshot());badge('DB 연결 · 초기데이터','#1565c0');window.__mesdbReady&&window.__mesdbReady()}}catch(e){online=false;badge('DB 미연결(로컬)','#9e9e9e');console.warn('MESDB',e.message);window.__mesdbReady&&window.__mesdbReady()}}
+  (window.MES?.search||window.search||window.render||(()=>{}))();last=JSON.stringify(snapshot());badge('DB 연결 · 저장본 복원','#2e7d32');window.__mesdbReady&&window.__mesdbReady()}else{last=JSON.stringify(snapshot());badge('DB 연결 · 초기데이터','#1565c0');window.__mesdbReady&&window.__mesdbReady()}}catch(e){online=false;badge('DB 미연결(로컬)','#9e9e9e');console.warn('MESDB',e.message);window.__mesdbReady&&window.__mesdbReady()}}
 async function persist(){if(!online)return;const s=JSON.stringify(snapshot());if(s===last)return;try{await rest('page_state',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify([{page,data:JSON.parse(s),updated_at:new Date().toISOString()}])});last=s;badge('DB 저장됨 '+new Date().toLocaleTimeString('ko-KR'),'#2e7d32')}catch(e){badge('DB 저장실패','#c62828');console.warn('MESDB',e.message)}}
-function bind(p,g){page=p;getter=g;load();document.addEventListener('click',e=>{if(e.target.closest('button,[onclick]')){clearTimeout(timer);timer=setTimeout(persist,400)}},true);document.addEventListener('change',()=>{clearTimeout(timer);timer=setTimeout(persist,400)},true)}
+function bind(p,g){window.__mesdbBound=1;page=p;getter=g;load();document.addEventListener('click',e=>{if(e.target.closest('button,[onclick]')){clearTimeout(timer);timer=setTimeout(persist,400)}},true);document.addEventListener('change',()=>{clearTimeout(timer);timer=setTimeout(persist,400)},true)}
 async function reset(){await rest(`page_state?page=eq.${encodeURIComponent(page)}`,{method:'DELETE'});location.reload()}
 /* RPC (Postgres 함수) 호출 */
 async function rpc(fn,args){
@@ -83,6 +107,7 @@ function toDb(row,map){const o={};for(const k in map){const{col,type}=map[k];let
 function badge(t,c){t=t+' · '+(window.MES_VER||'v24');let b=document.getElementById('mesdb-badge');if(!b){b=document.createElement('div');b.id='mesdb-badge';b.style.cssText='position:fixed;right:8px;bottom:50px;font:11px Malgun Gothic,sans-serif;padding:2px 7px;border-radius:9px;color:#fff;opacity:.85;z-index:9999;pointer-events:none';document.body.appendChild(b)}b.textContent=t;b.style.background=c}
 
 async function master(opt){
+  window.__mesdbBound=1;
   const map=norm(opt.map), pkScreen=opt.pk, pkCol=map[pkScreen].col;
   let snap=new Map(), online=false, timer=null;
   const arr=()=>opt.get();
@@ -140,6 +165,7 @@ const toD=(row,map)=>{const o={};for(const k in map){const{col,type}=map[k];let 
 function badge(t,c){t=t+' · '+(window.MES_VER||'v24');let b=document.getElementById('mesdb-badge');if(!b){b=document.createElement('div');b.id='mesdb-badge';b.style.cssText='position:fixed;right:8px;bottom:50px;font:11px Malgun Gothic,sans-serif;padding:2px 7px;border-radius:9px;color:#fff;opacity:.85;z-index:9999;pointer-events:none';document.body.appendChild(b)}b.textContent=t;b.style.background=c}
 
 async function lines(opt){
+  window.__mesdbBound=1;
   const map=N(opt.map);let snap=new Map(),online=false,timer=null;
   const arr=()=>opt.get();
   const q=['select=*','order=line_id',`category=eq.${encodeURIComponent(opt.category)}`];

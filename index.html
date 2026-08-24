@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DG mes</title>
+<link rel="preconnect" href="https://ipggvrzxfcryzryileuv.supabase.co" crossorigin>
+<link rel="dns-prefetch" href="https://ipggvrzxfcryzryileuv.supabase.co">
 <style>
 :root{--top1:42px;--top2:78px;--left:300px;--tabs:32px;--line:#aeb8c2;--blue:#2469a8;--text:#273746}
 *{box-sizing:border-box}html,body{height:100%;margin:0}body{font-family:"Malgun Gothic","맑은 고딕",Arial,sans-serif;font-size:12px;color:var(--text);background:#dfe4e9;overflow:hidden}button{font:inherit;cursor:pointer}
@@ -17,7 +19,7 @@
 <main class="workspace"><div class="tabs" id="tabs"></div><div class="stage" id="stage"></div></main>
 <footer class="status"><span id="now">2026-08-22 10:15:13</span><span class="msg" id="statusMsg">데이터가 조회되었습니다.</span><span class="right">AP0020</span></footer>
 <script>
-const APP_VER='25';
+const APP_VER='36';
 const APP={
   '영업관리':{
     secondary:[
@@ -240,6 +242,18 @@ function injectCtx(f){
 }
 function renderStage(){for(const p of openTabs.values()){if(document.getElementById('view_'+p.id))continue;if(p.file){const f=document.createElement('iframe');f.id='view_'+p.id;f.src=p.file+(p.file.includes('?')?'&':'?')+'v='+APP_VER;f.addEventListener('load',()=>injectCtx(f));stage.appendChild(f)}else{const d=document.createElement('div');d.id='view_'+p.id;d.className='placeholder';d.innerHTML=`<div><b>${esc(p.title)}</b><br><br>해당 업무 화면 사진을 주시면 <code>${p.id}.html</code> 형태로 제작해 이 위치에 연결합니다.</div>`;stage.appendChild(d)}}stage.querySelectorAll('iframe,.placeholder').forEach(x=>x.classList.toggle('on',x.id==='view_'+activeId))}
 function activate(id){activeId=id;renderTabs();renderStage();buildTree()}
+/* v36: 선반입(prefetch) — 클릭 전에 화면 파일을 캐시에 올려 대기시간을 줄인다 */
+const _pf=new Set();
+function prefetch(url){if(!url||_pf.has(url))return;_pf.add(url);
+  try{const l=document.createElement('link');l.rel='prefetch';l.href=url;l.as='document';document.head.appendChild(l)}catch(e){}
+  try{fetch(url,{cache:'force-cache'}).catch(()=>{})}catch(e){}}
+tree.addEventListener('mouseover',e=>{const b=e.target.closest('.item');if(!b)return;
+  const p=pageRegistry[b.textContent.trim()];if(p&&p.file)prefetch(p.file+'?v='+APP_VER)});
+(window.requestIdleCallback||(f=>setTimeout(f,1200)))(()=>{
+  ['mes_db.js?v=36','mes_ctx.js?v=1','mes_lookup.js?v=35','mes_auth.js?v='+APP_VER].forEach(prefetch);
+  let i=0;const hot=['sale_order_status.html','purchase_order_input.html','purchase_order_status.html',
+    'material_order_input.html','outsourcing_order_input.html','vendor_management.html','status_board.html'];
+  const step=()=>{if(i>=hot.length)return;prefetch(hot[i++]+'?v='+APP_VER);setTimeout(step,600)};step()});
 function closeTab(id,e){e?.stopPropagation();const ids=[...openTabs.keys()],idx=ids.indexOf(id);openTabs.delete(id);document.getElementById('view_'+id)?.remove();if(activeId===id){activeId=ids[idx+1]||ids[idx-1]||'';if(!openTabs.has(activeId))activeId=[...openTabs.keys()][0]||''}renderTabs();renderStage();buildTree()}
 function closeActive(){if(activeId)closeTab(activeId)}
 function tick(){const d=new Date();now.textContent=d.toLocaleString('sv-SE',{hour12:false}).replace(',','')}

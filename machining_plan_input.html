@@ -61,7 +61,7 @@ function search(){const j=q_job.value.trim().toLowerCase();
 function save(){msg('프로토타입에서는 저장을 수행하지 않습니다.')}
 function del_(){msg('선택한 행이 없습니다.')}
 function pr(){msg('프로토타입에서는 인쇄를 지원하지 않습니다.')}
-window.MES={search,save,setMessage:msg};render();</script><script src="mes_db.js?v=38"></script>
+window.MES={search,save,setMessage:msg};render();</script><script src="mes_db.js?v=36"></script>
 <script>
 MESDB.master({page:"machining_plan_input:heads",table:"machining_plans",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "process_code": "process_code", "machining_completion_date": {"col": "machining_completion_date", "type": "date"}, "s1_date": {"col": "s1_date", "type": "date"}},get:()=>heads,render:()=>{if(typeof view!=="undefined")view=[...heads];(window.render||window.search||function(){})()}});
 MESDB.master({page:"machining_plan_input:parts",table:"machining_plan_parts",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "part_no": "part_no", "part_name": "part_name", "standard_process": "standard_process", "steps": "steps"},get:()=>parts,render:()=>{if(typeof view!=="undefined")view=[...heads];(window.render||window.search||function(){})()}});

@@ -83,7 +83,7 @@ function exportCsv(){const out=[['제번','품명','공정','공정명','품번'
 function msg(t){message.textContent=t}
 confirmDate.value='2026-08-22';render();window.MES={search,save,exportCsv,setMessage:msg};
 </script>
-<script src="mes_db.js?v=38"></script>
+<script src="mes_db.js?v=36"></script>
 <script>MESDB.lines({page:"material_receipt_confirmation",category:"원재료",statuses:["입고", "입고확정"],map:{"no": {"col": "line_id", "type": "num"}, "vendor": "vendor_name", "job": "job_no", "item": "item_name", "proc": "process_code", "procName": "process_name", "part": "part_no", "partName": "part_name", "mat": "material", "odate": {"col": "order_date", "type": "date"}, "idate": {"col": "receipt_date", "type": "date"}, "cdate": {"col": "confirm_date", "type": "date"}, "price": {"col": "quote_price", "type": "num"}, "rate": {"col": "nego_rate", "type": "num"}, "status": {"col": "status", "type": "status"}},get:()=>rows,render:()=>{view=[...rows];render()}});</script>
 <script src="mes_ctx.js?v=1"></script>
 </body>
