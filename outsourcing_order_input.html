@@ -140,15 +140,15 @@ async function loadRoutes(){
 }
 window.MES={search,save,exportCsv,setMessage:msg,reload:loadJobs};
 </script>
-<script src="mes_db.js?v=40"></script>
+<script src="mes_db.js?v=41"></script>
 <script>
 /* v39: JOBS/ROUTES 는 page_state 스냅샷이 아니라 실데이터에서 매번 로드한다.
    (스냅샷에 갇혀 신규 수주가 안 뜨던 문제) */
 REQ.length=0;if(typeof renderReq==='function')renderReq();
 loadJobs();
 </script>
-<script src="mes_ctx.js?v=40"></script>
-<script src="mes_lookup.js?v=40"></script>
+<script src="mes_ctx.js?v=41"></script>
+<script src="mes_lookup.js?v=41"></script>
 <script>
 /* 협력업체 목록: 하드코딩 → 마스터 직결 */
 (async function loadVendors(){
@@ -168,6 +168,6 @@ window.MESLOOK_RELOAD_VENDORS=async()=>{MESLOOK.invalidate('vendor_outsourcing')
  if(typeof venView!=='undefined')venView=[...VENDORS];
  if(typeof renderVendors==='function')renderVendors();};
 </script>
-<script src="mes_price.js?v=40"></script>
+<script src="mes_price.js?v=41"></script>
 </body>
 </html>
