@@ -139,7 +139,7 @@ async function buildPlan(c){
 function search(){const j=(qJob.value||'').trim();if(j)return loadCard();goPage(1)}function add(){return false}function remove(){return false}function save(){window.print()}function exportCsv(){const rows=[];const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+v+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='process_history_card.csv';a.click();URL.revokeObjectURL(a.href)}
 window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg,reload:loadCard};build();goPage(1);(async()=>{await waitDB();if(online())loadCard()})();
 </script>
-<script src="mes_db.js?v=36"></script>
+<script src="mes_db.js?v=37"></script>
 <script src="mes_ctx.js?v=1"></script>
 </body>
 </html>
