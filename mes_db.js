@@ -29,7 +29,7 @@
       (document.head||document.documentElement).appendChild(lk)}catch(e){}
 })();
 
-const MES_VER='v36';window.MES_VER=MES_VER;
+const MES_VER='v37';window.MES_VER=MES_VER;
 const CFG={url:'https://ipggvrzxfcryzryileuv.supabase.co',key:'sb_publishable_CHO-dAOU00HNwno52255mg_H3C1_vew'};
 function tok(){try{return (window.MES_AUTH||window.parent.MES_AUTH)?.token||null}catch(e){return null}}
 const H=()=>({'apikey':CFG.key,'Authorization':'Bearer '+(tok()||CFG.key),'Content-Type':'application/json'});
@@ -60,7 +60,27 @@ const table=name=>({
 });
 let page=null,getter=null,last='',timer=null,online=false;
 function snapshot(){const o=getter()||{};const out={};for(const k in o)if(Array.isArray(o[k]))out[k]=o[k];return out}
-function badge(t,color){t=t+' · '+MES_VER;let b=document.getElementById('mesdb-badge');if(!b){b=document.createElement('div');b.id='mesdb-badge';b.style.cssText='position:fixed;right:8px;bottom:50px;font:11px Malgun Gothic,sans-serif;padding:2px 7px;border-radius:9px;color:#fff;opacity:.85;z-index:9999;pointer-events:none';document.body.appendChild(b)}b.textContent=t;b.style.background=color}
+/* v37: 상태 배지 — 개발용 표시. 정상(연결/저장)일 때는 2.5초 뒤 자동으로 사라지고,
+   오류·미연결일 때만 남는다. 항상 보고 싶으면 localStorage.mes_badge='on',
+   완전히 끄려면 'off'. */
+window.__mesBadge=function(t,color){
+  var mode=null;try{mode=localStorage.getItem('mes_badge')}catch(e){}
+  if(mode==='off')return;
+  t=t+' · '+(window.MES_VER||'v37');
+  var b=document.getElementById('mesdb-badge');
+  if(!b){b=document.createElement('div');b.id='mesdb-badge';
+    b.style.cssText='position:fixed;right:8px;bottom:50px;font:11px Malgun Gothic,sans-serif;'+
+      'padding:2px 7px;border-radius:9px;color:#fff;opacity:.85;z-index:9999;pointer-events:none;'+
+      'transition:opacity .4s';
+    (document.body||document.documentElement).appendChild(b)}
+  b.textContent=t;b.style.background=color;b.style.opacity='.85';b.style.display='';
+  clearTimeout(b.__t);
+  var bad=(color==='#c62828'||color==='#9e9e9e'||color==='#f57c00');
+  if(mode==='on'||bad)return;
+  b.__t=setTimeout(function(){b.style.opacity='0';
+    setTimeout(function(){if(b.style.opacity==='0')b.style.display='none'},450)},2500);
+};
+const badge=(t,c)=>window.__mesBadge(t,c);
 async function load(){try{const rows=await rest(`page_state?page=eq.${encodeURIComponent(page)}&select=data`);online=true;if(rows&&rows[0]){const saved=rows[0].data,cur=getter()||{};for(const k in saved){if(Array.isArray(cur[k])&&Array.isArray(saved[k])){cur[k].length=0;cur[k].push(...saved[k])}}
   (window.MES?.search||window.search||window.render||(()=>{}))();last=JSON.stringify(snapshot());badge('DB 연결 · 저장본 복원','#2e7d32');window.__mesdbReady&&window.__mesdbReady()}else{last=JSON.stringify(snapshot());badge('DB 연결 · 초기데이터','#1565c0');window.__mesdbReady&&window.__mesdbReady()}}catch(e){online=false;badge('DB 미연결(로컬)','#9e9e9e');console.warn('MESDB',e.message);window.__mesdbReady&&window.__mesdbReady()}}
 async function persist(){if(!online)return;const s=JSON.stringify(snapshot());if(s===last)return;try{await rest('page_state',{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify([{page,data:JSON.parse(s),updated_at:new Date().toISOString()}])});last=s;badge('DB 저장됨 '+new Date().toLocaleTimeString('ko-KR'),'#2e7d32')}catch(e){badge('DB 저장실패','#c62828');console.warn('MESDB',e.message)}}
@@ -104,7 +124,7 @@ function toDb(row,map){const o={};for(const k in map){const{col,type}=map[k];let
   else if(type==='num'){v=(v===''||v===null||v===undefined)?null:Number(v);if(Number.isNaN(v))v=null}
   else v=(v===''||v===undefined||v===null)?null:String(v);
   o[col]=v}return o}
-function badge(t,c){t=t+' · '+(window.MES_VER||'v24');let b=document.getElementById('mesdb-badge');if(!b){b=document.createElement('div');b.id='mesdb-badge';b.style.cssText='position:fixed;right:8px;bottom:50px;font:11px Malgun Gothic,sans-serif;padding:2px 7px;border-radius:9px;color:#fff;opacity:.85;z-index:9999;pointer-events:none';document.body.appendChild(b)}b.textContent=t;b.style.background=c}
+const badge=(t,c)=>window.__mesBadge(t,c);
 
 async function master(opt){
   window.__mesdbBound=1;
@@ -162,7 +182,7 @@ const toD=(row,map)=>{const o={};for(const k in map){const{col,type}=map[k];let 
   else if(type==='date'){v=(v&&v!=='null'&&v!=='undefined')?String(v).slice(0,10):null;if(v&&!/^\d{4}-\d{2}-\d{2}$/.test(v))v=null}
   else if(type==='status')v=S2D[v]||'발주';
   else v=(v===''||v===undefined||v===null)?null:String(v);o[col]=v}return o};
-function badge(t,c){t=t+' · '+(window.MES_VER||'v24');let b=document.getElementById('mesdb-badge');if(!b){b=document.createElement('div');b.id='mesdb-badge';b.style.cssText='position:fixed;right:8px;bottom:50px;font:11px Malgun Gothic,sans-serif;padding:2px 7px;border-radius:9px;color:#fff;opacity:.85;z-index:9999;pointer-events:none';document.body.appendChild(b)}b.textContent=t;b.style.background=c}
+const badge=(t,c)=>window.__mesBadge(t,c);
 
 async function lines(opt){
   window.__mesdbBound=1;
