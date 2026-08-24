@@ -61,19 +61,33 @@ function stop(){if(timer)clearInterval(timer);timer=null;btnStart.classList.remo
 setInterval(()=>{const d=new Date();clock.textContent=d.toLocaleString('ko-KR')},1000);
 /* v28: 수주 데이터(status_board_pool 뷰)에서 실시간 생성. DB 미연결 시 사진 판독본 유지 */
 const online=()=>!!(window.MESDB&&MESDB.online);
-async function loadBoard(){
- if(!online()&&window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}
+/* v44: 공지사항 조회를 현황판 조회와 분리. 수주 데이터가 0건이어도 공지사항은 표시 */
+async function loadNotices(){
  if(!online())return;
  try{
-  try{NOTICES=await MESDB.table('notices').select('select=*&is_active=is.true&order=posted_date.desc&limit=10')}catch(e){}
+  const ns=await MESDB.table('notices').select('select=*&order=posted_date.desc&limit=20');
+  NOTICES=(ns||[]).filter(n=>n.is_active!==false);
+ }catch(e){NOTICES=[]}
+}
+async function loadRows(){
+ if(!online())return;
+ try{
   const rs=await MESDB.table('status_board_pool').select('select=*&order=row_no');
-  if(!rs||!rs.length)return;
-  rows=rs;pages=[...new Set(rows.map(r=>r.page))].sort((a,b)=>a-b);
-  TOTAL_PAGES=pages.length;pi=0;render();
+  if(rs&&rs.length){
+   rows=rs;pages=[...new Set(rows.map(r=>r.page))].sort((a,b)=>a-b);
+   TOTAL_PAGES=pages.length;if(pi>=pages.length)pi=0;
+  }
  }catch(e){}
+}
+async function loadBoard(){
+ if(!online()&&window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}
+ await loadNotices();
+ await loadRows();
+ render();
 }
 window.MES={reload:loadBoard,setMessage:()=>{}};
 render();start();setTimeout(loadBoard,300);
+setInterval(loadBoard,300000);
 </script><script src="mes_db.js?v=43"></script>
 
 <script src="mes_ctx.js?v=43"></script>
