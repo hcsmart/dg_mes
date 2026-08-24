@@ -1,6 +1,6 @@
 {
  "project": "NEXMES photo-driven MES prototype",
- "version": "v37",
+ "version": "v38",
  "entry": "index.html",
  "updated": "2026-08-23",
  "naming_rule": "<domain>_<action>.html (snake_case, English)",
@@ -945,5 +945,15 @@
   "[db_sync] work_order_details 는 사진 1행에 작업지시번호·제번(NOT NULL)이 없어 적재 제외 — 작업지시 화면에서 생성. photo_provenance.null_fields 에 사유 기록",
   "[감사] mes_preload_check.py 에 [2-b] 생성열 포함 / NOT NULL 결측 검사 추가",
   "캐시 버전 v=37 일괄 갱신"
+ ],
+ "changelog_v38": [
+  "[시연데이터] 익명화 규격으로 거래 데이터 생성 (mes_seed_orders.py, md5 기반 결정적 스크램블)",
+  "  · order_lines 809건 추가(사진 판독 24건은 그대로 유지) — 4계열 × 발주/입고/입고확정 분산, 네고율 3~10%",
+  "  · PartList 가 있는 제번(J26118)은 PartList 75행을 그대로 발주로 전개, 나머지 제번은 부품·자재 마스터에서 결정적 선택",
+  "  · sale_orders 38건 / 수주현황 35건 / 영업계획 36건 생성 — 수주금액은 제번별 원가에서 원가율 55~74% 로 역산",
+  "  · 총 수주 1,523,380,000원 / 원가 992,747,000원 · 평균 원가율 65%",
+  "  · 고객사·양산처·담당자·금형타입·기계사양은 기존 가명 마스터에서만 선택 (FK 안전)",
+  "[db_sync] PK 없는 order_lines 는 재적재 시 중복되므로 적재 전 자동 초기화(NOPK_RESET) 추가",
+  "캐시 버전 v=38 일괄 갱신"
  ]
 }

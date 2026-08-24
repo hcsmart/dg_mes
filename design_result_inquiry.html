@@ -64,7 +64,7 @@ function csv(){const h=['구분','작업자','제번','공정','가공공정코�
  const c='\ufeff'+[h,...rs].map(x=>x.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');
  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([c],{type:'text/csv;charset=utf-8'}));a.download='design_results.csv';a.click();}
 document.querySelectorAll('input[name="k"]').forEach(x=>x.addEventListener('change',search));
-window.MES={search,exportCsv:csv,setMessage:msg};render();</script><script src="mes_db.js?v=37"></script>
+window.MES={search,exportCsv:csv,setMessage:msg};render();</script><script src="mes_db.js?v=38"></script>
 <script>MESDB.master({page:"design_result_inquiry:data",table:"design_results",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "work_type": "work_type", "worker_name": "worker_name", "job_no": "job_no", "process_code": "process_code", "machining_process_code": "machining_process_code", "machining_process_name": "machining_process_name", "work_date": {"col": "work_date", "type": "date"}, "work_minutes": {"col": "work_minutes", "type": "num"}},get:()=>data,render:()=>{if(typeof view!=="undefined")view=[...data];(window.MES&&window.MES.search||window.search||window.render||function(){})()}});
 /* 표가 다시 그려질 때마다 합계 갱신 */
 (function(){const tb=document.querySelector('tbody');if(!tb||typeof renderTotal!=='function')return;new MutationObserver(()=>renderTotal()).observe(tb,{childList:true});renderTotal()})();
