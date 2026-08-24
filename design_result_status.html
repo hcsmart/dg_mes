@@ -74,7 +74,7 @@ function render(){
 function search(){const k=document.querySelector('input[name="k"]:checked').value;
  view=k==='전체'?[...data]:data.filter(r=>r.work_type===k);render();msg(`조회결과 ${view.length}명입니다.`);}
 document.querySelectorAll('input[name="k"]').forEach(x=>x.addEventListener('change',search));
-window.MES={search,setMessage:msg};render();</script><script src="mes_db.js?v=41"></script>
+window.MES={search,setMessage:msg};render();</script><script src="mes_db.js?v=42"></script>
 <script>loadMonthly();</script>
-<script src="mes_ctx.js?v=41"></script>
+<script src="mes_ctx.js?v=42"></script>
 </body></html>

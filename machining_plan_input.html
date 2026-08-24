@@ -161,10 +161,10 @@ async function loadParts(job){
   msg(`${job} · 부품 ${parts.length}건${parts.some(p=>p.row_no==null)?' (PartList 기준 · 저장하면 가공계획으로 확정)':''}`);
  }catch(e){msg('부품 조회 실패: '+String(e.message||e).slice(0,110))}
 }
-</script><script src="mes_db.js?v=41"></script>
+</script><script src="mes_db.js?v=42"></script>
 <script>
 loadHeads();
 MESDB.master({page:"machining_plan_input:parts",table:"machining_plan_parts",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "part_no": "part_no", "part_name": "part_name", "standard_process": "standard_process", "steps": "steps"},get:()=>parts,render:()=>{if(typeof view!=="undefined")view=[...heads];(window.render||window.search||function(){})()}});
 </script>
-<script src="mes_ctx.js?v=41"></script>
+<script src="mes_ctx.js?v=42"></script>
 </body></html>

@@ -29,7 +29,7 @@
       (document.head||document.documentElement).appendChild(lk)}catch(e){}
 })();
 
-const MES_VER='v41';window.MES_VER=MES_VER;
+const MES_VER='v42';window.MES_VER=MES_VER;
 const CFG={url:'https://ipggvrzxfcryzryileuv.supabase.co',key:'sb_publishable_CHO-dAOU00HNwno52255mg_H3C1_vew'};
 function tok(){try{return (window.MES_AUTH||window.parent.MES_AUTH)?.token||null}catch(e){return null}}
 const H=()=>({'apikey':CFG.key,'Authorization':'Bearer '+(tok()||CFG.key),'Content-Type':'application/json'});
@@ -71,7 +71,7 @@ function snapshot(){const o=getter()||{};const out={};for(const k in o)if(Array.
 window.__mesBadge=function(t,color){
   var mode=null;try{mode=localStorage.getItem('mes_badge')}catch(e){}
   if(mode==='off')return;
-  t=t+' · '+(window.MES_VER||'v41');
+  t=t+' · '+(window.MES_VER||'v42');
   var b=document.getElementById('mesdb-badge');
   if(!b){b=document.createElement('div');b.id='mesdb-badge';
     b.style.cssText='position:fixed;right:8px;bottom:50px;font:11px Malgun Gothic,sans-serif;'+
