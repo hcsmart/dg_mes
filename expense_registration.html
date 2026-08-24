@@ -114,6 +114,8 @@ async function del_(){
 })();
 job_no.addEventListener('change',loadJob);
 render();
-window.MES={save,search:loadJob,setMessage:msg};</script><script src="mes_db.js?v=38"></script>
-<script src="mes_ctx.js?v=1"></script>
+window.MES={save,search:loadJob,setMessage:msg};</script><script src="mes_db.js?v=39"></script>
+<script src="mes_ctx.js?v=39"></script>
+<script src="mes_jobpick.js?v=39"></script>
+<script>MESJOB.attach("job_no",{onPick:()=>{if(typeof loadJob==="function")loadJob()}});</script>
 </body></html>

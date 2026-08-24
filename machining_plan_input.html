@@ -41,7 +41,7 @@ table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th
 @media(max-width:1400px){.formrow{grid-template-columns:78px minmax(0,1fr) 78px minmax(0,1fr)}}
 @media(max-width:880px){.formrow{grid-template-columns:78px minmax(0,1fr)}}
 .formrow>*{min-width:0}
-</style></head><body><div class="screen"><div class="title"><h1>가공계획등록</h1><small>구매관리 · 가공 · 1공장</small></div><section class="filt"><div class="f2"><div class="lb">제 번</div><div><input id="q_job" class="field"></div><div class="lb">품 명</div><div><input id="q_item" class="field"></div><div class="lb">공 장</div><div><select class="field"><option>1공장</option></select></div><div></div><div></div></div></section><div class="panes" style="grid-template-rows:1fr 1.2fr"><div class="panes" style="grid-template-columns:420px 1fr;grid-template-rows:1fr;padding:0;gap:8px"><div class="pane"><div class="ph">제번 리스트</div><div class="pb"><table style="min-width:0"><thead><tr><th style="width:46px">NO</th><th style="width:130px">제번</th><th style="width:56px">공정</th><th style="width:104px">가공완료일</th><th>S1</th></tr></thead><tbody id="hbody"></tbody></table></div></div><div class="pane"><div class="ph">가공 공정 리스트</div><div class="pb"><table style="min-width:900px"><thead><tr><th style="width:70px">기준공정</th><th style="width:130px">기준공정명</th><th style="width:64px">공정1</th><th style="width:64px">공정2</th><th style="width:64px">공정3</th><th style="width:64px">공정4</th><th style="width:64px">공정5</th><th style="width:64px">공정6</th><th style="width:64px">공정7</th><th style="width:64px">공정8</th><th style="width:64px">공정9</th><th style="width:64px">공정10</th></tr></thead><tbody id="rbody"></tbody></table></div></div></div><div class="pane"><div class="ph">부품 리스트</div><div class="pb"><table style="min-width:1220px"><thead><tr><th style="width:36px"></th><th style="width:110px">부품코드</th><th style="width:180px">부품명</th><th style="width:90px">기준공정</th><th style="width:64px">공정1</th><th style="width:64px">공정2</th><th style="width:64px">공정3</th><th style="width:64px">공정4</th><th style="width:64px">공정5</th><th style="width:64px">공정6</th><th style="width:64px">공정7</th><th style="width:64px">공정8</th><th style="width:64px">공정9</th><th style="width:64px">공정10</th><th style="width:64px">공정11</th><th style="width:64px">공정12</th></tr></thead><tbody id="pbody"></tbody></table></div></div></div><footer class="foot"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn" onclick="save()">▤ 저장</button><button class="btn" onclick="del_()">✕ 삭제</button><button class="btn" onclick="pr()">▤ PRINT</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">제번을 선택하면 부품별 가공공정이 표시됩니다.</span><span class="right" id="countText"></span></footer></div><script>const heads=[];const routes=[{"row_no": 1, "standard_process_no": 1, "standard_process_name": "밀링완성", "steps": ["MS", "HQ", "GS"]}, {"row_no": 2, "standard_process_no": 2, "standard_process_name": "EW완성1", "steps": ["MS", "HQ", "GS", "WS"]}, {"row_no": 3, "standard_process_no": 3, "standard_process_name": "기본", "steps": ["MS", "HQ", "GS", "WS", "NM2"]}, {"row_no": 4, "standard_process_no": 4, "standard_process_name": "대형 기본", "steps": ["NL", "GM", "NL1"]}, {"row_no": 5, "standard_process_no": 5, "standard_process_name": "EW완성2", "steps": ["NM", "HQ", "GS", "WS", "NM2"]}, {"row_no": 6, "standard_process_no": 6, "standard_process_name": "비열 밀링완성", "steps": ["MS", "GS", "WS"]}];const parts=[];const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+</style></head><body><div class="screen"><div class="title"><h1>가공계획등록</h1><small>구매관리 · 가공 · 1공장</small></div><section class="filt"><div class="f2"><div class="lb">제 번</div><div><input id="q_job" class="field"></div><div class="lb">품 명</div><div><input id="q_item" class="field"></div><div class="lb">공 장</div><div><select class="field"><option>1공장</option></select></div><div></div><div></div></div></section><div class="panes" style="grid-template-rows:1fr 1.2fr"><div class="panes" style="grid-template-columns:420px 1fr;grid-template-rows:1fr;padding:0;gap:8px"><div class="pane"><div class="ph">제번 리스트</div><div class="pb"><table style="min-width:0"><thead><tr><th style="width:46px">NO</th><th style="width:130px">제번</th><th style="width:56px">공정</th><th style="width:104px">가공완료일</th><th>S1</th></tr></thead><tbody id="hbody"></tbody></table></div></div><div class="pane"><div class="ph">가공 공정 리스트</div><div class="pb"><table style="min-width:900px"><thead><tr><th style="width:70px">기준공정</th><th style="width:130px">기준공정명</th><th style="width:64px">공정1</th><th style="width:64px">공정2</th><th style="width:64px">공정3</th><th style="width:64px">공정4</th><th style="width:64px">공정5</th><th style="width:64px">공정6</th><th style="width:64px">공정7</th><th style="width:64px">공정8</th><th style="width:64px">공정9</th><th style="width:64px">공정10</th></tr></thead><tbody id="rbody"></tbody></table></div></div></div><div class="pane"><div class="ph">부품 리스트</div><div class="pb"><table style="min-width:1220px"><thead><tr><th style="width:36px"></th><th style="width:110px">부품코드</th><th style="width:180px">부품명</th><th style="width:90px">기준공정</th><th style="width:64px">공정1</th><th style="width:64px">공정2</th><th style="width:64px">공정3</th><th style="width:64px">공정4</th><th style="width:64px">공정5</th><th style="width:64px">공정6</th><th style="width:64px">공정7</th><th style="width:64px">공정8</th><th style="width:64px">공정9</th><th style="width:64px">공정10</th><th style="width:64px">공정11</th><th style="width:64px">공정12</th></tr></thead><tbody id="pbody"></tbody></table></div></div></div><footer class="foot"><button class="btn" onclick="search()">⌕ 검색</button><button class="btn" onclick="save()">▤ 저장</button><button class="btn" onclick="del_()">✕ 삭제</button><button class="btn" onclick="pr()">▤ PRINT</button><button class="btn" onclick="window.parent?.closeActive?.()">⊠ 닫기</button><span class="msg" id="message">제번을 선택하면 부품별 가공공정이 표시됩니다.</span><span class="right" id="countText"></span></footer></div><script>const heads=[];const routes=[];const parts=[];const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const n=v=>v==null?'':Number(v).toLocaleString();const p=v=>v==null?'':Number(v).toFixed(2)+'%';
 const msg=t=>message.textContent=t;
 let view=[...heads];
@@ -51,20 +51,117 @@ function render(){
  rbody.innerHTML=routes.map(r=>`<tr><td class="c">${r.standard_process_no}</td><td>${esc(r.standard_process_name)}</td>${cells(r.steps,10)}</tr>`).join('');
  countText.textContent=view.length+'건';pbody.innerHTML='';
 }
-function pick(i,tr){const r=view[i];document.querySelectorAll('#hbody tr').forEach(x=>x.classList.remove('sel'));tr.classList.add('sel');
+let selIdx=-1;
+const PROW=p=>`<tr><td class="c"><input type="checkbox" data-i="${parts.indexOf(p)}" data-row="${p.row_no??''}"></td><td>${esc(p.part_no)}</td><td>${esc(p.part_name)}</td><td class="c">${esc(p.standard_process||'')}</td>${cells(p.steps,12)}</tr>`;
+const PEMPTY='<tr><td colspan="16" class="c" style="height:100px;color:#8a97a2">PartList에 등록된 부품이 없습니다. 설계관리 &gt; PARTLIST에서 부품을 먼저 등록하세요.</td></tr>';
+function pick(i,tr){const r=view[i];if(!r)return;selIdx=i;
+ document.querySelectorAll('#hbody tr').forEach((x,k)=>x.classList.toggle('sel',k===i));
+ if(typeof loadParts==='function')return loadParts(r.job_no);
  const rs=parts.filter(p=>p.job_no===r.job_no);
- pbody.innerHTML=rs.length?rs.map(p=>`<tr><td class="c"><input type="checkbox"></td><td>${esc(p.part_no)}</td><td>${esc(p.part_name)}</td><td class="c">${esc(p.standard_process||'')}</td>${cells(p.steps,12)}</tr>`).join('')
-  :'<tr><td colspan="16" class="c" style="height:100px;color:#8a97a2">사진에서 판독 가능한 부품 내역이 없습니다.</td></tr>';
+ pbody.innerHTML=rs.length?rs.map(PROW).join(''):PEMPTY;
  msg(`${r.job_no} / 공정 ${r.process_code} · 부품 ${rs.length}건`);}
 function search(){const j=q_job.value.trim().toLowerCase();
  view=heads.filter(r=>!j||r.job_no.toLowerCase().includes(j));render();msg(`조회결과 ${view.length}건입니다.`);}
-function save(){msg('프로토타입에서는 저장을 수행하지 않습니다.')}
-function del_(){msg('선택한 행이 없습니다.')}
+/* v39: 스텁 → machining_plans / machining_plan_parts 실제 저장 */
+const _online=()=>!!(window.MESDB&&MESDB.online);
+async function save(){
+ const job=(view[selIdx]&&view[selIdx].job_no)||(q_job.value||'').trim();
+ if(!job)return msg('제번을 선택하세요.');
+ if(!_online())return msg('DB 미연결 상태에서는 저장할 수 없습니다.');
+ try{
+  const h=view[selIdx]||{};
+  const ex=await MESDB.table('machining_plans').select(`select=row_no&job_no=eq.${encodeURIComponent(job)}&limit=1`);
+  let rowNo=(ex&&ex[0])?Number(ex[0].row_no):null;
+  if(rowNo==null){const mx=await MESDB.table('machining_plans').select('select=row_no&order=row_no.desc&limit=1');
+   rowNo=(mx&&mx[0]?Number(mx[0].row_no):0)+1}
+  await MESDB.table('machining_plans').upsert({row_no:rowNo,job_no:job,
+    process_code:h.process_code||'A',
+    machining_completion_date:h.machining_completion_date||null,
+    s1_date:h.s1_date||null},'row_no');
+  const picks=[...document.querySelectorAll('#pbody input[type=checkbox]:checked')]
+    .map(c=>Number(c.dataset.i)).filter(n=>!Number.isNaN(n));
+  if(picks.length){
+   const pmx=await MESDB.table('machining_plan_parts').select('select=row_no&order=row_no.desc&limit=1');
+   let base=(pmx&&pmx[0]?Number(pmx[0].row_no):0);
+   const rows=picks.map(k=>{const p=parts[k];
+     return{row_no:(p.row_no??++base),job_no:job,part_no:p.part_no,part_name:p.part_name||null,
+       standard_process:p.standard_process||null,steps:p.steps||[]}});
+   await MESDB.table('machining_plan_parts').upsert(rows,'row_no');
+  }
+  await loadParts(job);
+  msg(`${job} 가공계획을 저장했습니다.${picks.length?' (부품 '+picks.length+'건 확정)':' 부품을 선택하면 함께 저장됩니다.'}`);
+ }catch(e){msg('저장 실패: '+String(e.message||e).slice(0,140))}
+}
+async function del_(){
+ const ids=[...document.querySelectorAll('#pbody input[type=checkbox]:checked')]
+   .map(c=>Number(c.dataset.row)).filter(n=>!Number.isNaN(n));
+ if(!ids.length)return msg('삭제할 부품 행을 선택하세요.');
+ if(!_online())return msg('DB 미연결 상태에서는 삭제할 수 없습니다.');
+ if(!confirm(`${ids.length}건을 삭제하시겠습니까?`))return;
+ try{for(const id of ids)await MESDB.table('machining_plan_parts').delete({row_no:id});
+  if(view[selIdx])await loadParts(view[selIdx].job_no);
+  msg(`${ids.length}건을 삭제했습니다.`)}
+ catch(e){msg('삭제 실패: '+String(e.message||e).slice(0,140))}
+}
 function pr(){msg('프로토타입에서는 인쇄를 지원하지 않습니다.')}
-window.MES={search,save,setMessage:msg};render();</script><script src="mes_db.js?v=38"></script>
+window.MES={search,save,setMessage:msg,reload:()=>loadHeads()};render();
+
+/* ── v39: 제번리스트=job_pool(수주), 기준공정=machining_standard_routes,
+   부품=machining_plan_parts → 없으면 PartList 부품 × 기준공정 ── */
+async function _waitDB(){for(let i=0;i<60&&!window.MESDB;i++)await new Promise(r=>setTimeout(r,50));
+ if(window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}}
+async function loadRoutes(){
+ try{const rs=await MESDB.table('machining_standard_routes').select('select=*&order=standard_process_no');
+  routes.length=0;rs.forEach(r=>routes.push({row_no:r.row_no,standard_process_no:r.standard_process_no,
+    standard_process_name:r.standard_process_name,steps:Array.isArray(r.steps)?r.steps:[]}));
+  rbody.innerHTML=routes.map(r=>`<tr><td class="c">${r.standard_process_no}</td><td>${esc(r.standard_process_name)}</td>${cells(r.steps,10)}</tr>`).join('');
+ }catch(e){}
+}
+async function loadHeads(){
+ await _waitDB();
+ if(!(window.MESDB&&MESDB.online))return msg('DB 미연결 - 제번리스트를 불러올 수 없습니다.');
+ await loadRoutes();
+ try{
+  const [pool,plans]=await Promise.all([
+    MESDB.table('job_pool').select('select=*&order=row_no'),
+    MESDB.table('machining_plans').select('select=*')]);
+  const pm=new Map(plans.map(p=>[p.job_no,p]));
+  heads.length=0;
+  pool.forEach((r,i)=>{const p=pm.get(r.job_no)||{};
+    heads.push({row_no:i+1,job_no:r.job_no,item_name:r.item_name||'',
+      process_code:p.process_code||'A',
+      machining_completion_date:p.machining_completion_date||r.completion_date||'',
+      s1_date:p.s1_date||r.s1_date||''})});
+  view=[...heads];render();loadRoutes();
+  msg(heads.length?`제번 ${heads.length}건. 제번을 선택하면 부품별 가공공정이 표시됩니다.`
+    :'등록된 수주가 없습니다. 영업관리 > 수주등록을 먼저 하세요.');
+ }catch(e){msg('제번리스트 조회 실패: '+String(e.message||e).slice(0,110))}
+}
+async function loadParts(job){
+ parts.length=0;
+ if(!(window.MESDB&&MESDB.online)){pbody.innerHTML=PEMPTY;return}
+ try{
+  const rs=await MESDB.table('machining_plan_parts')
+    .select(`select=*&job_no=eq.${encodeURIComponent(job)}&order=row_no`);
+  if(rs.length){
+   rs.forEach(r=>parts.push({row_no:r.row_no,job_no:job,part_no:r.part_no,part_name:r.part_name||'',
+     standard_process:r.standard_process||'',steps:Array.isArray(r.steps)?r.steps:[]}));
+  }else{
+   const pl=await MESDB.table('partlist_materials')
+     .select(`select=part_no,part_name&job_no=eq.${encodeURIComponent(job)}&order=row_no`);
+   const std=routes[0];
+   pl.forEach(r=>parts.push({row_no:null,job_no:job,part_no:r.part_no,part_name:r.part_name||'',
+     standard_process:std?std.standard_process_name:'',steps:std?std.steps:[]}));
+  }
+  pbody.innerHTML=parts.length?parts.map(PROW).join(''):PEMPTY;
+  q_job.value=job;
+  msg(`${job} · 부품 ${parts.length}건${parts.some(p=>p.row_no==null)?' (PartList 기준 · 저장하면 가공계획으로 확정)':''}`);
+ }catch(e){msg('부품 조회 실패: '+String(e.message||e).slice(0,110))}
+}
+</script><script src="mes_db.js?v=39"></script>
 <script>
-MESDB.master({page:"machining_plan_input:heads",table:"machining_plans",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "process_code": "process_code", "machining_completion_date": {"col": "machining_completion_date", "type": "date"}, "s1_date": {"col": "s1_date", "type": "date"}},get:()=>heads,render:()=>{if(typeof view!=="undefined")view=[...heads];(window.render||window.search||function(){})()}});
+loadHeads();
 MESDB.master({page:"machining_plan_input:parts",table:"machining_plan_parts",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "part_no": "part_no", "part_name": "part_name", "standard_process": "standard_process", "steps": "steps"},get:()=>parts,render:()=>{if(typeof view!=="undefined")view=[...heads];(window.render||window.search||function(){})()}});
 </script>
-<script src="mes_ctx.js?v=1"></script>
+<script src="mes_ctx.js?v=39"></script>
 </body></html>

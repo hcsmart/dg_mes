@@ -29,7 +29,7 @@
       (document.head||document.documentElement).appendChild(lk)}catch(e){}
 })();
 
-const MES_VER='v38';window.MES_VER=MES_VER;
+const MES_VER='v39';window.MES_VER=MES_VER;
 const CFG={url:'https://ipggvrzxfcryzryileuv.supabase.co',key:'sb_publishable_CHO-dAOU00HNwno52255mg_H3C1_vew'};
 function tok(){try{return (window.MES_AUTH||window.parent.MES_AUTH)?.token||null}catch(e){return null}}
 const H=()=>({'apikey':CFG.key,'Authorization':'Bearer '+(tok()||CFG.key),'Content-Type':'application/json'});
@@ -66,7 +66,7 @@ function snapshot(){const o=getter()||{};const out={};for(const k in o)if(Array.
 window.__mesBadge=function(t,color){
   var mode=null;try{mode=localStorage.getItem('mes_badge')}catch(e){}
   if(mode==='off')return;
-  t=t+' · '+(window.MES_VER||'v38');
+  t=t+' · '+(window.MES_VER||'v39');
   var b=document.getElementById('mesdb-badge');
   if(!b){b=document.createElement('div');b.id='mesdb-badge';
     b.style.cssText='position:fixed;right:8px;bottom:50px;font:11px Malgun Gothic,sans-serif;'+
@@ -137,7 +137,11 @@ async function master(opt){
   try{
     const rows=await MESDB.table(opt.table).select('select=*');
     const a=arr(); a.length=0; a.push(...rows.map(r=>toScreen(r,map)));
-    online=true; (opt.render||window.render||(()=>{}))(); take();
+    online=true;
+    /* v39: 렌더 예외를 격리 (마스터 화면 저장 불능 방지) */
+    try{(opt.render||window.render||(()=>{}))()}catch(e){console.warn('MESDB.master render',e.message);
+      badge('화면 표시 오류(자료는 정상 로드)','#f57c00')}
+    take();
     badge(`DB: ${opt.table} ${rows.length}건`,'#2e7d32');window.__mesdbReady&&window.__mesdbReady();
   }catch(e){online=false;badge('DB 미연결(로컬)','#9e9e9e');console.warn('MESDB.master',e.message);window.__mesdbReady&&window.__mesdbReady();return}
 
@@ -194,7 +198,12 @@ async function lines(opt){
   try{
     const rows=await MESDB.table('order_lines').select(q.join('&'));
     const a=arr();a.length=0;a.push(...rows.map(r=>toS(r,map)));
-    online=true;(opt.render||window.render||(()=>{}))();take();
+    online=true;
+    /* v39: 화면 렌더 오류가 DB 연결 상태까지 죽이지 않도록 격리한다.
+       (이전에는 render 예외 → catch → online=false → syncLines 미등록 → 저장 불능) */
+    try{(opt.render||window.render||(()=>{}))()}catch(e){console.warn('MESDB.lines render',e.message);
+      badge('화면 표시 오류(자료는 정상 로드)','#f57c00')}
+    take();
     badge(`DB: order_lines ${opt.category} ${rows.length}건`,'#2e7d32');window.__mesdbReady&&window.__mesdbReady();
   }catch(e){online=false;badge('DB 미연결(로컬)','#9e9e9e');console.warn('MESDB.lines',e.message);window.__mesdbReady&&window.__mesdbReady();return}
 

@@ -49,7 +49,8 @@ tbody tr:hover td:not(.step){background:#edf6fd}tbody tr.sel td:not(.step){backg
 <script>
 const MAXCOL=12;
 const rows=[];
-const SUMMARY={rate:78.51,total:22800,done:13920,notin:0,notord:3811};
+/* v39: 하드코딩 스냅샷 → 실데이터 집계 (빈 상태에서 78.51% 가 표시되던 문제) */
+const SUMMARY={rate:0,total:0,done:0,notin:0,notord:0};
 let view=[...rows];
 const money=v=>Number(v||0).toLocaleString('ko-KR');
 function head(){headRow.innerHTML=`<th style="width:120px">제번</th><th style="width:60px">공정</th><th style="width:100px">품번</th>`+Array.from({length:MAXCOL},(_,i)=>`<th style="width:105px">공정${i+1}</th>`).join('')}
@@ -61,11 +62,49 @@ function search(){const j=jobQ.value.trim().toLowerCase(),p=procQ.value.trim().t
 view=rows.filter(r=>(!j||r.job.toLowerCase().includes(j))&&(!p||r.proc.toLowerCase().includes(p))&&(!pt||r.part.toLowerCase().includes(pt)));render();msg(`${view.length}건을 조회했습니다.`)}
 function exportCsv(){const out=[['제번','공정','품번',...Array.from({length:MAXCOL},(_,i)=>`공정${i+1}`)],...view.map(r=>[r.job,r.proc,r.part,...Array.from({length:MAXCOL},(_,i)=>{const s=r.steps[i];return s?`${s.mp}/${s.vendor}/${s.date}`:''})])];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='machining_purchase_progress.csv';a.click();URL.revokeObjectURL(a.href);msg('EXCEL(CSV) 파일을 생성했습니다.')}
 function msg(t){message.textContent=t}
-rate.value=SUMMARY.rate.toFixed(2)+'%';total.value=money(SUMMARY.total);done.value=money(SUMMARY.done);notin.value=money(SUMMARY.notin);notord.value=money(SUMMARY.notord);
-head();render();window.MES={search,exportCsv,setMessage:msg};
+function paintSummary(){
+ rate.value=(Number(SUMMARY.rate)||0).toFixed(2)+'%';total.value=money(SUMMARY.total);
+ done.value=money(SUMMARY.done);notin.value=money(SUMMARY.notin);notord.value=money(SUMMARY.notord);}
+paintSummary();
+head();render();
+
+/* ── v39: order_lines(외주가공) 에서 제번·품번별 공정 진척을 실시간 집계 ── */
+const _num=v=>{const x=Number(v);return Number.isFinite(x)?x:0};
+async function loadLive(){
+ for(let i=0;i<60&&!window.MESDB;i++)await new Promise(r=>setTimeout(r,50));
+ if(window.MESDB&&MESDB.ready){try{await MESDB.ready}catch(e){}}
+ if(!(window.MESDB&&MESDB.online)){msg('DB 미연결 - 진척 자료를 불러올 수 없습니다.');return}
+ try{
+  const ls=await MESDB.table('order_lines')
+    .select('select=*&category=eq.외주가공&order=line_id');
+  const g=new Map();
+  let total=0,done=0,notin=0,notord=0;
+  for(const l of ls){
+   const amt=_num(l.confirm_price)||_num(l.quote_price);
+   total+=amt;
+   if(l.status==='입고확정')done+=amt;
+   else if(l.status==='입고')notin+=amt;
+   else notord+=amt;
+   const k=(l.job_no||'')+'|'+(l.process_code||'')+'|'+(l.part_no||'');
+   if(!g.has(k))g.set(k,{job:l.job_no||'',proc:l.process_code||'',part:l.part_no||'',steps:[]});
+   g.get(k).steps.push({mp:l.machining_process_code||l.process_code||'',
+     vendor:l.vendor_name||'',
+     date:(l.confirm_date||l.receipt_date||l.required_date||'').toString().slice(0,10)
+       +(l.status==='입고확정'?'':' ('+(l.status||'')+')')});
+  }
+  rows.length=0;rows.push(...g.values());
+  SUMMARY.total=total;SUMMARY.done=done;SUMMARY.notin=notin;SUMMARY.notord=notord;
+  SUMMARY.rate=total>0?done*100/total:0;
+  paintSummary();view=[...rows];render();
+  msg(rows.length?`가공 진척 ${rows.length}건 (확정 ${SUMMARY.rate.toFixed(1)}%)`
+    :'외주가공 발주 자료가 없습니다.');
+ }catch(e){msg('진척 조회 실패: '+String(e.message||e).slice(0,110))}
+}
+loadLive();
+window.MES={search,exportCsv,setMessage:msg};
 </script>
-<script src="mes_db.js?v=38"></script>
+<script src="mes_db.js?v=39"></script>
 <script>MESDB.bind("machining_purchase_progress",()=>({rows}));</script>
-<script src="mes_ctx.js?v=1"></script>
+<script src="mes_ctx.js?v=39"></script>
 </body>
 </html>

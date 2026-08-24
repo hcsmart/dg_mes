@@ -126,10 +126,10 @@ async function delStep(){
   await reloadSteps(sel.job_no);msg(`세부공정 ${rs.length}건을 삭제했습니다.`);
  }catch(e){msg('삭제 실패: '+String(e.message||e).slice(0,120))}
 }
-window.MES={search,save,setMessage:msg,reload:loadPool};render();loadPool();</script><script src="mes_db.js?v=38"></script>
+window.MES={search,save,setMessage:msg,reload:loadPool};render();loadPool();</script><script src="mes_db.js?v=39"></script>
 <script>
 MESDB.master({page:"design_plan_input:heads",table:"design_plans",pk:"job_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "item_name": "item_name", "customer_name": "customer_name", "design_completion_planned_date": {"col": "design_completion_planned_date", "type": "date"}, "s1_date": {"col": "s1_date", "type": "date"}, "customer_request_date": {"col": "customer_request_date", "type": "date"}, "plant_name": "plant_name"},get:()=>heads,render:()=>{if(typeof view!=="undefined")view=[...heads];(window.render||window.search||function(){})()}});
 MESDB.master({page:"design_plan_input:steps",table:"design_plan_steps",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "process_code": "process_code", "process_name": "process_name", "manager_name": "manager_name", "machining_process_code": "machining_process_code", "machining_process_name": "machining_process_name", "completion_planned_date": {"col": "completion_planned_date", "type": "date"}},get:()=>steps,render:()=>{if(typeof view!=="undefined")view=[...heads];(window.render||window.search||function(){})()}});
 </script>
-<script src="mes_ctx.js?v=1"></script>
+<script src="mes_ctx.js?v=39"></script>
 </body></html>
