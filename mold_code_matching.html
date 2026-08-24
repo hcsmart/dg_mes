@@ -69,16 +69,15 @@ async function save(){
  if(!sel){msg('제번을 선택하세요.');return}
  if(!online()){msg('DB 미연결 상태에서는 매칭을 확정할 수 없습니다.');return}
  try{
-  let rowNo=sel.matched_row_no;
-  if(rowNo==null){
-   const mx=await MESDB.table('mold_code_matchings').select('select=row_no&order=row_no.desc&limit=1');
-   rowNo=(mx&&mx[0]?Number(mx[0].row_no):0)+1;
-  }
-  await MESDB.table('mold_code_matchings').upsert({row_no:Number(rowNo),job_no:sel.job_no,
+  /* v39: 신규는 row_no 미전달(identity) */
+  const _mm={job_no:sel.job_no,
    quotation_no:sel.quotation_no,business_division_name:sel.business_division_name,
    mass_production_vendor_name:sel.mass_production_vendor_name,item_name:sel.item_name,
    order_type:sel.order_type,eco:sel.eco,model:sel.model,manager_name:sel.manager_name,
-   customer_name:sel.customer_name,match_status:'확정',plant_name:sel.plant_name||'1공장'},'row_no');
+   customer_name:sel.customer_name,match_status:'확정',plant_name:sel.plant_name||'1공장'};
+  const rowNo=sel.matched_row_no;
+  if(rowNo!=null)await MESDB.table('mold_code_matchings').upsert({row_no:Number(rowNo),..._mm},'row_no');
+  else await MESDB.table('mold_code_matchings').insertOne(_mm);
   await loadPool();
   msg(`${sel.job_no} 금형코드 매칭을 확정했습니다.`);
  }catch(e){msg('저장 실패: '+String(e.message||e).slice(0,120))}
@@ -93,7 +92,7 @@ async function del_(){
  }catch(e){msg('해제 실패: '+String(e.message||e).slice(0,120))}
 }
 document.querySelectorAll('input[name="st"]').forEach(x=>x.addEventListener('change',search));
-window.MES={search,save,setMessage:msg,reload:loadPool};render();</script><script src="mes_db.js?v=39"></script>
+window.MES={search,save,setMessage:msg,reload:loadPool};render();</script><script src="mes_db.js?v=41"></script>
 <script>loadPool();</script>
-<script src="mes_ctx.js?v=39"></script>
+<script src="mes_ctx.js?v=41"></script>
 </body></html>

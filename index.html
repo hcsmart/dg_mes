@@ -250,7 +250,7 @@ function prefetch(url){if(!url||_pf.has(url))return;_pf.add(url);
 tree.addEventListener('mouseover',e=>{const b=e.target.closest('.item');if(!b)return;
   const p=pageRegistry[b.textContent.trim()];if(p&&p.file)prefetch(p.file+'?v='+APP_VER)});
 (window.requestIdleCallback||(f=>setTimeout(f,1200)))(()=>{
-  ['mes_db.js?v=39','mes_ctx.js?v=39','mes_lookup.js?v=39','mes_auth.js?v='+APP_VER].forEach(prefetch);
+  ['mes_db.js?v=41','mes_ctx.js?v=41','mes_lookup.js?v=41','mes_auth.js?v='+APP_VER].forEach(prefetch);
   let i=0;const hot=['sale_order_status.html','purchase_order_input.html','purchase_order_status.html',
     'material_order_input.html','outsourcing_order_input.html','vendor_management.html','status_board.html'];
   const step=()=>{if(i>=hot.length)return;prefetch(hot[i++]+'?v='+APP_VER);setTimeout(step,600)};step()});

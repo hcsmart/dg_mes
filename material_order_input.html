@@ -73,7 +73,10 @@ async function pushDown(){const j=jobView[jobIdx];if(!j)return;const picks=[...b
   for(const r of REQ){
    if(r.amount)continue;
    r.wt=MESPRICE.weightKg(r.design,r.ord||r.qty||1)||null;
-   r.price=await MESPRICE.material(r.mat,r.vendor);
+   /* v40: 단가변동 규칙 - 발주일 시점에 적용시작된 단가, 사이즈(두께) 일치 우선 */
+   const hit=await MESPRICE.material(r.mat,r.vendor,{size:r.th,asOf:r.odate});
+   r.price=hit?hit.price:0;
+   r.priceNote=hit?hit.matched:'';
    r.amount=r.price?Math.round(r.price*(r.wt||Number(r.ord)||1)):0;
   }
  }
@@ -81,7 +84,9 @@ async function pushDown(){const j=jobView[jobIdx];if(!j)return;const picks=[...b
  const tot=REQ.reduce((a,r)=>a+(Number(r.amount)||0),0);
  const noPrice=REQ.filter(r=>!r.amount).length;
  msg(`${picks.length}건을 구매요청 리스트에 추가했습니다. 발주금액 합계 ${tot.toLocaleString('ko-KR')}원`+
-   (noPrice?` (단가 미등록 ${noPrice}건 - 자재단가변동등록 확인)`:''));}
+   (noPrice?` (단가 미등록 ${noPrice}건 - 자재단가변동등록 확인)`:'')+
+  (REQ.some(r=>r.priceNote&&r.priceNote!=='일치')?
+   ` (대체단가 적용: ${[...new Set(REQ.filter(r=>r.priceNote&&r.priceNote!=='일치').map(r=>r.priceNote))].join(', ')})`:''));}
 function pullUp(){const ids=[...reqBody.querySelectorAll('input:checked')].map(x=>Number(x.dataset.no));if(!ids.length)return msg('삭제할 요청 행을 선택하세요.');for(let i=REQ.length-1;i>=0;i--)if(ids.includes(REQ[i].no))REQ.splice(i,1);renderReq();msg(`${ids.length}건을 요청 리스트에서 삭제했습니다.`)}
 async function save(){if(!REQ.length)return msg('저장할 구매요청이 없습니다.');if(!window.MESDB||!MESDB.online){msg(`구매요청 ${REQ.length}건을 저장했습니다. (DB 미연결 - 로컬)`);return}try{const j=jobView[jobIdx]||{};await MESDB.newLines(REQ.map(r=>({category:'원재료',status:'발주',vendor_name:r.vendor,job_no:r.job,item_name:j.item||null,process_code:r.proc,part_no:r.part,part_name:r.name,material:r.mat,spec:r.design,order_qty:Number(r.ord)||null,unit_price:Number(r.price)||null,quote_price:Number(r.amount)||null,order_date:r.odate||null,required_date:r.rdate||null,remark:r.remark||null})));const n=REQ.length;REQ.length=0;renderReq();msg(`원재료 발주 ${n}건을 DB에 등록했습니다. 발주현황/입고등록 화면에서 확인하세요.`)}catch(e){msg('DB 등록 실패: '+e.message.slice(0,120))}}
 function printOrder(){const ids=[...reqBody.querySelectorAll('input:checked')].map(x=>Number(x.dataset.no));const rows=ids.length?REQ.filter(r=>ids.includes(r.no)):REQ.slice(0,1);if(!rows.length)return msg('출력할 행이 없습니다.');const j=jobView[jobIdx]||JOBS[0];const v=rows[0].vendor;
@@ -129,13 +134,13 @@ async function loadBom(){
 }
 window.MES={search,save,exportCsv,setMessage:msg,print:printOrder};loadJobs();
 </script>
-<script src="mes_db.js?v=39"></script>
+<script src="mes_db.js?v=41"></script>
 <script>MESDB.bind("material_order_input",()=>({JOBS,VENDORS,REQ}));
 /* v22: 구매요청 리스트는 화면을 열 때 빈 작업공간으로 시작 (샘플 잔존분이 저장되는 것 방지) */
 REQ.length=0;/*v22*/if(typeof renderReq==='function')renderReq();
 </script>
-<script src="mes_ctx.js?v=39"></script>
-<script src="mes_lookup.js?v=39"></script>
+<script src="mes_ctx.js?v=41"></script>
+<script src="mes_lookup.js?v=41"></script>
 <script>
 /* 협력업체 목록: 하드코딩 → 마스터 직결 */
 (async function loadVendors(){
@@ -155,6 +160,6 @@ window.MESLOOK_RELOAD_VENDORS=async()=>{MESLOOK.invalidate('vendor_material');
  if(typeof venView!=='undefined')venView=[...VENDORS];
  if(typeof renderVendors==='function')renderVendors();};
 </script>
-<script src="mes_price.js?v=39"></script>
+<script src="mes_price.js?v=41"></script>
 </body>
 </html>

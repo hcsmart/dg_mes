@@ -99,7 +99,7 @@ async function fillSelect(sel,kind,opt={}){
 const css=`
 #meslk-mask{position:fixed;inset:0;background:rgba(20,28,35,.38);z-index:9500;display:none;align-items:center;justify-content:center;font:12px 'Malgun Gothic',맑은 고딕,sans-serif}
 #meslk-mask.on{display:flex}
-#meslk{width:540px;max-height:78vh;background:#fff;border:1px solid #7f8f9c;box-shadow:0 6px 24px rgba(0,0,0,.3);display:flex;flex-direction:column;color:#22303a}
+#meslk{width:540px;min-width:340px;max-width:94vw;max-height:78vh;background:#fff;border:1px solid #7f8f9c;box-shadow:0 6px 24px rgba(0,0,0,.3);display:flex;flex-direction:column;color:#22303a}
 #meslk .hd{height:30px;display:flex;align-items:center;padding:0 6px 0 12px;color:#fff;background:linear-gradient(#5f7f9f,#3f5f7d);font-weight:700}
 #meslk .x{margin-left:auto;width:24px;height:22px;border:0;background:transparent;color:#fff;cursor:pointer;font:inherit}
 #meslk .bar{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid #dde3e8;background:#f5f7f9}
@@ -107,9 +107,11 @@ const css=`
 #meslk .bar label{white-space:nowrap;color:#4d5c69}
 #meslk .cnt{color:#6d7b88;white-space:nowrap}
 #meslk .bd{flex:1;overflow:auto;min-height:150px}
-#meslk table{width:100%;border-collapse:collapse}
+/* v40: 열폭을 글자 기준으로 산출해 <col> 로 지정한다 (기존 width:100% 균등분배 → 코드열이 과하게 넓어짐) */
+#meslk table{width:100%;border-collapse:collapse;table-layout:fixed}
 #meslk th{position:sticky;top:0;background:linear-gradient(#e9eef3,#f5f7f9);border-bottom:1px solid #c3ccd4;height:24px;padding:0 7px;text-align:left;font-weight:700}
-#meslk td{height:23px;border-bottom:1px solid #e7ecf0;padding:0 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+#meslk td{height:23px;border-bottom:1px solid #e7ecf0;padding:0 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#meslk th{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #meslk tbody tr:hover td{background:#edf6fd;cursor:pointer}
 #meslk tbody tr.sel td{background:#2d75b7;color:#fff}
 #meslk .ft{display:flex;gap:6px;justify-content:flex-end;padding:8px 10px;background:#f7f9fa;border-top:1px solid #e3e9ed}
@@ -156,12 +158,84 @@ function filtered(){
   &&(!onlyA||K.activeKey(r))
   &&(!q||K.map(r).some(v=>String(v).toLowerCase().includes(q))));
 }
+/* ── v40: 글자 기준 열폭 자동 산출 ──────────────────────
+ * 헤더와 데이터의 실제 렌더 폭을 재서 열마다 필요한 만큼만 준다.
+ * canvas measureText 를 쓰고, 사용할 수 없으면 문자 기반(한글 2배)으로 추정한다. */
+const CELL_PAD=16, COL_MIN=54, COL_MAX=340, SAMPLE=400;
+let _mctx=null;
+function textPx(t,bold){
+ t=String(t??'');
+ if(_mctx===null){
+  try{const c=document.createElement('canvas');_mctx=c.getContext('2d')||false}catch(e){_mctx=false}
+ }
+ if(_mctx){
+  _mctx.font=(bold?'700 ':'')+"12px 'Malgun Gothic','맑은 고딕',sans-serif";
+  const m=_mctx.measureText(t);
+  if(m&&m.width)return m.width;
+ }
+ /* fallback: 한글·전각 2배 */
+ let u=0;
+ for(const ch of t)u+=/[\u1100-\u11FF\u3130-\u318F\uAC00-\uD7AF\u4E00-\u9FFF\uFF00-\uFFEF]/.test(ch)?2:1;
+ return u*6.4;
+}
+function colWidths(K,rs){
+ const n=K.cols.length, w=K.cols.map(c=>textPx(c,true)+CELL_PAD);
+ const lim=Math.min(rs.length,SAMPLE);
+ for(let i=0;i<lim;i++){
+  const v=K.map(rs[i]);
+  for(let c=0;c<n;c++){const p=textPx(v[c])+CELL_PAD;if(p>w[c])w[c]=p}
+ }
+ return w.map(x=>Math.round(Math.max(COL_MIN,Math.min(COL_MAX,x))));
+}
+function applySize(K,rs){
+ const w=colWidths(K,rs);
+ const box=ui.querySelector('#meslk');
+ const bd=ui.querySelector('#meslk .bd');
+ /* 세로 스크롤바 여유 + 테두리 */
+ const need=w.reduce((a,b)=>a+b,0)+18;
+ const vw=(window.innerWidth||1024);
+ const target=Math.max(340,Math.min(need,Math.round(vw*0.94)));
+ box.style.width=target+'px';
+ const avail=target-18;
+ let sum=w.reduce((a,b)=>a+b,0);
+ if(sum>avail){
+  /* 창이 좁으면 넓은 열부터 비례로 줄여 가로 스크롤을 없앤다.
+     (마지막 열만 줄이면 열이 많을 때 초과분을 다 흡수하지 못한다) */
+  for(let pass=0;pass<4&&sum>avail;pass++){
+   const over=sum-avail;
+   const room=w.map(x=>Math.max(0,x-COL_MIN));
+   const roomSum=room.reduce((a,b)=>a+b,0);
+   if(roomSum<=0)break;
+   const cut=Math.min(over,roomSum);
+   for(let i=0;i<w.length;i++)w[i]=Math.round(w[i]-cut*(room[i]/roomSum));
+   sum=w.reduce((a,b)=>a+b,0);
+  }
+  /* 반올림 오차 보정 */
+  let diff=sum-avail;
+  for(let i=w.length-1;i>=0&&diff>0;i--){
+   const c=Math.min(diff,w[i]-COL_MIN);
+   if(c>0){w[i]-=c;diff-=c}
+  }
+ }else if(sum<avail){
+  w[w.length-1]+=avail-sum;   /* 남는 폭은 마지막 열이 흡수 */
+ }
+ const total=w.reduce((a,b)=>a+b,0);
+ /* table-layout:fixed + width:100% 는 잔여폭을 열에 균등 재분배한다.
+    산출한 폭이 그대로 적용되도록 테이블 폭을 px 로 못박는다. */
+ const tb=ui.querySelector('#meslk-t');
+ tb.style.width=total+'px';
+ tb.style.minWidth=total+'px';
+ bd.style.overflowX=(total>avail)?'auto':'hidden';
+ return w;
+}
 function renderList(){
  if(!curKind)return;
  const K=KINDS[curKind],rs=filtered();
+ const w=applySize(K,rs);
  ui.querySelector('#meslk-t').innerHTML=
-  '<thead><tr>'+K.cols.map(c=>`<th>${esc(c)}</th>`).join('')+'</tr></thead><tbody>'+
-  (rs.length?rs.map((r,i)=>`<tr data-i="${i}">`+K.map(r).map(v=>`<td>${esc(v)}</td>`).join('')+'</tr>').join('')
+  '<colgroup>'+w.map(x=>`<col style="width:${x}px">`).join('')+'</colgroup>'+
+  '<thead><tr>'+K.cols.map((c,i)=>`<th title="${esc(c)}">${esc(c)}</th>`).join('')+'</tr></thead><tbody>'+
+  (rs.length?rs.map((r,i)=>`<tr data-i="${i}">`+K.map(r).map(v=>`<td title="${esc(v)}">${esc(v)}</td>`).join('')+'</tr>').join('')
    :`<tr><td colspan="${K.cols.length}" style="height:56px;text-align:center;color:#8a97a2">검색결과가 없습니다.</td></tr>`)
   +'</tbody>';
  ui.querySelector('#meslk-c').textContent=rs.length+'건';

@@ -29,7 +29,7 @@
       (document.head||document.documentElement).appendChild(lk)}catch(e){}
 })();
 
-const MES_VER='v39';window.MES_VER=MES_VER;
+const MES_VER='v41';window.MES_VER=MES_VER;
 const CFG={url:'https://ipggvrzxfcryzryileuv.supabase.co',key:'sb_publishable_CHO-dAOU00HNwno52255mg_H3C1_vew'};
 function tok(){try{return (window.MES_AUTH||window.parent.MES_AUTH)?.token||null}catch(e){return null}}
 const H=()=>({'apikey':CFG.key,'Authorization':'Bearer '+(tok()||CFG.key),'Content-Type':'application/json'});
@@ -56,7 +56,12 @@ const table=name=>({
   upsert:(rows,onConflict)=>{const a=Array.isArray(rows)?rows:[rows];const keys=[];for(const r of a)for(const k in r)if(!keys.includes(k))keys.push(k);
     const norm=a.map(r=>{const o={};for(const k of keys)o[k]=(r[k]===undefined?null:r[k]);return o});
     return rest(`${name}${onConflict?'?on_conflict='+onConflict:''}`,{method:'POST',headers:{'Prefer':'resolution=merge-duplicates,return=minimal'},body:JSON.stringify(norm)})},
-  delete:(match)=>rest(`${name}?`+Object.entries(match).map(([k,v])=>`${k}=eq.${encodeURIComponent(v)}`).join('&'),{method:'DELETE',headers:{'Prefer':'return=minimal'}})
+  delete:(match)=>rest(`${name}?`+Object.entries(match).map(([k,v])=>`${k}=eq.${encodeURIComponent(v)}`).join('&'),{method:'DELETE',headers:{'Prefer':'return=minimal'}}),
+  /* v39: identity 채번 컬럼을 DB에 맡기고 생성된 행을 돌려받는다.
+     (화면에서 max+1 로 직접 채번하면 동시 저장 시 PK 가 충돌한다) */
+  insertOne:async(row)=>{const r=await rest(`${name}?select=*`,{method:'POST',
+    headers:{'Prefer':'return=representation'},body:JSON.stringify([row])});
+    return Array.isArray(r)?r[0]:r}
 });
 let page=null,getter=null,last='',timer=null,online=false;
 function snapshot(){const o=getter()||{};const out={};for(const k in o)if(Array.isArray(o[k]))out[k]=o[k];return out}
@@ -66,7 +71,7 @@ function snapshot(){const o=getter()||{};const out={};for(const k in o)if(Array.
 window.__mesBadge=function(t,color){
   var mode=null;try{mode=localStorage.getItem('mes_badge')}catch(e){}
   if(mode==='off')return;
-  t=t+' · '+(window.MES_VER||'v39');
+  t=t+' · '+(window.MES_VER||'v41');
   var b=document.getElementById('mesdb-badge');
   if(!b){b=document.createElement('div');b.id='mesdb-badge';
     b.style.cssText='position:fixed;right:8px;bottom:50px;font:11px Malgun Gothic,sans-serif;'+
@@ -153,7 +158,13 @@ async function master(opt){
     for(const k of snap.keys())if(!curKeys.has(k))del.push(k);
     if(!up.length&&!del.length)return;
     try{
-      if(up.length)await MESDB.table(opt.table).upsert(up,pkCol);
+      /* v39: identity 채번 컬럼에 null 을 보내면 NOT NULL 위반이 난다.
+       pk 가 아닌 컬럼이 전부 비어 있으면 payload 에서 제외한다. */
+    const drop=[];
+    for(const k of Object.keys(up[0]||{}))
+      if(k!==pkCol&&up.every(r=>r[k]===null||r[k]===undefined))drop.push(k);
+    const up2=drop.length?up.map(r=>{const o={};for(const k in r)if(!drop.includes(k))o[k]=r[k];return o}):up;
+    if(up2.length)await MESDB.table(opt.table).upsert(up2,pkCol);
       for(const k of del)await MESDB.table(opt.table).delete({[pkCol]:k});
       take();
       badge(`DB 반영 ${up.length?'저장'+up.length:''}${del.length?' 삭제'+del.length:''} · ${new Date().toLocaleTimeString('ko-KR')}`,'#2e7d32');

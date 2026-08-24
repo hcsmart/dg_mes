@@ -72,21 +72,24 @@ async function save(){
   const h=view[selIdx]||{};
   const ex=await MESDB.table('machining_plans').select(`select=row_no&job_no=eq.${encodeURIComponent(job)}&limit=1`);
   let rowNo=(ex&&ex[0])?Number(ex[0].row_no):null;
-  if(rowNo==null){const mx=await MESDB.table('machining_plans').select('select=row_no&order=row_no.desc&limit=1');
-   rowNo=(mx&&mx[0]?Number(mx[0].row_no):0)+1}
-  await MESDB.table('machining_plans').upsert({row_no:rowNo,job_no:job,
+  /* v39: 신규는 row_no 미전달(identity) */
+  const _mp={job_no:job,
     process_code:h.process_code||'A',
     machining_completion_date:h.machining_completion_date||null,
-    s1_date:h.s1_date||null},'row_no');
+    s1_date:h.s1_date||null};
+  if(rowNo!=null)await MESDB.table('machining_plans').upsert({row_no:rowNo,..._mp},'row_no');
+  else await MESDB.table('machining_plans').insertOne(_mp);
   const picks=[...document.querySelectorAll('#pbody input[type=checkbox]:checked')]
     .map(c=>Number(c.dataset.i)).filter(n=>!Number.isNaN(n));
   if(picks.length){
-   const pmx=await MESDB.table('machining_plan_parts').select('select=row_no&order=row_no.desc&limit=1');
-   let base=(pmx&&pmx[0]?Number(pmx[0].row_no):0);
-   const rows=picks.map(k=>{const p=parts[k];
-     return{row_no:(p.row_no??++base),job_no:job,part_no:p.part_no,part_name:p.part_name||null,
-       standard_process:p.standard_process||null,steps:p.steps||[]}});
-   await MESDB.table('machining_plan_parts').upsert(rows,'row_no');
+   /* v39: 기존 행(row_no 보유)은 갱신, 신규 행은 row_no 없이 insert */
+   const upd=[],ins=[];
+   picks.forEach(k=>{const p=parts[k];
+     const base={job_no:job,part_no:p.part_no,part_name:p.part_name||null,
+       standard_process:p.standard_process||null,steps:p.steps||[]};
+     if(p.row_no!=null)upd.push({row_no:Number(p.row_no),...base});else ins.push(base)});
+   if(upd.length)await MESDB.table('machining_plan_parts').upsert(upd,'row_no');
+   if(ins.length)await MESDB.table('machining_plan_parts').upsert(ins);
   }
   await loadParts(job);
   msg(`${job} 가공계획을 저장했습니다.${picks.length?' (부품 '+picks.length+'건 확정)':' 부품을 선택하면 함께 저장됩니다.'}`);
@@ -158,10 +161,10 @@ async function loadParts(job){
   msg(`${job} · 부품 ${parts.length}건${parts.some(p=>p.row_no==null)?' (PartList 기준 · 저장하면 가공계획으로 확정)':''}`);
  }catch(e){msg('부품 조회 실패: '+String(e.message||e).slice(0,110))}
 }
-</script><script src="mes_db.js?v=39"></script>
+</script><script src="mes_db.js?v=41"></script>
 <script>
 loadHeads();
 MESDB.master({page:"machining_plan_input:parts",table:"machining_plan_parts",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "part_no": "part_no", "part_name": "part_name", "standard_process": "standard_process", "steps": "steps"},get:()=>parts,render:()=>{if(typeof view!=="undefined")view=[...heads];(window.render||window.search||function(){})()}});
 </script>
-<script src="mes_ctx.js?v=39"></script>
+<script src="mes_ctx.js?v=41"></script>
 </body></html>
