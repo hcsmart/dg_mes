@@ -228,7 +228,29 @@ function applySize(K,rs){
  bd.style.overflowX=(total>avail)?'auto':'hidden';
  return w;
 }
+function bindRows(){
+ sel=-1;
+ ui.querySelectorAll('#meslk-t tbody tr[data-i]').forEach(tr=>{
+  tr.onclick=()=>{sel=+tr.dataset.i;ui.querySelectorAll('#meslk-t tbody tr').forEach(x=>x.classList.remove('sel'));tr.classList.add('sel')};
+  tr.ondblclick=()=>{sel=+tr.dataset.i;confirmPick()};
+ });
+}
+/* v41: 폭 계산 등에서 예외가 나도 목록은 반드시 보이도록 안전망을 둔다 */
 function renderList(){
+ try{renderList_()}catch(e){
+  console.warn('MESLOOK render',e&&e.message);
+  try{
+   const K=KINDS[curKind],rs=filtered();
+   const box=ui.querySelector('#meslk');if(box)box.style.width='';
+   const tb=ui.querySelector('#meslk-t');tb.style.width='';tb.style.minWidth='';
+   tb.innerHTML='<thead><tr>'+K.cols.map(c=>`<th>${esc(c)}</th>`).join('')+'</tr></thead><tbody>'+
+    rs.map((r,i)=>`<tr data-i="${i}">`+K.map(r).map(v=>`<td>${esc(v)}</td>`).join('')+'</tr>').join('')+'</tbody>';
+   ui.querySelector('#meslk-c').textContent=rs.length+'건';
+   bindRows();
+  }catch(e2){}
+ }
+}
+function renderList_(){
  if(!curKind)return;
  const K=KINDS[curKind],rs=filtered();
  const w=applySize(K,rs);
@@ -239,11 +261,7 @@ function renderList(){
    :`<tr><td colspan="${K.cols.length}" style="height:56px;text-align:center;color:#8a97a2">검색결과가 없습니다.</td></tr>`)
   +'</tbody>';
  ui.querySelector('#meslk-c').textContent=rs.length+'건';
- sel=-1;
- ui.querySelectorAll('#meslk-t tbody tr[data-i]').forEach(tr=>{
-  tr.onclick=()=>{sel=+tr.dataset.i;ui.querySelectorAll('#meslk-t tbody tr').forEach(x=>x.classList.remove('sel'));tr.classList.add('sel')};
-  tr.ondblclick=()=>{sel=+tr.dataset.i;confirmPick()};
- });
+ bindRows();
 }
 function confirmPick(){
  if(sel<0)return;
@@ -253,16 +271,28 @@ function confirmPick(){
 }
 async function open(kind,cb){
  const K=KINDS[kind];if(!K){console.warn('MESLOOK: unknown',kind);return}
- if(!online()){
-  const m=document.getElementById('message');if(m)m.textContent='DB 미연결 — 마스터를 조회할 수 없습니다.';
-  return;
- }
+ /* v41: 예전에는 여기서 online() 을 즉시 판정하고 그냥 return 했다.
+    mes_lookup.js 는 mes_db.js 보다 먼저 로드되고 연결 확인(ping)은 비동기라,
+    연결이 끝나기 전에 버튼을 누르면 팝업이 조용히 열리지 않았다.
+    → 창을 먼저 띄우고 그 안에서 연결을 기다린다. */
  ensure();curKind=kind;curCb=cb;sel=-1;
  ui.querySelector('#meslk-title').textContent=K.title;
  ui.querySelector('#meslk-q').value='';
  ui.querySelector('#meslk-a').checked=true;
  ui.querySelector('#meslk-aw').style.display=K.activeKey?'':'none';
  ui.classList.add('on');
+ if(!online()){
+  ui.querySelector('#meslk-t').innerHTML='<tbody><tr><td style="height:56px;text-align:center;color:#8a97a2">연결 확인 중…</td></tr></tbody>';
+  for(let i=0;i<60&&!window.MESDB;i++)await new Promise(r=>setTimeout(r,50));
+  if(window.MESDB&&window.MESDB.ready){try{await window.MESDB.ready}catch(e){}}
+  if(!online()&&window.MESDB&&window.MESDB.ping){try{await window.MESDB.ping()}catch(e){}}
+  if(curKind!==kind)return;            /* 대기 중 사용자가 닫았으면 중단 */
+  if(!online()){
+   ui.querySelector('#meslk-t').innerHTML='<tbody><tr><td style="height:56px;text-align:center;color:#c62828">DB에 연결할 수 없어 마스터를 조회하지 못했습니다.<br>새로고침 후 다시 시도하세요.</td></tr></tbody>';
+   const m=document.getElementById('message');if(m)m.textContent='DB 미연결 — 마스터를 조회할 수 없습니다.';
+   return;
+  }
+ }
  if(!CACHE[kind]){
   ui.querySelector('#meslk-t').innerHTML='<tbody><tr><td style="height:56px;text-align:center;color:#8a97a2">불러오는 중…</td></tr></tbody>';
   try{await rows(kind)}catch(e){
