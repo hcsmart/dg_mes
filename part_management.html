@@ -36,7 +36,7 @@ function save(){const k=String(document.getElementById(keyName)?.value||'').trim
 function remove(){if(selected<0)return msg('삭제할 항목을 선택하세요.');if(!confirm('선택한 항목을 삭제하시겠습니까?'))return;const k=data[selected][keyName];data.splice(selected,1);selected=-1;view=[...data];render();add();msg(`${k} 항목을 삭제했습니다.`)}
 function exportCsv(){const header=["부품코드", "부품명", "부품그룹"];const out=[header,...data.map(r=>colKeys.map(k=>r[k]??''))];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download="part_management.csv";a.click();URL.revokeObjectURL(a.href);msg('CSV 파일을 생성했습니다.')}
 function msg(t){message.textContent=t} window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
-</script><script src="mes_db.js?v=37"></script>
+</script><script src="mes_db.js?v=38"></script>
 <script>MESDB.master({page:"part_management",table:"parts",pk:"code",map:{"code": "part_code", "name": "part_name", "group": "part_group"},get:()=>data,render:()=>{view=[...data];render()}});</script>
 <script src="mes_ctx.js?v=1"></script>
 </body></html>
