@@ -100,12 +100,12 @@ async function del_(){
  }catch(e){msg('삭제 실패: '+String(e.message||e).slice(0,120))}
 }
 function xls(){msg('프로토타입에서는 엑셀 불러오기를 지원하지 않습니다.')}
-window.MES={search,save,setMessage:msg,reload:loadJob};render();(async()=>{await waitDB();const j=(q_job.value||data[0]?.job_no||'').trim();if(j)loadJob(j)})();</script><script src="mes_db.js?v=42"></script>
+window.MES={search,save,setMessage:msg,reload:loadJob};render();(async()=>{await waitDB();const j=(q_job.value||data[0]?.job_no||'').trim();if(j)loadJob(j)})();</script><script src="mes_db.js?v=43"></script>
 <script>
 MESDB.master({page:"partlist_purchase_input:data",table:"partlist_purchases",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "process_code": "process_code", "part_no": "part_no", "part_name": "part_name", "type": "type", "qty": {"col": "qty", "type": "num"}, "spec": "spec", "registered_by": "registered_by", "registered_date": {"col": "registered_date", "type": "date"}, "attachment": "attachment", "plant_name": "plant_name"},get:()=>data,render:()=>{if(typeof view!=="undefined")view=[...data];(window.render||window.search||function(){})()}});
 </script>
-<script src="mes_ctx.js?v=42"></script>
-<script src="mes_jobpick.js?v=42"></script>
+<script src="mes_ctx.js?v=43"></script>
+<script src="mes_jobpick.js?v=43"></script>
 <script>/* v39: 제번 직접 타이핑 → 등록된 수주 목록에서 선택 */
 MESJOB.attach("q_job",{onPick:j=>{if(typeof loadJob==="function")loadJob(j)}});</script>
 </body></html>

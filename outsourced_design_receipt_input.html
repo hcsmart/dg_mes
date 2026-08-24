@@ -113,8 +113,8 @@ async function load(){
 [...new Set(ORD.map(o=>o.partner_name))].sort().forEach(v=>venQ.insertAdjacentHTML('beforeend',`<option>${v}</option>`));search()}
 load();window.MES={search,save:receive,exportCsv,setMessage:msg};
 </script>
-<script src="mes_db.js?v=42"></script>
+<script src="mes_db.js?v=43"></script>
 <script>MESDB.lines({page:"outsourced_design_receipt_input",category:"외주설계",statuses:[],map:{"seq": {"col": "line_id", "type": "num"}, "job_no": "job_no", "item_name": "item_name", "partner_name": "vendor_name", "process_code": "process_code", "order_date": {"col": "order_date", "type": "date"}, "expected_date": {"col": "required_date", "type": "date"}, "nego_price": {"col": "confirm_price", "type": "num"}, "progress_rate": {"col": "nego_rate", "type": "num"}, "receipt_date": {"col": "receipt_date", "type": "date"}},get:()=>ORD,render:()=>search()});</script>
-<script src="mes_ctx.js?v=42"></script>
+<script src="mes_ctx.js?v=43"></script>
 </body>
 </html>
