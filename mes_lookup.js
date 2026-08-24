@@ -1,4 +1,4 @@
-/* mes_lookup.js — v1  공용 마스터 조회
+/* mes_lookup.js — v38  공용 마스터 조회
  * 모든 화면이 거래처/사원/자재/부품/공정/설비/금형타입/기계사양/사업부/아이템을
  * 하드코딩 대신 DB 마스터에서 실시간 조회한다.
  *
@@ -99,17 +99,20 @@ async function fillSelect(sel,kind,opt={}){
 const css=`
 #meslk-mask{position:fixed;inset:0;background:rgba(20,28,35,.38);z-index:9500;display:none;align-items:center;justify-content:center;font:12px 'Malgun Gothic',맑은 고딕,sans-serif}
 #meslk-mask.on{display:flex}
-#meslk{width:540px;max-height:78vh;background:#fff;border:1px solid #7f8f9c;box-shadow:0 6px 24px rgba(0,0,0,.3);display:flex;flex-direction:column;color:#22303a}
+#meslk{width:auto;min-width:460px;max-width:min(900px,94vw);max-height:78vh;background:#fff;border:1px solid #7f8f9c;box-shadow:0 6px 24px rgba(0,0,0,.3);display:flex;flex-direction:column;color:#22303a}
 #meslk .hd{height:30px;display:flex;align-items:center;padding:0 6px 0 12px;color:#fff;background:linear-gradient(#5f7f9f,#3f5f7d);font-weight:700}
 #meslk .x{margin-left:auto;width:24px;height:22px;border:0;background:transparent;color:#fff;cursor:pointer;font:inherit}
 #meslk .bar{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid #dde3e8;background:#f5f7f9}
 #meslk .bar input[type=text]{flex:1;height:24px;border:1px solid #b9c3cb;padding:0 6px;font:inherit}
 #meslk .bar label{white-space:nowrap;color:#4d5c69}
 #meslk .cnt{color:#6d7b88;white-space:nowrap}
-#meslk .bd{flex:1;overflow:auto;min-height:150px}
-#meslk table{width:100%;border-collapse:collapse}
-#meslk th{position:sticky;top:0;background:linear-gradient(#e9eef3,#f5f7f9);border-bottom:1px solid #c3ccd4;height:24px;padding:0 7px;text-align:left;font-weight:700}
-#meslk td{height:23px;border-bottom:1px solid #e7ecf0;padding:0 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}
+#meslk .bd{flex:1;overflow-y:auto;overflow-x:hidden;min-height:150px}
+#meslk table{width:100%;border-collapse:collapse;table-layout:auto}
+/* v38: 열 너비를 글자 길이에 맞춘다. 마지막 열이 남는 폭을 흡수해 가로 스크롤을 없앤다 */
+#meslk th,#meslk td{width:1%;white-space:nowrap}
+#meslk th:last-child,#meslk td:last-child{width:auto}
+#meslk th{position:sticky;top:0;background:linear-gradient(#e9eef3,#f5f7f9);border-bottom:1px solid #c3ccd4;height:24px;padding:0 10px;text-align:left;font-weight:700}
+#meslk td{height:23px;border-bottom:1px solid #e7ecf0;padding:0 10px;overflow:hidden;text-overflow:ellipsis;max-width:330px}
 #meslk tbody tr:hover td{background:#edf6fd;cursor:pointer}
 #meslk tbody tr.sel td{background:#2d75b7;color:#fff}
 #meslk .ft{display:flex;gap:6px;justify-content:flex-end;padding:8px 10px;background:#f7f9fa;border-top:1px solid #e3e9ed}
