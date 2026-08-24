@@ -81,8 +81,8 @@ function exportCsv(){const out=[['구분','업체명','제번','품명','공정'
 function msg(t){message.textContent=t}
 render();window.MES={search,exportCsv,setMessage:msg};
 </script>
-<script src="mes_db.js?v=38"></script>
+<script src="mes_db.js?v=39"></script>
 <script>MESDB.lines({page:"purchase_order_status",category:"구매품",statuses:[],map:{"no": {"col": "line_id", "type": "num"}, "vendor": "vendor_name", "job": "job_no", "item": "item_name", "proc": "process_code", "procName": "process_name", "part": "part_no", "partName": "part_name", "st": {"col": "status", "type": "status"}, "mat": "material", "spec": "spec", "qty": {"col": "order_qty", "type": "num"}, "price": {"col": "unit_price", "type": "num"}, "odate": {"col": "order_date", "type": "date"}, "rdate": {"col": "required_date", "type": "date"}, "idate": {"col": "receipt_date", "type": "date"}, "cdate": {"col": "confirm_date", "type": "date"}, "quote": {"col": "quote_price", "type": "num"}},get:()=>rows,render:()=>{view=[...rows];render()}});</script>
-<script src="mes_ctx.js?v=1"></script>
+<script src="mes_ctx.js?v=39"></script>
 </body>
 </html>

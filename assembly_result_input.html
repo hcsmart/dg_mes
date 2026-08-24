@@ -133,8 +133,8 @@ async function addResult(){
  const m=Number(minutes.value);if(!m||m<=0)return msg('작업시간(분)을 입력하세요.');
  if(!online())return msg('DB 미연결 상태에서는 실적을 등록할 수 없습니다.');
  try{
-  const mx=await MESDB.table('design_results').select('select=row_no&order=row_no.desc&limit=1');
-  await MESDB.table('design_results').upsert({row_no:(mx&&mx[0]?Number(mx[0].row_no):0)+1,
+  /* v39: row_no 는 DB identity 가 채운다 (수동 max+1 은 동시 저장 시 PK 충돌) */
+  await MESDB.table('design_results').upsert({
    work_type:'조립',worker_name:worker.value||null,job_no:j.job,process_code:s.mp||null,
    machining_process_code:s.mp||null,machining_process_name:s.mpName||null,
    work_date:workDate.value||new Date().toISOString().slice(0,10),work_minutes:m},'row_no');
@@ -157,11 +157,12 @@ async function completeStep(){
  if(!online())return msg('DB 미연결 상태에서는 완료 처리할 수 없습니다.');
  try{
   let row=s.row;
-  if(row==null){const mx=await MESDB.table('assembly_steps').select('select=row_no&order=row_no.desc&limit=1');
-   row=(mx&&mx[0]?Number(mx[0].row_no):0)+1;s.row=row}
-  await MESDB.table('assembly_steps').upsert({row_no:row,job_no:j.job,
+  /* v39: 신규 행은 row_no 를 보내지 않고 identity 에 맡긴다 */
+  const _as={job_no:j.job,
    machining_process_code:s.mp,machining_process_name:s.mpName,step_completed:true,
-   completion_date:new Date().toISOString().slice(0,10),plant_name:'1공장'},'row_no');
+   completion_date:new Date().toISOString().slice(0,10),plant_name:'1공장'};
+  if(row!=null){await MESDB.table('assembly_steps').upsert({row_no:Number(row),..._as},'row_no')}
+  else{const r=await MESDB.table('assembly_steps').insertOne(_as);if(r&&r.row_no!=null)s.row=r.row_no}
   s.done=true;s.rate=100;renderSteps();
   msg(`세부공정 ${s.mp}를 완료 처리했습니다.`);
  }catch(e){msg('완료 처리 실패: '+String(e.message||e).slice(0,110))}
@@ -204,10 +205,10 @@ function msg(t){message.textContent=t}
 worker.innerHTML=WORKERS.map(w=>`<option>${w}</option>`).join('');workDate.value='2026-08-22';
 renderJobs();renderSteps();renderResults();window.MES={search,save:addResult,exportCsv,setMessage:msg,reload:loadJobs};loadJobs();
 </script>
-<script src="mes_db.js?v=39"></script>
+<script src="mes_db.js?v=40"></script>
 <script>MESDB.bind("assembly_result_input",()=>({JOBS,STEPS,WORKERS}));</script>
-<script src="mes_ctx.js?v=39"></script>
-<script src="mes_lookup.js?v=39"></script>
+<script src="mes_ctx.js?v=40"></script>
+<script src="mes_lookup.js?v=40"></script>
 <script>
 (async function(){
  try{

@@ -117,8 +117,8 @@ async function addResult(){
  if(!fDate.value){msg('작업일을 선택하세요.');return}
  if(!online()){msg('DB 미연결 상태에서는 실적을 등록할 수 없습니다.');return}
  try{
-  const mx=await MESDB.table('design_results').select('select=row_no&order=row_no.desc&limit=1');
-  await MESDB.table('design_results').upsert({row_no:(mx&&mx[0]?Number(mx[0].row_no):0)+1,
+  /* v39: row_no 는 DB identity 가 채운다 */
+  await MESDB.table('design_results').upsert({
    work_type:'설계',worker_name:(fWorker.value||'').trim()||null,job_no:selJob.job_no,
    process_code:selStep.process_code,machining_process_code:selStep.machining_process_code||null,
    machining_process_name:selStep.machining_process_name||null,
@@ -154,6 +154,6 @@ async function doneDesign(){
 document.querySelectorAll('input[name=k]').forEach(x=>x.addEventListener('change',search));
 fDate.value=new Date().toISOString().slice(0,10);
 window.MES={search,save:addResult,setMessage:msg};
-search();</script><script src="mes_db.js?v=39"></script>
-<script src="mes_ctx.js?v=39"></script>
+search();</script><script src="mes_db.js?v=40"></script>
+<script src="mes_ctx.js?v=40"></script>
 </body></html>

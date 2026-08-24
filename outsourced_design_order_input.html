@@ -66,7 +66,21 @@ function pickVendor(i){venIdx=i;renderVendors();msg(`협력업체 ${venView[i]} 
 function findVendor(){const q=venQ.value.trim().toLowerCase();venView=VENDORS.filter(v=>!q||v.toLowerCase().includes(q));venIdx=0;renderVendors()}
 function clearVendor(){venQ.value='';venView=[...VENDORS];venIdx=0;renderVendors()}
 function search(){const j=jobQ.value.trim().toLowerCase(),it=itemQ.value.trim().toLowerCase();jobView=JOBS.filter(x=>(!j||x.job.toLowerCase().includes(j))&&(!it||(x.item||'').toLowerCase().includes(it)));jobIdx=0;renderJobs();msg(`제번 ${jobView.length}건을 조회했습니다.`)}
-function addRow(){const picks=[...poolBody.querySelectorAll('input:checked')].map(x=>POOL[Number(x.dataset.i)]);if(!picks.length)return msg('대기 리스트에서 공정을 선택하세요.');picks.forEach(p=>ORD.push({no:ORD.length?Math.max(...ORD.map(r=>r.no))+1:1,vendor:venView[venIdx],proc:p.proc,procName:p.procName,odate:new Date().toISOString().slice(0,10),edate:'',quote:0,nego:0,writer:'동구'}));renderOrd();msg(`${picks.length}건을 조수공정 리스트에 추가했습니다.`)}
+async function addRow(){const picks=[...poolBody.querySelectorAll('input:checked')].map(x=>POOL[Number(x.dataset.i)]);if(!picks.length)return msg('대기 리스트에서 공정을 선택하세요.');
+ picks.forEach(p=>ORD.push({no:ORD.length?Math.max(...ORD.map(r=>r.no))+1:1,vendor:venView[venIdx],proc:p.proc,procName:p.procName,odate:new Date().toISOString().slice(0,10),edate:'',quote:0,nego:0,writer:'동구'}));
+ /* v39: 설계 공정단가를 자동 조회해 견적가를 채운다 (0이면 제조원가 외주설계비가 0) */
+ if(window.MESPRICE){
+  for(const r of ORD){
+   if(Number(r.quote))continue;
+   const p=await MESPRICE.process(r.proc,r.vendor);
+   if(p){r.quote=p;r.nego=p}
+  }
+ }
+ renderOrd();
+ const tot=ORD.reduce((a,r)=>a+(Number(r.nego)||Number(r.quote)||0),0);
+ const noPrice=ORD.filter(r=>!Number(r.quote)).length;
+ msg(`${picks.length}건을 조수공정 리스트에 추가했습니다. 발주금액 합계 ${tot.toLocaleString('ko-KR')}원`+
+  (noPrice?` (단가 미등록 ${noPrice}건 - 공정단가변동등록 확인)`:''));}
 function delRow(){const ids=[...ordBody.querySelectorAll('input:checked')].map(x=>Number(x.dataset.no));if(!ids.length)return msg('삭제할 발주 행을 선택하세요.');for(let i=ORD.length-1;i>=0;i--)if(ids.includes(ORD[i].no))ORD.splice(i,1);renderOrd();msg(`${ids.length}건을 삭제했습니다.`)}
 /* v30: 프로토타입 스텁 → order_lines(외주설계) 실제 기록 */
 const online=()=>!!(window.MESDB&&MESDB.online);
@@ -127,10 +141,10 @@ function exportCsv(){const out=[['제번','협력업체','공정','공정명','�
 function msg(t){message.textContent=t}
 renderJobs();renderPool();renderVendors();renderOrd();window.MES={search,save,exportCsv,setMessage:msg,reload:loadJobs};loadJobs();
 </script>
-<script src="mes_db.js?v=38"></script>
+<script src="mes_db.js?v=39"></script>
 <script>MESDB.bind("outsourced_design_order_input",()=>({JOBS,POOL,VENDORS,ORD}));</script>
-<script src="mes_ctx.js?v=1"></script>
-<script src="mes_lookup.js?v=38"></script>
+<script src="mes_ctx.js?v=39"></script>
+<script src="mes_lookup.js?v=39"></script>
 <script>
 /* 협력업체 목록: 하드코딩 → 마스터 직결 */
 (async function loadVendors(){
@@ -150,5 +164,6 @@ window.MESLOOK_RELOAD_VENDORS=async()=>{MESLOOK.invalidate('design_partner');
  if(typeof venView!=='undefined')venView=[...VENDORS];
  if(typeof renderVendors==='function')renderVendors();};
 </script>
+<script src="mes_price.js?v=39"></script>
 </body>
 </html>

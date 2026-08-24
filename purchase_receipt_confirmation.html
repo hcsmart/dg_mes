@@ -75,8 +75,11 @@ const rows=[
 ];
 let view=[...rows];
 function money(v){return Number(v||0).toLocaleString('ko-KR')}
-function finalPrice(r){return Math.round(r.price*(1-r.rate/100))}
-function render(){body.innerHTML=view.map((r,i)=>`<tr data-id="${r.id}" onclick="selectRow(event,${r.id})"><td class="c">${r.id}</td><td class="c"><input type="checkbox" data-id="${r.id}" onchange="summary()"></td><td>${r.job}</td><td>${r.item}</td><td class="c">${r.proc}</td><td class="c">${r.procName}</td><td>${r.part}</td><td>${r.partName}</td><td class="c">${r.mat}</td><td>${r.vendor}</td><td class="c">${r.order}</td><td class="c">${r.inDate}</td><td class="c">${r.confirm}</td><td class="r">${money(r.price)}</td><td class="r">${r.rate.toFixed(2)}</td><td class="r">${money(finalPrice(r))}</td><td class="c">${r.status}</td></tr>`).join('');countText.textContent=`${view.length}건`;summary()}
+/* v39: PostgREST numeric 은 문자열/NULL 로 오므로 반드시 숫자화 (rate.toFixed 크래시 방지) */
+function num(v){const x=Number(v);return Number.isFinite(x)?x:0}
+function pct(v){return num(v).toFixed(2)}
+function finalPrice(r){return Math.round(num(r.price)*(1-num(r.rate)/100))}
+function render(){body.innerHTML=view.map((r,i)=>`<tr data-id="${r.id}" onclick="selectRow(event,${r.id})"><td class="c">${r.id}</td><td class="c"><input type="checkbox" data-id="${r.id}" onchange="summary()"></td><td>${r.job}</td><td>${r.item}</td><td class="c">${r.proc}</td><td class="c">${r.procName}</td><td>${r.part}</td><td>${r.partName}</td><td class="c">${r.mat}</td><td>${r.vendor}</td><td class="c">${r.order}</td><td class="c">${r.inDate}</td><td class="c">${r.confirm}</td><td class="r">${money(num(r.price))}</td><td class="r">${pct(r.rate)}</td><td class="r">${money(finalPrice(r))}</td><td class="c">${r.status}</td></tr>`).join('');countText.textContent=`${view.length}건`;summary()}
 function selectedRows(){const ids=[...document.querySelectorAll('#body input:checked')].map(x=>Number(x.dataset.id));return rows.filter(r=>ids.includes(r.id))}
 function selectRow(e,id){if(e.target.tagName==='INPUT')return;const cb=document.querySelector(`#body input[data-id="${id}"]`);if(cb){cb.checked=!cb.checked;summary()}}
 function summary(){const s=selectedRows();total.value=money(s.reduce((a,r)=>a+r.price,0));selectedText.textContent=`선택 ${s.length}건`;document.querySelectorAll('#body tr').forEach(tr=>tr.classList.toggle('sel',!!tr.querySelector('input:checked')))}
@@ -91,8 +94,8 @@ function exportCsv(){const out=[['제번','품명','공정','공정명','품번'
 function msg(t){message.textContent=t}
 confirmDate.value=new Date().toISOString().slice(0,10);window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script>
-<script src="mes_db.js?v=38"></script>
+<script src="mes_db.js?v=39"></script>
 <script>MESDB.lines({page:"purchase_receipt_confirmation",category:"구매품",statuses:["입고", "입고확정"],map:{"id": {"col": "line_id", "type": "num"}, "vendor": "vendor_name", "job": "job_no", "item": "item_name", "proc": "process_code", "procName": "process_name", "part": "part_no", "partName": "part_name", "mat": "material", "order": {"col": "order_date", "type": "date"}, "inDate": {"col": "receipt_date", "type": "date"}, "confirm": {"col": "confirm_date", "type": "date"}, "price": {"col": "quote_price", "type": "num"}, "rate": {"col": "nego_rate", "type": "num"}, "status": {"col": "status", "type": "status"}},get:()=>rows,render:()=>{view=[...rows];render()}});</script>
-<script src="mes_ctx.js?v=1"></script>
+<script src="mes_ctx.js?v=39"></script>
 </body>
 </html>
