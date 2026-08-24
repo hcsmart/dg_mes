@@ -64,7 +64,7 @@ function search(){const k=q_kind.value,j=q_job.value.trim().toLowerCase(),p=q_pa
   &&(!pc||String(r.process_code??'').toLowerCase().includes(pc))&&(!m||String(r.material??'').toLowerCase().includes(m)));
  render();msg(`조회결과 ${view.length}건입니다.`);}
 function csv(){msg('프로토타입에서는 EXCEL 내보내기를 지원하지 않습니다.')}
-window.MES={search,setMessage:msg};render();</script><script src="mes_db.js?v=41"></script>
+window.MES={search,setMessage:msg};render();</script><script src="mes_db.js?v=42"></script>
 <script>loadAll();</script>
-<script src="mes_ctx.js?v=41"></script>
+<script src="mes_ctx.js?v=42"></script>
 </body></html>

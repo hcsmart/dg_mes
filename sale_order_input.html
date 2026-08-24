@@ -80,11 +80,11 @@ table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th
  <div class="label">도 번</div><div class="span3"><input id="drawing_no" class="field"></div>
  <div class="label">사업부</div><div class="lk"><input id="biz_code"><input id="biz_name" readonly><button onclick="openLook('biz','biz_code','biz_name')">…</button></div>
  <div class="label">담당자</div><div class="lk"><input id="mgr_code"><input id="mgr_name" readonly><button onclick="openLook('employee','mgr_code','mgr_name')">…</button></div>
- <div class="label">고객사</div><div class="lk"><input id="cust_code"><input id="cust_name" readonly><button onclick="openLook('vendor','cust_code','cust_name')">…</button></div>
+ <div class="label">고객사</div><div class="lk"><input id="cust_code"><input id="cust_name" readonly><button onclick="openLook('customer','cust_code','cust_name')">…</button></div>
 
  <div class="label">금형타입</div><div class="lk"><input id="mold_code"><input id="mold_name" readonly><button onclick="openLook('mold','mold_code','mold_name')">…</button></div>
  <div class="label">개발유형</div><div><select id="devtype" class="field"><option value=""></option><option>사내</option><option>외주</option></select></div>
- <div class="label">양산처</div><div class="lk"><input id="mp_code"><input id="mp_name" readonly><button onclick="openLook('vendor','mp_code','mp_name')">…</button></div>
+ <div class="label">양산처</div><div class="lk"><input id="mp_code"><input id="mp_name" readonly><button onclick="openLook('mass_production','mp_code','mp_name')">…</button></div>
  <div class="label">품 명</div><div><input id="product_name" class="field"></div>
  <div class="label">모 델</div><div><input id="model" class="field"></div>
  <div class="label">공정/조수</div><div class="lk"><input id="proc_cnt"><input id="set_qty"></div>
@@ -108,7 +108,7 @@ table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th
 </div>
 
 
-<script src="mes_lookup.js?v=41"></script>
+<script src="mes_lookup.js?v=42"></script>
 
 <script>
 /* 마스터 조회는 mes_lookup.js(MESLOOK) 사용 - DB 직결 */
@@ -116,7 +116,8 @@ const seed={"row_no": 1, "job_no": "J26137", "plant_name": "1공장", "order_sta
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const msg=t=>message.textContent=t;
 function openLook(key,codeId,nameId){
- const kind={'employee':'employee','vendor':'vendor','item':'item','biz':'biz','mold':'mold','mspec':'mspec'}[key]||key;
+ const kind={'employee':'employee','vendor':'vendor','customer':'customer',
+  'mass_production':'mass_production','item':'item','biz':'biz','mold':'mold','mspec':'mspec'}[key]||key;
  MESLOOK.bindPair(kind,codeId,nameId);
 }
 const MAP={job_no:'job_no',plant:'plant_name',order_date:'order_date',s1p:'s1_planned_date',
@@ -180,6 +181,6 @@ async function save(){
 }
 window.MES={save,clearForm,setMessage:msg};
 load(seed);
-</script><script src="mes_db.js?v=41"></script>
-<script src="mes_ctx.js?v=41"></script>
+</script><script src="mes_db.js?v=42"></script>
+<script src="mes_ctx.js?v=42"></script>
 </body></html>

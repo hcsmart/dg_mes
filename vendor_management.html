@@ -36,7 +36,7 @@ function save(){const k=String(document.getElementById(keyName)?.value||'').trim
 function remove(){if(selected<0)return msg('삭제할 항목을 선택하세요.');if(!confirm('선택한 항목을 삭제하시겠습니까?'))return;const k=data[selected][keyName];data.splice(selected,1);selected=-1;view=[...data];render();add();msg(`${k} 항목을 삭제했습니다.`)}
 function exportCsv(){const header=["업체 코드", "업체 명", "구분", "원자재", "면삭", "구매품", "외주가공", "협력업체구분", "소재지", "대표자명", "전화번호", "우편번호", "팩스"];const out=[header,...data.map(r=>colKeys.map(k=>r[k]??''))];const csv='\ufeff'+out.map(a=>a.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download="vendor_management.csv";a.click();URL.revokeObjectURL(a.href);msg('CSV 파일을 생성했습니다.')}
 function msg(t){message.textContent=t} window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
-</script><script src="mes_db.js?v=41"></script>
+</script><script src="mes_db.js?v=42"></script>
 <script>MESDB.master({page:"vendor_management",table:"vendors",pk:"code",map:{"code": "vendor_code", "name": "vendor_name", "type": "vendor_type", "raw": {"col": "raw_material_flag", "type": "ynbool"}, "milling": "milling_flag", "purchase": {"col": "purchase_item_flag", "type": "ynbool"}, "outsource": {"col": "outsourcing_flag", "type": "ynbool"}, "partner": "partner_type", "location": "location_type", "ceo": "ceo_name", "phone": "phone", "zip": "postal_code", "fax": "fax"},get:()=>data,render:()=>{view=[...data];render()}});</script>
-<script src="mes_ctx.js?v=41"></script>
+<script src="mes_ctx.js?v=42"></script>
 </body></html>

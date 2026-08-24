@@ -142,10 +142,10 @@ function exportCsv(){const out=[['제번','협력업체','공정','공정명','�
 function msg(t){message.textContent=t}
 renderJobs();renderPool();renderVendors();renderOrd();window.MES={search,save,exportCsv,setMessage:msg,reload:loadJobs};loadJobs();
 </script>
-<script src="mes_db.js?v=41"></script>
+<script src="mes_db.js?v=42"></script>
 <script>MESDB.bind("outsourced_design_order_input",()=>({JOBS,POOL,VENDORS,ORD}));</script>
-<script src="mes_ctx.js?v=41"></script>
-<script src="mes_lookup.js?v=41"></script>
+<script src="mes_ctx.js?v=42"></script>
+<script src="mes_lookup.js?v=42"></script>
 <script>
 /* 협력업체 목록: 하드코딩 → 마스터 직결 */
 (async function loadVendors(){
@@ -165,6 +165,6 @@ window.MESLOOK_RELOAD_VENDORS=async()=>{MESLOOK.invalidate('design_partner');
  if(typeof venView!=='undefined')venView=[...VENDORS];
  if(typeof renderVendors==='function')renderVendors();};
 </script>
-<script src="mes_price.js?v=41"></script>
+<script src="mes_price.js?v=42"></script>
 </body>
 </html>
