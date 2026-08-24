@@ -77,9 +77,10 @@ async function receive(){if(sel<0)return msg('입고할 발주를 선택하세�
   inspector:fInsp.value||null,remark:fRemark.value||null};
  if(window.MESDB&&MESDB.online){
   try{
-   const mx=await MESDB.table('outsourced_design_receipts').select('select=receipt_no&order=receipt_no.desc&limit=1');
-   rec.receipt_no=(mx&&mx[0]?Number(mx[0].receipt_no):0)+1;
-   await MESDB.table('outsourced_design_receipts').upsert(rec,'receipt_no');
+   /* v39: receipt_no 는 DB identity 가 채운다 */
+   delete rec.receipt_no;
+   const ins=await MESDB.table('outsourced_design_receipts').insertOne(rec);
+   rec.receipt_no=(ins&&ins.receipt_no)||(RCP.length?Math.max(...RCP.map(r=>Number(r.receipt_no)||0))+1:1);
    /* order_lines 의 진척률·입고일 반영 (제조원가의 외주설계비 산정 기준) */
    /* v39: 외주설계는 별도 입고확정 화면이 없다. 진척 100% + 검수자 입력 = 입고확정으로 처리해야
       제조원가(입고확정 건만 집계)에 외주설계비가 잡힌다. */
@@ -112,8 +113,8 @@ async function load(){
 [...new Set(ORD.map(o=>o.partner_name))].sort().forEach(v=>venQ.insertAdjacentHTML('beforeend',`<option>${v}</option>`));search()}
 load();window.MES={search,save:receive,exportCsv,setMessage:msg};
 </script>
-<script src="mes_db.js?v=39"></script>
+<script src="mes_db.js?v=40"></script>
 <script>MESDB.lines({page:"outsourced_design_receipt_input",category:"외주설계",statuses:[],map:{"seq": {"col": "line_id", "type": "num"}, "job_no": "job_no", "item_name": "item_name", "partner_name": "vendor_name", "process_code": "process_code", "order_date": {"col": "order_date", "type": "date"}, "expected_date": {"col": "required_date", "type": "date"}, "nego_price": {"col": "confirm_price", "type": "num"}, "progress_rate": {"col": "nego_rate", "type": "num"}, "receipt_date": {"col": "receipt_date", "type": "date"}},get:()=>ORD,render:()=>search()});</script>
-<script src="mes_ctx.js?v=39"></script>
+<script src="mes_ctx.js?v=40"></script>
 </body>
 </html>

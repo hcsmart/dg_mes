@@ -108,7 +108,7 @@ table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th
 </div>
 
 
-<script src="mes_lookup.js?v=39"></script>
+<script src="mes_lookup.js?v=40"></script>
 
 <script>
 /* 마스터 조회는 mes_lookup.js(MESLOOK) 사용 - DB 직결 */
@@ -165,22 +165,21 @@ async function save(){
    const ex=await MESDB.table('sale_order_status_rows')
      .select(`select=row_no&job_no=eq.${encodeURIComponent(o.job_no)}&limit=1`);
    if(ex&&ex[0])rowNo=ex[0].row_no;
-   if(rowNo==null){
-    const mx=await MESDB.table('sale_order_status_rows').select('select=row_no&order=row_no.desc&limit=1');
-    rowNo=(mx&&mx[0]?Number(mx[0].row_no):0)+1;
-   }
-  }catch(e){rowNo=Date.now()%2000000000}
-  await MESDB.table('sale_order_status_rows').upsert({row_no:rowNo,job_no:o.job_no,model:o.model,
+  }catch(e){rowNo=null}
+  /* v39: 신규는 row_no 를 보내지 않고 DB identity 에 맡긴다 (수동 max+1 은 동시 저장 시 충돌) */
+  const _sr={job_no:o.job_no,model:o.model,
     drawing_no:o.drawing_no,item_name:o.item_name,eco:o.eco,customer_name:o.customer_name,set_qty:o.process_set_qty,
     development_type:o.development_type,order_type:o.order_type,mold_type_name:o.mold_type_name,
     machine_spec_name:o.machine_spec_name,order_date:o.order_date,s1_planned_date:o.s1_planned_date,
     completion_date:o.completion_date,mass_production_vendor_name:o.mass_production_vendor_name,
-    order_status:o.order_status,plant_name:o.plant_name},'row_no');
-  msg(`${o.job_no} 수주를 저장했습니다. (제번·수주·수주현황 반영 / 현황 No.${rowNo})`);
+    order_status:o.order_status,plant_name:o.plant_name};
+  if(rowNo!=null)await MESDB.table('sale_order_status_rows').upsert({row_no:Number(rowNo),..._sr},'row_no');
+  else{const r=await MESDB.table('sale_order_status_rows').insertOne(_sr);rowNo=r&&r.row_no}
+  msg(`${o.job_no} 수주를 저장했습니다. (제번·수주·수주현황 반영 / 현황 No.${rowNo??'-'})`);
  }catch(e){msg('DB 저장 실패: '+e.message.slice(0,140))}
 }
 window.MES={save,clearForm,setMessage:msg};
 load(seed);
-</script><script src="mes_db.js?v=39"></script>
-<script src="mes_ctx.js?v=39"></script>
+</script><script src="mes_db.js?v=40"></script>
+<script src="mes_ctx.js?v=40"></script>
 </body></html>

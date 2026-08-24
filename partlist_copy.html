@@ -89,11 +89,10 @@ async function copyPartList(){
     skipped+=src.length-target.length;
     if(!target.length)continue;
     if(!total&&!confirm(`${kind()} PartList\n${sj}(${sp||'전체'}) → ${dj}(${dp||sp||'전체'})\n복사하시겠습니까?`))return;
-    const mx=await MESDB.table(tbl).select('select=row_no&order=row_no.desc&limit=1');
-    let next=(mx&&mx[0]?Number(mx[0].row_no):0)+1;
-    const rows=target.map(r=>({...r,row_no:next++,job_no:dj,process_code:dp||r.process_code,
-      registered_date:new Date().toISOString().slice(0,10)}));
-    await MESDB.table(tbl).upsert(rows,'row_no');
+    /* v39: row_no 는 DB identity 가 채운다 (수동 max+1 은 동시 복사 시 충돌) */
+    const rows=target.map(r=>{const x={...r,job_no:dj,process_code:dp||r.process_code,
+      registered_date:new Date().toISOString().slice(0,10)};delete x.row_no;return x});
+    await MESDB.table(tbl).upsert(rows);
     total+=rows.length;
     }
     if(!total)return msg(`복사할 ${kind()} PartList가 없습니다.${skipped?` (중복 ${skipped}건 제외)`:''}`);
@@ -107,8 +106,8 @@ function reset(){dstJob.value='';dstItem.value='';dstProc.value='';msg('복사�
 function msg(t){message.textContent=t}
 renderLog();window.MES={save:copyPartList,setMessage:msg};
 </script>
-<script src="mes_db.js?v=39"></script>
+<script src="mes_db.js?v=40"></script>
 <script>MESDB.bind("partlist_copy",()=>({LOG}));</script>
-<script src="mes_ctx.js?v=39"></script>
+<script src="mes_ctx.js?v=40"></script>
 </body>
 </html>

@@ -72,8 +72,10 @@ async function pushDown(){const j=jobView[jobIdx];if(!j)return;const picks=[...b
  if(window.MESPRICE){
   for(const r of REQ){
    if(r.amount)continue;
-   const p=await MESPRICE.material(r.mat||r.part,r.vendor);
-   if(p){r.stdPrice=p;r.buyPrice=p;r.amount=Math.round(p*(Number(r.ord)||1))}
+   /* v40: 발주일 시점에 적용시작된 단가만 사용 */
+   const hit=await MESPRICE.material(r.mat||r.part,r.vendor,{asOf:r.odate});
+   if(hit&&hit.price){r.stdPrice=hit.price;r.buyPrice=hit.price;
+     r.amount=Math.round(hit.price*(Number(r.ord)||1))}
   }
  }
  renderReq();
@@ -121,13 +123,13 @@ async function loadBom(){
 }
 window.MES={search,save,exportCsv,setMessage:msg,print:printOrder};loadJobs();
 </script>
-<script src="mes_db.js?v=39"></script>
+<script src="mes_db.js?v=40"></script>
 <script>MESDB.bind("purchase_order_input",()=>({JOBS,VENDORS,REQ}));
 /* v22: 구매요청 리스트는 화면을 열 때 빈 작업공간으로 시작 (샘플 잔존분이 저장되는 것 방지) */
 REQ.length=0;/*v22*/if(typeof renderReq==='function')renderReq();
 </script>
-<script src="mes_ctx.js?v=39"></script>
-<script src="mes_lookup.js?v=39"></script>
+<script src="mes_ctx.js?v=40"></script>
+<script src="mes_lookup.js?v=40"></script>
 <script>
 /* 협력업체 목록: 하드코딩 → 마스터 직결 */
 (async function loadVendors(){
@@ -147,6 +149,6 @@ window.MESLOOK_RELOAD_VENDORS=async()=>{MESLOOK.invalidate('vendor_purchase');
  if(typeof venView!=='undefined')venView=[...VENDORS];
  if(typeof renderVendors==='function')renderVendors();};
 </script>
-<script src="mes_price.js?v=39"></script>
+<script src="mes_price.js?v=40"></script>
 </body>
 </html>

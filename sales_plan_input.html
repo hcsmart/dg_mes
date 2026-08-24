@@ -150,10 +150,9 @@ async function save(){
   const jb=await MESDB.table('jobs').select(`select=job_no&job_no=eq.${encodeURIComponent(o.job_no)}&limit=1`);
   if(!jb||!jb[0]){msg(`${o.job_no} 은(는) 등록된 제번이 아닙니다. 수주등록을 먼저 진행하세요.`);return}
   const ex=await MESDB.table('sales_plans').select(`select=row_no&job_no=eq.${encodeURIComponent(o.job_no)}&limit=1`);
-  if(ex&&ex[0])o.row_no=Number(ex[0].row_no);
-  else{const mx=await MESDB.table('sales_plans').select('select=row_no&order=row_no.desc&limit=1');
-   o.row_no=(mx&&mx[0]?Number(mx[0].row_no):0)+1}
-  await MESDB.table('sales_plans').upsert(o,'row_no');
+  /* v39: 기존은 row_no 로 갱신, 신규는 DB identity 에 맡긴다 */
+  if(ex&&ex[0]){o.row_no=Number(ex[0].row_no);await MESDB.table('sales_plans').upsert(o,'row_no')}
+  else{delete o.row_no;await MESDB.table('sales_plans').insertOne(o)}
   /* 영업계획현황 행 동기화 */
   const sum=(...ks)=>{const v=ks.reduce((a,k)=>a+Number(o[k]||0),0);return v||null};
   const r={row_no:o.row_no,job_no:o.job_no,item_name:o.item_name,
@@ -174,7 +173,7 @@ async function save(){
 window.MES={save,clearForm,setMessage:t=>message.textContent=t,search:loadJob};
 job_no.addEventListener('change',loadJob);
 load(seed);
-</script><script src="mes_db.js?v=39"></script>
+</script><script src="mes_db.js?v=40"></script>
 
-<script src="mes_ctx.js?v=39"></script>
+<script src="mes_ctx.js?v=40"></script>
 </body></html>
