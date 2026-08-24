@@ -36,6 +36,7 @@ function exportCsv(){const out=[["직급코드", "직급명", "직급순위", "�
 function msg(t){message.textContent=t}window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script>
 <script src="mes_db.js?v=43"></script>
+<script src="mes_paste.js?v=44"></script>
 <script>MESDB.master({page:"position_info",table:"positions",pk:"code",map:{"code":"position_code","name":"position_name","level":{"col":"position_level","type":"num"},"group":"position_group","approver":{"col":"is_approver","type":"ynbool"},"use":{"col":"is_active","type":"ynbool"},"remark":"remark"},get:()=>data,render:()=>{view=[...data];render()}});</script>
 <script src="mes_ctx.js?v=43"></script>
 </body></html>

@@ -36,6 +36,7 @@ function exportCsv(){const out=[['비용코드','비용명','비고'],...data.ma
 function msg(t){message.textContent=t}window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg};render();
 </script>
 <script src="mes_db.js?v=43"></script>
+<script src="mes_paste.js?v=44"></script>
 <script>MESDB.master({page:"expense_reason_registration",table:"expense_reasons",pk:"code",map:{"code": "expense_reason_code", "name": "expense_reason_name", "remark": "remark"},get:()=>data,render:()=>{view=[...data];render()}});</script>
 <script src="mes_ctx.js?v=43"></script>
 </body></html>
