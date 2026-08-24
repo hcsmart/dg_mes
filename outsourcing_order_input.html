@@ -79,7 +79,7 @@ function msg(t){message.textContent=t}
 reqDate.value='2026-09-05';renderJobs();renderVendors();renderRoutes();renderReq();
 window.MES={search,save,exportCsv,setMessage:msg};
 </script>
-<script src="mes_db.js?v=35"></script>
+<script src="mes_db.js?v=36"></script>
 <script>MESDB.bind("outsourcing_order_input",()=>({JOBS,VENDORS,ROUTES,REQ}));
 /* v22: 구매요청 리스트는 화면을 열 때 빈 작업공간으로 시작 (샘플 잔존분이 저장되는 것 방지) */
 REQ.length=0;/*v22*/if(typeof renderReq==='function')renderReq();

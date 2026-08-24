@@ -132,7 +132,7 @@ function exportCsv(){
 document.querySelectorAll('input[name="st"],input[name="ot"]').forEach(x=>x.addEventListener('change',search));
 window.MES={search,exportCsv,delOrder,setMessage:t=>message.textContent=t};
 render();
-</script><script src="mes_db.js?v=35"></script>
+</script><script src="mes_db.js?v=36"></script>
 <script>
 MESDB.master({page:"sale_order_status:data",table:"sale_order_status_rows",pk:"row_no",map:{"row_no": {"col": "row_no", "type": "num"}, "job_no": "job_no", "model": "model", "drawing_no": "drawing_no", "item_name": "item_name", "eco": "eco", "customer_name": "customer_name", "set_qty": {"col": "set_qty", "type": "num"}, "development_type": "development_type", "order_type": "order_type", "mold_type_name": "mold_type_name", "machine_spec_name": "machine_spec_name", "order_date": {"col": "order_date", "type": "date"}, "s1_planned_date": {"col": "s1_planned_date", "type": "date"}, "completion_date": {"col": "completion_date", "type": "date"}, "mass_production_vendor_name": "mass_production_vendor_name", "order_status": "order_status", "plant_name": "plant_name"},get:()=>data,render:()=>{if(typeof view!=="undefined")view=[...data];(window.render||window.search||function(){})();loadAmounts()}});
 

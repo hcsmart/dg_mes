@@ -415,7 +415,7 @@ async function deleteUser(){
 window.MES={search:()=>q.focus(),add:()=>{selectedKey='';},delete:deleteUser,save:saveUser,exportCsv:()=>{},setMessage:t=>message.textContent=t};
 renderUsers();selectUser(selectedKey);
 </script>
-<script src="mes_db.js?v=35"></script>
+<script src="mes_db.js?v=36"></script>
 <script>
 MESDB.master({page:"user_information:users",table:"users",pk:"user_key",map:{"user_key":"user_key","user_id":"user_id","name":"name","department_code":"department_code","department_name":"department_name","factory":"factory","registered_date":{"col":"registered_date","type":"date"},"position_code":"position_code","position_name":"position_name","user_group":"user_group","is_active":{"col":"is_active","type":"bool"},"english_name":"english_name","business_division":"business_division","process_group":"process_group","mobile_phone":"mobile_phone","email":"email","phone":"phone","employee_no":"employee_no","remark":"remark","auth_email":"auth_email","role":"role"},get:()=>users,render:()=>{renderUsers();selectUser(selectedKey||users[0]?.user_key)}});
 MESDB.table("user_permissions").select("select=*").then(rs=>{permissions.length=0;permissions.push(...rs);renderPermissions(users.find(x=>x.user_key===selectedKey),true)}).catch(()=>{});
