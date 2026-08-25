@@ -44,23 +44,23 @@
     <section class="paper" id="page2">
       <div class="report">
         <div class="head">
-          <div class="brandcell"><h1>공정이력카드</h1><div class="qr"></div><div class="issue"><span>발행일 :　2026-08-22</span><span>K21136-A005_A_B17A</span></div></div>
+          <div class="brandcell"><h1>공정이력카드</h1><div class="qr"></div><div class="issue"><span id="p2Issue">발행일 :　2026-08-22</span><span id="p2Key">K21136-A005_A_B17A</span></div></div>
           <div class="dates">
             <div class="th">납기</div><div class="th">수주일</div><div class="th">설계</div><div class="th">가공</div><div class="th">조립</div><div class="th">S1</div>
-            <div>기</div><div>2021-11-09</div><div>2024-05-23</div><div>2024-05-27</div><div>2024-05-28</div><div>2024-06-05</div>
-            <div class="th">담당자</div><div colspan="2">영업　 박채원</div><div colspan="2">설계　 장소율</div><div>조립</div>
+            <div id="p2Due">기</div><div id="p2Order">2021-11-09</div><div id="p2Design">2024-05-23</div><div id="p2Mach">2024-05-27</div><div id="p2Asm">2024-05-28</div><div id="p2S1">2024-06-05</div>
+            <div class="th">담당자</div><div colspan="2" id="p2Sales">영업　 박채원</div><div colspan="2" id="p2DesignM">설계　 장소율</div><div id="p2AsmM">조립</div>
           </div>
         </div>
         <div class="meta th"><div>제번</div><div>공정</div><div>품번</div><div>재질</div><div>수량</div><div>제품명</div><div>부품명</div></div>
-        <div class="meta"><div>K21136-A005</div><div>A</div><div>B17A</div><div>STD11</div><div>1</div><div>SHELF,NET RL</div><div>BUTTON, DIE</div></div>
-        <div class="workgrid">
+        <div class="meta"><div id="p2Job">K21136-A005</div><div id="p2Proc">A</div><div id="p2Part">B17A</div><div id="p2Mat">STD11</div><div id="p2Qty">1</div><div id="p2Prod">SHELF,NET RL</div><div id="p2PartName">BUTTON, DIE</div></div>
+        <div class="workgrid" id="workGrid">
           <div class="side">작업공정</div><div class="lbl">공정</div><div>NM</div><div>HQ</div><div>GS</div><div>WS</div><div></div><div></div><div></div><div></div>
           <div class="lbl">작업자(업체)</div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
           <div class="lbl">납기일</div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
           <div class="lbl">완료일</div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div>
         </div>
         <div class="inspection-title">공정별 검사결과</div>
-        <table class="inspection"><thead><tr><th style="width:45px">NO</th><th style="width:80px">규격치</th><th style="width:65px">공차</th><th colspan="4">NM</th><th colspan="4">HQ</th><th colspan="4">GS</th><th colspan="4">WS</th></tr><tr><th></th><th></th><th></th><th>작업자</th><th>검사자</th><th>값1</th><th>값2</th><th>작업자</th><th>검사자</th><th>값1</th><th>값2</th><th>작업자</th><th>검사자</th><th>값1</th><th>값2</th><th>작업자</th><th>검사자</th><th>값1</th><th>값2</th></tr></thead><tbody id="inspectRows"></tbody></table>
+        <table class="inspection"><thead id="inspHead"><tr><th style="width:45px">NO</th><th style="width:80px">규격치</th><th style="width:65px">공차</th><th colspan="4">NM</th><th colspan="4">HQ</th><th colspan="4">GS</th><th colspan="4">WS</th></tr><tr><th></th><th></th><th></th><th>작업자</th><th>검사자</th><th>값1</th><th>값2</th><th>작업자</th><th>검사자</th><th>값1</th><th>값2</th><th>작업자</th><th>검사자</th><th>값1</th><th>값2</th><th>작업자</th><th>검사자</th><th>값1</th><th>값2</th></tr></thead><tbody id="inspectRows"></tbody></table>
       </div>
     </section>
   </div>
@@ -129,6 +129,8 @@ async function loadCard(){
   setTxt('mProd',c.product_name||'');setTxt('mPartName',c.part_name||'');
   CARD=c;
   await buildPlan(c);
+  fillPage2(c);
+  await buildInspect(c);
   goPage(1);msg(`${c.card_key} 공정이력카드를 조회했습니다.`);
  }catch(e){msg('조회 실패: '+String(e.message||e).slice(0,110))}
 }
@@ -156,6 +158,57 @@ async function buildPlan(c){
    <td style="text-align:left;padding-left:8px">${hesc(r.desc)}</td>
    <td>${hesc(r.plan)}</td><td>${hesc(r.done)}</td></tr>`).join('')
   :'<tr><td colspan="6" style="height:60px;color:#8a97a2">작업지시가 없습니다. 기준정보 > 작업지시 관리에서 등록하세요.</td></tr>';
+}
+/* ── 2페이지: 헤더 미러 + 작업공정 그리드 + 공정별 검사결과 ── */
+function fillPage2(c){
+ setTxt('p2Key',c.card_key);setTxt('p2Issue','발행일 :　'+(c.issue_date||''));
+ setTxt('p2Order',c.order_date||'');setTxt('p2Design',c.design_date||'');
+ setTxt('p2Mach',c.machining_date||'');setTxt('p2Asm',c.assembly_date||'');setTxt('p2S1',c.s1_date||'');
+ setTxt('p2Sales','영업　 '+(c.sales_manager||''));setTxt('p2DesignM','설계　 '+(c.design_manager||''));
+ setTxt('p2Job',c.job_no||'');setTxt('p2Proc',c.process_code||'');setTxt('p2Part',c.part_no||'');
+ setTxt('p2Mat',c.material_code||'');setTxt('p2Qty',c.quantity??'');
+ setTxt('p2Prod',c.product_name||'');setTxt('p2PartName',c.part_name||'');
+ /* 작업공정 그리드: 공정계획(CARD_PLAN) 앞 8개 */
+ const g=CARD_PLAN.slice(0,8), cell=f=>Array.from({length:8},(_,i)=>`<div>${hesc(g[i]?f(g[i]):'')}</div>`).join('');
+ document.getElementById('workGrid').innerHTML=
+  `<div class="side">작업공정</div><div class="lbl">공정</div>${cell(r=>r.code)}
+   <div class="lbl">작업자(업체)</div>${cell(r=>r.place)}
+   <div class="lbl">납기일</div>${cell(r=>r.plan)}
+   <div class="lbl">완료일</div>${cell(r=>r.done)}`;
+}
+/* 검사결과: inspection_results(제번·품번) 최근 4회를 열로, 검사항목을 행으로 */
+async function buildInspect(c){
+ const codes=CARD_PLAN.slice(0,4).map(r=>r.code);
+ let ins=[],det=[];
+ try{
+  let q=`select=inspection_no,inspection_date,inspector,inspection_category_code,part_no,judgement&job_no=eq.${encodeURIComponent(c.job_no)}&order=inspection_date,inspection_no`;
+  if(c.part_no)q+=`&part_no=eq.${encodeURIComponent(c.part_no)}`;
+  ins=await MESDB.table('inspection_results').select(q);
+  if(!ins.length&&c.part_no)  /* 품번 단위 기록이 없으면 제번 전체로 확대 */
+   ins=await MESDB.table('inspection_results').select(`select=inspection_no,inspection_date,inspector,inspection_category_code,part_no,judgement&job_no=eq.${encodeURIComponent(c.job_no)}&order=inspection_date,inspection_no`);
+  ins=ins.slice(-4);
+  if(ins.length)det=await MESDB.table('inspection_result_details').select(`select=*&inspection_no=in.(${ins.map(x=>x.inspection_no).join(',')})&order=inspection_no,inspection_item_code`);
+ }catch(e){}
+ const head=document.getElementById('inspHead');
+ if(!ins.length){ /* 검사기록 없음 → 공정코드 헤더 + 수기용 빈 8행 */
+  const hs=[0,1,2,3].map(i=>codes[i]||['NM','HQ','GS','WS'][i]);
+  head.innerHTML=`<tr><th style="width:45px">NO</th><th style="width:80px">규격치</th><th style="width:65px">공차</th>${hs.map(h=>`<th colspan="4">${hesc(h)}</th>`).join('')}</tr>
+   <tr><th></th><th></th><th></th>${hs.map(()=>'<th>작업자</th><th>검사자</th><th>값1</th><th>값2</th>').join('')}</tr>`;
+  inspectRows.innerHTML=Array.from({length:8},(_,i)=>`<tr><td>${i+1}</td><td></td><td></td>${Array.from({length:16},()=>'<td></td>').join('')}</tr>`).join('');
+  return;
+ }
+ /* 열 = 검사회차(구분·일자), 행 = 검사항목 */
+ head.innerHTML=`<tr><th style="width:45px">NO</th><th style="width:120px">검사항목</th><th style="width:80px">기준</th>${ins.map(x=>`<th colspan="4">${hesc(x.inspection_category_code||'')} ${hesc((x.inspection_date||'').slice(5))}${x.judgement&&x.judgement!=='대기'?' · '+hesc(x.judgement):''}</th>`).join('')}${'<th colspan="4"></th>'.repeat(4-ins.length)}</tr>
+  <tr><th></th><th></th><th></th>${ins.map(()=>'<th>작업자</th><th>검사자</th><th>측정값</th><th>판정</th>').join('')}${'<th></th>'.repeat((4-ins.length)*4)}</tr>`;
+ const items=[]; det.forEach(d=>{const k=d.inspection_item_code;let it=items.find(x=>x.code===k);
+  if(!it){it={code:k,name:d.inspection_item_name||k,criteria:d.criteria||'',by:{}};items.push(it)}
+  it.by[d.inspection_no]=d;});
+ const rows=items.slice(0,8);
+ inspectRows.innerHTML=rows.map((it,i)=>{
+  const cells=ins.map(x=>{const d=it.by[x.inspection_no];
+   return d?`<td></td><td>${hesc(x.inspector||'')}</td><td>${hesc(d.measured_value||'')}</td><td>${hesc(d.result||'')}</td>`:'<td></td><td></td><td></td><td></td>'}).join('');
+  return `<tr><td>${i+1}</td><td style="text-align:left;padding-left:6px">${hesc(it.name)}</td><td style="text-align:left;padding-left:6px;font-size:10px">${hesc(it.criteria)}</td>${cells}${'<td></td>'.repeat((4-ins.length)*4)}</tr>`}).join('')
+  +Array.from({length:Math.max(0,8-rows.length)},(_,i)=>`<tr><td>${rows.length+i+1}</td><td></td><td></td>${Array.from({length:16},()=>'<td></td>').join('')}</tr>`).join('');
 }
 /* 카드발행: 조회 결과 + 공정행 스냅샷을 process_history_cards 에 저장 */
 async function issueCard(){
