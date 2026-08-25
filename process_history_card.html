@@ -21,7 +21,7 @@
     <button class="navbtn" onclick="goPage(1)">|◀</button><button class="navbtn" onclick="prevPage()">◀</button><button class="navbtn" onclick="nextPage()">▶</button><button class="navbtn" onclick="goPage(2)">▶|</button><span class="counter" id="counter">페이지 1 / 2</span><div class="sep"></div>
     <button class="ico" title="인쇄" onclick="window.print()">🖨</button><button class="ico" title="닫기" onclick="closePreview()">⊗</button>
   </div>
-  <div style="display:flex;gap:4px;padding:6px;align-items:center;background:#f4f8fb;border-bottom:1px solid #c3ccd4"><span class="lb">제번</span><input id="qJob" class="field" style="width:150px"><span class="lb">공정</span><input id="qProc" class="field" style="width:60px"><span class="lb">품번</span><input id="qPart" class="field" style="width:100px"><button class="btn" onclick="loadCard()">⌕ 카드조회</button><span class="msg" id="message"></span></div><div class="canvas" id="canvas">
+  <div style="display:flex;gap:4px;padding:6px;align-items:center;background:#f4f8fb;border-bottom:1px solid #c3ccd4"><span class="lb">제번</span><input id="qJob" class="field" style="width:150px"><span class="lb">공정</span><input id="qProc" class="field" style="width:60px"><span class="lb">품번</span><input id="qPart" class="field" style="width:100px"><button class="btn" onclick="loadCard()">⌕ 카드조회</button><button class="btn" onclick="issueCard()">▣ 카드발행</button><span class="msg" id="message"></span></div><div class="canvas" id="canvas">
     <section class="paper firstpage on" id="page1">
       <div class="report">
         <div class="head">
@@ -117,29 +117,56 @@ async function loadCard(){
   setTxt('mJob',c.job_no);setTxt('mProc',c.process_code||'');setTxt('mPart',c.part_no||'');
   setTxt('mMat',c.material_code||'');setTxt('mQty',c.quantity??'');
   setTxt('mProd',c.product_name||'');setTxt('mPartName',c.part_name||'');
+  CARD=c;
   await buildPlan(c);
   goPage(1);msg(`${c.card_key} 공정이력카드를 조회했습니다.`);
  }catch(e){msg('조회 실패: '+String(e.message||e).slice(0,110))}
 }
-/* 공정 계획 행: 가공 기준공정(machining_standard_routes) + 외주가공 실적 */
+/* 공정 계획 행: ① 작업지시(work_order_details) ② 없으면 외주가공 발주(order_lines) */
+let CARD=null, CARD_PLAN=[];
+const hesc=s=>String(s??'').replace(/[&<>"]/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[x]));
 async function buildPlan(c){
- let route=[];
- try{route=await MESDB.table('machining_standard_routes').select(`select=*&order=row_no&limit=11`)}catch(e){}
- let done=[];
- try{done=await MESDB.table('order_lines').select(`select=process_code,process_name,vendor_name,order_date,receipt_date&job_no=eq.${encodeURIComponent(c.job_no)}&order=line_id`)}catch(e){}
- const rows=(route.length?route:done).slice(0,11);
- planRows.innerHTML=rows.length?rows.map((r,i)=>{
-  const d=done[i]||{};
-  return `<tr><td>${i+1}</td><td>${r.process_code||r.machining_process_code||''}</td>
-   <td>${r.process_name||r.machining_process_name||d.vendor_name||''}</td>
-   <td style="text-align:left;padding-left:8px">공정 작업 및 검사 기록</td>
-   <td>${d.order_date||''}</td><td>${d.receipt_date||''}</td></tr>`}).join('')
-  :'<tr><td colspan="6" style="height:60px;color:#8a97a2">공정 정보가 없습니다.</td></tr>';
+ let rows=[];
+ try{
+  const wo=await MESDB.table('work_order_details').select(`select=work_order_no,process_code,process_name,work_center_name,worker_name,work_order_date,end_date,status&job_no=eq.${encodeURIComponent(c.job_no)}&order=work_order_no`);
+  rows=wo.map(w=>({code:w.process_code||'',place:w.work_center_name||w.worker_name||'',
+    desc:`${w.process_name||'공정'} 작업 및 검사 기록${w.status&&w.status!=='지시'?` [${w.status}]`:''}`,
+    plan:w.work_order_date||'',done:w.end_date||''}));
+ }catch(e){}
+ if(!rows.length){
+  try{
+   const ol=await MESDB.table('order_lines').select(`select=process_code,process_name,vendor_name,order_date,receipt_date&job_no=eq.${encodeURIComponent(c.job_no)}&order=line_id`);
+   rows=ol.map(o=>({code:o.process_code||'',place:o.vendor_name||'',
+     desc:`${o.process_name||'공정'} 작업 및 검사 기록`,plan:o.order_date||'',done:o.receipt_date||''}));
+  }catch(e){}
+ }
+ CARD_PLAN=rows.slice(0,11);
+ planRows.innerHTML=CARD_PLAN.length?CARD_PLAN.map((r,i)=>
+  `<tr><td>${i+1}</td><td>${hesc(r.code)}</td><td>${hesc(r.place)}</td>
+   <td style="text-align:left;padding-left:8px">${hesc(r.desc)}</td>
+   <td>${hesc(r.plan)}</td><td>${hesc(r.done)}</td></tr>`).join('')
+  :'<tr><td colspan="6" style="height:60px;color:#8a97a2">작업지시가 없습니다. 기준정보 > 작업지시 관리에서 등록하세요.</td></tr>';
+}
+/* 카드발행: 조회 결과 + 공정행 스냅샷을 process_history_cards 에 저장 */
+async function issueCard(){
+ if(!online()){msg('DB 미연결 상태에서는 발행할 수 없습니다.');return}
+ if(!CARD){msg('먼저 카드조회를 하세요.');return}
+ const K=['card_key','job_no','process_code','part_no','material_code','quantity','product_name','part_name',
+   'order_date','design_date','machining_date','assembly_date','s1_date','sales_manager','design_manager'];
+ const row={}; K.forEach(k=>row[k]=(CARD[k]===''||CARD[k]===undefined)?null:CARD[k]);
+ row.quantity=row.quantity==null?null:Number(row.quantity);
+ row.issue_date=new Date().toISOString().slice(0,10);
+ row.process_sequence=CARD_PLAN;
+ try{
+  await MESDB.table('process_history_cards').upsert([row],'card_key');
+  setTxt('issueDate','발행일 :　'+row.issue_date);
+  msg(`${row.card_key} 공정이력카드를 발행(저장)했습니다.`);
+ }catch(e){msg('발행 실패: '+String(e.message||e).slice(0,120))}
 }
 function search(){const j=(qJob.value||'').trim();if(j)return loadCard();goPage(1)}function add(){return false}function remove(){return false}function save(){window.print()}function exportCsv(){const rows=[];const csv='\ufeff'+rows.map(r=>r.map(v=>'"'+v+'"').join(',')).join('\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='process_history_card.csv';a.click();URL.revokeObjectURL(a.href)}
-window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg,reload:loadCard};build();goPage(1);(async()=>{await waitDB();if(online())loadCard()})();
+window.MES={search,add,delete:remove,save,exportCsv,setMessage:msg,reload:loadCard,issueCard};build();goPage(1);(async()=>{await waitDB();if(online())loadCard()})();
 </script>
-<script src="mes_db.js?v=43"></script>
-<script src="mes_ctx.js?v=43"></script>
+<script src="mes_db.js?v=44"></script>
+<script src="mes_ctx.js?v=44"></script>
 </body>
 </html>

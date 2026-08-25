@@ -93,6 +93,7 @@ table{border-collapse:collapse;min-width:1220px;width:100%;table-layout:fixed}th
 <footer class="footer"><span class="btnbar">
   <button class="btn" onclick="doSearch()">⌕ 검색</button>
   <button class="btn" onclick="loadJobs()">⟳ 새로고침</button>
+  <button class="btn" onclick="openLook('std',-1)">⚙ 기준공정 전개</button>
   <button class="btn" onclick="addOrder()">＋ 지시등록</button>
   <button class="btn" onclick="saveOrders()">▣ 저장</button>
   <button class="btn" onclick="deleteOrder()">✖ 지시삭제</button>
@@ -266,12 +267,17 @@ const LOOK={
         codeKey:'process_code', nameKey:'process_name', hasActive:false,
         map:r=>[r.process_code, r.process_name, r.process_group||'', r.sort_order??''],
         active:()=>true},
+ std:{  title:'기준공정 전개 — 기준공정을 선택하면 단계별 작업지시가 일괄 생성됩니다',
+        cols:['번호','기준공정명','공정단계','등록자'], hasActive:false,
+        map:r=>[r.standard_process_id, r.standard_process_name, (r.steps||[]).join(' → '), r.owner_name||''],
+        active:()=>true},
 };
 const LKCACHE={};
 let lkKind=null, lkIdx=-1, lkSel=-1;
 
 async function openLook(kind,i){
  if(!online()){msg('DB 미연결 — 마스터를 조회할 수 없습니다.');return}
+ if(kind==='std'&&!selJob){msg('먼저 좌측에서 제번을 선택하세요.');return}
  lkKind=kind; lkIdx=i; lkSel=-1;
  const L=LOOK[kind];
  document.getElementById('lkTitle').textContent=L.title;
@@ -282,8 +288,14 @@ async function openLook(kind,i){
  if(!LKCACHE[kind]){
   document.getElementById('lkTable').innerHTML='<tbody><tr><td style="height:56px;text-align:center;color:#8a97a2">불러오는 중…</td></tr></tbody>';
   try{
-   const order=kind==='proc'?'&order=process_group,sort_order,process_code':'&order=equipment_code';
-   LKCACHE[kind]=await MESDB.table(L.table).select('select=*'+order);
+   if(kind==='std'){
+    const sp=await MESDB.table('standard_processes').select('select=*&order=standard_process_id');
+    const st=await MESDB.table('standard_process_steps').select('select=*&order=standard_process_id,sequence');
+    LKCACHE.std=sp.map(p=>({...p,steps:st.filter(s=>s.standard_process_id===p.standard_process_id).map(s=>s.process_code)}));
+   }else{
+    const order=kind==='proc'?'&order=process_group,sort_order,process_code':'&order=equipment_code';
+    LKCACHE[kind]=await MESDB.table(L.table).select('select=*'+order);
+   }
   }catch(e){msg('마스터 조회 실패: '+String(e.message||e).slice(0,110));closeLook();return}
  }
  renderLook();
@@ -324,11 +336,37 @@ function applyLook(code,name){
 }
 function confirmLook(){
  if(lkSel<0){msg('목록에서 항목을 선택하세요.');return}
+ if(lkKind==='std'){const r=lkRows()[lkSel];closeLook();expandStd(r);return}
  const L=LOOK[lkKind], r=lkRows()[lkSel], v=L.map(r);
  applyLook(v[0], v[1]);
  msg(`${L.title.replace(' 조회','')}: ${v[0]} ${v[1]}`);
 }
-function clearLook(){applyLook('','');msg('값을 지웠습니다.')}
+
+/* ── 기준공정 일괄전개: 단계마다 작업지시 자동 생성 ───── */
+async function expandStd(sp){
+ if(!selJob){msg('먼저 제번을 선택하세요.');return}
+ const steps=sp.steps||[];
+ if(!steps.length){msg(`'${sp.standard_process_name}' 기준공정에 등록된 공정단계가 없습니다. 기준정보 > 가공 기준공정관리에서 확인하세요.`);return}
+ const dup=dets.filter(d=>steps.includes(d.process_code));
+ const warn=dup.length?`\n※ 이미 같은 공정의 지시 ${dup.length}건이 있습니다. 중복 생성됩니다.`:'';
+ if(!confirm(`${selJob.job_no}\n'${sp.standard_process_name}' ${steps.length}단계 → 작업지시 ${steps.length}건을 생성합니다.\n(${steps.join(' → ')})${warn}\n계속하시겠습니까?`))return;
+ let pm={};
+ try{(LKCACHE.proc||await MESDB.table('processes').select('select=process_code,process_name')).forEach(p=>pm[p.process_code]=p.process_name)}catch(e){}
+ const made=[],fail=[];
+ for(const code of steps){
+  try{
+   const no=await MESDB.rpc('next_work_order_no');
+   await MESDB.table(TBL).upsert([{work_order_no:no,job_no:selJob.job_no,part_name:selJob.item_name||'',
+     work_order_date:today(),process_code:code,process_name:pm[code]||'',
+     planned_qty:0,good_qty:0,defect_qty:0,status:'지시',worker_name:me(),plant_name:selJob.plant_name||'1공장'}]);
+   made.push(no);
+  }catch(e){fail.push(code)}
+ }
+ await loadDets(); await refreshCount();
+ msg(fail.length?`일부 생성 실패(${fail.join(', ')}) — ${made.length}건 생성됨`
+   :`'${sp.standard_process_name}' 작업지시 ${made.length}건을 생성했습니다. 작업장·지시량을 입력하고 저장하세요.`);
+}
+function clearLook(){if(lkKind==='std'){closeLook();return}applyLook('','');msg('값을 지웠습니다.')}
 document.addEventListener('keydown',e=>{
  if(!lkKind)return;
  if(e.key==='Escape'){e.preventDefault();closeLook()}
@@ -339,8 +377,8 @@ document.getElementById('lkMask').addEventListener('click',e=>{if(e.target.id===
 window.MES={search:doSearch,add:addOrder,save:saveOrders,delete:deleteOrder,loadJobs,exportCsv,openLook,setMessage};
 render();renderD();
 </script>
-<script src="mes_db.js?v=43"></script>
+<script src="mes_db.js?v=44"></script>
 <script>loadJobs();</script>
-<script src="mes_ctx.js?v=43"></script>
+<script src="mes_ctx.js?v=44"></script>
 </body>
 </html>
