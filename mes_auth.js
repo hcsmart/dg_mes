@@ -87,7 +87,7 @@ function ui(){
       const s=await api('/auth/v1/token?grant_type=password',{method:'POST',
         body:JSON.stringify({email,password:lgPw.value})});
       AUTH.session=s;store.set(JSON.stringify(s));
-      await loadPerms(); done();
+      await loadPerms(); done(true);
     }catch(e){if(err)err.textContent='로그인 실패: '+(String(e.message).includes('Invalid')?'이름 또는 비밀번호가 올바르지 않습니다.':e.message)}
     if(document.getElementById('lgBtn')){lgBtn.disabled=false;lgBtn.textContent='로그인'}
   };
@@ -127,12 +127,16 @@ function userBadge(){
   document.getElementById('lgout')?.addEventListener('click',e=>{e.preventDefault();
     store.del();location.reload()});
 }
-function done(){
+/* v45: interactive=true(사용자가 방금 로그인)일 때만 iframe을 새로고침한다.
+   저장된 세션으로 진입할 때는 토큰이 이미 localStorage에 있어 각 화면이
+   자체 init에서 읽어가므로, 새로고침하면 같은 화면을 두 번 불러오게 된다. */
+function done(interactive){
   document.getElementById('loginGate')?.remove();
   userBadge(); applyMenuPermissions();
   window.dispatchEvent(new Event('mes-auth-ready'));
-  /* 열려있는 iframe 새로고침해서 토큰 반영 */
-  document.querySelectorAll('iframe').forEach(f=>{try{f.contentWindow.location.reload()}catch(e){}try{}finally{}});
+  if(!interactive)return;
+  /* 로그인 전에 이미 열려 있던 화면만 토큰 반영을 위해 새로고침 */
+  document.querySelectorAll('iframe').forEach(f=>{try{f.contentWindow.location.reload()}catch(e){}});
 }
 
 (async function init(){
@@ -140,7 +144,7 @@ function done(){
     if(saved){AUTH.session=saved;
       if(saved.expires_at*1000-Date.now()<60*1000){if(!await refresh()){store.del();AUTH.session=null}}
     }}catch(e){}
-  if(AUTH.session){await loadPerms();done()}
+  if(AUTH.session){await loadPerms();done(false)}
   else if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',ui);
   else ui();
 })();
