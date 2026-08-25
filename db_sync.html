@@ -1,7 +1,7 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><title>DB 동기화</title>
 <style>:root{--line:#9daab6;--line2:#c5ced6;--ink:#344758}body{font-family:"Malgun Gothic",sans-serif;font-size:12px;color:var(--ink);margin:0;padding:14px}h1{font-size:20px;font-weight:500;margin:0 0 8px}
 .btn{height:28px;min-width:90px;border:1px solid #9ca9b5;background:linear-gradient(#fff,#dfe6eb);margin-right:6px}.btn.primary{background:linear-gradient(#f9ffff,#d2e7f6);color:#1e5e91}
-table{border-collapse:collapse;width:100%;margin-top:10px}th,td{border:1px solid var(--line2);padding:3px 6px;text-align:left}th{background:#dbe9f4}td.r{text-align:right}.ok{color:#2e7d32}.err{color:#c62828}.box{border:1px solid var(--line);padding:8px;margin-top:8px;background:#fafbfc}</style></head><body>
+table{border-collapse:collapse;width:100%;margin-top:10px}th,td{border:1px solid var(--line2);padding:3px 6px;text-align:left}th{background:#dbe9f4}td.r{text-align:right}.ok{color:#2e7d32}.err{color:#c62828}.sk{color:#8a97a2}.box{border:1px solid var(--line);padding:8px;margin-top:8px;background:#fafbfc}</style></head><body>
 <h1>◯ DB 동기화 <small style="font-size:12px;color:#6b7885">JSON 파일 → Supabase 정규화 테이블 업서트 / 화면 저장본(page_state) 관리</small></h1>
 <div class="box">① 같은 폴더의 *.json을 읽어 올립니다 (GitHub Pages/웹서버에서 열었을 때). file:// 로 열었다면 ②에서 json 파일들을 선택하세요.<br>
 <button class="btn primary" onclick="syncFromUrl()">▣ 폴더 JSON → DB 업서트</button><button class="btn" onclick="retryFailed()">↻ 실패분 재시도</button>
@@ -9,9 +9,15 @@ table{border-collapse:collapse;width:100%;margin-top:10px}th,td{border:1px solid
 <div class="box" style="border-color:#c98b8b;background:#fff8f8"><b>공정 진행 테스트 준비</b> — 기준정보(업체·품번·자재·공정·검사·사용자 등)는 그대로 두고 <u>거래 데이터만</u> 전부 지웁니다. 수주등록부터 처음 흐름을 따라가며 테스트할 때 사용하세요.<br><button class="btn" style="color:#a33" onclick="resetTx()">⟲ 거래데이터 초기화 (마스터 유지)</button> <span id="txmsg"></span></div>
 <div class="box">화면 저장본(page_state): 각 화면에서 저장/삭제한 내용이 자동 저장된 곳입니다. <button class="btn" onclick="listStates()">목록</button> <button class="btn" onclick="clearStates()">전체 초기화(원본 JSON 상태로)</button></div>
 <table><thead><tr><th>테이블</th><th>PK</th><th>JSON 건수</th><th>DB 건수</th><th>결과</th></tr></thead><tbody id="body"></tbody></table>
-<script src="mes_db.js?v=43"></script>
+<script src="mes_db.js?v=44"></script>
 <script>
-const TABLES={"assembly_result_jobs": ["job"], "business_divisions": ["business_division_code"], "design_plan_steps": ["row_no"], "design_plans": ["job_no"], "design_result_monthly": ["row_no"], "design_results": ["row_no"], "design_teams": ["team"], "employees": ["employee_code"], "equipment": ["equipment_code"], "expense_reasons": ["expense_reason_code"], "item_categories": ["item_code"], "jobs": ["job_no"], "machine_specs": ["machine_spec_code"], "machining_plan_parts": ["row_no"], "machining_plans": ["row_no"], "machining_purchase_progress_rows": ["no"], "machining_standard_routes": ["standard_process_no"], "manufacturing_cost_details": ["job_no", "cost_stage"], "manufacturing_cost_orders": ["job_no"], "material_order_jobs": ["job_no", "process_code"], "material_order_status_rows": ["seq"], "material_price_changes": ["row_no"], "material_purchase_requests": ["seq"], "material_receipt_candidates": ["seq"], "material_receipt_confirm_candidates": ["seq"], "materials": ["material_code"], "mold_code_match_processes": ["process_set", "process_code"], "mold_code_matchings": ["row_no"], "mold_types": ["mold_type_code"], "outsourced_design_orders": ["seq"], "outsourced_design_partners": ["partner_name"], "outsourced_design_receipt_candidates": ["seq"], "outsourced_design_receipts": ["receipt_no"], "outsourcing_order_jobs": ["job", "proc"], "outsourcing_order_status_rows": ["no"], "outsourcing_receipt_confirm_candidates": ["no"], "partlist_materials": ["job_no", "process_code", "part_no"], "partlist_processes": ["job_no", "process_code"], "partlist_purchases": ["job_no", "process_code", "part_no"], "partlist_status_rows": ["row_no"], "parts": ["part_code"], "process_history_cards": ["card_key"], "process_price_changes": ["row_no"], "processes": ["process_code"], "purchase_order_jobs": ["job_no"], "purchase_order_status_rows": ["no"], "purchase_receipt_candidates": ["row_no"], "purchase_receipt_rows": ["seq"], "purchase_status_rows": ["row_no"], "sale_order_status_rows": ["row_no"], "sale_orders": ["job_no"], "sales_plan_status_rows": ["row_no"], "sales_plans": ["row_no"], "sales_status_rows": ["no"], "set_order_partners": ["row_no"], "set_order_receipt_details": ["row_no"], "set_order_receipts": ["row_no"], "set_order_registrations": ["row_no"], "set_order_status_rows": ["row_no"], "standard_process_steps": ["standard_process_id", "sequence"], "standard_processes": ["standard_process_id"], "status_board_rows": ["row_no"], "stock_inquiry_rows": ["job_no"], "user_permissions": ["user_key", "menu_name"], "users": ["user_key"], "vendors": ["vendor_code"], "work_order_details": [], "work_order_item_candidates": ["item_no"], "order_lines": [], "positions": ["position_code"], "inspection_categories": ["inspection_category_code"], "inspection_items": ["inspection_item_code"], "inspection_results": [], "inspection_result_details": ["inspection_no", "inspection_item_code"], "notices": ["code"], "assembly_jobs": ["job_no"], "assembly_steps": ["row_no"], "expenses": ["expense_id"], "departments": ["department_code"]};
+const TABLES={"assembly_result_jobs": ["job"], "business_divisions": ["business_division_code"], "design_plan_steps": ["row_no"], "design_plans": ["job_no"], "design_result_monthly": ["row_no"], "design_results": ["row_no"], "design_teams": ["team"], "employees": ["employee_code"], "equipment": ["equipment_code"], "expense_reasons": ["expense_reason_code"], "item_categories": ["item_code"], "jobs": ["job_no"], "machine_specs": ["machine_spec_code"], "machining_plan_parts": ["row_no"], "machining_plans": ["row_no"], "machining_purchase_progress_rows": ["no"], "machining_standard_routes": ["standard_process_no"], "manufacturing_cost_details": ["job_no", "cost_stage"], "manufacturing_cost_orders": ["job_no"], "material_order_jobs": ["job_no", "process_code"], "material_order_status_rows": ["seq"], "material_price_changes": ["row_no"], "material_purchase_requests": ["seq"], "material_receipt_candidates": ["seq"], "material_receipt_confirm_candidates": ["seq"], "materials": ["material_code"], "mold_code_match_processes": ["process_set", "process_code"], "mold_code_matchings": ["row_no"], "mold_types": ["mold_type_code"], "outsourced_design_orders": ["seq"], "outsourced_design_partners": ["partner_name"], "outsourced_design_receipt_candidates": ["seq"], "outsourced_design_receipts": ["receipt_no"], "outsourcing_order_jobs": ["job", "proc"], "outsourcing_order_status_rows": ["no"], "outsourcing_receipt_confirm_candidates": ["no"], "partlist_materials": ["job_no", "process_code", "part_no"], "partlist_processes": ["job_no", "process_code"], "partlist_purchases": ["job_no", "process_code", "part_no"], "partlist_status_rows": ["row_no"], "parts": ["part_code"], "process_history_cards": ["card_key"], "process_price_changes": ["row_no"], "processes": ["process_code"], "purchase_order_jobs": ["job_no"], "purchase_order_status_rows": ["no"], "purchase_receipt_candidates": ["row_no"], "purchase_receipt_rows": ["seq"], "purchase_status_rows": ["row_no"], "sale_order_status_rows": ["row_no"], "sale_orders": ["job_no"], "sales_plan_status_rows": ["row_no"], "sales_plans": ["row_no"], "sales_status_rows": ["no"], "set_order_partners": ["row_no"], "set_order_receipt_details": ["row_no"], "set_order_receipts": ["row_no"], "set_order_registrations": ["row_no"], "set_order_status_rows": ["row_no"], "standard_process_steps": ["standard_process_id", "sequence"], "standard_processes": ["standard_process_id"], "status_board_rows": ["row_no"], "stock_inquiry_rows": ["job_no"], "user_permissions": ["user_key", "menu_name"], "users": ["user_key"], "vendors": ["vendor_code"], "work_order_details": ["work_order_no"], "work_order_item_candidates": ["item_no"], "order_lines": [], "positions": ["position_code"], "inspection_categories": ["inspection_category_code"], "inspection_items": ["inspection_item_code"], "inspection_results": [], "inspection_result_details": ["inspection_no", "inspection_item_code"], "notices": ["code"], "assembly_jobs": ["job_no"], "assembly_steps": ["row_no"], "expenses": ["expense_id"], "departments": ["department_code"]};
+/* GENERATED ALWAYS 컬럼 — 업서트 페이로드에서 반드시 제거 (PostgREST 428C9) */
+const GEN={"work_order_details":["completed_qty"],"user_permissions":["permission_status"]};
+/* NOT NULL 필수 컬럼 — 값이 없는 행은 시드 대상이 아님(사진 판독 샘플행 등) */
+const REQ={"work_order_details":["work_order_no","job_no"],"order_lines":["job_no"],"assembly_steps":["job_no"],"design_plan_steps":["job_no"]};
+/* 시드 JSON이 없고 화면에서 런타임 생성되는 테이블 — 404를 오류로 표시하지 않음 */
+const NOSEED=["notices","assembly_jobs","assembly_steps","expenses","inspection_results","inspection_result_details","set_order_lines"];
 const rows=d=>Array.isArray(d)?d:(Object.values(d).find(v=>Array.isArray(v)&&v.length&&typeof v[0]==='object')||[]);
 const body=document.getElementById('body'),msg=t=>document.getElementById('msg').textContent=t;
 function line(t,pk,n,db,res,cls){let tr=document.getElementById('t_'+t);if(!tr){tr=document.createElement('tr');tr.id='t_'+t;body.appendChild(tr)}tr.innerHTML=`<td>${t}</td><td>${pk.join(',')}</td><td class="r">${n??''}</td><td class="r">${db??''}</td><td class="${cls||''}">${res||''}</td>`}
@@ -19,21 +25,38 @@ async function countDb(t){try{const r=await fetch(MESDB.cfg.url+'/rest/v1/'+t+'?
 function normalize(rs){/* PostgREST는 배열 내 모든 객체의 키가 같아야 함(PGRST102) */
   const keys=[];for(const r of rs)for(const k in r)if(!keys.includes(k))keys.push(k);
   return rs.map(r=>{const o={};for(const k of keys)o[k]=(r[k]===undefined?null:r[k]);return o})}
-async function upsert(t,data){const pk=TABLES[t];let rs=rows(data);
+async function upsert(t,data){const pk=TABLES[t];let rs=rows(data);const raw=rs.length;
+  /* ① GENERATED ALWAYS 컬럼 제거 */
+  const gen=GEN[t]||[];
+  if(gen.length)rs=rs.map(r=>{const o={...r};for(const k of gen)delete o[k];return o});
+  /* ② PK 결측행 제외 */
   if(pk.length)rs=rs.filter(r=>pk.every(k=>r[k]!==null&&r[k]!==undefined));
-  if(!rs.length){line(t,pk,0,await countDb(t),'건너뜀');return}
+  /* ③ NOT NULL 필수컬럼 결측행 제외 */
+  const req=REQ[t]||[];
+  if(req.length)rs=rs.filter(r=>req.every(k=>r[k]!==null&&r[k]!==undefined&&r[k]!==''));
+  const dropped=raw-rs.length;
+  if(!rs.length){line(t,pk,raw,await countDb(t),raw?`시드 불가 ${raw}행(필수값 없음) — 화면에서 등록`:'건너뜀','sk');return}
+  /* ④ PK 없는 테이블은 INSERT이므로 이미 데이터가 있으면 중복 방지 */
+  if(!pk.length){const c=Number(await countDb(t))||0;
+    if(c>0){line(t,pk,rs.length,c,`이미 ${c}건 존재 — 중복방지로 건너뜀`,'sk');return}}
   rs=normalize(rs);
-  try{for(let i=0;i<rs.length;i+=200)await MESDB.table(t).upsert(rs.slice(i,i+200),pk.join(','));line(t,pk,rs.length,await countDb(t),'완료','ok')}catch(e){line(t,pk,rs.length,await countDb(t),e.message.slice(0,160),'err')}}
+  const note=dropped?` (제외 ${dropped}행)`:'';
+  try{for(let i=0;i<rs.length;i+=200)await MESDB.table(t).upsert(rs.slice(i,i+200),pk.join(','));line(t,pk,rs.length,await countDb(t),'완료'+note,'ok')}catch(e){line(t,pk,rs.length,await countDb(t),e.message.slice(0,160),'err')}}
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function getJson(t){/* 503/429 등 일시 오류는 지수 백오프로 재시도 */
-  let last='';for(let i=0;i<4;i++){try{const r=await fetch(t+'.json',{cache:'no-store'});if(r.ok)return await r.json();last=String(r.status);if(![429,500,502,503,504].includes(r.status))throw new Error(last)}catch(e){last=e.message}
+  let last='';for(let i=0;i<4;i++){let stop=false;
+    try{const r=await fetch(t+'.json',{cache:'no-store'});if(r.ok)return await r.json();last=String(r.status);if(![429,500,502,503,504].includes(r.status))stop=true}catch(e){last=e.message}
+    if(stop)throw new Error(last);
     await sleep(400*Math.pow(2,i))}throw new Error(last)}
 let FAILED=[];
 const ORDER=['vendors','materials','parts','processes','equipment','item_categories','mold_types','machine_specs','expense_reasons','business_divisions','departments','inspection_categories','inspection_items','positions','employees','users','user_permissions','standard_processes','standard_process_steps','machining_standard_routes','design_teams','jobs','sale_orders','order_lines','set_order_registrations','set_order_partners','set_order_lines','notices','design_plans','design_plan_steps','assembly_jobs','assembly_steps','expenses'];
 function ordered(list){/* FK 부모 테이블 먼저 */const a=ORDER.filter(t=>list.includes(t));return[...a,...list.filter(t=>!a.includes(t))]}
 async function syncFromUrl(only){const list=ordered(only||Object.keys(TABLES));FAILED=[];let n=0;
   for(const t of list){msg(`${++n}/${list.length} ${t}`);
-    try{await upsert(t,await getJson(t))}catch(e){line(t,TABLES[t],'-','-','JSON 읽기 실패: '+e.message,'err');FAILED.push(t)}
+    if(NOSEED.includes(t)){line(t,TABLES[t],'-',await countDb(t),'시드 JSON 없음 — 화면에서 등록되는 테이블','sk');await sleep(30);continue}
+    try{await upsert(t,await getJson(t))}catch(e){
+      if(String(e.message)==='404'){line(t,TABLES[t],'-',await countDb(t),'JSON 파일 없음 — 건너뜀','sk')}
+      else{line(t,TABLES[t],'-','-','JSON 읽기 실패: '+e.message,'err');FAILED.push(t)}}
     await sleep(60)}
   msg(FAILED.length?`완료 (실패 ${FAILED.length}건 - 실패분 재시도 버튼을 누르세요)`:'완료 - 전체 성공')}
 async function retryFailed(){if(!FAILED.length)return msg('재시도할 항목이 없습니다.');await syncFromUrl([...FAILED])}
@@ -52,5 +75,5 @@ async function resetTx(){
 async function listStates(){try{const r=await MESDB.table('page_state').select('select=page,updated_at');msg(r.length?r.map(x=>x.page+' ('+x.updated_at.slice(0,16)+')').join(', '):'저장본 없음')}catch(e){msg('DB 연결 실패: '+e.message)}}
 async function clearStates(){try{if(!confirm('모든 화면 저장본을 삭제하고 원본 JSON 상태로 되돌립니까?'))return;await MESDB.rest('page_state?page=neq.__none__',{method:'DELETE'});msg('초기화 완료')}catch(e){msg('DB 연결 실패: '+e.message)}}
 (async()=>{for(const t of Object.keys(TABLES))line(t,TABLES[t],'',await countDb(t),'')})();
-</script><script src="mes_ctx.js?v=43"></script>
+</script><script src="mes_ctx.js?v=44"></script>
 </body></html>
