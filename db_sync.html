@@ -14,6 +14,9 @@ table{border-collapse:collapse;width:100%;margin-top:10px}th,td{border:1px solid
 const TABLES={"assembly_result_jobs": ["job"], "business_divisions": ["business_division_code"], "design_plan_steps": ["row_no"], "design_plans": ["job_no"], "design_result_monthly": ["row_no"], "design_results": ["row_no"], "design_teams": ["team"], "employees": ["employee_code"], "equipment": ["equipment_code"], "expense_reasons": ["expense_reason_code"], "item_categories": ["item_code"], "jobs": ["job_no"], "machine_specs": ["machine_spec_code"], "machining_plan_parts": ["row_no"], "machining_plans": ["row_no"], "machining_purchase_progress_rows": ["no"], "machining_standard_routes": ["standard_process_no"], "manufacturing_cost_details": ["job_no", "cost_stage"], "manufacturing_cost_orders": ["job_no"], "material_order_jobs": ["job_no", "process_code"], "material_order_status_rows": ["seq"], "material_price_changes": ["row_no"], "material_purchase_requests": ["seq"], "material_receipt_candidates": ["seq"], "material_receipt_confirm_candidates": ["seq"], "materials": ["material_code"], "mold_code_match_processes": ["process_set", "process_code"], "mold_code_matchings": ["row_no"], "mold_types": ["mold_type_code"], "outsourced_design_orders": ["seq"], "outsourced_design_partners": ["partner_name"], "outsourced_design_receipt_candidates": ["seq"], "outsourced_design_receipts": ["receipt_no"], "outsourcing_order_jobs": ["job", "proc"], "outsourcing_order_status_rows": ["no"], "outsourcing_receipt_confirm_candidates": ["no"], "partlist_materials": ["job_no", "process_code", "part_no"], "partlist_processes": ["job_no", "process_code"], "partlist_purchases": ["job_no", "process_code", "part_no"], "partlist_status_rows": ["row_no"], "parts": ["part_code"], "process_history_cards": ["card_key"], "process_price_changes": ["row_no"], "processes": ["process_code"], "purchase_order_jobs": ["job_no"], "purchase_order_status_rows": ["no"], "purchase_receipt_candidates": ["row_no"], "purchase_receipt_rows": ["seq"], "purchase_status_rows": ["row_no"], "sale_order_status_rows": ["row_no"], "sale_orders": ["job_no"], "sales_plan_status_rows": ["row_no"], "sales_plans": ["row_no"], "sales_status_rows": ["no"], "set_order_partners": ["row_no"], "set_order_receipt_details": ["row_no"], "set_order_receipts": ["row_no"], "set_order_registrations": ["row_no"], "set_order_status_rows": ["row_no"], "standard_process_steps": ["standard_process_id", "sequence"], "standard_processes": ["standard_process_id"], "status_board_rows": ["row_no"], "stock_inquiry_rows": ["job_no"], "user_permissions": ["user_key", "menu_name"], "users": ["user_key"], "vendors": ["vendor_code"], "work_order_details": ["work_order_no"], "work_order_item_candidates": ["item_no"], "order_lines": [], "positions": ["position_code"], "inspection_categories": ["inspection_category_code"], "inspection_items": ["inspection_item_code"], "inspection_results": [], "inspection_result_details": ["inspection_no", "inspection_item_code"], "notices": ["code"], "assembly_jobs": ["job_no"], "assembly_steps": ["row_no"], "expenses": ["expense_id"], "departments": ["department_code"]};
 /* GENERATED ALWAYS 컬럼 — 업서트 페이로드에서 반드시 제거 (PostgREST 428C9) */
 const GEN={"work_order_details":["completed_qty"],"user_permissions":["permission_status"]};
+/* PK가 아닌 별도 UNIQUE identity 컬럼 — 기존 행이 있으면 페이로드에서 제거해야 함.
+   (PostgreSQL은 ON CONFLICT 대상이 아닌 UNIQUE 인덱스 위반 시 UPDATE로 넘어가지 않고 23505를 던짐) */
+const SECID={"partlist_materials":["row_no"],"partlist_purchases":["row_no"],"design_plans":["row_no"]};
 /* NOT NULL 필수 컬럼 — 값이 없는 행은 시드 대상이 아님(사진 판독 샘플행 등) */
 const REQ={"work_order_details":["work_order_no","job_no"],"order_lines":["job_no"],"assembly_steps":["job_no"],"design_plan_steps":["job_no"]};
 /* 시드 JSON이 없고 화면에서 런타임 생성되는 테이블 — 404를 오류로 표시하지 않음 */
@@ -36,11 +39,15 @@ async function upsert(t,data){const pk=TABLES[t];let rs=rows(data);const raw=rs.
   if(req.length)rs=rs.filter(r=>req.every(k=>r[k]!==null&&r[k]!==undefined&&r[k]!==''));
   const dropped=raw-rs.length;
   if(!rs.length){line(t,pk,raw,await countDb(t),raw?`시드 불가 ${raw}행(필수값 없음) — 화면에서 등록`:'건너뜀','sk');return}
+  /* ③-2 보조 identity: 최초 적재 때만 원본 번호 유지, 재동기화 때는 제거(23505 방지) */
+  const sec=SECID[t]||[]; let seq='';
+  if(sec.length&&(Number(await countDb(t))||0)>0){
+    rs=rs.map(r=>{const o={...r};for(const k of sec)delete o[k];return o});seq=` (${sec.join(',')} 유지)`}
   /* ④ PK 없는 테이블은 INSERT이므로 이미 데이터가 있으면 중복 방지 */
   if(!pk.length){const c=Number(await countDb(t))||0;
     if(c>0){line(t,pk,rs.length,c,`이미 ${c}건 존재 — 중복방지로 건너뜀`,'sk');return}}
   rs=normalize(rs);
-  const note=dropped?` (제외 ${dropped}행)`:'';
+  const note=(dropped?` (제외 ${dropped}행)`:'')+seq;
   try{for(let i=0;i<rs.length;i+=200)await MESDB.table(t).upsert(rs.slice(i,i+200),pk.join(','));line(t,pk,rs.length,await countDb(t),'완료'+note,'ok')}catch(e){line(t,pk,rs.length,await countDb(t),e.message.slice(0,160),'err')}}
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function getJson(t){/* 503/429 등 일시 오류는 지수 백오프로 재시도 */
