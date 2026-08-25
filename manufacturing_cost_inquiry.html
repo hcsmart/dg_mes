@@ -30,7 +30,7 @@ table{border-collapse:collapse;min-width:1040px;width:100%;table-layout:fixed}th
 </section>
 <div class="split">
  <div class="gridbox"><table style="min-width:1320px">
-  <thead><tr><th style="width:70px">수주유형</th><th style="width:92px">완료일</th><th style="width:78px">제번</th><th style="width:90px">모델</th><th style="width:180px">품명</th><th style="width:110px">도번</th><th style="width:52px">조수</th><th style="width:72px">개발유형</th><th style="width:112px">수주가</th><th style="width:112px">목표가</th><th style="width:78px">목표가대비</th><th style="width:100px">경비</th><th style="width:112px">제조원가</th><th style="width:112px">이윤</th><th style="width:68px">이익률</th></tr></thead>
+  <thead><tr><th style="width:70px">수주유형</th><th style="width:92px">완료일</th><th style="width:78px">제번</th><th style="width:90px">모델</th><th style="width:180px">품명</th><th style="width:110px">도번</th><th style="width:52px">조수</th><th style="width:72px">개발유형</th><th style="width:112px">수주가</th><th style="width:112px">목표가</th><th style="width:78px">목표가대비</th><th style="width:106px">SET외주</th><th style="width:100px">경비</th><th style="width:112px">제조원가</th><th style="width:112px">이윤</th><th style="width:68px">이익률</th></tr></thead>
   <tbody id="obody"></tbody>
   <tfoot><tr class="gtot"><td colspan="16" class="c" id="totline">조회 0건</td></tr></tfoot>
  </table></div>
@@ -61,7 +61,7 @@ function renderTotal(){
   el.textContent = src.length ? `조회 ${src.length}건 · ` + ['수주가 '+money(sum('order_price')),'목표가 '+money(sum('target_price')),'제조원가 '+money(sum('manufacturing_cost')),'이윤 '+money(sum('profit'))].join(' / ') : '조회된 자료가 없습니다.';
 }
 function render(){
- obody.innerHTML=view.map((r,i)=>`<tr onclick="pick(${i},this)"><td class="c">${esc(r.order_type)}</td><td class="c">${esc(r.completion_date||'')}</td><td>${esc(r.job_no)}</td><td>${esc(r.model||'')}</td><td>${esc(r.item_name)}</td><td>${dwv(r)}</td><td class="c">${r.set_qty??''}</td><td class="c">${esc(r.development_type||'')}</td><td class="num">${n(r.order_price)}</td><td class="num">${n(r.target_price)}</td><td class="num">${p(r.target_ratio_pct)}</td><td class="num">${n(r.expense_cost)}</td><td class="num">${n(r.manufacturing_cost)}</td><td class="num">${n(r.profit)}</td><td class="num">${p(r.profit_rate_pct)}</td></tr>`).join('');
+ obody.innerHTML=view.map((r,i)=>`<tr onclick="pick(${i},this)"><td class="c">${esc(r.order_type)}</td><td class="c">${esc(r.completion_date||'')}</td><td>${esc(r.job_no)}</td><td>${esc(r.model||'')}</td><td>${esc(r.item_name)}</td><td>${dwv(r)}</td><td class="c">${r.set_qty??''}</td><td class="c">${esc(r.development_type||'')}</td><td class="num">${n(r.order_price)}</td><td class="num">${n(r.target_price)}</td><td class="num">${p(r.target_ratio_pct)}</td><td class="num">${n(r.set_outsourcing_cost)}</td><td class="num">${n(r.expense_cost)}</td><td class="num">${n(r.manufacturing_cost)}</td><td class="num">${n(r.profit)}</td><td class="num">${p(r.profit_rate_pct)}</td></tr>`).join('');
  countText.textContent=view.length+'건';
 }
 function pick(i,tr){
@@ -79,8 +79,8 @@ function search(){
  dbody.innerHTML='';dfoot.innerHTML='';render();message.textContent=`조회결과 ${view.length}건입니다.`;
 }
 function exportCsv(){
- const h=['수주유형','완료일','제번','모델','품명','도번','조수','개발유형','수주가','목표가','목표가대비','제조원가','이윤','이익률'];
- const rows=view.map(r=>[r.order_type,r.completion_date,r.job_no,r.model,r.item_name,r.drawing_no,r.set_qty,r.development_type,r.order_price,r.target_price,r.target_ratio_pct,r.manufacturing_cost,r.profit,r.profit_rate_pct]);
+ const h=['수주유형','완료일','제번','모델','품명','도번','조수','개발유형','수주가','목표가','목표가대비','SET외주','경비','제조원가','이윤','이익률'];
+ const rows=view.map(r=>[r.order_type,r.completion_date,r.job_no,r.model,r.item_name,r.drawing_no,r.set_qty,r.development_type,r.order_price,r.target_price,r.target_ratio_pct,r.set_outsourcing_cost,r.expense_cost,r.manufacturing_cost,r.profit,r.profit_rate_pct]);
  const csv='\ufeff'+[h,...rows].map(a=>a.map(v=>'"'+String(v??'').replaceAll('"','""')+'"').join(',')).join('\n');
  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download='manufacturing_cost_orders.csv';a.click();
 }
