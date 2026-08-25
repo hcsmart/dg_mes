@@ -1,4 +1,4 @@
-/* DG mes 로그인 (v23) - Supabase 이메일 인증
+/* HC Smart Mold 로그인 (v45) - Supabase 이메일 인증
  * index.html(부모)에서만 로드. 화면 iframe들은 mes_db.js가 부모의 토큰을 읽어 사용한다. */
 (function(){
 const URL_='https://ipggvrzxfcryzryileuv.supabase.co';
@@ -58,7 +58,7 @@ function ui(){
     display:flex;align-items:center;justify-content:center;font-family:"Malgun Gothic",sans-serif}
   #loginGate .card{background:#fff;border:1px solid #b9c6d2;box-shadow:0 8px 30px rgba(40,70,100,.15);
     padding:34px 38px;width:330px}
-  #loginGate h1{margin:0 0 4px;font-size:26px;color:#1d3d5e}#loginGate h1 b{color:#2e6da4}
+  #loginGate h1{margin:0 0 4px;font-size:26px;color:#1d3d5e;letter-spacing:-.5px;white-space:nowrap}#loginGate h1 b{color:#2e6da4}#loginGate h1 i{font-style:normal;font-size:17px;font-weight:600;color:#6b8bb5;margin-left:3px}
   #loginGate .sub{font-size:12px;color:#6b7885;margin-bottom:20px}
   #loginGate label{display:block;font-size:12px;color:#41556b;margin:10px 0 4px}
   #loginGate input{width:100%;height:32px;border:1px solid #9ca9b5;padding:0 9px;font-size:13px;box-sizing:border-box}
@@ -68,7 +68,7 @@ function ui(){
   #loginGate .hintbox{margin-top:16px;font-size:11px;color:#8a97a5;border-top:1px dashed #d4dde5;padding-top:10px}
   </style>
   <div class="card">
-    <h1><b>DG</b> mes</h1><div class="sub">동구기업 MES 로그인</div>
+    <h1><b>HC</b> Smart <i>Mold</i></h1><div class="sub">MES 로그인</div>
     <label>이름 (또는 아이디)</label><input id="lgEmail" type="text" autocomplete="username" placeholder="예: 김민수">
     <label>비밀번호</label><input id="lgPw" type="password" autocomplete="current-password" placeholder="6자리 이상">
     <button id="lgBtn">로그인</button><div class="err" id="lgErr"></div>
